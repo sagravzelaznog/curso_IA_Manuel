@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesión 1.3: Operadores y Expresiones - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header class="session-header">
+        <div class="container">
+            <h1>Sesión 1.3: Operadores y Expresiones en Python</h1>
+            <p class="session-meta">Módulo 1: Introducción a Python | Duración: 60 minutos</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="learning-objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender los diferentes tipos de operadores en Python</li>
+                <li>Aprender a utilizar operadores aritméticos, de comparación y lógicos</li>
+                <li>Entender la precedencia de operadores</li>
+                <li>Practicar con expresiones complejas</li>
+                <li>Aplicar los conceptos en ejercicios prácticos</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
+            
+            <article class="concept">
+                <h3>Introducción a los Operadores</h3>
+                <p>Los operadores son símbolos especiales en Python que realizan operaciones en variables y valores. Python tiene varios tipos de operadores que nos permiten realizar diferentes tipos de operaciones.</p>
+                
+                <div class="info-box">
+                    <i class="fas fa-lightbulb"></i>
+                    <p><strong>Dato curioso:</strong> Python sigue las reglas matemáticas estándar de precedencia de operadores, comúnmente recordadas por el acrónimo PEMDAS (Paréntesis, Exponentes, Multiplicación y División, Suma y Resta).</p>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>1. Operadores Aritméticos</h3>
+                <p>Se utilizan para realizar operaciones matemáticas básicas.</p>
+                
+                <div class="data-type">
+                    <table class="operator-table">
+                        <thead>
+                            <tr>
+                                <th>Operador</th>
+                                <th>Descripción</th>
+                                <th>Ejemplo</th>
+                                <th>Resultado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>+</code></td>
+                                <td>Suma</td>
+                                <td><code>5 + 3</code></td>
+                                <td><code>8</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>-</code></td>
+                                <td>Resta</td>
+                                <td><code>10 - 4</code></td>
+                                <td><code>6</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>*</code></td>
+                                <td>Multiplicación</td>
+                                <td><code>6 * 7</code></td>
+                                <td><code>42</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>/</code></td>
+                                <td>División (siempre retorna float)</td>
+                                <td><code>15 / 3</code></td>
+                                <td><code>5.0</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>//</code></td>
+                                <td>División entera</td>
+                                <td><code>15 // 4</code></td>
+                                <td><code>3</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>%</code></td>
+                                <td>Módulo (resto de la división)</td>
+                                <td><code>15 % 4</code></td>
+                                <td><code>3</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>**</code></td>
+                                <td>Exponenciación</td>
+                                <td><code>2 ** 3</code></td>
+                                <td><code>8</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h4>Ejemplos prácticos:</h4>
+                <pre><code class="language-python"># Operaciones básicas
+suma = 10 + 5        # 15
+resta = 20 - 8       # 12
+multiplicacion = 6 * 7  # 42
+division = 15 / 3     # 5.0 (siempre retorna float)
+div_entera = 15 // 4  # 3 (división entera, trunca decimales)
+resto = 15 % 4        # 3 (resto de la división)
+potencia = 2 ** 3     # 8 (2 elevado a la 3)</code></pre>
+            </article>
+
+            <article class="concept">
+                <h3>2. Operadores de Comparación</h3>
+                <p>Se utilizan para comparar valores y siempre retornan un valor booleano (True o False).</p>
+                
+                <div class="data-type">
+                    <table class="operator-table">
+                        <thead>
+                            <tr>
+                                <th>Operador</th>
+                                <th>Descripción</th>
+                                <th>Ejemplo</th>
+                                <th>Resultado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>==</code></td>
+                                <td>Igual a</td>
+                                <td><code>5 == 5</code></td>
+                                <td><code>True</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>!=</code></td>
+                                <td>Diferente de</td>
+                                <td><code>5 != 3</code></td>
+                                <td><code>True</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>></code></td>
+                                <td>Mayor que</td>
+                                <td><code>10 > 5</code></td>
+                                <td><code>True</code></td>
+                            </tr>
+                            <tr>
+                                <td><code><</code></td>
+                                <td>Menor que</td>
+                                <td><code>10 < 5</code></td>
+                                <td><code>False</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>>=</code></td>
+                                <td>Mayor o igual que</td>
+                                <td><code>10 >= 10</code></td>
+                                <td><code>True</code></td>
+                            </tr>
+                            <tr>
+                                <td><code><=</code></td>
+                                <td>Menor o igual que</td>
+                                <td><code>5 <= 3</code></td>
+                                <td><code>False</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h4>Ejemplos prácticos:</h4>
+                <pre><code class="language-python"># Comparaciones
+edad = 20
+mayor_de_edad = edad >= 18  # True
+igualdad = (10 == 10)       # True
+desigualdad = (10 != 5)     # True
+
+# Comparación de cadenas
+nombre1 = "Ana"
+nombre2 = "Beto"
+orden_alfabetico = nombre1 < nombre2  # True (compara caracteres por su valor ASCII)</code></pre>
+            </article>
+
+            <article class="concept">
+                <h3>3. Operadores Lógicos</h3>
+                <p>Se utilizan para combinar declaraciones condicionales.</p>
+                
+                <div class="data-type">
+                    <table class="operator-table">
+                        <thead>
+                            <tr>
+                                <th>Operador</th>
+                                <th>Descripción</th>
+                                <th>Ejemplo</th>
+                                <th>Resultado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>and</code></td>
+                                <td>Devuelve True si ambas afirmaciones son verdaderas</td>
+                                <td><code>True and False</code></td>
+                                <td><code>False</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>or</code></td>
+                                <td>Devuelve True si al menos una afirmación es verdadera</td>
+                                <td><code>True or False</code></td>
+                                <td><code>True</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>not</code></td>
+                                <td>Invierte el resultado, devuelve False si el resultado es verdadero</td>
+                                <td><code>not True</code></td>
+                                <td><code>False</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h4>Tabla de verdad:</h4>
+                <div class="data-type">
+                    <table class="operator-table">
+                        <thead>
+                            <tr>
+                                <th>A</th>
+                                <th>B</th>
+                                <th>A and B</th>
+                                <th>A or B</th>
+                                <th>not A</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>True</td>
+                                <td>True</td>
+                                <td>True</td>
+                                <td>True</td>
+                                <td>False</td>
+                            </tr>
+                            <tr>
+                                <td>True</td>
+                                <td>False</td>
+                                <td>False</td>
+                                <td>True</td>
+                                <td>False</td>
+                            </tr>
+                            <tr>
+                                <td>False</td>
+                                <td>True</td>
+                                <td>False</td>
+                                <td>True</td>
+                                <td>True</td>
+                            </tr>
+                            <tr>
+                                <td>False</td>
+                                <td>False</td>
+                                <td>False</td>
+                                <td>False</td>
+                                <td>True</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h4>Ejemplos prácticos:</h4>
+                <pre><code class="language-python"># Operadores lógicos
+edad = 25
+tiene_licencia = True
+puede_manejar = edad >= 18 and tiene_licencia  # True
+
+# Combinando operadores
+numero = 10
+es_par = (numero % 2) == 0  # True
+
+# Uso de paréntesis para claridad
+resultado = (5 > 3) and (10 <= 20)  # True
+
+# Operador not
+es_verdadero = True
+no_es_verdadero = not es_verdadero  # False</code></pre>
+            </article>
+
+            <article class="concept">
+                <h3>4. Precedencia de Operadores</h3>
+                <p>Python sigue un orden específico al evaluar expresiones, conocido como precedencia de operadores. Aquí está el orden de mayor a menor precedencia:</p>
+                
+                <div class="data-type">
+                    <ol>
+                        <li><strong>Paréntesis:</strong> <code>()</code> - Tienen la mayor precedencia</li>
+                        <li><strong>Exponenciación:</strong> <code>**</code></li>
+                        <li><strong>Signo positivo/negativo:</strong> <code>+x</code>, <code>-x</code></li>
+                        <li><strong>Multiplicación, División, Módulo, División entera:</strong> <code>*</code>, <code>/</code>, <code>%</code>, <code>//</code></li>
+                        <li><strong>Suma y Resta:</strong> <code>+</code>, <code>-</code></li>
+                        <li><strong>Operadores de comparación:</strong> <code><=</code>, <code><</code>, <code>></code>, <code>>=</code></li>
+                        <li><strong>Operadores de igualdad:</strong> <code>==</code>, <code>!=</code></li>
+                        <li><strong>Operadores de asignación:</strong> <code>=</code>, <code>+=</code>, <code>-=</code>, etc.</li>
+                        <li><strong>Operadores de identidad:</strong> <code>is</code>, <code>is not</code></li>
+                        <li><strong>Operadores de pertenencia:</strong> <code>in</code>, <code>not in</code></li>
+                        <li><strong>Operadores lógicos:</strong> <code>not</code>, <code>and</code>, <code>or</code></li>
+                    </ol>
+                </div>
+                
+                <h4>Ejemplo de precedencia:</h4>
+                <pre><code class="language-python"># Ejemplo de precedencia
+resultado1 = 5 + 3 * 2      # 11 (primero la multiplicación)
+resultado2 = (5 + 3) * 2    # 16 (los paréntesis tienen prioridad)
+
+# Expresión compleja
+resultado3 = 10 + 2 * 3 ** 2  # 28 (primero 3**2=9, luego 2*9=18, luego 10+18=28)
+
+# Usando paréntesis para claridad
+resultado_claro = 10 + (2 * (3 ** 2))  # 28</code></pre>
+                
+                <div class="info-box">
+                    <i class="fas fa-lightbulb"></i>
+                    <p><strong>Consejo:</strong> Siempre usa paréntesis para hacer tus expresiones más claras, incluso cuando no sean estrictamente necesarios. Esto hace que tu código sea más legible y evita errores.</p>
+                </div>
+            </article>
+        </section>
+
+        <section class="practical-activity">
+            <h2><i class="fas fa-laptop-code"></i> Actividad Práctica</h2>
+            
+            <div class="step">
+                <h3>1. Calculadora de Propinas</h3>
+                <p>Crea un programa que calcule el monto total a pagar en un restaurante, incluyendo una propina del 15% sobre el total de la cuenta.</p>
+                <div class="hint" onclick="toggleHint('hint1')">
+                    <i class="fas fa-lightbulb"></i> Pista
+                    <div id="hint1" class="hint-content">
+                        Usa una variable para el monto de la cuenta, calcula el 15% de ese monto y súmalo al total.
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>2. Verificador de Números</h3>
+                <p>Escribe un programa que pida un número al usuario y determine si es positivo, negativo o cero, y si es par o impar.</p>
+                <div class="hint" onclick="toggleHint('hint2')">
+                    <i class="fas fa-lightbulb"></i> Pista
+                    <div id="hint2" class="hint-content">
+                        Usa operadores de comparación para verificar si el número es mayor, menor o igual a cero, y el operador módulo (%) para verificar si es par o impar.
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>3. Calculadora de IMC</h3>
+                <p>Crea un programa que calcule el Índice de Masa Corporal (IMC) y proporcione una interpretación básica.</p>
+                <p>Fórmula: IMC = peso (kg) / (altura (m) ** 2)</p>
+                <p>Interpretación:
+                    <ul>
+                        <li>IMC < 18.5: Bajo peso</li>
+                        <li>18.5 ≤ IMC < 25: Peso normal</li>
+                        <li>25 ≤ IMC < 30: Sobrepeso</li>
+                        <li>IMC ≥ 30: Obesidad</li>
+                    </ul>
+                </p>
+            </div>
+        </section>
+
+        <section class="exercises">
+            <h2><i class="fas fa-tasks"></i> Ejercicios Adicionales</h2>
+            
+            <div class="exercise">
+                <h3>Ejercicio 1: Calculadora de Edad</h3>
+                <p>Escribe un programa que pida al usuario su año de nacimiento y calcule su edad actual.</p>
+                <p>Pista: Puedes usar el módulo <code>datetime</code> para obtener el año actual.</p>
+            </div>
+
+            <div class="exercise">
+                <h3>Ejercicio 2: Conversor de Temperatura</h3>
+                <p>Crea un programa que convierta entre grados Celsius y Fahrenheit. El programa debe preguntar al usuario qué conversión desea realizar.</p>
+                <p>Fórmulas:
+                    <ul>
+                        <li>Celsius a Fahrenheit: (C × 9/5) + 32</li>
+                        <li>Fahrenheit a Celsius: (F - 32) × 5/9</li>
+                    </ul>
+                </p>
+            </div>
+
+            <div class="exercise">
+                <h3>Ejercicio 3: Verificador de Año Bisiesto</h3>
+                <p>Escribe un programa que determine si un año es bisiesto o no.</p>
+                <p>Un año es bisiesto si:
+                    <ol>
+                        <li>Es divisible entre 4, pero no entre 100, o</li>
+                        <li>Es divisible entre 400</li>
+                    </ol>
+                </p>
+                <p>Ejemplo: 2000 fue bisiesto, 1900 no fue bisiesto, 2024 es bisiesto.</p>
+            </div>
+        </section>
+
+        <section class="resources">
+            <h2><i class="fas fa-book-open"></i> Recursos Adicionales</h2>
+            <ul>
+                <li><a href="https://docs.python.org/3/reference/expressions.html#operator-precedence" target="_blank" rel="noopener">Documentación oficial de Python sobre precedencia de operadores</a></li>
+                <li><a href="https://www.w3schools.com/python/python_operators.asp" target="_blank" rel="noopener">Guía de operadores en W3Schools</a></li>
+                <li><a href="https://www.learnpython.org/es/Operadores%20y%20Expresiones" target="_blank" rel="noopener">Tutorial interactivo sobre operadores</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION1-2.html" class="btn">Sesión Anterior: 1.2 Variables</a>
+                <span>Sesión 1.3 de 100</span>
+                <a href="SESION1-4.html" class="btn">Siguiente Sesión: 1.4 Estructuras de Control</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

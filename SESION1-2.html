@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesión 1.2: Variables y Tipos de Datos - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header class="session-header">
+        <div class="container">
+            <h1>Sesión 1.2: Variables y Tipos de Datos en Python</h1>
+            <p class="session-meta">Módulo 1: Introducción a Python | Duración: 60 minutos</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="learning-objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender qué son las variables y cómo declararlas en Python</li>
+                <li>Conocer los tipos de datos básicos en Python</li>
+                <li>Aprender a realizar operaciones con diferentes tipos de datos</li>
+                <li>Entender la conversión entre tipos de datos</li>
+                <li>Practicar con ejercicios interactivos</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
+            
+            <article class="concept">
+                <h3>¿Qué son las variables?</h3>
+                <p>En programación, una variable es un espacio en la memoria de la computadora donde podemos almacenar datos. Piensa en ellas como cajas etiquetadas donde guardamos información para usarla más tarde.</p>
+                
+                <div class="info-box">
+                    <i class="fas fa-lightbulb"></i>
+                    <p><strong>Curiosidad:</strong> En Python, las variables no necesitan una declaración de tipo explícita. Python infiere el tipo de dato automáticamente.</p>
+                </div>
+                
+                <h4>Reglas para nombrar variables:</h4>
+                <ul>
+                    <li>Pueden contener letras, números y guiones bajos (_)</li>
+                    <li>No pueden comenzar con un número</li>
+                    <li>Son sensibles a mayúsculas y minúsculas (edad ≠ Edad ≠ EDAD)</li>
+                    <li>No pueden ser palabras reservadas de Python (como <code>if</code>, <code>for</code>, <code>while</code>, etc.)</li>
+                </ul>
+            </article>
+
+            <article class="concept">
+                <h3>Tipos de Datos Básicos</h3>
+                
+                <h4>1. Números</h4>
+                <div class="data-type">
+                    <h5>Enteros (int)</h5>
+                    <p>Números sin parte decimal. Ejemplos: <code>5</code>, <code>-3</code>, <code>0</code>, <code>42</code></p>
+                    <pre><code class="language-python">edad = 25
+puntuacion = -10
+anio = 2023</code></pre>
+                </div>
+                
+                <div class="data-type">
+                    <h5>Punto flotante (float)</h5>
+                    <p>Números con parte decimal. Ejemplos: <code>3.14</code>, <code>-0.001</code>, <code>2.0</code></p>
+                    <pre><code class="language-python">pi = 3.1416
+precio = 19.99
+temperatura = -5.5</code></pre>
+                </div>
+                
+                <h4>2. Texto (str)</h4>
+                <p>Cadenas de caracteres entre comillas simples o dobles.</p>
+                <pre><code class="language-python">nombre = "Juan"
+mensaje = 'Hola, ¿cómo estás?'
+direccion = "Calle Falsa 123"</code></pre>
+                
+                <h4>3. Booleanos (bool)</h4>
+                <p>Representan valores de verdad: <code>True</code> o <code>False</code> (Verdadero o Falso).</p>
+                <pre><code class="language-python">es_mayor = True
+tiene_descuento = False
+es_estudiante = True</code></pre>
+                
+                <h4>4. Colecciones (las veremos en detalle más adelante)</h4>
+                <ul>
+                    <li><strong>Listas (list):</strong> Colección ordenada y mutable <code>[1, 2, 3]</code></li>
+                    <li><strong>Tuplas (tuple):</strong> Colección ordenada e inmutable <code>(1, 2, 3)</code></li>
+                    <li><strong>Diccionarios (dict):</strong> Pares clave-valor <code>{"nombre": "Ana", "edad": 25}</code></li>
+                    <li><strong>Conjuntos (set):</strong> Colección no ordenada de elementos únicos <code>{1, 2, 3}</code></li>
+                </ul>
+            </article>
+
+            <article class="concept">
+                <h3>Operaciones con Variables</h3>
+                
+                <h4>Operaciones numéricas</h4>
+                <pre><code class="language-python"># Suma
+resultado = 5 + 3  # 8
+
+# Resta
+diferencia = 10 - 4  # 6
+
+# Multiplicación
+producto = 6 * 7  # 42
+
+# División
+cociente = 15 / 3  # 5.0 (siempre devuelve float)
+
+# División entera
+cociente_entero = 15 // 4  # 3
+
+# Módulo (resto de la división)
+resto = 15 % 4  # 3
+
+# Potencia
+potencia = 2 ** 3  # 8</code></pre>
+
+                <h4>Operaciones con cadenas</h4>
+                <pre><code class="language-python"># Concatenación
+saludo = "Hola, " + "mundo!"  # "Hola, mundo!"
+
+# Repetición
+risas = "ja" * 3  # "jajaja"
+
+# Longitud de una cadena
+longitud = len("Python")  # 6</code></pre>
+
+                <h4>Conversión entre tipos</h4>
+                <pre><code class="language-python"># De cadena a entero
+numero = int("42")  # 42
+
+# De entero a cadena
+texto = str(42)  # "42"
+
+# De entero a flotante
+decimal = float(5)  # 5.0
+
+# De flotante a entero (trunca los decimales)
+entero = int(3.99)  # 3 (no redondea, solo quita la parte decimal)</code></pre>
+            </article>
+        </section>
+
+        <section class="practical-activity">
+            <h2><i class="fas fa-laptop-code"></i> Actividad Práctica</h2>
+            
+            <div class="step">
+                <h3>1. Ejercicio: Calculadora Básica</h3>
+                <p>Crea un programa que pida al usuario dos números y muestre el resultado de las operaciones básicas.</p>
+                <div class="hint" onclick="toggleHint('hint1')">
+                    <i class="fas fa-lightbulb"></i> Pista
+                    <div id="hint1" class="hint-content">
+                        Usa <code>input()</code> para obtener los números (recuerda convertirlos a <code>int()</code> o <code>float()</code>) y luego muestra los resultados con <code>print()</code>.
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>2. Ejercicio: Información Personal</h3>
+                <p>Crea un programa que pida al usuario su nombre, edad y ciudad, y muestre un mensaje personalizado.</p>
+                <div class="hint" onclick="toggleHint('hint2')">
+                    <i class="fas fa-lightbulb"></i> Pista
+                    <div id="hint2" class="hint-content">
+                        Usa <code>input()</code> para cada dato y luego concaténalos en un mensaje con <code>+</code> o usando f-strings (Python 3.6+).
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>3. Ejercicio: Conversor de Unidades</h3>
+                <p>Crea un programa que convierta kilómetros a millas (1 km = 0.621371 millas).</p>
+            </div>
+        </section>
+
+        <section class="exercises">
+            <h2><i class="fas fa-tasks"></i> Ejercicios Adicionales</h2>
+            
+            <div class="exercise">
+                <h3>Ejercicio 1: Calculadora de IMC</h3>
+                <p>Escribe un programa que calcule el Índice de Masa Corporal (IMC) usando la fórmula: IMC = peso / (altura^2).</p>
+                <p>Donde el peso está en kg y la altura en metros.</p>
+            </div>
+
+            <div class="exercise">
+                <h3>Ejercicio 2: Calculadora de Propinas</h3>
+                <p>Crea un programa que calcule el monto total a pagar en un restaurante, incluyendo una propina del 15% sobre el total de la cuenta.</p>
+            </div>
+        </section>
+
+        <section class="resources">
+            <h2><i class="fas fa-book-open"></i> Recursos Adicionales</h2>
+            <ul>
+                <li><a href="https://docs.python.org/3/tutorial/introduction.html#using-python-as-a-calculator" target="_blank" rel="noopener">Documentación oficial de Python sobre operaciones básicas</a></li>
+                <li><a href="https://www.learnpython.org/es/Variables%20y%20Tipos" target="_blank" rel="noopener">Tutorial interactivo sobre variables y tipos</a></li>
+                <li><a href="https://www.w3schools.com/python/python_variables.asp" target="_blank" rel="noopener">Guía de variables en W3Schools</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION1-1.html" class="btn">Sesión Anterior: 1.1 Instalación</a>
+                <span>Sesión 1.2 de 100</span>
+                <a href="SESION1-3.html" class="btn">Siguiente Sesión: 1.3 Operadores</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

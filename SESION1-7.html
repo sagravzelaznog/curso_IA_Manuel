@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesión 1.7 - Estructuras de Datos en Python</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><i class="fas fa-project-diagram"></i> Estructuras de Datos en Python</h1>
+            <p>Sesión 1.7: Aprendiendo a trabajar con listas, tuplas, conjuntos y diccionarios</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="learning-objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender las principales estructuras de datos en Python</li>
+                <li>Aprender a crear y manipular listas, tuplas, conjuntos y diccionarios</li>
+                <li>Entender cuándo usar cada tipo de estructura de datos</li>
+                <li>Practicar con ejercicios interactivos</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Contenido</h2>
+            
+            <div class="tab">
+                <button class="tab-button active" onclick="openTab(event, 'listas')">Listas</button>
+                <button class="tab-button" onclick="openTab(event, 'tuplas')">Tuplas</button>
+                <button class="tab-button" onclick="openTab(event, 'conjuntos')">Conjuntos</button>
+                <button class="tab-button" onclick="openTab(event, 'diccionarios')">Diccionarios</button>
+            </div>
+
+            <div id="listas" class="tab-content active">
+                <h3><i class="fas fa-list"></i> Listas</h3>
+                <p>Las listas son colecciones ordenadas y mutables de elementos. Pueden contener diferentes tipos de datos.</p>
+                
+                <h4>Creación de listas:</h4>
+                <pre><code class="language-python"># Lista vacía
+mi_lista = []
+
+# Lista con elementos
+numeros = [1, 2, 3, 4, 5]
+mezcla = [1, "hola", 3.14, True]
+
+# Usando el constructor list()
+otra_lista = list((1, 2, 3))</code></pre>
+
+                <h4>Operaciones comunes:</h4>
+                <pre><code class="language-python"># Acceso a elementos
+primer_elemento = numeros[0]  # 1
+ultimo_elemento = numeros[-1]  # 5
+
+# Modificar elementos
+numeros[0] = 10
+
+# Añadir elementos
+numeros.append(6)         # Añade al final
+numeros.insert(1, 1.5)    # Inserta en posición específica
+
+# Eliminar elementos
+del numeros[0]           # Elimina por índice
+numeros.remove(3)         # Elimina la primera ocurrencia del valor
+valor_eliminado = numeros.pop()  # Elimina y devuelve el último elemento
+
+# Longitud de la lista
+tamano = len(numeros)     # Devuelve 5</code></pre>
+            </div>
+
+            <div id="tuplas" class="tab-content">
+                <h3><i class="fas fa-brackets-curly"></i> Tuplas</h3>
+                <p>Las tuplas son similares a las listas pero son inmutables (no se pueden modificar después de crearse).</p>
+                
+                <h4>Creación de tuplas:</h4>
+                <pre><code class="language-python"># Tupla vacía
+mi_tupla = ()
+
+# Tupla con un elemento (¡cuidado con la coma!)
+una_tupla = (1,)  # Correcto
+no_es_tupla = (1)  # Incorrecto, es un entero
+
+# Tupla con múltiples elementos
+colores = ('rojo', 'verde', 'azul')
+
+# Usando el constructor tuple()
+otra_tupla = tuple([1, 2, 3])</code></pre>
+
+                <h4>Operaciones comunes:</h4>
+                <pre><code class="language-python"># Acceso a elementos
+primer_color = colores[0]  # 'rojo'
+
+# Desempaquetado
+a, b, c = colores  # a='rojo', b='verde', c='azul'
+
+# Longitud
+tamano = len(colores)  # 3
+
+# Las tuplas no pueden modificarse después de crearse
+# Esto dará error:
+# colores[0] = 'amarillo'  # TypeError</code></pre>
+            </div>
+
+            <div id="conjuntos" class="tab-content">
+                <h3><i class="fas fa-object-group"></i> Conjuntos</h3>
+                <p>Los conjuntos son colecciones no ordenadas de elementos únicos.</p>
+                
+                <h4>Creación de conjuntos:</h4>
+                <pre><code class="language-python"># Conjunto vacío
+mi_conjunto = set()  # ¡No usar {} que crea un diccionario!
+
+# Conjunto con elementos
+frutas = {'manzana', 'banana', 'cereza'}
+
+# Usando el constructor set()
+otro_conjunto = set([1, 2, 2, 3, 4])  # {1, 2, 3, 4}</code></pre>
+
+                <h4>Operaciones comunes:</h4>
+                <pre><code class="language-python"># Añadir elementos
+frutas.add('naranja')
+
+# Eliminar elementos
+frutas.remove('banana')  # Lanza error si no existe
+frutas.discard('banana')  # No lanza error
+
+# Operaciones de conjuntos
+A = {1, 2, 3}
+B = {3, 4, 5}
+
+union = A | B          # {1, 2, 3, 4, 5}
+interseccion = A & B   # {3}
+diferencia = A - B     # {1, 2}
+diferencia_simetrica = A ^ B  # {1, 2, 4, 5}</code></pre>
+            </div>
+
+            <div id="diccionarios" class="tab-content">
+                <h3><i class="fas fa-book"></i> Diccionarios</h3>
+                <p>Los diccionarios almacenan pares clave-valor y son muy útiles para representar datos estructurados.</p>
+                
+                <h4>Creación de diccionarios:</h4>
+                <pre><code class="language-python"># Diccionario vacío
+mi_diccionario = {}
+otro_diccionario = dict()
+
+# Diccionario con elementos
+estudiante = {
+    'nombre': 'Juan',
+    'edad': 20,
+    'cursos': ['Matemáticas', 'Programación'],
+    'activo': True
+}</code></pre>
+
+                <h4>Operaciones comunes:</h4>
+                <pre><code class="language-python"># Acceso a valores
+nombre = estudiante['nombre']  # 'Juan'
+edad = estudiante.get('edad')  # 20
+
+# Añadir o modificar valores
+estudiante['edad'] = 21
+estudiante['email'] = 'juan@ejemplo.com'
+
+# Eliminar elementos
+del estudiante['activo']
+email = estudiante.pop('email', None)  # Elimina y devuelve el valor
+
+# Obtener claves, valores y pares
+claves = estudiante.keys()     # dict_keys(['nombre', 'edad', 'cursos'])
+valores = estudiante.values()  # dict_values(['Juan', 21, ['Matemáticas', 'Programación']])
+pares = estudiante.items()     # dict_items([('nombre', 'Juan'), ...])
+
+# Verificar existencia de clave
+if 'nombre' in estudiante:
+    print('El estudiante tiene nombre')</code></pre>
+            </div>
+        </section>
+
+        <section class="practical-exercises">
+            <h2><i class="fas fa-pencil-alt"></i> Ejercicios Prácticos</h2>
+            
+            <div class="exercise">
+                <h4><i class="fas fa-pencil-alt"></i> Ejercicio 1: Lista de Compras</h4>
+                <p>Crea un programa que permita al usuario gestionar una lista de compras. Debe permitir:</p>
+                <ol>
+                    <li>Agregar elementos a la lista</li>
+                    <li>Eliminar elementos de la lista</li>
+                    <li>Mostrar todos los elementos de la lista</li>
+                    <li>Verificar si un elemento está en la lista</li>
+                    <li>Salir del programa</li>
+                </ol>
+                <button class="hint-button" onclick="toggleHint('solucion1')">Mostrar Solución</button>
+                <div id="solucion1" class="solution">
+                    <pre><code class="language-python">def lista_compras():
+    compras = []
+    
+    while True:
+        print("\n--- Lista de Compras ---")
+        print("1. Agregar artículo")
+        print("2. Eliminar artículo")
+        print("3. Ver lista")
+        print("4. Buscar artículo")
+        print("5. Salir")
+        
+        opcion = input("Selecciona una opción: ")
+        
+        if opcion == '1':
+            articulo = input("Ingresa el artículo a agregar: ")
+            compras.append(articulo)
+            print(f"'{articulo}' ha sido agregado a la lista.")
+            
+        elif opcion == '2':
+            if not compras:
+                print("La lista está vacía.")
+                continue
+                
+            print("\nLista actual:")
+            for i, articulo in enumerate(compras, 1):
+                print(f"{i}. {articulo}")
+                
+            try:
+                num = int(input("Número del artículo a eliminar: "))
+                if 1 <= num <= len(compras):
+                    eliminado = compras.pop(num - 1)
+                    print(f"'{eliminado}' ha sido eliminado de la lista.")
+                else:
+                    print("Número inválido.")
+            except ValueError:
+                print("Por favor ingresa un número válido.")
+                
+        elif opcion == '3':
+            if not compras:
+                print("La lista está vacía.")
+            else:
+                print("\n--- Tu lista de compras ---")
+                for i, articulo in enumerate(compras, 1):
+                    print(f"{i}. {articulo}")
+                    
+        elif opcion == '4':
+            busqueda = input("Ingresa el artículo a buscar: ")
+            if busqueda in compras:
+                print(f"'{busqueda}' está en la lista.")
+            else:
+                print(f"'{busqueda}' no está en la lista.")
+                
+        elif opcion == '5':
+            print("¡Hasta luego!")
+            break
+            
+        else:
+            print("Opción no válida. Por favor intenta de nuevo.")
+
+# Para ejecutar el programa:
+# lista_compras()
+</code></pre>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h4><i class="fas fa-pencil-alt"></i> Ejercicio 2: Agenda de Contactos</h4>
+                <p>Crea un programa que funcione como una agenda de contactos. Debe permitir:</p>
+                <ol>
+                    <li>Agregar un nuevo contacto (nombre y teléfono)</li>
+                    <li>Buscar un contacto por nombre</li>
+                    <li>Eliminar un contacto</li>
+                    <li>Mostrar todos los contactos</li>
+                    <li>Salir del programa</li>
+                </ol>
+                <button class="hint-button" onclick="toggleHint('solucion2')">Mostrar Solución</button>
+                <div id="solucion2" class="solution">
+                    <pre><code class="language-python">def agenda_contactos():
+    contactos = {}
+    
+    while True:
+        print("\n--- Agenda de Contactos ---")
+        print("1. Agregar contacto")
+        print("2. Buscar contacto")
+        print("3. Eliminar contacto")
+        print("4. Mostrar todos los contactos")
+        print("5. Salir")
+        
+        opcion = input("Selecciona una opción: ")
+        
+        if opcion == '1':
+            nombre = input("Nombre del contacto: ")
+            if nombre in contactos:
+                print("¡Este contacto ya existe!")
+                continue
+                
+            telefono = input("Número de teléfono: ")
+            contactos[nombre] = telefono
+            print(f"Contacto '{nombre}' agregado correctamente.")
+            
+        elif opcion == '2':
+            nombre = input("Nombre a buscar: ")
+            if nombre in contactos:
+                print(f"{nombre}: {contactos[nombre]}")
+            else:
+                print("Contacto no encontrado.")
+                
+        elif opcion == '3':
+            nombre = input("Nombre del contacto a eliminar: ")
+            if nombre in contactos:
+                del contactos[nombre]
+                print(f"Contacto '{nombre}' eliminado.")
+            else:
+                print("Contacto no encontrado.")
+                
+        elif opcion == '4':
+            if not contactos:
+                print("No hay contactos en la agenda.")
+            else:
+                print("\n--- Tus contactos ---")
+                for nombre, telefono in contactos.items():
+                    print(f"{nombre}: {telefono}")
+                    
+        elif opcion == '5':
+            print("¡Hasta luego!")
+            break
+            
+        else:
+            print("Opción no válida. Por favor intenta de nuevo.")
+
+# Para ejecutar el programa:
+# agenda_contactos()
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h2><i class="fas fa-clipboard-list"></i> Resumen</h2>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h3>Listas</h3>
+                    <ul>
+                        <li>Ordenadas y mutables</li>
+                        <li>Sintaxis: <code>[1, 2, 3]</code></li>
+                        <li>Métodos útiles: <code>append()</code>, <code>remove()</code>, <code>pop()</code></li>
+                    </ul>
+                </div>
+                
+                <div class="summary-card">
+                    <h3>Tuplas</h3>
+                    <ul>
+                        <li>Ordenadas e inmutables</li>
+                        <li>Sintaxis: <code>(1, 2, 3)</code></li>
+                        <li>Útiles para datos que no cambian</li>
+                    </ul>
+                </div>
+                
+                <div class="summary-card">
+                    <h3>Conjuntos</h3>
+                    <ul>
+                        <li>No ordenados y sin duplicados</li>
+                        <li>Sintaxis: <code>{1, 2, 3}</code></li>
+                        <li>Operaciones de conjuntos: unión, intersección, etc.</li>
+                    </ul>
+                </div>
+                
+                <div class="summary-card">
+                    <h3>Diccionarios</h3>
+                    <ul>
+                        <li>Pares clave-valor</li>
+                        <li>Sintaxis: <code>{"clave": "valor"}</code></li>
+                        <li>Acceso rápido por clave</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    
+    <footer>
+					<div class="container">
+									<p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+									<div class="navigation">
+													<a href="SESION1-6.html" class="btn">Sesión Anterior: 1.6 Listas y tuplas</a>
+													<a href="SESION1-8.html" class="btn">Siguiente Sesión: 1.8 Manejo de archivos</a>
+									</div>
+									<div class="social-links">
+													<a href="#" class="social-link" title="Github" rel="noopener"><i class="fab fa-github"></i></a>
+													<a href="#" class="social-link" title="Twitter" rel="noopener"><i class="fab fa-twitter"></i></a>
+													<a href="#" class="social-link" title="Linkedin" rel="noopener"><i class="fab fa-linkedin"></i></a>
+									</div>
+					</div>
+	</footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Inicializar Prism para resaltar el código
+        document.addEventListener('DOMContentLoaded', function() {
+            Prism.highlightAll();
+            
+            // Agregar botones de copiar a los bloques de código
+            document.querySelectorAll('pre code').forEach((block) => {
+                const button = document.createElement('button');
+                button.className = 'copy-button';
+                button.title = 'Copiar al portapapeles';
+                button.innerHTML = '<i class="far fa-copy"></i>';
+                button.onclick = () => copyToClipboard(block);
+                
+                // Agregar el botón al bloque de código
+                const pre = block.parentNode;
+                if (pre.parentNode.classList.contains('copyable')) {
+                    pre.parentNode.insertBefore(button, pre);
+                } else {
+                    pre.insertBefore(button, block);
+                }
+            });
+        });
+    </script>
+				
+</body>
+</html>

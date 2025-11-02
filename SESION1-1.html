@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesión 1.1: Instalación y configuración de Python - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header class="session-header">
+        <div class="container">
+            <h1>Sesión 1.1: Instalación y configuración de Python</h1>
+            <p class="session-meta">Módulo 1: Introducción a Python | Duración: 60 minutos</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="learning-objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender qué es Python y por qué es importante en IA</li>
+                <li>Instalar Python en tu sistema operativo</li>
+                <li>Configurar un entorno de desarrollo básico</li>
+                <li>Ejecutar tu primer programa en Python</li>
+                <li>Familiarizarte con el uso de Jupyter Notebook</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
+            
+            <article class="concept">
+                <h3>¿Qué es Python?</h3>
+                <p>Python es un lenguaje de programación de alto nivel, interpretado y de propósito general. Fue creado por Guido van Rossum y lanzado por primera vez en 1991. Es conocido por su sintaxis clara y legible, lo que lo hace ideal para principiantes.</p>
+                
+                <div class="info-box">
+                    <i class="fas fa-lightbulb"></i>
+                    <p><strong>Dato curioso:</strong> El nombre "Python" proviene del grupo de comedia británico Monty Python, no de la serpiente, aunque el logo oficial sí muestra dos serpientes.</p>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>¿Por qué Python para IA?</h3>
+                <ul>
+                    <li><strong>Amplio ecosistema de bibliotecas</strong> como TensorFlow, PyTorch, y scikit-learn</li>
+                    <li><strong>Sintaxis legible</strong> que facilita la implementación de algoritmos complejos</li>
+                    <li><strong>Gran comunidad</strong> de desarrolladores</li>
+                    <li><strong>Multiplataforma</strong> (Windows, macOS, Linux)</li>
+                    <li><strong>Extensa documentación</strong> y recursos de aprendizaje</li>
+                </ul>
+            </article>
+        </section>
+
+        <section class="practical-activity">
+            <h2><i class="fas fa-laptop-code"></i> Actividad Práctica</h2>
+            
+            <div class="step">
+                <h3>1. Instalación de Python</h3>
+                <div class="os-instructions">
+                    <div class="os-tab">
+                        <button class="tab-button active" onclick="openTab(event, 'windows')">Windows</button>
+                        <button class="tab-button" onclick="openTab(event, 'mac')">macOS</button>
+                        <button class="tab-button" onclick="openTab(event, 'linux')">Linux</button>
+                    </div>
+
+                    <div id="windows" class="tab-content active">
+                        <ol>
+                            <li>Visita <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python.org/downloads</a></li>
+                            <li>Haz clic en "Download Python 3.x.x" (la versión más reciente)</li>
+                            <li>Ejecuta el instalador descargado</li>
+                            <li>Asegúrate de marcar la casilla "Add Python to PATH"</li>
+                            <li>Haz clic en "Install Now"</li>
+                            <li>Verifica la instalación abriendo Command Prompt y escribiendo: <code>python --version</code></li>
+                        </ol>
+                    </div>
+
+                    <div id="mac" class="tab-content">
+                        <ol>
+                            <li>Abre Terminal (puedes encontrarlo en Aplicaciones > Utilidades)</li>
+                            <li>Instala Homebrew si no lo tienes: <code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code></li>
+                            <li>Instala Python: <code>brew install python</code></li>
+                            <li>Verifica la instalación: <code>python3 --version</code></li>
+                        </ol>
+                    </div>
+
+                    <div id="linux" class="tab-content">
+                        <ol>
+                            <li>Abre una terminal (Ctrl+Alt+T en la mayoría de distribuciones)</li>
+                            <li>Actualiza la lista de paquetes: <code>sudo apt update</code></li>
+                            <li>Instala Python: <code>sudo apt install python3 python3-pip</code></li>
+                            <li>Verifica la instalación: <code>python3 --version</code></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>2. Instalación de Visual Studio Code</h3>
+                <ol>
+                    <li>Descarga VS Code desde <a href="https://code.visualstudio.com/" target="_blank" rel="noopener">code.visualstudio.com</a></li>
+                    <li>Ejecuta el instalador y sigue las instrucciones</li>
+                    <li>Una vez instalado, abre VS Code y ve a la pestaña de extensiones (Ctrl+Shift+X)</li>
+                    <li>Busca e instala la extensión "Python" de Microsoft</li>
+                </ol>
+            </div>
+
+            <div class="step">
+                <h3>3. Tu primer programa en Python</h3>
+                <ol>
+                    <li>Abre VS Code</li>
+                    <li>Crea un nuevo archivo (Ctrl+N)</li>
+                    <li>Escribe el siguiente código:
+                        <pre><code class="language-python"># Mi primer programa en Python
+print("¡Hola, Mundo!")
+
+# Pide el nombre del usuario
+nombre = input("¿Cuál es tu nombre? ")
+print(f"¡Bienvenido al curso de IA, {nombre}!")</code></pre>
+                    </li>
+                    <li>Guarda el archivo como <code>hola_mundo.py</code></li>
+                    <li>Ejecútalo haciendo clic derecho en el editor y seleccionando "Run Python File in Terminal" o presionando F5</li>
+                </ol>
+            </div>
+
+            <div class="step">
+                <h3>4. Instalación de Jupyter Notebook</h3>
+                <p>Jupyter Notebook es una herramienta interactiva ampliamente utilizada en ciencia de datos.</p>
+                <ol>
+                    <li>Abre una terminal o Command Prompt</li>
+                    <li>Instala Jupyter Notebook: <code>pip install notebook</code></li>
+                    <li>Inicia Jupyter Notebook: <code>jupyter notebook</code></li>
+                    <li>Se abrirá una ventana en tu navegador predeterminado</li>
+                    <li>Haz clic en "New" > "Python 3" para crear un nuevo notebook</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="exercises">
+            <h2><i class="fas fa-tasks"></i> Ejercicios</h2>
+            <div class="exercise">
+                <h3>Ejercicio 1: Calculadora Básica</h3>
+                <p>Crea un programa que pida dos números al usuario y muestre la suma, resta, multiplicación y división.</p>
+                <div class="hint" onclick="toggleHint('hint1')">
+                    <i class="fas fa-lightbulb"></i> Pista
+                    <div id="hint1" class="hint-content">
+                        Usa <code>input()</code> para obtener los números (recuerda convertirlos a <code>float()</code> o <code>int()</code>) y luego muestra los resultados con <code>print()</code>.
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h3>Ejercicio 2: Conversor de Temperatura</h3>
+                <p>Escribe un programa que convierta grados Celsius a Fahrenheit. La fórmula es: <code>F = (C × 9/5) + 32</code>.</p>
+            </div>
+        </section>
+
+        <section class="resources">
+            <h2><i class="fas fa-book-open"></i> Recursos Adicionales</h2>
+            <ul>
+                <li><a href="https://docs.python.org/3/tutorial/" target="_blank" rel="noopener">Tutorial oficial de Python</a></li>
+                <li><a href="https://www.learnpython.org/" target="_blank" rel="noopener">Learn Python (interactivo)</a></li>
+                <li><a href="https://jupyter.org/documentation" target="_blank" rel="noopener">Documentación de Jupyter</a></li>
+                <li><a href="https://code.visualstudio.com/docs/python/python-tutorial" target="_blank" rel="noopener">Tutorial de Python en VS Code</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="index.html" class="btn">Sesión Anterior</a>
+                <span>Sesión 1.1 de 100</span>
+                <a href="SESION1-2.html" class="btn">Siguiente Sesión</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

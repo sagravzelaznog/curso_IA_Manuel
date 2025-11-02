@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesión 1.9: Funciones en Python - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Módulo 1: Introducción a Python</h1>
+            <h2>Sesión 1.9: Funciones en Python</h2>
+        
+        </div>
+    </header>
+
+    <main>
+        <section class="learning-objectives">
+            <h3>Objetivos de Aprendizaje</h3>
+            <ul>
+                <li>Comprender el concepto de funciones en programación</li>
+                <li>Aprender a definir y llamar funciones en Python</li>
+                <li>Entender los parámetros y argumentos de funciones</li>
+                <li>Explorar el retorno de valores</li>
+                <li>Conocer el alcance de las variables</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h3>1. Introducción a las Funciones</h3>
+            <p>Las funciones son bloques de código reutilizables que realizan una tarea específica. Nos permiten organizar el código, hacerlo más legible y evitar la repetición.</p>
+            
+            <div class="code-block">
+                <h4>Sintaxis básica de una función</h4>
+                <pre><code class="python">def nombre_funcion(parametros):
+    """Docstring: Descripción de la función"""
+    # Cuerpo de la función
+    return valor_retorno</code></pre>
+            </div>
+
+            <h3>2. Definición y Llamada de Funciones</h3>
+            <p>Vamos a ver un ejemplo práctico de cómo definir y llamar una función simple:</p>
+            
+            <div class="code-block">
+                <h4>Ejemplo: Función de saludo</h4>
+                <pre><code class="python">def saludar(nombre):
+    """Esta función recibe un nombre y devuelve un saludo"""
+    return f"¡Hola, {nombre}! Bienvenido al curso de IA."
+
+# Llamando a la función
+mensaje = saludar("Ana")
+print(mensaje)  # Imprime: ¡Hola, Ana! Bienvenido al curso de IA.</code></pre>
+            </div>
+
+            <h3>3. Parámetros y Argumentos</h3>
+            <p>Las funciones pueden recibir múltiples parámetros y podemos definir valores por defecto:</p>
+            
+            <div class="code-block">
+                <h4>Ejemplo: Función con múltiples parámetros</h4>
+                <pre><code class="python">def calcular_imc(peso, estatura):
+    """Calcula el Índice de Masa Corporal (IMC)"""
+    return peso / (estatura ** 2)
+
+# Llamada con argumentos posicionales
+imc = calcular_imc(70, 1.75)
+
+# Llamada con argumentos nombrados
+imc = calcular_imc(estatura=1.75, peso=70)</code></pre>
+            </div>
+
+            <h3>4. Valores de retorno</h3>
+            <p>Las funciones pueden devolver múltiples valores usando tuplas:</p>
+            
+            <div class="code-block">
+                <h4>Ejemplo: Retorno múltiple</h4>
+                <pre><code class="python">def operaciones(a, b):
+    """Realiza operaciones básicas y devuelve múltiples valores"""
+    suma = a + b
+    resta = a - b
+    multiplicacion = a * b
+    division = a / b if b != 0 else "Error: división por cero"
+    return suma, resta, multiplicacion, division
+
+# Desempaquetado de la tupla retornada
+s, r, m, d = operaciones(10, 5)
+print(f"Suma: {s}, Resta: {r}, Multiplicación: {m}, División: {d}")</code></pre>
+            </div>
+
+            <h3>5. Alcance de Variables</h3>
+            <p>Las variables pueden ser globales o locales según donde se definan:</p>
+            
+            <div class="code-block">
+                <h4>Ejemplo: Variables locales y globales</h4>
+                <pre><code class="python"># Variable global
+contador = 0
+
+def incrementar():
+    # Para modificar una variable global dentro de una función
+    global contador
+    contador += 1
+    # Variable local
+    mensaje = f"Contador: {contador}"
+    return mensaje
+
+print(incrementar())  # Contador: 1
+print(incrementar())  # Contador: 2</code></pre>
+            </div>
+        </section>
+
+        <section class="exercises">
+            <h3>Ejercicios Prácticos</h3>
+            
+            <div class="exercise">
+                <h4>Ejercicio 1: Calculadora de Factorial</h4>
+                <p>Crea una función que calcule el factorial de un número entero no negativo.</p>
+                <button onclick="mostrarSolucion('sol1')">Mostrar Solución</button>
+                <div id="sol1" class="solution">
+                    <pre><code class="python">def factorial(n):
+    """Calcula el factorial de un número"""
+    if n == 0 or n == 1:
+        return 1
+    return n * factorial(n - 1)
+
+# Ejemplo de uso
+print(factorial(5))  # 120</code></pre>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h4>Ejercicio 2: Contador de Vocales</h4>
+                <p>Escribe una función que cuente cuántas vocales tiene una cadena de texto.</p>
+                <button onclick="mostrarSolucion('sol2')">Mostrar Solución</button>
+                <div id="sol2" class="solution">
+                    <pre><code class="python">def contar_vocales(texto):
+    """Cuenta el número de vocales en un texto"""
+    vocales = 'aeiouAEIOUáéíóúÁÉÍÓÚ'
+    contador = 0
+    for letra in texto:
+        if letra in vocales:
+            contador += 1
+    return contador
+
+# Ejemplo de uso
+print(contar_vocales("Hola Mundo"))  # 4</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h3>Resumen de la Sesión</h3>
+            <ul>
+                <li>Las funciones nos permiten organizar el código en bloques reutilizables.</li>
+                <li>Podemos definir funciones con <code>def</code> y llamarlas por su nombre.</li>
+                <li>Las funciones pueden recibir parámetros y devolver valores.</li>
+                <li>Es importante entender el alcance de las variables (globales y locales).</li>
+                <li>Las funciones pueden devolver múltiples valores usando tuplas.</li>
+            </ul>
+        </section>
+    </main>
+
+
+    <footer>
+					<div class="container">
+									<p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+									<div class="navigation">
+													<a href="SESION1-8.html" class="btn">Sesión Anterior: 1.8 Manejo de archivos</a>
+													<a href="SESION1-10.html" class="btn">Siguiente Sesión: 1.10 Programación funcional</a>
+									</div>
+									<div class="social-links">
+													<a href="#" class="social-link" title="Github" rel="noopener"><i class="fab fa-github"></i></a>
+													<a href="#" class="social-link" title="Twitter" rel="noopener"><i class="fab fa-twitter"></i></a>
+													<a href="#" class="social-link" title="Linkedin" rel="noopener"><i class="fab fa-linkedin"></i></a>
+									</div>
+					</div>
+	</footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

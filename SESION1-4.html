@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesión 1.4: Estructuras de Control - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header class="session-header">
+        <div class="container">
+            <h1>Sesión 1.4: Estructuras de Control en Python</h1>
+            <p class="session-meta">Módulo 1: Introducción a Python | Duración: 60 minutos</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="learning-objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender las estructuras de control condicionales (if, elif, else)</li>
+                <li>Aprender a utilizar bucles (for, while) para repetir tareas</li>
+                <li>Entender cómo controlar el flujo de ejecución de un programa</li>
+                <li>Practicar con ejemplos prácticos de estructuras de control anidadas</li>
+                <li>Desarrollar la lógica de programación a través de ejercicios</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
+            
+            <article class="concept">
+                <h3>Introducción a las Estructuras de Control</h3>
+                <p>Las estructuras de control nos permiten controlar el flujo de ejecución de un programa, tomando decisiones y repitiendo acciones según sea necesario. Son fundamentales para crear programas dinámicos y flexibles.</p>
+                
+                <div class="info-box">
+                    <i class="fas fa-lightbulb"></i>
+                    <p><strong>Dato curioso:</strong> Las estructuras de control son la base de la lógica de programación y se utilizan en todos los lenguajes de programación, aunque la sintaxis puede variar.</p>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>1. Estructuras Condicionales</h3>
+                <p>Permiten ejecutar bloques de código solo si se cumple cierta condición.</p>
+                
+                <h4>1.1 Sentencia if</h4>
+                <p>Ejecuta un bloque de código si la condición es verdadera.</p>
+                <pre><code class="language-python">edad = 18
+if edad >= 18:
+    print("Eres mayor de edad")  # Esta línea se ejecuta si la condición es verdadera</code></pre>
+
+                <h4>1.2 Sentencia if-else</h4>
+                <p>Ejecuta un bloque si la condición es verdadera y otro si es falsa.</p>
+                <pre><code class="language-python">edad = 16
+if edad >= 18:
+    print("Puedes votar")
+else:
+    print("Aún no puedes votar")  # Se ejecutará este bloque</code></pre>
+
+                <h4>1.3 Sentencia if-elif-else</h4>
+                <p>Permite evaluar múltiples condiciones en secuencia.</p>
+                <pre><code class="language-python">nota = 85
+if nota >= 90:
+    print("Excelente (A)")
+elif nota >= 80:
+    print("Muy bueno (B)")  # Se ejecutará este bloque
+elif nota >= 70:
+    print("Bueno (C)")
+else:
+    print("Necesitas mejorar")</code></pre>
+
+                <div class="exercise">
+                    <h4><i class="fas fa-pencil-alt"></i> Ejercicio Práctico 1</h4>
+                    <p>Escribe un programa que pida al usuario su edad y le diga si es un niño (menor de 12), adolescente (12-17), adulto (18-64) o adulto mayor (65 o más).</p>
+                    <button class="hint-button" onclick="toggleHint('solucion1')">Mostrar Solución</button>
+                    <div id="solucion1" class="solution">
+                        <pre><code class="language-python">edad = int(input("Ingresa tu edad: "))
+if edad < 12:
+    print("Eres un niño")
+elif 12 <= edad < 18:
+    print("Eres un adolescente")
+elif 18 <= edad < 65:
+    print("Eres un adulto")
+else:
+    print("Eres un adulto mayor")</code></pre>
+                    </div>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>2. Bucles (Loops)</h3>
+                <p>Permiten ejecutar un bloque de código múltiples veces.</p>
+                
+                <h4>2.1 Bucle for</h4>
+                <p>Itera sobre una secuencia (lista, tupla, cadena, etc.).</p>
+                <pre><code class="language-python"># Iterar sobre una lista
+frutas = ["manzana", "banana", "cereza"]
+for fruta in frutas:
+    print(f"Me gusta la {fruta}")
+
+# Usando range()
+for i in range(5):  # 0, 1, 2, 3, 4
+    print(f"Número: {i}")
+
+# Con inicio y fin
+for i in range(2, 6):  # 2, 3, 4, 5
+    print(i)
+
+# Con paso
+for i in range(0, 10, 2):  # 0, 2, 4, 6, 8
+    print(i)</code></pre>
+
+                <h4>2.2 Bucle while</h4>
+                <p>Ejecuta un bloque mientras una condición sea verdadera.</p>
+                <pre><code class="language-python"># Contador
+contador = 0
+while contador < 5:
+    print(f"Contador: {contador}")
+    contador += 1  # Incrementa el contador
+
+# Bucle con condición de salida
+respuesta = ""
+while respuesta.lower() != "salir":
+    respuesta = input("Escribe 'salir' para terminar: ")</code></pre>
+
+                <div class="exercise">
+                    <h4><i class="fas fa-pencil-alt"></i> Ejercicio Práctico 2</h4>
+                    <p>Escribe un programa que pida números al usuario hasta que ingrese 0, y luego muestre la suma de todos los números ingresados.</p>
+                    <button class="hint-button" onclick="toggleHint('solucion2')">Mostrar Solución</button>
+                    <div id="solucion2" class="solution">
+                        <pre><code class="language-python">suma = 0
+numero = float(input("Ingresa un número (0 para terminar): "))
+
+while numero != 0:
+    suma += numero
+    numero = float(input("Ingresa otro número (0 para terminar): "))
+
+print(f"La suma total es: {suma}")</code></pre>
+                    </div>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>3. Control de Bucles</h3>
+                <p>Python proporciona palabras clave para controlar el flujo de los bucles.</p>
+                
+                <h4>3.1 break</h4>
+                <p>Termina el bucle inmediatamente.</p>
+                <pre><code class="language-python">for i in range(10):
+    if i == 5:
+        break  # Sale del bucle cuando i es 5
+    print(i)  # Imprime 0, 1, 2, 3, 4</code></pre>
+
+                <h4>3.2 continue</h4>
+                <p>Salta a la siguiente iteración del bucle.</p>
+                <pre><code class="language-python">for i in range(5):
+    if i == 2:
+        continue  # Salta la iteración cuando i es 2
+    print(i)  # Imprime 0, 1, 3, 4</code></pre>
+
+                <h4>3.3 else en bucles</h4>
+                <p>Se ejecuta cuando el bucle termina normalmente (sin un break).</p>
+                <pre><code class="language-python">for i in range(3):
+    print(i)
+else:
+    print("Bucle terminado")  # Siempre se ejecuta
+
+for i in range(3):
+    if i == 1:
+        break
+    print(i)
+else:
+    print("Esto no se ejecutará por el break")</code></pre>
+            </article>
+
+            <article class="concept">
+                <h3>4. Estructuras Anidadas</h3>
+                <p>Podemos anidar estructuras de control para crear lógicas más complejas.</p>
+                
+                <pre><code class="language-python"># Tabla de multiplicar del 1 al 5
+for i in range(1, 6):
+    print(f"\nTabla del {i}")
+    print("-" * 12)
+    
+    for j in range(1, 11):
+        print(f"{i} x {j:2} = {i*j:2}")
+    
+    if i < 5:
+        print("\n" + "="*30 + "\n")</code></pre>
+
+                <div class="exercise">
+                    <h4><i class="fas fa-pencil-alt"></i> Ejercicio Práctico 3</h4>
+                    <p>Escribe un programa que determine si un número ingresado por el usuario es primo o no.</p>
+                    <button class="hint-button" onclick="toggleHint('solucion3')">Mostrar Solución</button>
+                    <div id="solucion3" class="solution">
+                        <pre><code class="language-python">numero = int(input("Ingresa un número mayor que 1: "))
+
+if numero <= 1:
+    print("El número debe ser mayor que 1")
+else:
+    es_primo = True
+    for i in range(2, int(numero ** 0.5) + 1):
+        if numero % i == 0:
+            es_primo = False
+            break
+    
+    if es_primo:
+        print(f"{numero} es un número primo")
+    else:
+        print(f"{numero} no es un número primo")</code></pre>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <section class="practical-activity">
+            <h2><i class="fas fa-laptop-code"></i> Proyecto Práctico</h2>
+            
+            <div class="project">
+                <h3>Calculadora de Calificaciones</h3>
+                <p>Crea un programa que permita al usuario ingresar las calificaciones de varios estudiantes y calcule el promedio, la calificación más alta y la más baja.</p>
+                
+                <h4>Requisitos:</h4>
+                <ol>
+                    <li>Pregunta al usuario cuántos estudiantes hay en la clase.</li>
+                    <li>Para cada estudiante, pide su nombre y su calificación (0-100).</li>
+                    <li>Al final, muestra:
+                        <ul>
+                            <li>El promedio de la clase</li>
+                            <li>La calificación más alta y el nombre del estudiante</li>
+                            <li>La calificación más baja y el nombre del estudiante</li>
+                            <li>Cuántos estudiantes aprobaron (nota ≥ 70)</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <button class="hint-button" onclick="toggleHint('solucion-proyecto')">Mostrar Solución</button>
+                <div id="solucion-proyecto" class="solution">
+                    <pre><code class="language-python"># Inicialización de variables
+num_estudiantes = int(input("¿Cuántos estudiantes hay en la clase? "))
+estudiantes = []
+suma_calificaciones = 0
+aprobados = 0
+
+# Validación de entrada
+if num_estudiantes <= 0:
+    print("El número de estudiantes debe ser mayor que cero.")
+else:
+    # Recopilación de datos
+    for i in range(num_estudiantes):
+        nombre = input(f"\nNombre del estudiante {i+1}: ")
+        
+        # Validación de la calificación
+        while True:
+            try:
+                calificacion = float(input(f"Calificación de {nombre} (0-100): "))
+                if 0 <= calificacion <= 100:
+                    break
+                else:
+                    print("La calificación debe estar entre 0 y 100.")
+            except ValueError:
+                print("Por favor, ingresa un número válido.")
+        
+        # Guardar datos del estudiante
+        estudiantes.append({
+            'nombre': nombre,
+            'calificacion': calificacion
+        })
+        
+        # Actualizar estadísticas
+        suma_calificaciones += calificacion
+        if calificacion >= 70:
+            aprobados += 1
+    
+    # Cálculos finales
+    promedio = suma_calificaciones / num_estudiantes
+    
+    # Encontrar calificación más alta y más baja
+    mejor_estudiante = max(estudiantes, key=lambda x: x['calificacion'])
+    peor_estudiante = min(estudiantes, key=lambda x: x['calificacion'])
+    
+    # Mostrar resultados
+    print("\n" + "="*50)
+    print(f"{'RESUMEN DE CALIFICACIONES':^50}")
+    print("="*50)
+    print(f"Promedio de la clase: {promedio:.2f}")
+    print(f"Mejor calificación: {mejor_estudiante['calificacion']} - {mejor_estudiante['nombre']}")
+    print(f"Peor calificación: {peor_estudiante['calificacion']} - {peor_estudiante['nombre']}")
+    print(f"Estudiantes aprobados: {aprobados} de {num_estudiantes} ({(aprobados/num_estudiantes)*100:.1f}%)")
+    print("="*50)</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="resources">
+            <h2><i class="fas fa-book-open"></i> Recursos Adicionales</h2>
+            <ul>
+                <li><a href="https://docs.python.org/3/tutorial/controlflow.html" target="_blank" rel="noopener">Documentación oficial de Python: Control de Flujo</a></li>
+                <li><a href="https://www.w3schools.com/python/python_conditions.asp" target="_blank" rel="noopener">W3Schools: Python If...Else</a></li>
+                <li><a href="https://www.learnpython.org/en/Loops" target="_blank" rel="noopener">LearnPython: Bucles en Python</a></li>
+                <li><a href="https://realpython.com/python-conditional-statements/" target="_blank" rel="noopener">Real Python: Conditional Statements</a></li>
+            </ul>
+        </section>
+
+        <section class="summary">
+            <h2><i class="fas fa-clipboard-check"></i> Resumen de la Sesión</h2>
+            <ul>
+                <li>Las estructuras condicionales (<code>if</code>, <code>elif</code>, <code>else</code>) permiten tomar decisiones en el código.</li>
+                <li>Los bucles (<code>for</code>, <code>while</code>) permiten repetir bloques de código.</li>
+                <li>Las palabras clave <code>break</code> y <code>continue</code> controlan el flujo de los bucles.</li>
+                <li>Las estructuras de control se pueden anidar para crear lógicas más complejas.</li>
+                <li>Es importante validar las entradas del usuario para evitar errores.</li>
+            </ul>
+        </section>
+
+        <section class="homework">
+            <h2><i class="fas fa-tasks"></i> Tarea</h2>
+            <p>Desarrolla un programa que simule un cajero automático con las siguientes características:</p>
+            <ol>
+                <li>El cajero inicia con un saldo de $10,000.</li>
+                <li>Muestra un menú con las opciones:
+                    <ul>
+                        <li>Consultar saldo</li>
+                        <li>Depositar dinero</li>
+                        <li>Retirar dinero</li>
+                        <li>Salir</li>
+                    </ul>
+                </li>
+                <li>El programa debe validar que no se puedan retirar más fondos de los disponibles.</li>
+                <li>Permitir múltiples operaciones hasta que el usuario decida salir.</li>
+                <li>Mostrar mensajes claros en cada operación.</li>
+            </ol>
+            <p><strong>Entrega:</strong> Sube tu código a un archivo llamado <code>cajero_automatico.py</code> y comparte el enlace o el archivo según las indicaciones del instructor.</p>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION1-3.html" class="btn">Sesión Anterior: 1.3 Operadores</a>
+                <a href="SESION1-5.html" class="btn">Siguiente Sesión: 1.5 Funciones y módulos</a>
+            </div>
+            <div class="social-links">
+                <a href="#" class="social-link" title="Github" rel="noopener"><i class="fab fa-github"></i></a>
+                <a href="#" class="social-link" title="Twitter" rel="noopener"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-link" title="Linkedin" rel="noopener"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

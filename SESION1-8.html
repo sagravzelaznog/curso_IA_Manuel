@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesión 1.8 - Módulos y Paquetes en Python</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><i class="fas fa-folder-open"></i> Módulos y Paquetes en Python</h1>
+            <p>Sesión 1.8: Aprendiendo a organizar y reutilizar código con módulos y paquetes</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="learning-objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender qué son los módulos y paquetes en Python</li>
+                <li>Aprender a crear y usar módulos propios</li>
+                <li>Entender cómo importar módulos estándar y de terceros</li>
+                <li>Crear y estructurar paquetes de Python</li>
+                <li>Gestionar dependencias con pip</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Contenido</h2>
+            
+            <div class="tab">
+                <button class="tab-button active" onclick="openTab(event, 'modulos')">Módulos</button>
+                <button class="tab-button" onclick="openTab(event, 'paquetes')">Paquetes</button>
+                <button class="tab-button" onclick="openTab(event, 'pip')">PIP</button>
+                <button class="tab-button" onclick="openTab(event, 'proyecto')">Proyecto</button>
+            </div>
+
+            <div id="modulos" class="tab-content active">
+                <h3><i class="fas fa-file-code"></i> Módulos en Python</h3>
+                <p>Un módulo es un archivo que contiene definiciones y declaraciones de Python. El nombre del archivo es el nombre del módulo con el sufijo <code>.py</code>.</p>
+                
+                <h4>Crear un módulo:</h4>
+                <p>Crea un archivo llamado <code>saludos.py</code> con el siguiente contenido:</p>
+                <pre><code class="language-python"># saludos.py
+def saludar(nombre):
+    """Saluda a una persona por su nombre."""
+    return f"¡Hola, {nombre}! ¿Cómo estás?"
+
+PI = 3.14159
+
+class Persona:
+    def __init__(self, nombre, edad):
+        self.nombre = nombre
+        self.edad = edad
+    
+    def presentarse(self):
+        return f"Soy {self.nombre} y tengo {self.edad} años."</code></pre>
+
+                <h4>Usar un módulo:</h4>
+                <pre><code class="language-python"># Importar todo el módulo
+import saludos
+
+# Usar funciones, variables y clases del módulo
+print(saludos.saludar("Juan"))
+print(f"El valor de PI es: {saludos.PI}"
+
+persona = saludos.Persona("Ana", 25)
+print(persona.presentarse())
+
+# Importar elementos específicos
+from saludos import saludar, PI
+
+# Ahora podemos usarlos directamente
+print(saludar("Carlos"))
+print(PI)
+
+# Importar con un alias
+import saludos as s
+from saludos import Persona as P
+
+print(s.saludar("María")
+persona2 = P("Pedro", 30)</code></pre>
+
+                <h4>Módulos estándar de Python:</h4>
+                <p>Python viene con una biblioteca estándar extensa. Algunos módulos útiles:</p>
+                <pre><code class="language-python">import math
+import random
+import datetime
+import os
+import sys
+import json
+import csv
+import re
+import urllib.request
+
+# Ejemplos de uso
+print(math.sqrt(16))  # 4.0
+print(random.randint(1, 10))  # Número aleatorio entre 1 y 10
+print(datetime.datetime.now())  # Fecha y hora actual</code></pre>
+            </div>
+
+            <div id="paquetes" class="tab-content">
+                <h3><i class="fas fa-folder"></i> Paquetes en Python</h3>
+                <p>Un paquete es una forma de organizar módulos relacionados en una jerarquía de directorios.</p>
+                
+                <h4>Estructura de un paquete:</h4>
+                <pre><code class="language-bash">mi_paquete/
+├── __init__.py
+├── modulo1.py
+├── modulo2.py
+└── subpaquete/
+    ├── __init__.py
+    └── modulo3.py</code></pre>
+
+                <h4>Crear un paquete:</h4>
+                <p>1. Crea una carpeta llamada <code>mi_paquete</code></p>
+                <p>2. Dentro de la carpeta, crea un archivo <code>__init__.py</code> (puede estar vacío o contener código de inicialización)</p>
+                
+                <h4>Ejemplo de un paquete simple:</h4>
+                <p><strong>mi_paquete/__init__.py</strong>:</p>
+                <pre><code class="language-python"># Este archivo hace que Python trate el directorio como un paquete
+__version__ = '1.0.0'
+
+# Podemos definir qué se importa con 'from paquete import *'
+__all__ = ['modulo1', 'modulo2']</code></pre>
+
+                <p><strong>mi_paquete/modulo1.py</strong>:</p>
+                <pre><code class="language-python">def hola():
+    return "¡Hola desde modulo1!"</code></pre>
+
+                <p><strong>mi_paquete/modulo2.py</strong>:</p>
+                <pre><code class="language-python">def despedida():
+    return "¡Adiós desde modulo2!"</code></pre>
+
+                <h4>Usar el paquete:</h4>
+                <pre><code class="language-python"># Importar todo el paquete
+import mi_paquete
+
+# Usar módulos del paquete
+print(mi_paquete.modulo1.hola())
+print(mi_paquete.modulo2.despedida())
+
+# Importar módulos específicos
+from mi_paquete import modulo1, modulo2
+
+# Importar funciones específicas
+from mi_paquete.modulo1 import hola
+from mi_paquete.modulo2 import despedida as adios</code></pre>
+
+                <h4>Paquetes anidados:</h4>
+                <p>Puedes tener paquetes dentro de paquetes. Por ejemplo, crea una carpeta <code>subpaquete</code> dentro de <code>mi_paquete</code> con su propio <code>__init__.py</code> y módulos.</p>
+            </div>
+
+            <div id="pip" class="tab-content">
+                <h3><i class="fab fa-python"></i> Gestión de Paquetes con pip</h3>
+                <p>pip es el sistema de gestión de paquetes de Python. Te permite instalar y administrar paquetes de terceros.</p>
+                
+                <h4>Comandos básicos de pip:</h4>
+                <pre><code class="language-bash"># Instalar un paquete
+pip install nombre_del_paquete
+
+# Instalar una versión específica
+pip install nombre_del_paquete==1.2.3
+
+# Actualizar un paquete
+pip install --upgrade nombre_del_paquete
+
+# Desinstalar un paquete
+pip uninstall nombre_del_paquete
+
+# Listar paquetes instalados
+pip list
+
+# Ver información de un paquete instalado
+pip show nombre_del_paquete
+
+# Guardar dependencias en un archivo
+pip freeze > requirements.txt
+
+# Instalar dependencias desde un archivo
+pip install -r requirements.txt</code></pre>
+
+                <h4>Entornos virtuales:</h4>
+                <p>Es una buena práctica usar entornos virtuales para aislar las dependencias de cada proyecto.</p>
+                
+                <pre><code class="language-bash"># Crear un entorno virtual
+python -m venv mi_entorno
+
+# Activar el entorno (Windows)
+mi_entorno\Scripts\activate
+
+# Activar el entorno (macOS/Linux)
+source mi_entorno/bin/activate
+
+# Desactivar el entorno (cualquier sistema)
+deactivate</code></pre>
+
+                <h4>Paquetes populares de Python:</h4>
+                <ul>
+                    <li><strong>NumPy</strong>: Cómputo numérico</li>
+                    <li><strong>Pandas</strong>: Análisis de datos</li>
+                    <li><strong>Matplotlib</strong>: Visualización de datos</li>
+                    <li><strong>Requests</strong>: Peticiones HTTP</li>
+                    <li><strong>Flask/Django</strong>: Desarrollo web</li>
+                </ul>
+            </div>
+
+            <div id="proyecto" class="tab-content">
+                <h3><i class="fas fa-project-diagram"></i> Proyecto: Sistema de Gestión de Tareas</h3>
+                <p>Vamos a crear un sistema de gestión de tareas organizado en módulos y paquetes.</p>
+                
+                <h4>Estructura del proyecto:</h4>
+                <pre><code class="language-bash">gestor_tareas/
+├── gestor_tareas/
+│   ├── __init__.py
+│   ├── tareas.py
+│   ├── almacenamiento.py
+│   ├── interfaz/
+│   │   ├── __init__.py
+│   │   └── consola.py
+│   └── utilidades/
+│       ├── __init__.py
+│       └── validadores.py
+└── main.py</code></pre>
+
+                <h4>gestor_tareas/tareas.py</h4>
+                <pre><code class="language-python">class Tarea:
+    def __init__(self, titulo, descripcion='', completada=False):
+        self.titulo = titulo
+        self.descripcion = descripcion
+        self.completada = completada
+        self.fecha_creacion = datetime.datetime.now()
+    
+    def marcar_completada(self):
+        self.completada = True
+    
+    def __str__(self):
+        estado = "✓" if self.completada else " "
+        return f"[{estado}] {self.titulo}"
+
+
+class GestorTareas:
+    def __init__(self):
+        self.tareas = []
+    
+    def agregar_tarea(self, titulo, descripcion=''):
+        tarea = Tarea(titulo, descripcion)
+        self.tareas.append(tarea)
+        return tarea
+    
+    def listar_tareas(self, solo_pendientes=False):
+        if solo_pendientes:
+            return [t for t in self.tareas if not t.completada]
+        return self.tareas
+    
+    def marcar_como_completada(self, indice):
+        if 0 <= indice < len(self.tareas):
+            self.tareas[indice].marcar_completada()
+            return True
+        return False</code></pre>
+
+                <h4>gestor_tareas/almacenamiento.py</h4>
+                <pre><code class="language-python">import json
+from datetime import datetime
+
+class AlmacenamientoTareas:
+    def __init__(self, archivo='tareas.json'):
+        self.archivo = archivo
+    
+    def guardar(self, gestor_tareas):
+        datos = []
+        for tarea in gestor_tareas.tareas:
+            datos.append({
+                'titulo': tarea.titulo,
+                'descripcion': tarea.descripcion,
+                'completada': tarea.completada,
+                'fecha_creacion': tarea.fecha_creacion.isoformat()
+            })
+        
+        with open(self.archivo, 'w') as f:
+            json.dump(datos, f, indent=2)
+    
+    def cargar(self):
+        try:
+            with open(self.archivo, 'r') as f:
+                datos = json.load(f)
+            
+            gestor = GestorTareas()
+            for tarea_data in datos:
+                tarea = Tarea(
+                    tarea_data['titulo'],
+                    tarea_data.get('descripcion', ''),
+                    tarea_data.get('completada', False)
+                )
+                tarea.fecha_creacion = datetime.fromisoformat(tarea_data['fecha_creacion'])
+                gestor.tareas.append(tarea)
+            
+            return gestor
+        except FileNotFoundError:
+            return GestorTareas()</code></pre>
+
+                <h4>gestor_tareas/interfaz/consola.py</h4>
+                <pre><code class="language-python">from ..tareas import GestorTareas
+
+class InterfazConsola:
+    def __init__(self, gestor_tareas):
+        self.gestor = gestor_tareas
+    
+    def mostrar_menu(self):
+        print("\n--- Gestor de Tareas ---")
+        print("1. Ver tareas")
+        print("2. Agregar tarea")
+        print("3. Marcar tarea como completada")
+        print("4. Salir")
+    
+    def ejecutar(self):
+        while True:
+            self.mostrar_menu()
+            opcion = input("\nSelecciona una opción: ")
+            
+            if opcion == '1':
+                self.mostrar_tareas()
+            elif opcion == '2':
+                self.agregar_tarea()
+            elif opcion == '3':
+                self.marcar_como_completada()
+            elif opcion == '4':
+                print("¡Hasta luego!")
+                break
+            else:
+                print("Opción no válida. Intenta de nuevo.")
+    
+    def mostrar_tareas(self):
+        print("\n--- Tareas ---")
+        tareas = self.gestor.listar_tareas()
+        if not tareas:
+            print("No hay tareas.")
+            return
+        
+        for i, tarea in enumerate(tareas, 1):
+            print(f"{i}. {tarea}")
+    
+    def agregar_tarea(self):
+        print("\n--- Nueva Tarea ---")
+        titulo = input("Título: ")
+        descripcion = input("Descripción (opcional): ")
+        self.gestor.agregar_tarea(titulo, descripcion)
+        print("¡Tarea agregada!")
+    
+    def marcar_como_completada(self):
+        self.mostrar_tareas()
+        tareas = self.gestor.listar_tareas(solo_pendientes=True)
+        
+        if not tareas:
+            print("No hay tareas pendientes.")
+            return
+        
+        try:
+            indice = int(input("Número de tarea a marcar como completada: ")) - 1
+            if 0 <= indice < len(tareas):
+                tarea = tareas[indice]
+                tarea.marcar_completada()
+                print(f"Tarea '{tarea.titulo}' marcada como completada.")
+            else:
+                print("Número de tarea inválido.")
+        except ValueError:
+            print("Por favor ingresa un número válido.")</code></pre>
+
+                <h4>main.py</h4>
+                <pre><code class="language-python">from gestor_tareas.almacenamiento import AlmacenamientoTareas
+from gestor_tareas.interfaz.consola import InterfazConsola
+
+def main():
+    # Inicializar el almacenamiento
+    almacenamiento = AlmacenamientoTareas()
+    
+    # Cargar tareas existentes
+    gestor = almacenamiento.cargar()
+    
+    # Iniciar la interfaz de usuario
+    interfaz = InterfazConsola(gestor)
+    
+    try:
+        interfaz.ejecutar()
+    finally:
+        # Guardar las tareas al salir
+        almacenamiento.guardar(gestor)
+
+if __name__ == "__main__":
+    main()</code></pre>
+
+                <h4>Instrucciones para ejecutar el proyecto:</h4>
+                <ol>
+                    <li>Crea la estructura de directorios y archivos como se muestra arriba</li>
+                    <li>Copia el código correspondiente a cada archivo</li>
+                    <li>Asegúrate de tener Python instalado</li>
+                    <li>Ejecuta el programa con: <code>python main.py</code></li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h2><i class="fas fa-clipboard-list"></i> Resumen</h2>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h3>Módulos</h3>
+                    <ul>
+                        <li>Archivos <code>.py</code> con código Python</li>
+                        <li>Pueden contener funciones, clases y variables</li>
+                        <li>Se importan con <code>import modulo</code> o <code>from modulo import algo</code></li>
+                    </ul>
+                </div>
+                
+                <div class="summary-card">
+                    <h3>Paquetes</h3>
+                    <ul>
+                        <li>Directorios con un archivo <code>__init__.py</code></li>
+                        <li>Organizan módulos relacionados</li>
+                        <li>Pueden contener subpaquetes</li>
+                    </ul>
+                </div>
+                
+                <div class="summary-card">
+                    <h3>PIP</h3>
+                    <ul>
+                        <li>Sistema de gestión de paquetes</li>
+                        <li><code>pip install paquete</code> para instalar</li>
+                        <li><code>requirements.txt</code> para dependencias</li>
+                    </ul>
+                </div>
+                
+                <div class="summary-card">
+                    <h3>Buenas Prácticas</h3>
+                    <ul>
+                        <li>Usar entornos virtuales</li>
+                        <li>Documentar módulos y funciones</li>
+                        <li>Estructura clara de paquetes</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION1-7.html" class="btn">Sesión Anterior: 1.7 Diccionarios y conjuntos</a>
+                <a href="SESION1-9.html" class="btn">Siguiente Sesión: 1.9 Manejo de excepciones</a>
+            </div>
+            <div class="social-links">
+                <a href="#" class="social-link" title="Github" rel="noopener"><i class="fab fa-github"></i></a>
+                <a href="#" class="social-link" title="Twitter" rel="noopener"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-link" title="Linkedin" rel="noopener"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Inicializar Prism para resaltar el código
+        document.addEventListener('DOMContentLoaded', function() {
+            Prism.highlightAll();
+            
+            // Agregar botones de copiar a los bloques de código
+            document.querySelectorAll('pre code').forEach((block) => {
+                const button = document.createElement('button');
+                button.className = 'copy-button';
+                button.title = 'Copiar al portapapeles';
+                button.innerHTML = '<i class="far fa-copy"></i>';
+                button.onclick = () => copyToClipboard(block);
+                
+                // Agregar el botón al bloque de código
+                const pre = block.parentNode;
+                if (pre.parentNode.classList.contains('copyable')) {
+                    pre.parentNode.insertBefore(button, pre);
+                } else {
+                    pre.insertBefore(button, block);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

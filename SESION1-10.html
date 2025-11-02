@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesión 1.10: Estructuras de Control en Python</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Curso de Inteligencia Artificial</h1>
+            <h2>Sesión 1.10: Estructuras de Control en Python</h2>
+            <p class="session-duration"><i class="far fa-clock"></i> Duración: 60 minutos</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="learning-objectives">
+            <h3><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h3>
+            <ul>
+                <li>Comprender el uso de estructuras condicionales (if, elif, else)</li>
+                <li>Dominar los diferentes tipos de bucles (for, while)</li>
+                <li>Aplicar estructuras de control anidadas</li>
+                <li>Utilizar break, continue y pass en bucles</li>
+                <li>Resolver problemas prácticos con estructuras de control</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <article>
+                <h3><i class="fas fa-code"></i> 1. Estructuras Condicionales</h3>
+                
+                <div class="code-container">
+                    <h4>Condicional if</h4>
+                    <pre><code class="language-python"># Estructura básica de if
+edad = 18
+if edad >= 18:
+    print("Eres mayor de edad")
+</code></pre>
+                </div>
+
+                <div class="code-container">
+                    <h4>Condicional if-else</h4>
+                    <pre><code class="language-python"># Estructura if-else
+nota = 7
+if nota >= 6:
+    print("¡Aprobado!")
+else:
+    print("Reprobado")
+</code></pre>
+                </div>
+
+                <div class="code-container">
+                    <h4>Condicional if-elif-else</h4>
+                    <pre><code class="language-python"># Estructura if-elif-else
+puntaje = 85
+
+if puntaje >= 90:
+    print("Excelente (A)")
+elif puntaje >= 80:
+    print("Muy bien (B)")
+elif puntaje >= 70:
+    print("Bien (C)")
+else:
+    print("Necesitas mejorar")
+</code></pre>
+                </div>
+            </article>
+
+            <article>
+                <h3><i class="fas fa-sync"></i> 2. Bucles en Python</h3>
+                
+                <div class="code-container">
+                    <h4>Bucle for</h4>
+                    <pre><code class="language-python"># Recorrer una lista
+frutas = ["manzana", "banana", "cereza"]
+for fruta in frutas:
+    print(f"Me gusta la {fruta}")
+
+# Usando range()
+for i in range(5):  # 0, 1, 2, 3, 4
+    print(f"Número: {i}")
+
+# Con inicio y fin
+for i in range(2, 6):  # 2, 3, 4, 5
+    print(i)
+
+# Con paso
+for i in range(0, 10, 2):  # 0, 2, 4, 6, 8
+    print(i)
+</code></pre>
+                </div>
+
+                <div class="code-container">
+                    <h4>Bucle while</h4>
+                    <pre><code class="language-python"># Contador con while
+contador = 0
+while contador < 5:
+    print(f"Contador: {contador}")
+    contador += 1
+
+# Bucle con condición de salida
+respuesta = ""
+while respuesta.lower() != "salir":
+    respuesta = input("Escribe 'salir' para terminar: ")
+    print(f"Escribiste: {respuesta}")
+</code></pre>
+                </div>
+            </article>
+
+            <article>
+                <h3><i class="fas fa-project-diagram"></i> 3. Estructuras de Control Anidadas</h3>
+                
+                <div class="code-container">
+                    <pre><code class="language-python"># Ejemplo de estructuras anidadas
+for i in range(1, 6):
+    print(f"\nTabla del {i}:")
+    print("-" * 12)
+    
+    j = 1
+    while j <= 10:
+        if i % 2 == 0:  # Si es par
+            print(f"{i} x {j:2} = {i*j:2}  (par)")
+        else:
+            print(f"{i} x {j:2} = {i*j:2}  (impar)")
+        j += 1
+</code></pre>
+                </div>
+            </article>
+
+            <article>
+                <h3><i class="fas fa-arrows-alt"></i> 4. Control de Flujo en Bucles</h3>
+                
+                <div class="code-container">
+                    <h4>break, continue y pass</h4>
+                    <pre><code class="language-python"># Uso de break
+print("Ejemplo de break:")
+for i in range(10):
+    if i == 5:
+        break  # Sale del bucle cuando i es 5
+    print(i)
+
+# Uso de continue
+print("\nEjemplo de continue:")
+for i in range(5):
+    if i == 2:
+        continue  # Salta a la siguiente iteración cuando i es 2
+    print(i)
+
+# Uso de pass
+print("\nEjemplo de pass:")
+for i in range(3):
+    pass  # No hace nada, se usa como marcador de posición
+    print("Después de pass")
+</code></pre>
+                </div>
+            </article>
+
+            <article class="practical-exercise">
+                <h3><i class="fas fa-laptop-code"></i> Ejercicio Práctico</h3>
+                <p>Crea un programa que simule un cajero automático con las siguientes características:</p>
+                <ol>
+                    <li>El saldo inicial es de $10,000</li>
+                    <li>Muestra un menú con opciones: Consultar saldo, Retirar, Depositar, Salir</li>
+                    <li>Usa estructuras de control para manejar las diferentes opciones</li>
+                    <li>Valida que no se pueda retirar más dinero del disponible</li>
+                    <li>El programa debe continuar ejecutándose hasta que el usuario elija Salir</li>
+                </ol>
+
+                <button onclick="toggleHint('solucion-cajero')">Mostrar Solución</button>
+                
+                <div id="solucion-cajero" class="solution">
+                    <pre><code class="language-python"># Solución del cajero automático
+saldo = 10000
+
+while True:
+    print("\n=== CAJERO AUTOMÁTICO ===")
+    print("1. Consultar saldo")
+    print("2. Retirar efectivo")
+    print("3. Depositar efectivo")
+    print("4. Salir")
+    
+    opcion = input("\nSeleccione una opción (1-4): ")
+    
+    if opcion == "1":
+        print(f"\nSu saldo actual es: ${saldo:,.2f}")
+        
+    elif opcion == "2":
+        try:
+            monto = float(input("\nIngrese el monto a retirar: "))
+            if monto <= 0:
+                print("El monto debe ser mayor a cero.")
+            elif monto > saldo:
+                print("Fondos insuficientes.")
+            else:
+                saldo -= monto
+                print(f"Retiro exitoso. Su nuevo saldo es: ${saldo:,.2f}")
+        except ValueError:
+            print("Por favor ingrese un monto válido.")
+            
+    elif opcion == "3":
+        try:
+            monto = float(input("\nIngrese el monto a depositar: "))
+            if monto <= 0:
+                print("El monto debe ser mayor a cero.")
+            else:
+                saldo += monto
+                print(f"Depósito exitoso. Su nuevo saldo es: ${saldo:,.2f}")
+        except ValueError:
+            print("Por favor ingrese un monto válido.")
+            
+    elif opcion == "4":
+        print("\n¡Gracias por usar nuestro cajero automático!")
+        break
+        
+    else:
+        print("\nOpción no válida. Por favor seleccione una opción del 1 al 4.")
+</code></pre>
+                </div>
+            </article>
+        </section>
+
+        <section class="summary">
+            <h3><i class="fas fa-clipboard-list"></i> Resumen de la Sesión</h3>
+            <ul>
+                <li>Las estructuras condicionales (if, elif, else) permiten ejecutar código basado en condiciones.</li>
+                <li>Los bucles (for, while) permiten repetir bloques de código.</li>
+                <li>Las estructuras de control pueden anidarse para crear lógicas más complejas.</li>
+                <li>Las palabras clave break, continue y pass ofrecen mayor control sobre el flujo de los bucles.</li>
+                <li>Las estructuras de control son fundamentales para crear programas interactivos y dinámicos.</li>
+            </ul>
+        </section>
+
+        <section class="resources">
+            <h3><i class="fas fa-book"></i> Recursos Adicionales</h3>
+            <ul>
+                <li><a href="https://docs.python.org/3/tutorial/controlflow.html" target="_blank" rel="noopener">Documentación oficial de Python sobre control de flujo</a></li>
+                <li><a href="https://www.w3schools.com/python/python_conditions.asp" target="_blank" rel="noopener">Tutorial de condiciones en W3Schools</a></li>
+                <li><a href="https://www.learnpython.org/es/" target="_blank" rel="noopener">Aprende Python (español)</a></li>
+            </ul>
+        </section>
+    </main>
+
+   
+    <footer>
+					<div class="container">
+									<p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+									<div class="navigation">
+													<a href="SESION1-9.html" class="btn">Sesión Anterior: 1.9 Manejo de excepciones</a>
+													<a href="SESION1-11.html" class="btn">Siguiente Sesión: 1.11 Programación orientada a objetos (I)</a>
+									</div>
+									<div class="social-links">
+													<a href="#" class="social-link" title="Github" rel="noopener"><i class="fab fa-github"></i></a>
+													<a href="#" class="social-link" title="Twitter" rel="noopener"><i class="fab fa-twitter"></i></a>
+													<a href="#" class="social-link" title="Linkedin" rel="noopener"><i class="fab fa-linkedin"></i></a>
+									</div>
+					</div>
+	</footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
