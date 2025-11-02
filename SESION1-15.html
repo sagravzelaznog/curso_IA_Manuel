@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1.15: Proyecto Integrador Python - Curso de Inteligencia Artificial</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos específicos para esta sesión */
+        .project-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .project-card h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        
+        .project-card .difficulty {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .difficulty-beginner {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .difficulty-intermediate {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .difficulty-advanced {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .project-card .tags {
+            margin: 10px 0;
+        }
+        
+        .project-card .tag {
+            display: inline-block;
+            background-color: #e9ecef;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .project-card .objectives {
+            margin: 15px 0;
+        }
+        
+        .project-card .objectives li {
+            margin-bottom: 5px;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .project-card .objectives li:before {
+            content: "✓";
+            color: #28a745;
+            position: absolute;
+            left: 0;
+        }
+        
+        .project-card .resources {
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        
+        .project-card .resources h4 {
+            margin: 10px 0 5px 0;
+            color: #495057;
+        }
+        
+        .project-card .resources ul {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+        
+        .project-selection {
+            margin-bottom: 30px;
+        }
+        
+        .project-selection select {
+            padding: 10px 15px;
+            border-radius: 4px;
+            border: 1px solid #ced4da;
+            font-size: 1em;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .project-details {
+            display: none;
+        }
+        
+        .project-details.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .project-screenshot {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            margin: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .project-structure {
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        
+        .project-bonus {
+            background-color: #e7f5ff;
+            border-left: 4px solid #4dabf7;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+    </style>
+</head>
+<body>
+    <header class="session-header">
+        <div class="container">
+            <h1>1.15: Proyecto Integrador Python</h1>
+            <p class="module">Módulo 1: Introducción a Python</p>
+            <div class="session-info">
+                <span><i class="far fa-clock"></i> Duración: 3-5 horas</span>
+                <span><i class="far fa-calendar-alt"></i> Fecha: [Fecha]</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="learning-objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos del Proyecto</h2>
+            <p>En esta sesión final del módulo de Python, aplicarás todos los conceptos aprendidos a lo largo del curso para desarrollar un proyecto completo. Este proyecto te permitirá:</p>
+            <ul>
+                <li>Integrar múltiples conceptos de programación en Python</li>
+                <li>Desarrollar una aplicación funcional desde cero</li>
+                <li>Practicar la resolución de problemas del mundo real</li>
+                <li>Mejorar tus habilidades de depuración y prueba de código</li>
+                <li>Prepararte para proyectos más avanzados en el campo de la inteligencia artificial</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-tasks"></i> Instrucciones Generales</h2>
+            <p>Selecciona uno de los proyectos propuestos a continuación. Cada proyecto tiene diferentes niveles de dificultad y cubre diferentes aspectos de la programación en Python. Sigue estos pasos:</p>
+            
+            <ol>
+                <li><strong>Selecciona un proyecto</strong> que se ajuste a tus intereses y nivel de habilidad.</li>
+                <li><strong>Planifica</strong> tu solución antes de comenzar a codificar.</li>
+                <li><strong>Divide el problema</strong> en partes más pequeñas y manejables.</li>
+                <li><strong>Escribe código limpio y bien documentado</strong>.</li>
+                <li><strong>Prueba</strong> cada función o módulo a medida que avanzas.</li>
+                <li><strong>Refactoriza</strong> tu código para mejorar su calidad.</li>
+                <li><strong>Prepara una presentación</strong> de tu proyecto para compartir con la clase.</li>
+            </ol>
+            
+            <div class="project-selection">
+                <h3 id="project-selector-label">Selecciona un proyecto:</h3>
+                <select 
+                    id="project-selector" 
+                    onchange="showProject(this.value)"
+                    aria-labelledby="project-selector-label"
+                    aria-label="Selecciona un proyecto de la lista"
+                >
+                    <option value="">-- Selecciona un proyecto --</option>
+                    <option value="sistema-gestion-tareas">Sistema de Gestión de Tareas</option>
+                    <option value="juego-ahorcado">Juego del Ahorcado</option>
+                    <option value="gestor-financiero">Gestor Financiero Personal</option>
+                    <option value="blog-cms">Sistema de Gestión de Contenidos (CMS) para Blog</option>
+                    <option value="analizador-archivos">Analizador de Archivos</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Proyecto 1: Sistema de Gestión de Tareas -->
+        <div id="sistema-gestion-tareas" class="project-details">
+            <section class="project-card">
+                <h3>Sistema de Gestión de Tareas</h3>
+                <span class="difficulty difficulty-beginner">Nivel: Principiante</span>
+                
+                <div class="tags">
+                    <span class="tag">Listas</span>
+                    <span class="tag">Archivos</span>
+                    <span class="tag">Funciones</span>
+                    <span class="tag">CRUD</span>
+                </div>
+                
+                <div class="project-description">
+                    <h4>Descripción:</h4>
+                    <p>Desarrolla una aplicación de línea de comandos para gestionar tareas pendientes. Los usuarios podrán agregar, ver, marcar como completadas y eliminar tareas. Las tareas se guardarán en un archivo para persistencia de datos.</p>
+                    
+                    <h4>Características principales:</h4>
+                    <ul class="objectives">
+                        <li>Agregar nuevas tareas con descripción y fecha límite</li>
+                        <li>Listar todas las tareas con su estado (pendiente/completada)</li>
+                        <li>Marcar tareas como completadas</li>
+                        <li>Eliminar tareas</li>
+                        <li>Guardar y cargar tareas desde un archivo</li>
+                        <li>Filtrar tareas por estado o fecha</li>
+                    </ul>
+                    
+                    <div class="project-bonus">
+                        <h4>Desafíos adicionales (opcional):</h4>
+                        <ul>
+                            <li>Agregar categorías a las tareas</li>
+                            <li>Implementar búsqueda de tareas por palabra clave</li>
+                            <li>Agregar prioridad a las tareas</li>
+                            <li>Crear una interfaz gráfica con Tkinter o PyQt</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="resources">
+                        <h4>Recursos útiles:</h4>
+                        <ul>
+                            <li>Manejo de archivos en Python</li>
+                            <li>Manejo de fechas con el módulo <code>datetime</code></li>
+                            <li>Manejo de listas y diccionarios</li>
+                        </ul>
+                    </div>
+                    
+                    <h4>Estructura sugerida del proyecto:</h4>
+                    <div class="project-structure">
+gestor_tareas/
+├── main.py           # Punto de entrada de la aplicación
+├── tareas.py         # Lógica de gestión de tareas
+├── archivo.py        # Funciones para guardar/cargar desde archivo
+└── README.md         # Documentación del proyecto
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Proyecto 2: Juego del Ahorcado -->
+        <div id="juego-ahorcado" class="project-details">
+            <section class="project-card">
+                <h3>Juego del Ahorcado</h3>
+                <span class="difficulty difficulty-beginner">Nivel: Principiante/Intermedio</span>
+                
+                <div class="tags">
+                    <span class="tag">Cadenas</span>
+                    <span class="tag">Bucles</span>
+                    <span class="tag">Funciones</span>
+                    <span class="tag">Juegos</span>
+                </div>
+                
+                <div class="project-description">
+                    <h4>Descripción:</h4>
+                    <p>Implementa el clásico juego del ahorcado donde el jugador debe adivinar una palabra letra por letra antes de que se complete el dibujo del ahorcado.</p>
+                    
+                    <h4>Características principales:</h4>
+                    <ul class="objectives">
+                        <li>Selección aleatoria de palabras de una lista o archivo</li>
+                        <li>Interfaz de texto que muestra el estado actual del juego</li>
+                        <li>Seguimiento de letras adivinadas y disponibles</li>
+                        <li>Contador de intentos restantes</li>
+                        <li>Detección de victoria/derrota</li>
+                        <li>Opción para jugar nuevamente</li>
+                    </ul>
+                    
+                    <div class="project-bonus">
+                        <h4>Desafíos adicionales (opcional):</h4>
+                        <ul>
+                            <li>Agregar categorías de palabras (animales, países, etc.)</li>
+                            <li>Implementar un sistema de puntuación</li>
+                            <li>Guardar puntuaciones altas en un archivo</li>
+                            <li>Agregar una interfaz gráfica con Tkinter o Pygame</li>
+                            <li>Incluir pistas o definiciones de las palabras</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="resources">
+                        <h4>Recursos útiles:</h4>
+                        <ul>
+                            <li>Manejo de cadenas en Python</li>
+                            <li>Bucles y condicionales</li>
+                            <li>Módulo <code>random</code> para selección aleatoria</li>
+                        </ul>
+                    </div>
+                    
+                    <h4>Estructura sugerida del proyecto:</h4>
+                    <div class="project-structure">
+ahorcado/
+├── main.py           # Punto de entrada del juego
+├── juego.py          # Lógica principal del juego
+├── palabras.py       # Gestión de palabras y categorías
+├── interfaz.py       # Funciones de interfaz de usuario
+└── README.md         # Documentación del proyecto
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Proyecto 3: Gestor Financiero Personal -->
+        <div id="gestor-financiero" class="project-details">
+            <section class="project-card">
+                <h3>Gestor Financiero Personal</h3>
+                <span class="difficulty difficulty-intermediate">Nivel: Intermedio</span>
+                
+                <div class="tags">
+                    <span class="tag">POO</span>
+                    <span class="tag">Archivos CSV/JSON</span>
+                    <span class="tag">Módulos</span>
+                    <span class="tag">Análisis de datos</span>
+                </div>
+                
+                <div class="project-description">
+                    <h4>Descripción:</h4>
+                    <p>Desarrolla una aplicación para gestionar finanzas personales que permita a los usuarios registrar ingresos y gastos, categorizar transacciones y generar informes.</p>
+                    
+                    <h4>Características principales:</h4>
+                    <ul class="objectives">
+                        <li>Registrar ingresos y gastos con descripción, monto, fecha y categoría</li>
+                        <li>Ver resumen financiero (balance, ingresos totales, gastos totales)</li>
+                        <li>Filtrar transacciones por categoría, fecha o tipo (ingreso/gasto)</li>
+                        <li>Exportar datos a CSV o JSON</li>
+                        <li>Cargar datos desde archivo</li>
+                        <li>Generar gráficos simples de gastos por categoría</li>
+                    </ul>
+                    
+                    <div class="project-bonus">
+                        <h4>Desafíos adicionales (opcional):</h4>
+                        <ul>
+                            <li>Implementar un sistema de presupuestos por categoría</li>
+                            <li>Agregar gráficos más avanzados con Matplotlib</li>
+                            <li>Implementar autenticación de usuarios</li>
+                            <li>Crear una API REST para acceder a los datos</li>
+                            <li>Desarrollar una interfaz web con Flask o Django</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="resources">
+                        <h4>Recursos útiles:</h4>
+                        <ul>
+                            <li>Programación orientada a objetos en Python</li>
+                            <li>Manejo de archivos CSV/JSON</li>
+                            <li>Módulo <code>datetime</code> para manejo de fechas</li>
+                            <li>Librerías como <code>pandas</code> para análisis de datos</li>
+                        </ul>
+                    </div>
+                    
+                    <h4>Estructura sugerida del proyecto:</h4>
+                    <div class="project-structure">
+gestor_financiero/
+├── main.py           # Punto de entrada de la aplicación
+├── transaccion.py    # Clase Transacción
+├── gestor.py         # Lógica principal del gestor
+├── almacenamiento.py # Manejo de archivos
+├── informes.py       # Generación de informes
+└── README.md         # Documentación del proyecto
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Proyecto 4: Sistema de Gestión de Contenidos (CMS) para Blog -->
+        <div id="blog-cms" class="project-details">
+            <section class="project-card">
+                <h3>Sistema de Gestión de Contenidos (CMS) para Blog</h3>
+                <span class="difficulty difficulty-advanced">Nivel: Avanzado</span>
+                
+                <div class="tags">
+                    <span class="tag">Flask/Django</span>
+                    <span class="tag">Base de datos</span>
+                    <span class="tag">HTML/CSS</span>
+                    <span class="tag">CRUD</span>
+                </div>
+                
+                <div class="project-description">
+                    <h4>Descripción:</h4>
+                    <p>Desarrolla un sistema de gestión de contenidos simple para un blog que permita crear, leer, actualizar y eliminar publicaciones.</p>
+                    
+                    <h4>Características principales:</h4>
+                    <ul class="objectives">
+                        <li>Interfaz web para gestionar publicaciones</li>
+                        <li>Almacenamiento de publicaciones en una base de datos</li>
+                        <li>Soporte para formato Markdown en el contenido</li>
+                        <li>Sistema de categorías y etiquetas</li>
+                        <li>Búsqueda de publicaciones</li>
+                        <li>Paginación de resultados</li>
+                    </ul>
+                    
+                    <div class="project-bonus">
+                        <h4>Desafíos adicionales (opcional):</h4>
+                        <ul>
+                            <li>Implementar un sistema de comentarios</li>
+                            <li>Agregar autenticación de usuarios</li>
+                            <li>Implementar un sistema de roles (admin, editor, lector)</li>
+                            <li>Agregar carga de imágenes</li>
+                            <li>Crear una API REST para el frontend</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="resources">
+                        <h4>Recursos útiles:</h4>
+                        <ul>
+                            <li>Framework web (Flask o Django)</li>
+                            <li>Bases de datos SQL (SQLite, PostgreSQL)</li>
+                            <li>ORM (SQLAlchemy, Django ORM)</li>
+                            <li>HTML/CSS/JavaScript básico</li>
+                            <li>Manejo de formularios</li>
+                        </ul>
+                    </div>
+                    
+                    <h4>Estructura sugerida del proyecto (Flask):</h4>
+                    <div class="project-structure">
+blog_cms/
+├── app/
+│   ├── __init__.py
+│   ├── models.py      # Modelos de datos
+│   ├── routes.py      # Rutas de la aplicación
+│   ├── forms.py       # Formularios
+│   ├── static/        # Archivos estáticos (CSS, JS, imágenes)
+│   └── templates/     # Plantillas HTML
+├── config.py          # Configuración
+├── requirements.txt   # Dependencias
+└── run.py             # Punto de entrada
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Proyecto 5: Analizador de Archivos -->
+        <div id="analizador-archivos" class="project-details">
+            <section class="project-card">
+                <h3>Analizador de Archivos</h3>
+                <span class="difficulty difficulty-intermediate">Nivel: Intermedio/Avanzado</span>
+                
+                <div class="tags">
+                    <span class="tag">Sistema de archivos</span>
+                    <span class="tag">Expresiones regulares</span>
+                    <span class="tag">Interfaz de línea de comandos</span>
+                    <span class="tag">Procesamiento de texto</span>
+                </div>
+                
+                <div class="project-description">
+                    <h4>Descripción:</h4>
+                    <p>Desarrolla una herramienta de línea de comandos que analice archivos y directorios, proporcionando información detallada y realizando operaciones de búsqueda y procesamiento.</p>
+                    
+                    <h4>Características principales:</h4>
+                    <ul class="objectives">
+                        <li>Explorar directorios y mostrar información de archivos</li>
+                        <li>Buscar archivos por nombre, extensión o contenido</li>
+                        <li>Obtener estadísticas de archivos (tamaño, líneas, palabras, caracteres)</li>
+                        <li>Buscar y reemplazar texto en archivos</li>
+                        <li>Generar informes en diferentes formatos (texto, CSV, JSON)</li>
+                    </ul>
+                    
+                    <div class="project-bonus">
+                        <h4>Desafíos adicionales (opcional):</h4>
+                        <ul>
+                            <li>Agregar soporte para expresiones regulares en búsquedas</li>
+                            <li>Implementar un modo interactivo</li>
+                            <li>Agregar opciones de filtrado avanzado</li>
+                            <li>Crear una interfaz gráfica con Tkinter o PyQt</li>
+                            <li>Agregar soporte para archivos comprimidos</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="resources">
+                        <h4>Recursos útiles:</h4>
+                        <ul>
+                            <li>Módulo <code>os</code> y <code>pathlib</code> para manejo de archivos</li>
+                            <li>Módulo <code>argparse</code> para argumentos de línea de comandos</li>
+                            <li>Expresiones regulares con el módulo <code>re</code></li>
+                            <li>Manejo de diferentes codificaciones de archivos</li>
+                        </ul>
+                    </div>
+                    
+                    <h4>Estructura sugerida del proyecto:</h4>
+                    <div class="project-structure">
+analizador_archivos/
+├── main.py           # Punto de entrada
+├── scanner.py        # Exploración de archivos
+├── analyzer.py       # Análisis de contenido
+├── search.py         # Búsqueda y reemplazo
+├── report.py         # Generación de informes
+└── README.md         # Documentación
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <section class="evaluation">
+            <h2><i class="fas fa-clipboard-check"></i> Criterios de Evaluación</h2>
+            <p>Tu proyecto será evaluado según los siguientes criterios:</p>
+            
+            <table class="evaluation-table">
+                <thead>
+                    <tr>
+                        <th>Criterio</th>
+                        <th>Ponderación</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Funcionalidad</td>
+                        <td>30%</td>
+                        <td>El proyecto cumple con todos los requisitos funcionales especificados.</td>
+                    </tr>
+                    <tr>
+                        <td>Calidad del código</td>
+                        <td>25%</td>
+                        <td>El código está bien estructurado, es legible y sigue las mejores prácticas de Python.</td>
+                    </tr>
+                    <tr>
+                        <td>Documentación</td>
+                        <td>15%</td>
+                        <td>El código está adecuadamente documentado con comentarios y docstrings.</td>
+                    </tr>
+                    <tr>
+                        <td>Manejo de errores</td>
+                        <td>15%</td>
+                        <td>El código maneja adecuadamente los errores y casos extremos.</td>
+                    </tr>
+                    <tr>
+                        <td>Presentación</td>
+                        <td>15%</td>
+                        <td>La presentación del proyecto es clara y profesional.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="submission">
+            <h2><i class="fas fa-upload"></i> Entrega del Proyecto</h2>
+            <p>Para entregar tu proyecto, sigue estos pasos:</p>
+            
+            <ol>
+                <li>Crea un repositorio en GitHub para tu proyecto.</li>
+                <li>Agrega todos los archivos necesarios al repositorio.</li>
+                <li>Crea un archivo <code>README.md</code> con la documentación del proyecto.</li>
+                <li>Prepara una presentación de 5-10 minutos mostrando tu proyecto.</li>
+                <li>Comparte el enlace al repositorio y la presentación con el instructor.</li>
+            </ol>
+            
+            <div class="tip-box">
+                <i class="fas fa-lightbulb"></i> <strong>Consejo:</strong> Asegúrate de probar exhaustivamente tu proyecto antes de la entrega. Pídele a un compañero que lo pruebe también para identificar posibles problemas.
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION1-14.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 1.14 Pruebas Unitarias</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION2-1.html" class="btn">Siguiente Módulo: 2.1 Álgebra Lineal Básica <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Función para mostrar el proyecto seleccionado
+        function showProject(projectId) {
+            // Ocultar todos los proyectos
+            document.querySelectorAll('.project-details').forEach(project => {
+                project.classList.remove('active');
+            });
+            
+            // Mostrar el proyecto seleccionado
+            if (projectId) {
+                const selectedProject = document.getElementById(projectId);
+                if (selectedProject) {
+                    selectedProject.classList.add('active');
+                    // Desplazarse suavemente al proyecto seleccionado
+                    selectedProject.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        }
+        
+        // Función para copiar código al portapapeles
+        function copyToClipboard(button) {
+            const codeBlock = button.parentElement.nextElementSibling;
+            const code = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                // Cambiar el ícono a un check temporalmente
+                const icon = button.querySelector('i');
+                const originalClass = icon.className;
+                
+                icon.className = 'fas fa-check';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    icon.className = originalClass;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Error al copiar: ', err);
+            });
+        }
+        
+        // Función para mostrar/ocultar pistas y soluciones
+        function toggleHint(elementId) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.style.display = element.style.display === 'none' ? 'block' : 'none';
+            }
+        }
+        
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar tooltips (si se usa Bootstrap)
+            if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+                const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

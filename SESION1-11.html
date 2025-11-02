@@ -1,0 +1,1902 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesión 1.11: Programación Orientada a Objetos (I) - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .solution {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #1e8449;
+        }
+        
+        .hint-button {
+            background-color: #1e8449;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .hint-button:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+        }
+
+        .code-example {
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .code-example h4 {
+            margin-bottom: 0.5rem;
+            color: #1e8449;
+        }
+
+        .concept-box {
+            background-color: #f0f8ff;
+            border-left: 4px solid #3498db;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .tip-box {
+            background-color: #e8f5e9;
+            border-left: 4px solid #2ecc71;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .warning-box {
+            background-color: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .class-diagram {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .class-name {
+            font-weight: bold;
+            text-align: center;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .class-attributes, .class-methods {
+            margin: 0.5rem 0;
+        }
+
+        .class-attributes h4, .class-methods h4 {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+            color: #2c3e50;
+            border-bottom: 1px dashed #ddd;
+            padding-bottom: 0.3rem;
+        }
+
+        .attribute, .method {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 0.3rem 0;
+            padding-left: 1rem;
+        }
+
+        .method {
+            color: #2980b9;
+        }
+
+        .attribute {
+            color: #8e44ad;
+        }
+    </style>
+</head>
+<body>
+    <header class="session-header">
+        <div class="container">
+            <h1>Sesión 1.11: Programación Orientada a Objetos en Python (I)</h1>
+            <p class="session-meta">Módulo 1: Introducción a Python | Duración: 60 minutos</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="learning-objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender los conceptos fundamentales de la programación orientada a objetos (POO)</li>
+                <li>Aprender a definir y utilizar clases y objetos en Python</li>
+                <li>Entender los conceptos de atributos y métodos</li>
+                <li>Dominar el uso de los métodos especiales <code>__init__</code> y <code>__str__</code></li>
+                <li>Comprender el concepto de encapsulamiento y cómo implementarlo en Python</li>
+                <li>Aprender a trabajar con atributos de clase y de instancia</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
+            
+            <article class="concept">
+                <h3>1. Introducción a la Programación Orientada a Objetos</h3>
+                
+                <p>La Programación Orientada a Objetos (POO) es un paradigma de programación que se basa en el concepto de "objetos", que pueden contener datos (atributos) y código (métodos). La POO se centra en los objetos que los programadores necesitan manipular, en lugar de centrarse en la lógica necesaria para esa manipulación.</p>
+                
+                <div class="concept-box">
+                    <h4>Pilares de la Programación Orientada a Objetos</h4>
+                    <ul>
+                        <li><strong>Abstracción</strong>: Simplificar la complejidad mostrando solo los aspectos relevantes de un objeto.</li>
+                        <li><strong>Encapsulamiento</strong>: Ocultar los detalles internos de cómo funciona un objeto y exponer solo lo necesario.</li>
+                        <li><strong>Herencia</strong>: Permitir que una clase herede atributos y métodos de otra clase.</li>
+                        <li><strong>Polimorfismo</strong>: Permitir que objetos de diferentes clases respondan al mismo mensaje de diferentes maneras.</li>
+                    </ul>
+                </div>
+
+                <h4>1.1 Clases y Objetos</h4>
+                <p>Una <strong>clase</strong> es una plantilla o plano para crear objetos. Define un tipo de datos abstracto, incluyendo atributos (datos) y métodos (funciones) que operan en esos datos.</p>
+                
+                <p>Un <strong>objeto</strong> es una instancia de una clase. Cuando se crea un objeto, se asigna memoria para él y se inicializan sus atributos.</p>
+                
+                <div class="code-example">
+                    <h4>Ejemplo: Definición de una clase simple</h4>
+                    <pre><code class="language-python"># Definición de una clase
+class Perro:
+    # Atributo de clase (compartido por todas las instancias)
+    especie = "Canis lupus familiaris"
+    
+    # Método especial de inicialización (constructor)
+    def __init__(self, nombre, edad):
+        # Atributos de instancia
+        self.nombre = nombre
+        self.edad = edad
+    
+    # Método de instancia
+    def ladrar(self):
+        return f"{self.nombre} dice: ¡Guau!"
+    
+    # Otro método de instancia
+    def presentarse(self):
+        return f"Soy {self.nombre}, tengo {self.edad} años y soy un {self.especie}"
+
+# Creación de objetos (instancias de la clase Perro)
+perro1 = Perro("Buddy", 3)
+perro2 = Perro("Luna", 5)
+
+# Acceso a atributos
+print(perro1.nombre)  # Salida: Buddy
+print(perro2.edad)    # Salida: 5
+
+# Llamada a métodos
+print(perro1.ladrar())      # Salida: Buddy dice: ¡Guau!
+print(perro2.presentarse()) # Salida: Soy Luna, tengo 5 años y soy un Canis lupus familiaris
+
+# Acceso a atributo de clase
+print(Perro.especie)  # Salida: Canis lupus familiaris</code></pre>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>2. El Método <code>__init__</code> y el Parámetro <code>self</code></h3>
+                
+                <p>El método <code>__init__</code> es un método especial que se llama automáticamente cuando se crea una nueva instancia de una clase. Se utiliza para inicializar los atributos del objeto.</p>
+                
+                <p>El parámetro <code>self</code> es una referencia a la instancia actual de la clase y se utiliza para acceder a los atributos y métodos de la clase. Debe ser el primer parámetro de cualquier método de instancia, aunque no se pase explícitamente al llamar al método.</p>
+                
+                <div class="code-example">
+                    <h4>Ejemplo: Uso de <code>__init__</code> y <code>self</code></h4>
+                    <pre><code class="language-python">class CuentaBancaria:
+    # Atributo de clase (tasa de interés para todas las cuentas)
+    tasa_interes = 0.05  # 5%
+    
+    def __init__(self, titular, saldo_inicial=0):
+        # Atributos de instancia
+        self.titular = titular
+        self.saldo = saldo_inicial
+        self.activa = True
+        self.numero_transacciones = 0
+    
+    def depositar(self, cantidad):
+        if cantidad > 0 and self.activa:
+            self.saldo += cantidad
+            self.numero_transacciones += 1
+            return f"Depósito exitoso. Saldo actual: ${self.saldo:.2f}"
+        elif not self.activa:
+            return "La cuenta está inactiva. No se puede realizar la operación."
+        else:
+            return "La cantidad debe ser mayor que cero."
+    
+    def retirar(self, cantidad):
+        if 0 < cantidad <= self.saldo and self.activa:
+            self.saldo -= cantidad
+            self.numero_transacciones += 1
+            return f"Retiro exitoso. Saldo actual: ${self.saldo:.2f}"
+        elif not self.activa:
+            return "La cuenta está inactiva. No se puede realizar la operación."
+        else:
+            return "Fondos insuficientes o cantidad inválida."
+    
+    def aplicar_interes(self):
+        if self.activa:
+            interes = self.saldo * self.tasa_interes
+            self.saldo += interes
+            return f"Interés aplicado: ${interes:.2f}. Nuevo saldo: ${self.saldo:.2f}"
+        return "La cuenta está inactiva. No se puede aplicar interés."
+    
+    def desactivar(self):
+        if self.saldo == 0:
+            self.activa = False
+            return "Cuenta desactivada correctamente."
+        return "No se puede desactivar la cuenta. El saldo debe ser cero."
+
+# Creación de una cuenta bancaria
+mi_cuenta = CuentaBancaria("Juan Pérez", 1000)
+
+# Operaciones con la cuenta
+print(mi_cuenta.depositar(500))     # Depósito exitoso. Saldo actual: $1500.00
+print(mi_cuenta.retirar(200))       # Retiro exitoso. Saldo actual: $1300.00
+print(mi_cuenta.aplicar_interes())  # Interés aplicado: $65.00. Nuevo saldo: $1365.00
+print(f"Número de transacciones: {mi_cuenta.numero_transaccions}")  # 3
+
+# Intentar desactivar la cuenta con saldo
+print(mi_cuenta.desactivar())  # No se puede desactivar la cuenta. El saldo debe ser cero.
+
+# Retirar el saldo restante
+print(mi_cuenta.retirar(1365))  # Retiro exitoso. Saldo actual: $0.00
+
+# Ahora sí se puede desactivar
+print(mi_cuenta.desactivar())   # Cuenta desactivada correctamente.
+print(f"¿La cuenta está activa? {mi_cuenta.activa}")  # False</code></pre>
+                </div>
+
+                <div class="tip-box">
+                    <h4><i class="fas fa-lightbulb"></i> Convenciones de nomenclatura</h4>
+                    <ul>
+                        <li>Los nombres de las clases siguen la convención <code>PascalCase</code> (primera letra de cada palabra en mayúscula).</li>
+                        <li>Los nombres de métodos y atributos siguen la convención <code>snake_case</code> (todo en minúsculas con guiones bajos).</li>
+                        <li>Los nombres que comienzan y terminan con doble guión bajo (como <code>__init__</code>) son especiales en Python.</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>3. Atributos de Clase vs. Atributos de Instancia</h3>
+                
+                <p>Los <strong>atributos de clase</strong> son compartidos por todas las instancias de la clase, mientras que los <strong>atributos de instancia</strong> son específicos de cada objeto.</p>
+                
+                <div class="code-example">
+                    <h4>Ejemplo: Atributos de Clase vs. Instancia</h4>
+                    <pre><code class="language-python">class Contador:
+    # Atributo de clase (compartido por todas las instancias)
+    contador_global = 0
+    
+    def __init__(self, nombre):
+        # Atributos de instancia (únicos para cada objeto)
+        self.nombre = nombre
+        self.contador = 0
+        # Incrementamos el contador global cada vez que se crea una instancia
+        Contador.contador_global += 1
+    
+    def incrementar(self):
+        self.contador += 1
+        return self.contador
+    
+    def obtener_estado(self):
+        return f"{self.nombre}: {self.contador} (Total: {Contador.contador_global})"
+
+# Crear instancias
+contador1 = Contador("Contador A")
+contador2 = Contador("Contador B")
+
+# Usar los contadores
+print(contador1.incrementar())  # 1
+print(contador1.incrementar())  # 2
+print(contador2.incrementar())  # 1
+
+# Ver el estado de los contadores
+print(contador1.obtener_estado())  # Contador A: 2 (Total: 2)
+print(contador2.obtener_estado())  # Contador B: 1 (Total: 2)
+
+# Crear otra instancia
+contador3 = Contador("Contador C")
+print(contador3.obtener_estado())  # Contador C: 0 (Total: 3)
+
+# El contador global se ha incrementado
+print(f"Contador global: {Contador.contador_global}")  # Contador global: 3</code></pre>
+                </div>
+
+                <div class="warning-box">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Cuidado con los tipos mutables como atributos de clase</h4>
+                    <p>Cuando un atributo de clase es un tipo mutable (como una lista o un diccionario), todas las instancias compartirán la misma referencia, lo que puede llevar a comportamientos inesperados.</p>
+                    
+                    <pre><code class="language-python">class AlumnoIncorrecto:
+    # ¡Cuidado! Las listas son mutables
+    materias = []
+    
+    def __init__(self, nombre):
+        self.nombre = nombre
+    
+    def agregar_materia(self, materia):
+        self.materias.append(materia)
+
+# Crear instancias
+alumno1 = AlumnoIncorrecto("Ana")
+alumno2 = AlumnoIncorrecto("Juan")
+
+# Agregar materias
+alumno1.agregar_materia("Matemáticas")
+alumno2.agregar_materia("Historia")
+
+# ¡Sorpresa! Ambas instancias comparten la misma lista
+print(alumno1.materias)  # ['Matemáticas', 'Historia']
+print(alumno2.materias)  # ['Matemáticas', 'Historia']</code></pre>
+
+                    <p><strong>Solución:</strong> Inicializar los atributos mutables en <code>__init__</code>.</p>
+                    
+                    <pre><code class="language-python">class AlumnoCorrecto:
+    def __init__(self, nombre):
+        self.nombre = nombre
+        self.materias = []  # Cada instancia tiene su propia lista
+    
+    def agregar_materia(self, materia):
+        self.materias.append(materia)
+
+# Ahora cada instancia tiene su propia lista
+alumno1 = AlumnoCorrecto("Ana")
+alumno2 = AlumnoCorrecto("Juan")
+
+alumno1.agregar_materia("Matemáticas")
+alumno2.agregar_materia("Historia")
+
+print(alumno1.materias)  # ['Matemáticas']
+print(alumno2.materias)  # ['Historia']</code></pre>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>4. Encapsulamiento y Métodos Especiales</h3>
+                
+                <p>El encapsulamiento es el principio de ocultar los detalles internos de una clase y exponer solo lo necesario. En Python, esto se logra mediante convenciones de nombres, ya que no tiene modificadores de acceso estrictos como otros lenguajes.</p>
+                
+                <h4>4.1 Convenciones de nombres en Python</h4>
+                <ul>
+                    <li><code>nombre_publico</code>: Atributo o método público (accesible desde cualquier lugar).</li>
+                    <li><code>_nombre_protegido</code>: Atributo o método protegido (por convención, no debe usarse fuera de la clase o sus subclases).</li>
+                    <li><code>__nombre_privado</code>: Atributo o método privado (Python aplica name mangling para hacerlo más difícil de acceder desde fuera).</li>
+                </ul>
+                
+                <div class="code-example">
+                    <h4>Ejemplo: Encapsulamiento en Python</h4>
+                    <pre><code class="language-python">class CuentaBancariaSegura:
+    def __init__(self, titular, saldo_inicial=0):
+        self.titular = titular
+        # Atributo "protegido" (por convención)
+        self._saldo = saldo_inicial
+        # Atributo "privado" (name mangling)
+        self.__pin = "1234"
+        self.__intentos_fallidos = 0
+    
+    # Método público para depositar
+    def depositar(self, cantidad):
+        if cantidad > 0:
+            self._saldo += cantidad
+            return True
+        return False
+    
+    # Método público para retirar (con verificación de PIN)
+    def retirar(self, cantidad, pin):
+        if not self.__verificar_pin(pin):
+            self.__intentos_fallidos += 1
+            if self.__intentos_fallidos >= 3:
+                return "Cuenta bloqueada. Demasiados intentos fallidos."
+            return f"PIN incorrecto. Intentos restantes: {3 - self.__intentos_fallidos}"
+        
+        if 0 < cantidad <= self._saldo:
+            self._saldo -= cantidad
+            self.__intentos_fallidos = 0  # Reiniciar contador de intentos fallidos
+            return f"Retiro exitoso. Saldo actual: ${self._saldo:.2f}"
+        return "Fondos insuficientes o cantidad inválida."
+    
+    # Método privado (name mangling)
+    def __verificar_pin(self, pin):
+        return pin == self.__pin
+    
+    # Método especial para representación en string
+    def __str__(self):
+        return f"Cuenta de {self.titular} - Saldo: ${self._saldo:.2f}"
+
+# Crear una cuenta
+cuenta = CuentaBancariaSegura("María López", 1000)
+
+# Uso normal de la API pública
+print(cuenta)  # Usa __str__
+print(cuenta.depositar(500))  # True
+print(cuenta.retirar(200, "1234"))  # Retiro exitoso. Saldo actual: $1300.00
+
+# Intentar acceder a atributos "protegidos" y "privados"
+print(cuenta._saldo)  # 1300.0 (accesible pero por convención no deberíamos)
+
+# Name mangling para atributos privados
+# print(cuenta.__pin)  # Error: AttributeError
+# Pero podemos acceder así (aunque no deberíamos):
+print(cuenta._CuentaBancariaSegura__pin)  # 1234</code></pre>
+                </div>
+
+                <h4>4.2 Métodos Especiales Comunes</h4>
+                <p>Python proporciona varios métodos especiales (también llamados métodos mágicos o dunder methods) que permiten definir el comportamiento de las clases. Algunos de los más comunes son:</p>
+                
+                <table class="function-table">
+                    <tr>
+                        <th>Método</th>
+                        <th>Descripción</th>
+                        <th>Ejemplo de uso</th>
+                    </tr>
+                    <tr>
+                        <td><code>__init__(self, ...)</code></td>
+                        <td>Inicializador del objeto (no es exactamente un constructor)</td>
+                        <td><code>obj = MiClase(param1, param2)</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>__str__(self)</code></td>
+                        <td>Representación legible del objeto</td>
+                        <td><code>print(obj)</code> o <code>str(obj)</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>__repr__(self)</code></td>
+                        <td>Representación oficial del objeto (para depuración)</td>
+                        <td><code>repr(obj)</code> o al mostrar en la consola interactiva</td>
+                    </tr>
+                    <tr>
+                        <td><code>__len__(self)</code></td>
+                        <td>Devuelve la longitud del objeto</td>
+                        <td><code>len(obj)</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>__add__(self, other)</code></td>
+                        <td>Define el comportamiento de la suma <code>+</code></td>
+                        <td><code>obj1 + obj2</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>__eq__(self, other)</code></td>
+                        <td>Define la igualdad <code>==</code></td>
+                        <td><code>obj1 == obj2</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>__lt__(self, other)</code></td>
+                        <td>Define el operador menor que <code><</code></td>
+                        <td><code>obj1 < obj2</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>__getitem__(self, key)</code></td>
+                        <td>Permite indexación <code>obj[key]</code></td>
+                        <td><code>valor = obj[clave]</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>__setitem__(self, key, value)</code></td>
+                        <td>Asignación por índice <code>obj[key] = valor</code></td>
+                        <td><code>obj[clave] = valor</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>__call__(self, ...)</code></td>
+                        <td>Permite llamar al objeto como una función</td>
+                        <td><code>obj(param1, param2)</code></td>
+                    </tr>
+                </table>
+                
+                <div class="code-example">
+                    <h4>Ejemplo: Implementación de métodos especiales</h4>
+                    <pre><code class="language-python">class Vector:
+    def __init__(self, x=0, y=0):
+        self.x = x
+        self.y = y
+    
+    def __add__(self, otro):
+        """Suma de vectores: v1 + v2"""
+        return Vector(self.x + otro.x, self.y + otro.y)
+    
+    def __sub__(self, otro):
+        """Resta de vectores: v1 - v2"""
+        return Vector(self.x - otro.x, self.y - otro.y)
+    
+    def __mul__(self, escalar):
+        """Multiplicación por escalar: v * escalar"""
+        if isinstance(escalar, (int, float)):
+            return Vector(self.x * escalar, self.y * escalar)
+        raise TypeError("El segundo operando debe ser un número")
+    
+    def __rmul__(self, escalar):
+        """Multiplicación por escalar (lado derecho): escalar * v"""
+        return self * escalar  # Reutilizamos __mul__
+    
+    def __abs__(self):
+        """Módulo del vector: abs(v)"""
+        return (self.x**2 + self.y**2) ** 0.5
+    
+    def __eq__(self, otro):
+        """Igualdad de vectores: v1 == v2"""
+        return self.x == otro.x and self.y == otro.y
+    
+    def __str__(self):
+        """Representación legible"""
+        return f"Vector({self.x}, {self.y})"
+    
+    def __repr__(self):
+        """Representación para depuración"""
+        return f"Vector(x={self.x}, y={self.y})"
+
+# Uso de la clase Vector
+v1 = Vector(2, 3)
+v2 = Vector(5, 7)
+
+print(f"v1 = {v1}")         # v1 = Vector(2, 3)
+print(f"v2 = {v2}")         # v2 = Vector(5, 7)
+print(f"v1 + v2 = {v1 + v2}")  # v1 + v2 = Vector(7, 10)
+print(f"v2 - v1 = {v2 - v1}")  # v2 - v1 = Vector(3, 4)
+print(f"v1 * 3 = {v1 * 3}")    # v1 * 3 = Vector(6, 9)
+print(f"2 * v2 = {2 * v2}")    # 2 * v2 = Vector(10, 14)
+print(f"|v1| = {abs(v1):.2f}")  # |v1| = 3.61
+
+# Uso en una lista
+vectores = [v1, v2, v1 + v2]
+print(f"Lista de vectores: {vectores}")
+# Lista de vectores: [Vector(x=2, y=3), Vector(x=5, y=7), Vector(x=7, y=10)]</code></pre>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>5. Propiedades y Decoradores <code>@property</code></h3>
+                
+                <p>El decorador <code>@property</code> permite definir métodos que pueden ser accedidos como atributos, lo que es útil para validar valores o realizar cálculos bajo demanda.</p>
+                
+                <div class="code-example">
+                    <h4>Ejemplo: Uso de <code>@property</code></h4>
+                    <pre><code class="language-python">class Circulo:
+    def __init__(self, radio):
+        self.radio = radio
+    
+    @property
+    def radio(self):
+        return self._radio
+    
+    @radio.setter
+    def radio(self, valor):
+        if valor <= 0:
+            raise ValueError("El radio debe ser positivo")
+        self._radio = valor
+    
+    @property
+    def diametro(self):
+        return 2 * self.radio
+    
+    @diametro.setter
+    def diametro(self, valor):
+        if valor <= 0:
+            raise ValueError("El diámetro debe ser positivo")
+        self.radio = valor / 2
+    
+    @property
+    def area(self):
+        return 3.1416 * self.radio ** 2
+    
+    # No definimos un setter para área, por lo que es de solo lectura
+    # @area.setter
+    # def area(self, valor):
+    #     if valor <= 0:
+    #         raise ValueError("El área debe ser positiva")
+    #     self.radio = (valor / 3.1416) ** 0.5
+    
+    def __str__(self):
+        return f"Círculo(radio={self.radio}, área={self.area:.2f})"
+
+# Crear un círculo
+c = Circulo(5)
+print(c)  # Círculo(radio=5, área=78.54)
+
+# Acceder a propiedades
+print(f"Radio: {c.radio}")      # 5
+print(f"Diámetro: {c.diametro}") # 10.0
+print(f"Área: {c.area:.2f}")     # 78.54
+
+# Modificar el radio a través de la propiedad
+c.radio = 10
+print(f"Nuevo diámetro: {c.diametro}")  # 20.0
+print(f"Nueva área: {c.area:.2f}")      # 314.16
+
+# Modificar el diámetro (que actualiza el radio)
+c.diametro = 10
+print(f"Nuevo radio: {c.radio}")  # 5.0
+
+# Intentar establecer un radio inválido
+try:
+    c.radio = -5
+except ValueError as e:
+    print(f"Error: {e}")  # Error: El radio debe ser positivo
+
+# El área es de solo lectura
+try:
+    c.area = 100
+except AttributeError as e:
+    print(f"Error: {e}")  # Error: property 'area' of 'Circulo' object has no setter</code></pre>
+                </div>
+            </article>
+        </section>
+
+        <section class="practical-activity">
+            <h2><i class="fas fa-laptop-code"></i> Ejercicios Prácticos</h2>
+            
+            <div class="exercise">
+                <h4><i class="fas fa-pencil-alt"></i> Ejercicio 1: Sistema de Biblioteca</h4>
+                <p>Crea un sistema de gestión de biblioteca con las siguientes clases:</p>
+                <ul>
+                    <li><strong>Libro</strong>: con atributos como título, autor, año de publicación, estado (disponible/prestado), etc.</li>
+                    <li><strong>Usuario</strong>: con atributos como nombre, ID, libros prestados, etc.</li>
+                    <li><strong>Biblioteca</strong>: que gestione los libros y usuarios, con métodos para prestar, devolver y buscar libros.</li>
+                </ul>
+                
+                <button class="hint-button" onclick="toggleHint('solucion1')">Mostrar Solución</button>
+                <div id="solucion1" class="solution">
+                    <pre><code class="language-python">from datetime import datetime, timedelta
+
+class Libro:
+    def __init__(self, titulo, autor, anio_publicacion, isbn, ejemplares=1):
+        self.titulo = titulo
+        self.autor = autor
+        self.anio_publicacion = anio_publicacion
+        self.isbn = isbn
+        self.ejemplares_totales = ejemplares
+        self.ejemplares_disponibles = ejemplares
+        self._prestamos = []  # Historial de préstamos
+    
+    def prestar(self):
+        """Presta un ejemplar del libro si hay disponibilidad."""
+        if self.ejemplares_disponibles > 0:
+            self.ejemplares_disponibles -= 1
+            return True
+        return False
+    
+    def devolver(self):
+        """Devuelve un ejemplar del libro."""
+        if self.ejemplares_disponibles < self.ejemplares_totales:
+            self.ejemplares_disponibles += 1
+            return True
+        return False
+    
+    def registrar_prestamo(self, usuario_id, fecha_prestamo, fecha_devolucion):
+        """Registra un préstamo en el historial."""
+        self._prestamos.append({
+            'usuario_id': usuario_id,
+            'fecha_prestamo': fecha_prestamo,
+            'fecha_devolucion': fecha_devolucion
+        })
+    
+    @property
+    def disponible(self):
+        """Indica si hay ejemplares disponibles."""
+        return self.ejemplares_disponibles > 0
+    
+    def __str__(self):
+        return f"{self.titulo} - {self.autor} ({self.anio_publicacion})"
+    
+    def __repr__(self):
+        return f"Libro('{self.titulo}', '{self.autor}', {self.anio_publicacion}, '{self.isbn}', {self.ejemplares_totales})"
+
+
+class Usuario:
+    def __init__(self, nombre, usuario_id):
+        self.nombre = nombre
+        self.usuario_id = usuario_id
+        self._libros_prestados = []  # Lista de IDs de libros prestados
+        self._multa = 0.0  # Multa acumulada
+    
+    def tomar_prestado(self, libro_id, fecha_prestamo, fecha_devolucion):
+        """Registra un préstamo de libro por el usuario."""
+        self._libros_prestados.append({
+            'libro_id': libro_id,
+            'fecha_prestamo': fecha_prestamo,
+            'fecha_devolucion': fecha_devolucion,
+            'devuelto': False
+        })
+    
+    def devolver_libro(self, libro_id, fecha_devolucion):
+        """Registra la devolución de un libro."""
+        for prestamo in self._libros_prestados:
+            if prestamo['libro_id'] == libro_id and not prestamo['devuelto']:
+                prestamo['devuelto'] = True
+                prestamo['fecha_devolucion_real'] = fecha_devolucion
+                
+                # Calcular multa si hay retraso
+                if fecha_devolucion > prestamo['fecha_devolucion']:
+                    dias_retraso = (fecha_devolucion - prestamo['fecha_devolucion']).days
+                    self._multa += dias_retraso * 1.0  # $1 por día de retraso
+                
+                return True
+        return False
+    
+    @property
+    def libros_prestados_actuales(self):
+        """Devuelve los libros actualmente prestados."""
+        return [p for p in self._libros_prestados if not p['devuelto']]
+    
+    @property
+    def multa(self):
+        """Obtiene el monto de la multa actual."""
+        return self._multa
+    
+    def pagar_multa(self, monto):
+        """Reduce el monto de la multa."""
+        if monto <= 0:
+            return False
+        
+        if monto >= self._multa:
+            self._multa = 0
+            return True
+        
+        self._multa -= monto
+        return True
+    
+    def __str__(self):
+        return f"{self.nombre} (ID: {self.usuario_id}) - Libros prestados: {len(self.libros_prestados_actuales)}"
+
+
+class Biblioteca:
+    def __init__(self, nombre):
+        self.nombre = nombre
+        self._catalogo = {}  # {libro_id: libro}
+        self._usuarios = {}  # {usuario_id: usuario}
+        self._proximo_libro_id = 1
+        self._proximo_usuario_id = 1
+    
+    def agregar_libro(self, titulo, autor, anio_publicacion, isbn, ejemplares=1):
+        """Agrega un nuevo libro al catálogo."""
+        libro = Libro(titulo, autor, anio_publicacion, isbn, ejemplares)
+        libro_id = f"L{self._proximo_libro_id}"
+        self._catalogo[libro_id] = libro
+        self._proximo_libro_id += 1
+        return libro_id
+    
+    def registrar_usuario(self, nombre):
+        """Registra un nuevo usuario en la biblioteca."""
+        usuario_id = f"U{self._proximo_usuario_id}"
+        self._usuarios[usuario_id] = Usuario(nombre, usuario_id)
+        self._proximo_usuario_id += 1
+        return usuario_id
+    
+    def prestar_libro(self, usuario_id, libro_id, dias_prestamo=14):
+        """Presta un libro a un usuario."""
+        if usuario_id not in self._usuarios:
+            return "Usuario no encontrado."
+        
+        if libro_id not in self._catalogo:
+            return "Libro no encontrado."
+        
+        usuario = self._usuarios[usuario_id]
+        libro = self._catalogo[libro_id]
+        
+        # Verificar si el usuario ya tiene prestado este libro
+        for prestamo in usuario.libros_prestados_actuales:
+            if prestamo['libro_id'] == libro_id:
+                return "El usuario ya tiene prestado este libro."
+        
+        # Verificar disponibilidad
+        if not libro.disponible:
+            return "No hay ejemplares disponibles de este libro."
+        
+        # Registrar el préstamo
+        hoy = datetime.now()
+        fecha_devolucion = hoy + timedelta(days=dias_prestamo)
+        
+        if libro.prestar():
+            usuario.tomar_prestado(libro_id, hoy, fecha_devolucion)
+            libro.registrar_prestamo(usuario_id, hoy, fecha_devolucion)
+            return f"Préstamo exitoso. Fecha de devolución: {fecha_devolucion.strftime('%d/%m/%Y')}"
+        
+        return "No se pudo realizar el préstamo."
+    
+    def devolver_libro(self, usuario_id, libro_id):
+        """Registra la devolución de un libro."""
+        if usuario_id not in self._usuarios:
+            return "Usuario no encontrado."
+        
+        if libro_id not in self._catalogo:
+            return "Libro no encontrado."
+        
+        usuario = self._usuarios[usuario_id]
+        libro = self._catalogo[libro_id]
+        
+        # Verificar si el usuario tiene prestado este libro
+        tiene_prestado = any(
+            p['libro_id'] == libro_id and not p['devuelto'] 
+            for p in usuario.libros_prestados_actuales
+        )
+        
+        if not tiene_prestado:
+            return "Este usuario no tiene prestado este libro."
+        
+        # Registrar la devolución
+        hoy = datetime.now()
+        if libro.devolver():
+            usuario.devolver_libro(libro_id, hoy)
+            return "Devolución exitosa."
+        
+        return "No se pudo registrar la devolución."
+    
+    def buscar_libros(self, criterio, valor):
+        """Busca libros por título, autor o ISBN."""
+        resultados = []
+        
+        for libro_id, libro in self._catalogo.items():
+            if criterio == 'titulo' and valor.lower() in libro.titulo.lower():
+                resultados.append((libro_id, libro))
+            elif criterio == 'autor' and valor.lower() in libro.autor.lower():
+                resultados.append((libro_id, libro))
+            elif criterio == 'isbn' and valor == libro.isbn:
+                resultados.append((libro_id, libro))
+        
+        return resultados
+    
+    def obtener_estado_usuario(self, usuario_id):
+        """Obtiene el estado de un usuario (libros prestados, multas, etc.)."""
+        if usuario_id not in self._usuarios:
+            return "Usuario no encontrado."
+        
+        usuario = self._usuarios[usuario_id]
+        estado = {
+            'usuario': str(usuario),
+            'multa_actual': f"${usuario.multa:.2f}",
+            'libros_prestados': []
+        }
+        
+        for prestamo in usuario.libros_prestados_actuales:
+            libro_id = prestamo['libro_id']
+            if libro_id in self._catalogo:
+                libro = self._catalogo[libro_id]
+                estado['libros_prestados'].append({
+                    'libro': str(libro),
+                    'fecha_devolucion': prestamo['fecha_devolucion'].strftime('%d/%m/%Y')
+                })
+        
+        return estado
+    
+    def __str__(self):
+        return (f"Biblioteca: {self.nombre}\n"
+                f"Total de libros: {len(self._catalogo)}\n"
+                f"Total de usuarios: {len(self._usuarios)}")
+
+
+def menu_principal():
+    """Muestra el menú principal de la aplicación."""
+    print("\n--- Sistema de Gestión de Biblioteca ---")
+    print("1. Agregar libro al catálogo")
+    print("2. Registrar nuevo usuario")
+    print("3. Prestar libro")
+    print("4. Devolver libro")
+    print("5. Buscar libros")
+    print("6. Consultar estado de usuario")
+    print("7. Pagar multa")
+    print("8. Mostrar resumen de la biblioteca")
+    print("0. Salir")
+    
+    try:
+        return int(input("\nSeleccione una opción: "))
+    except ValueError:
+        return -1
+
+
+def main():
+    """Función principal de la aplicación."""
+    # Crear una biblioteca de ejemplo
+    biblioteca = Biblioteca("Biblioteca Central")
+    
+    # Agregar algunos libros de ejemplo
+    libros_ejemplo = [
+        ("Cien años de soledad", "Gabriel García Márquez", 1967, "978-0307474728", 3),
+        ("El Principito", "Antoine de Saint-Exupéry", 1943, "978-0156013926", 5),
+        ("1984", "George Orwell", 1949, "978-0451524935", 2),
+        ("Don Quijote de la Mancha", "Miguel de Cervantes", 1605, "978-8424110236", 4),
+        ("Crimen y castigo", "Fiódor Dostoievski", 1866, "978-8420412146", 2)
+    ]
+    
+    for libro in libros_ejemplo:
+        biblioteca.agregar_libro(*libro)
+    
+    # Registrar algunos usuarios de ejemplo
+    usuarios_ejemplo = ["Ana García", "Carlos López", "María Rodríguez"]
+    for nombre in usuarios_ejemplo:
+        biblioteca.registrar_usuario(nombre)
+    
+    # Menú interactivo
+    while True:
+        opcion = menu_principal()
+        
+        if opcion == 0:
+            print("¡Gracias por usar el sistema de gestión de biblioteca!")
+            break
+            
+        elif opcion == 1:
+            # Agregar libro
+            print("\n--- Agregar nuevo libro ---")
+            titulo = input("Título: ")
+            autor = input("Autor: ")
+            anio = int(input("Año de publicación: "))
+            isbn = input("ISBN: ")
+            ejemplares = int(input("Número de ejemplares: "))
+            
+            libro_id = biblioteca.agregar_libro(titulo, autor, anio, isbn, ejemplares)
+            print(f"Libro agregado con ID: {libro_id}")
+            
+        elif opcion == 2:
+            # Registrar usuario
+            print("\n--- Registrar nuevo usuario ---")
+            nombre = input("Nombre completo: ")
+            usuario_id = biblioteca.registrar_usuario(nombre)
+            print(f"Usuario registrado con ID: {usuario_id}")
+            
+        elif opcion == 3:
+            # Prestar libro
+            print("\n--- Prestar libro ---")
+            usuario_id = input("ID de usuario: ")
+            libro_id = input("ID de libro: ")
+            print(biblioteca.prestar_libro(usuario_id, libro_id))
+            
+        elif opcion == 4:
+            # Devolver libro
+            print("\n--- Devolver libro ---")
+            usuario_id = input("ID de usuario: ")
+            libro_id = input("ID de libro: ")
+            print(biblioteca.devolver_libro(usuario_id, libro_id))
+            
+        elif opcion == 5:
+            # Buscar libros
+            print("\n--- Buscar libros ---")
+            print("1. Por título")
+            print("2. Por autor")
+            print("3. Por ISBN")
+            
+            try:
+                opcion_busqueda = int(input("Seleccione criterio de búsqueda: "))
+                if opcion_busqueda not in [1, 2, 3]:
+                    raise ValueError
+                    
+                criterios = {1: 'titulo', 2: 'autor', 3: 'isbn'}
+                valor = input(f"Ingrese {criterios[opcion_busqueda]}: ")
+                
+                resultados = biblioteca.buscar_libros(criterios[opcion_busqueda], valor)
+                
+                if not resultados:
+                    print("No se encontraron resultados.")
+                else:
+                    print(f"\nResultados ({len(resultados)}):")
+                    for libro_id, libro in resultados:
+                        print(f"- ID: {libro_id} | {libro} | Disponibles: {libro.ejemplares_disponibles}/{libro.ejemplares_totales}")
+                        
+            except ValueError:
+                print("Opción no válida.")
+                
+        elif opcion == 6:
+            # Consultar estado de usuario
+            print("\n--- Consultar estado de usuario ---")
+            usuario_id = input("ID de usuario: ")
+            estado = biblioteca.obtener_estado_usuario(usuario_id)
+            
+            if isinstance(estado, str):
+                print(estado)
+            else:
+                print(f"\n--- Estado de {estado['usuario']} ---")
+                print(f"Multa actual: {estado['multa_actual']}")
+                
+                if estado['libros_prestados']:
+                    print("\nLibros prestados:")
+                    for i, libro in enumerate(estado['libros_prestados'], 1):
+                        print(f"{i}. {libro['libro']} (Devolver antes de: {libro['fecha_devolucion']})")
+                else:
+                    print("\nNo tiene libros prestados actualmente.")
+                    
+        elif opcion == 7:
+            # Pagar multa
+            print("\n--- Pagar multa ---")
+            usuario_id = input("ID de usuario: ")
+            
+            if usuario_id not in biblioteca._usuarios:
+                print("Usuario no encontrado.")
+                continue
+                
+            usuario = biblioteca._usuarios[usuario_id]
+            
+            if usuario.multa <= 0:
+                print("El usuario no tiene multas pendientes.")
+                continue
+                
+            print(f"Monto de la multa: ${usuario.multa:.2f}")
+            
+            try:
+                monto = float(input("Monto a pagar: $"))
+                if usuario.pagar_multa(monto):
+                    print("Pago registrado exitosamente.")
+                    print(f"Nuevo saldo: ${usuario.multa:.2f}")
+                else:
+                    print("El monto debe ser un valor positivo.")
+            except ValueError:
+                print("Por favor, ingrese un monto válido.")
+                
+        elif opcion == 8:
+            # Mostrar resumen
+            print("\n" + "="*50)
+            print(biblioteca)
+            print("="*50)
+            
+            # Mostrar usuarios registrados
+            print("\nUsuarios registrados:")
+            for usuario_id, usuario in biblioteca._usuarios.items():
+                print(f"- {usuario_id}: {usuario.nombre}")
+                
+            # Mostrar libros en catálogo
+            print("\nLibros en catálogo:")
+            for libro_id, libro in biblioteca._catalogo.items():
+                print(f"- {libro_id}: {libro.titulo} | {libro.autor} | Disponibles: {libro.ejemplares_disponibles}/{libro.ejemplares_totales}")
+                
+        else:
+            print("Opción no válida. Por favor, intente de nuevo.")
+
+if __name__ == "__main__":
+    main()</code></pre>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4><i class="fas fa-pencil-alt"></i> Ejercicio 2: Sistema de Figuras Geométricas</h4>
+                <p>Crea un sistema de figuras geométricas con herencia. Debe incluir al menos tres tipos de figuras (por ejemplo, Círculo, Rectángulo, Triángulo) con métodos para calcular área y perímetro.</p>
+                
+                <button class="hint-button" onclick="toggleHint('solucion2')">Mostrar Solución</button>
+                <div id="solucion2" class="solution">
+                    <pre><code class="language-python">import math
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import List, Tuple
+
+# Clase base abstracta para figuras geométricas
+class Figura(ABC):
+    """Clase base abstracta para figuras geométricas."""
+    
+    @property
+    @abstractmethod
+    def area(self) -> float:
+        """Calcula el área de la figura."""
+        pass
+    
+    @property
+    @abstractmethod
+    def perimetro(self) -> float:
+        """Calcula el perímetro de la figura."""
+        pass
+    
+    def __str__(self) -> str:
+        """Representación en cadena de la figura."""
+        return f"{self.__class__.__name__} - Área: {self.area:.2f}, Perímetro: {self.perimetro:.2f}"
+    
+    def __eq__(self, otro) -> bool:
+        """Compara figuras por su área."""
+        if not isinstance(otro, Figura):
+            return NotImplemented
+        return math.isclose(self.area, otro.area, rel_tol=1e-9)
+    
+    def __lt__(self, otro) -> bool:
+        """Compara figuras por su área."""
+        if not isinstance(otro, Figura):
+            return NotImplemented
+        return self.area < otro.area
+
+
+@dataclass
+class Punto:
+    """Representa un punto en el plano 2D."""
+    x: float
+    y: float
+    
+    def distancia_a(self, otro: 'Punto') -> float:
+        """Calcula la distancia a otro punto."""
+        return math.hypot(self.x - otro.x, self.y - otro.y)
+    
+    def __str__(self) -> str:
+        return f"({self.x}, {self.y})"
+
+
+class Circulo(Figura):
+    """Representa un círculo en el plano 2D."""
+    
+    def __init__(self, centro: Punto, radio: float):
+        if radio <= 0:
+            raise ValueError("El radio debe ser positivo")
+        self.centro = centro
+        self._radio = radio
+    
+    @property
+    def radio(self) -> float:
+        return self._radio
+    
+    @radio.setter
+    def radio(self, valor: float):
+        if valor <= 0:
+            raise ValueError("El radio debe ser positivo")
+        self._radio = valor
+    
+    @property
+    def area(self) -> float:
+        return math.pi * self.radio ** 2
+    
+    @property
+    def perimetro(self) -> float:
+        return 2 * math.pi * self.radio
+    
+    def __str__(self) -> str:
+        return f"Círculo(centro={self.centro}, radio={self.radio:.2f}) - Área: {self.area:.2f}, Perímetro: {self.perimetro:.2f}"
+
+
+class Rectangulo(Figura):
+    """Representa un rectángulo en el plano 2D."""
+    
+    def __init__(self, esquina_inf_izq: Punto, ancho: float, alto: float):
+        if ancho <= 0 or alto <= 0:
+            raise ValueError("El ancho y el alto deben ser positivos")
+        self.esquina = esquina_inf_izq
+        self.ancho = ancho
+        self.alto = alto
+    
+    @property
+    def vertices(self) -> List[Punto]:
+        """Devuelve los cuatro vértices del rectángulo."""
+        x, y = self.esquina.x, self.esquina.y
+        return [
+            Punto(x, y),                      # Vértice inferior izquierdo
+            Punto(x + self.ancho, y),         # Vértice inferior derecho
+            Punto(x + self.ancho, y + self.alto),  # Vértice superior derecho
+            Punto(x, y + self.alto)           # Vértice superior izquierdo
+        ]
+    
+    @property
+    def area(self) -> float:
+        return self.ancho * self.alto
+    
+    @property
+    def perimetro(self) -> float:
+        return 2 * (self.ancho + self.alto)
+    
+    def __str__(self) -> str:
+        return (f"Rectángulo(esquina={self.esquina}, ancho={self.ancho:.2f}, alto={self.alto:.2f}) - "
+                f"Área: {self.area:.2f}, Perímetro: {self.perimetro:.2f}")
+
+
+class Triangulo(Figura):
+    """Representa un triángulo en el plano 2D."""
+    
+    def __init__(self, punto1: Punto, punto2: Punto, punto3: Punto):
+        # Verificar que los puntos no sean colineales
+        if self._area_triangulo(punto1, punto2, punto3) == 0:
+            raise ValueError("Los puntos no deben ser colineales")
+        self.punto1 = punto1
+        self.punto2 = punto2
+        self.punto3 = punto3
+    
+    @staticmethod
+    def _area_triangulo(a: Punto, b: Punto, c: Punto) -> float:
+        """Calcula el área del triángulo usando la fórmula de Herón."""
+        lado1 = a.distancia_a(b)
+        lado2 = b.distancia_a(c)
+        lado3 = c.distancia_a(a)
+        s = (lado1 + lado2 + lado3) / 2
+        return math.sqrt(s * (s - lado1) * (s - lado2) * (s - lado3))
+    
+    @property
+    def lados(self) -> Tuple[float, float, float]:
+        """Devuelve las longitudes de los tres lados."""
+        return (
+            self.punto1.distancia_a(self.punto2),
+            self.punto2.distancia_a(self.punto3),
+            self.punto3.distancia_a(self.punto1)
+        )
+    
+    @property
+    def area(self) -> float:
+        return self._area_triangulo(self.punto1, self.punto2, self.punto3)
+    
+    @property
+    def perimetro(self) -> float:
+        return sum(self.lados)
+    
+    def tipo_por_lados(self) -> str:
+        """Determina el tipo de triángulo según sus lados."""
+        a, b, c = sorted(self.lados)
+        
+        if math.isclose(a, b, rel_tol=1e-9) and math.isclose(b, c, rel_tol=1e-9):
+            return "Equilátero"
+        elif math.isclose(a, b, rel_tol=1e-9) or math.isclose(b, c, rel_tol=1e-9) or math.isclose(a, c, rel_tol=1e-9):
+            return "Isósceles"
+        else:
+            return "Escaleno"
+    
+    def tipo_por_angulos(self) -> str:
+        """Determina el tipo de triángulo según sus ángulos."""
+        a, b, c = sorted(self.lados)
+        a_cuad = a ** 2
+        b_cuad = b ** 2
+        c_cuad = c ** 2
+        
+        if math.isclose(a_cuad + b_cuad, c_cuad, rel_tol=1e-9):
+            return "Rectángulo"
+        elif a_cuad + b_cuad > c_cuad:
+            return "Acutángulo"
+        else:
+            return "Obtusángulo"
+    
+    def __str__(self) -> str:
+        return (f"Triángulo({self.punto1}, {self.punto2}, {self.punto3}) - "
+                f"Tipo: {self.tipo_por_lados()}, {self.tipo_por_angulos().lower()} - "
+                f"Área: {self.area:.2f}, Perímetro: {self.perimetro:.2f}")
+
+
+class PoligonoRegular(Figura):
+    """Representa un polígono regular en el plano 2D."""
+    
+    def __init__(self, centro: Punto, radio: float, lados: int):
+        if radio <= 0:
+            raise ValueError("El radio debe ser positivo")
+        if lados < 3:
+            raise ValueError("Un polígono debe tener al menos 3 lados")
+        
+        self.centro = centro
+        self.radio = radio  # Radio de la circunferencia circunscrita
+        self.lados = lados
+    
+    @property
+    def angulo_central(self) -> float:
+        """Ángulo central en radianes."""
+        return 2 * math.pi / self.lados
+    
+    @property
+    def longitud_lado(self) -> float:
+        """Longitud de cada lado del polígono."""
+        return 2 * self.radio * math.sin(math.pi / self.lados)
+    
+    @property
+    def apotema(self) -> float:
+        """Apotema del polígono (distancia del centro al punto medio de un lado)."""
+        return self.radio * math.cos(math.pi / self.lados)
+    
+    @property
+    def area(self) -> float:
+        return (self.perimetro * self.apotema) / 2
+    
+    @property
+    def perimetro(self) -> float:
+        return self.lados * self.longitud_lado
+    
+    def obtener_vertices(self) -> List[Punto]:
+        """Calcula las coordenadas de los vértices del polígono."""
+        vertices = []
+        for i in range(self.lados):
+            angulo = i * self.angulo_central
+            x = self.centro.x + self.radio * math.cos(angulo)
+            y = self.centro.y + self.radio * math.sin(angulo)
+            vertices.append(Punto(x, y))
+        return vertices
+    
+    def __str__(self) -> str:
+        return (f"{self.lados}-ágono regular(centro={self.centro}, radio={self.radio:.2f}) - "
+                f"Área: {self.area:.2f}, Perímetro: {self.perimetro:.2f}")
+
+
+def mostrar_menu():
+    """Muestra el menú de la aplicación."""
+    print("\n--- Sistema de Figuras Geométricas ---")
+    print("1. Crear círculo")
+    print("2. Crear rectángulo")
+    print("3. Crear triángulo")
+    print("4. Crear polígono regular")
+    print("5. Mostrar todas las figuras")
+    print("6. Ordenar figuras por área")
+    print("0. Salir")
+    
+    try:
+        return int(input("\nSeleccione una opción: "))
+    except ValueError:
+        return -1
+
+
+def main():
+    """Función principal de la aplicación."
+    figuras = []
+    
+    while True:
+        opcion = mostrar_menu()
+        
+        if opcion == 0:
+            print("¡Hasta luego!")
+            break
+            
+        elif opcion == 1:
+            # Crear círculo
+            print("\n--- Crear Círculo ---")
+            try:
+                x = float(input("Coordenada x del centro: "))
+                y = float(input("Coordenada y del centro: "))
+                radio = float(input("Radio: "))
+                
+                circulo = Circulo(Punto(x, y), radio)
+                figuras.append(circulo)
+                print(f"\n¡Círculo creado!\n{circulo}")
+                
+            except ValueError as e:
+                print(f"Error: {e}")
+                
+        elif opcion == 2:
+            # Crear rectángulo
+            print("\n--- Crear Rectángulo ---")
+            try:
+                x = float(input("Coordenada x de la esquina inferior izquierda: "))
+                y = float(input("Coordenada y de la esquina inferior izquierda: "))
+                ancho = float(input("Ancho: "))
+                alto = float(input("Alto: "))
+                
+                rectangulo = Rectangulo(Punto(x, y), ancho, alto)
+                figuras.append(rectangulo)
+                print(f"\n¡Rectángulo creado!\n{rectangulo}")
+                
+            except ValueError as e:
+                print(f"Error: {e}")
+                
+        elif opcion == 3:
+            # Crear triángulo
+            print("\n--- Crear Triángulo ---")
+            try:
+                print("Punto 1:")
+                x1 = float(input("  Coordenada x: "))
+                y1 = float(input("  Coordenada y: "))
+                
+                print("\nPunto 2:")
+                x2 = float(input("  Coordenada x: "))
+                y2 = float(input("  Coordenada y: "))
+                
+                print("\nPunto 3:")
+                x3 = float(input("  Coordenada x: "))
+                y3 = float(input("  Coordenada y: "))
+                
+                triangulo = Triangulo(Punto(x1, y1), Punto(x2, y2), Punto(x3, y3))
+                figuras.append(triangulo)
+                print(f"\n¡Triángulo creado!\n{triangulo}")
+                
+            except ValueError as e:
+                print(f"Error: {e}")
+                
+        elif opcion == 4:
+            # Crear polígono regular
+            print("\n--- Crear Polígono Regular ---")
+            try:
+                x = float(input("Coordenada x del centro: "))
+                y = float(input("Coordenada y del centro: "))
+                radio = float(input("Radio de la circunferencia circunscrita: "))
+                lados = int(input("Número de lados (mínimo 3): "))
+                
+                poligono = PoligonoRegular(Punto(x, y), radio, lados)
+                figuras.append(poligono)
+                print(f"\n¡{lados}-ágono regular creado!\n{poligono}")
+                
+            except ValueError as e:
+                print(f"Error: {e}")
+                
+        elif opcion == 5:
+            # Mostrar todas las figuras
+            print("\n--- Figuras Registradas ---")
+            if not figuras:
+                print("No hay figuras registradas.")
+            else:
+                for i, figura in enumerate(figuras, 1):
+                    print(f"{i}. {figura}")
+                    
+        elif opcion == 6:
+            # Ordenar figuras por área
+            print("\n--- Figuras Ordenadas por Área ---")
+            if not figuras:
+                print("No hay figuras para ordenar.")
+            else:
+                figuras_ordenadas = sorted(figuras)
+                for i, figura in enumerate(figuras_ordenadas, 1):
+                    print(f"{i}. {figura.__class__.__name__}: Área = {figura.area:.2f}")
+        
+        else:
+            print("Opción no válida. Por favor, intente de nuevo.")
+
+if __name__ == "__main__":
+    main()</code></pre>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4><i class="fas fa-pencil-alt"></i> Ejercicio 3: Juego de Cartas con POO</h4>
+                <p>Implementa un juego de cartas simple como el Blackjack o el Póker utilizando programación orientada a objetos. Debe incluir clases para Carta, Mazo, Jugador y Juego.</p>
+                
+                <button class="hint-button" onclick="toggleHint('solucion3')">Mostrar Solución</button>
+                <div id="solucion3" class="solution">
+                    <pre><code class="language-python">import random
+from enum import Enum, auto
+from typing import List, Dict, Optional, Tuple
+from dataclasses import dataclass
+
+
+class Palo(Enum):
+    """Enumeración para los palos de la baraja francesa."""
+    CORAZONES = auto()
+    DIAMANTES = auto()
+    TREBOLES = auto()
+    PICAS = auto()
+    
+    def __str__(self):
+        # Símbolos Unicode para los palos
+        simbolos = {
+            Palo.CORAZONES: '♥',  # Corazones rojos
+            Palo.DIAMANTES: '♦',  # Diamantes rojos
+            Palo.TREBOLES: '♣',   # Tréboles negros
+            Palo.PICAS: '♠'       # Picas negras
+        }
+        return simbolos[self]
+
+
+class Valor(Enum):
+    """Enumeración para los valores de las cartas."""
+    DOS = (2, '2')
+    TRES = (3, '3')
+    CUATRO = (4, '4')
+    CINCO = (5, '5')
+    SEIS = (6, '6')
+    SIETE = (7, '7')
+    OCHO = (8, '8')
+    NUEVE = (9, '9')
+    DIEZ = (10, '10')
+    JOTA = (10, 'J')
+    REINA = (10, 'Q')
+    REY = (10, 'K')
+    AS = (11, 'A')  # El AS puede valer 1 u 11
+    
+    def __init__(self, valor: int, simbolo: str):
+        self.valor = valor
+        self.simbolo = simbolo
+    
+    def __str__(self):
+        return self.simbolo
+
+
+@dataclass
+class Carta:
+    """Representa una carta de la baraja."""
+    valor: Valor
+    palo: Palo
+    boca_arriba: bool = True
+    
+    def __str__(self):
+        if not self.boca_arriba:
+            return "[?]"
+        return f"[{self.valor}{self.palo}]"
+    
+    def valor_blackjack(self) -> int:
+        """Devuelve el valor de la carta en el juego de Blackjack."""
+        return self.valor.valor
+
+
+class Mazo:
+    """Representa un mazo de cartas."""
+    
+    def __init__(self, num_barajas: int = 1):
+        self.cartas: List[Carta] = []
+        self.num_barajas = num_barajas
+        self.crear_baraja()
+    
+    def crear_baraja(self):
+        """Crea un mazo con el número especificado de barajas."""
+        self.cartas = []
+        for _ in range(self.num_barajas):
+            for palo in Palo:
+                for valor in Valor:
+                    self.cartas.append(Carta(valor, palo))
+    
+    def barajar(self):
+        """Mezcla las cartas del mazo."""
+        random.shuffle(self.cartas)
+    
+    def repartir(self, boca_arriba: bool = True) -> Optional[Carta]:
+        """Reparte una carta del mazo."""
+        if not self.cartas:
+            return None
+        
+        carta = self.cartas.pop()
+        carta.boca_arriba = boca_arriba
+        return carta
+    
+    def __len__(self) -> int:
+        return len(self.cartas)
+    
+    def __str__(self) -> str:
+        return f"Mazo con {len(self)} cartas"
+
+
+class Mano:
+    """Representa una mano de cartas de un jugador."""
+    
+    def __init__(self):
+        self.cartas: List[Carta] = []
+    
+    def agregar_carta(self, carta: Carta):
+        """Agrega una carta a la mano."""
+        self.cartas.append(carta)
+    
+    def valor_blackjack(self) -> int:
+        """Calcula el valor de la mano según las reglas del Blackjack."""
+        valor = 0
+        ases = 0
+        
+        for carta in self.cartas:
+            if carta.boca_arriba:  # Solo contamos las cartas visibles
+                valor_carta = carta.valor_blackjack()
+                valor += valor_carta
+                if carta.valor == Valor.AS:
+                    ases += 1
+        
+        # Ajustar el valor de los ases si es necesario
+        while valor > 21 and ases > 0:
+            valor -= 10  # Cambiar un AS de 11 a 1
+            ases -= 1
+        
+        return valor
+    
+    def es_blackjack(self) -> bool:
+        """Determina si la mano es un Blackjack (21 con solo dos cartas)."""
+        return len(self.cartas) == 2 and self.valor_blackjack() == 21
+    
+    def esta_quemada(self) -> bool:
+        """Determina si la mano se ha pasado de 21."""
+        return self.valor_blackjack() > 21
+    
+    def voltear_primera_carta(self):
+        """Voltea la primera carta de la mano (útil para la mano del crupier)."""
+        if self.cartas:
+            self.cartas[0].boca_arriba = not self.cartas[0].boca_arriba
+    
+    def __str__(self) -> str:
+        return ' '.join(str(carta) for carta in self.cartas) + f" ({self.valor_blackjack()})"
+
+
+class Jugador:
+    """Representa un jugador de Blackjack."""
+    
+    def __init__(self, nombre: str, saldo_inicial: float = 1000.0):
+        self.nombre = nombre
+        self.saldo = saldo_inicial
+        self.mano = Mano()
+        self.apuesta_actual = 0.0
+    
+    def hacer_apuesta(self, cantidad: float) -> bool:
+        """Realiza una apuesta si el jugador tiene saldo suficiente."""
+        if cantidad <= 0 or cantidad > self.saldo:
+            return False
+        
+        self.apuesta_actual = cantidad
+        self.saldo -= cantidad
+        return True
+    
+    def ganar_apuesta(self, blackjack: bool = False):
+        """El jugador gana su apuesta (y posiblemente un bono por blackjack)."""
+        if blackjack:
+            self.saldo += int(self.apuesta_actual * 2.5)  # Pago 3:2 por blackjack
+        else:
+            self.saldo += self.apuesta_actual * 2  # Pago 1:1 por victoria normal
+        self.apuesta_actual = 0
+    
+    def perder_apuesta(self):
+        """El jugador pierde su apuesta."""
+        self.apuesta_actual = 0
+    
+    def empate(self):
+        """El jugador recupera su apuesta (empate)."""
+        self.saldo += self.apuesta_actual
+        self.apuesta_actual = 0
+    
+    def reiniciar_mano(self):
+        """Prepara al jugador para una nueva ronda."""
+        self.mano = Mano()
+        self.apuesta_actual = 0
+    
+    def __str__(self) -> str:
+        return f"{self.nombre} (${self.saldo:.2f}): {self.mano}"
+
+
+class Blackjack:
+    """Implementa la lógica del juego de Blackjack."""
+    
+    def __init__(self, num_barajas: int = 6):
+        self.mazo = Mazo(num_barajas)
+        self.mazo.barajar()
+        self.jugador: Optional[Jugador] = None
+        self.crupier = Jugador("Crupier", float('inf'))  # El crupier tiene saldo infinito
+        self.ronda_activa = False
+    
+    def registrar_jugador(self, nombre: str, saldo_inicial: float = 1000.0):
+        """Registra un nuevo jugador para el juego."""
+        self.jugador = Jugador(nombre, saldo_inicial)
+        return self.jugador
+    
+    def iniciar_ronda(self, apuesta: float) -> bool:
+        """Inicia una nueva ronda con la apuesta del jugador."
+        if self.ronda_activa or not self.jugador or self.jugador.saldo < apuesta:
+            return False
+        
+        # Reiniciar el mazo si quedan pocas cartas
+        if len(self.mazo) < 20:  # Umbral arbitrario
+            print("¡Mezclando el mazo!")
+            self.mazo.crear_baraja()
+            self.mazo.barajar()
+        
+        # Reiniciar manos
+        self.jugador.reiniciar_mano()
+        self.crupier.reiniciar_mano()
+        
+        # Realizar apuesta
+        if not self.jugador.hacer_apuesta(apuesta):
+            return False
+        
+        self.ronda_activa = True
+        
+        # Repartir cartas iniciales (2 al jugador, 1 al crupier boca abajo, 1 boca arriba)
+        self.jugador.mano.agregar_carta(self.mazo.repartir())
+        self.jugador.mano.agregar_carta(self.mazo.repartir())
+        
+        self.crupier.mano.agregar_carta(self.mazo.repartir(boca_arriba=False))  # Carta oculta
+        self.crupier.mano.agregar_carta(self.mazo.repartir())
+        
+        # Verificar blackjack del jugador
+        if self.jugador.mano.es_blackjack():
+            self.ronda_activa = False
+            # Verificar si el crupier también tiene blackjack
+            self.crupier.mano.voltear_primera_carta()  # Mostrar la carta oculta
+            
+            if self.crupier.mano.es_blackjack():
+                # Empate (push) - el jugador recupera su apuesta
+                self.jugador.empate()
+                return True, "¡Ambos tienen Blackjack! Es un empate."
+            else:
+                # El jugador gana 3:2 por blackjack
+                self.jugador.ganar_apuesta(blackjack=True)
+                return True, "¡Blackjack! ¡Has ganado!"
+        
+        return True, "Ronda iniciada. ¿Pedir o plantarte?"
+    
+    def pedir_carta(self) -> Tuple[bool, str]:
+        """El jugador pide una carta."""
+        if not self.ronda_activa or not self.jugador:
+            return False, "No hay una ronda activa."
+        
+        # Repartir carta al jugador
+        self.jugador.mano.agregar_carta(self.mazo.repartir())
+        
+        # Verificar si el jugador se ha pasado
+        if self.jugador.mano.esta_quemada():
+            self.ronda_activa = False
+            self.jugador.perder_apuesta()
+            return False, f"Te has pasado de 21. ¡Has perdido ${self.jugador.apuesta_actual:.2f}!"
+        
+        return True, f"Tienes {self.jugador.mano.valor_blackjack()} puntos. ¿Otra carta o te plantas?"
+    
+    def plantarse(self) -> Tuple[bool, str]:
+        """El jugador se planta y es el turno del crupier."""
+        if not self.ronda_activa or not self.jugador:
+            return False, "No hay una ronda activa."
+        
+        self.ronda_activa = False
+        
+        # Mostrar la carta oculta del crupier
+        self.crupier.mano.voltear_primera_carta()
+        
+        # El crupier debe pedir cartas hasta llegar al menos a 17
+        while self.crupier.mano.valor_blackjack() < 17:
+            self.crupier.mano.agregar_carta(self.mazo.repartir())
+        
+        # Determinar el resultado
+        valor_jugador = self.jugador.mano.valor_blackjack()
+        valor_crupier = self.crupier.mano.valor_blackjack()
+        
+        # Verificar si el crupier se ha pasado
+        if valor_crupier > 21:
+            self.jugador.ganar_apuesta()
+            return False, f"¡El crupier se ha pasado! ¡Has ganado ${self.jugador.apuesta_actual * 2:.2f}!"
+        
+        # Comparar puntuaciones
+        if valor_jugador > valor_crupier:
+            self.jugador.ganar_apuesta()
+            return False, f"¡Has ganado! {valor_jugador} a {valor_crupier}. Ganas ${self.jugador.apuesta_actual * 2:.2f}!"
+        elif valor_jugador < valor_crupier:
+            self.jugador.perder_apuesta()
+            return False, f"Has perdido. {valor_crupier} a {valor_jugador}. Pierdes ${self.jugador.apuesta_actual:.2f}."
+        else:
+            self.jugador.empate()
+            return False, f"Empate a {valor_jugador}. Recuperas tu apuesta de ${self.jugador.apuesta_actual:.2f}."
+    
+    def mostrar_estado(self) -> str:
+        """Muestra el estado actual del juego."""
+        if not self.jugador:
+            return "No hay jugador registrado."
+        
+        estado = [
+            f"\n--- Mesa de Blackjack ---",
+            f"Crupier: {self.crupier.mano}",
+            f"{self.jugador.nombre}: {self.jugador.mano}",
+            f"Saldo: ${self.jugador.saldo:.2f}",
+            f"Apuesta actual: ${self.jugador.apuesta_actual:.2f}"
+        ]
+        
+        return "\n".join(estado)
+
+
+def mostrar_menu_principal():
+    """Muestra el menú principal del juego."""
+    print("\n--- Blackjack ---")
+    print("1. Iniciar nueva ronda")
+    print("2. Pedir carta")
+    print("3. Plantarse")
+    print("4. Mostrar reglas")
+    print("0. Salir")
+    
+    try:
+        return int(input("\nSeleccione una opción: "))
+    except ValueError:
+        return -1
+
+
+def mostrar_reglas():
+    """Muestra las reglas del Blackjack."""
+    print("\n--- Reglas del Blackjack ---")
+    print("Objetivo: Conseguir una mano cuyo valor sea lo más cercano posible a 21 sin pasarse.")
+    print("\nValor de las cartas:")
+    print("- Las cartas del 2 al 10 valen su valor numérico.")
+    print("- Las figuras (J, Q, K) valen 10.")
+    print("- El As puede valer 1 u 11, lo que sea más beneficioso para la mano.")
+    print("\nDesarrollo del juego:")
+    print("1. Haces una apuesta.")
+    print("2. Recibes dos cartas boca arriba. El crupier recibe una carta boca arriba y otra boca abajo.")
+    print("3. Decides si pedir más cartas ('Pedir') o quedarte con las que tienes ('Plantarte').")
+    print("4. Si te pasas de 21, pierdes automáticamente.")
+    print("5. Cuando te plantas, el crupier revela su carta oculta y debe pedir cartas hasta sumar 17 o más.")
+    print("6. Gana quien tenga la mano más cercana a 21 sin pasarse.")
+    print("\nPagos:")
+    print("- Victoria normal: Ganas el doble de tu apuesta (1:1).")
+    print("- Blackjack (21 con dos cartas): Ganas 3:2 de tu apuesta (1.5 veces la apuesta).")
+    print("- Empate: Recuperas tu apuesta.")
+    print("- Derrota: Pierdes tu apuesta.")
+    input("\nPresiona Enter para continuar...")
+
+
+def main():
+    """Función principal del juego."""
+    print("¡Bienvenido al Casino Blackjack!")
+    
+    # Configuración inicial
+    nombre = input("\nIngresa tu nombre: ").strip() or "Jugador"
+    saldo_inicial = 1000.0
+    
+    # Inicializar el juego
+    juego = Blackjack(num_barajas=6)
+    jugador = juego.registrar_jugador(nombre, saldo_inicial)
+    
+    print(f"\n¡Hola, {jugador.nombre}! Tu saldo inicial es: ${jugador.saldo:.2f}")
+    
+    # Bucle principal del juego
+    while True:
+        if jugador.saldo <= 0:
+            print("\n¡Te has quedado sin fondos! Fin del juego.")
+            break
+        
+        opcion = mostrar_menu_principal()
+        
+        if opcion == 0:
+            print(f"\n¡Gracias por jugar, {jugador.nombre}! Tu saldo final es: ${jugador.saldo:.2f}")
+            break
+            
+        elif opcion == 1:
+            # Iniciar nueva ronda
+            if juego.ronda_activa:
+                print("\n¡Ya hay una ronda en curso!")
+                continue
+                
+            try:
+                apuesta = float(input(f"\nIngresa tu apuesta (máx. ${jugador.saldo:.2f}): $"))
+                if apuesta <= 0 or apuesta > jugador.saldo:
+                    print("Apuesta no válida.")
+                    continue
+                    
+                resultado, mensaje = juego.iniciar_ronda(apuesta)
+                print(f"\n{mensaje}")
+                
+            except ValueError:
+                print("Por favor, ingresa un monto válido.")
+                
+        elif opcion == 2:
+            # Pedir carta
+            if not juego.ronda_activa:
+                print("\nNo hay una ronda activa. Inicia una nueva ronda primero.")
+                continue
+                
+            resultado, mensaje = juego.pedir_carta()
+            print(f"\n{mensaje}")
+            
+        elif opcion == 3:
+            # Plantarse
+            if not juego.ronda_activa:
+                print("\nNo hay una ronda activa.")
+                continue
+                
+            resultado, mensaje = juego.plantarse()
+            print(f"\n{mensaje}")
+            
+        elif opcion == 4:
+            # Mostrar reglas
+            mostrar_reglas()
+            
+        else:
+            print("\nOpción no válida. Por favor, intenta de nuevo.")
+        
+        # Mostrar estado actual del juego después de cada acción
+        if opcion in [1, 2, 3]:
+            print(juego.mostrar_estado())
+
+if __name__ == "__main__":
+    main()</code></pre>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION1-10.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 1.10 Programación Funcional</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION1-12.html" class="btn">Siguiente Sesión: 1.12 Programación Orientada a Objetos (II) <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Función para mostrar/ocultar soluciones
+        function toggleHint(elementId) {
+            const element = document.getElementById(elementId);
+            if (element.style.display === 'none' || element.style.display === '') {
+                element.style.display = 'block';
+                element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                element.style.display = 'none';
+            }
+        }
+        
+        // Asegurar que las soluciones estén ocultas al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.solution').forEach(solution => {
+                solution.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.1: Álgebra Lineal Básica - Curso de Inteligencia Artificial</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+                    /* Screen reader only class for accessibility */
+                    .sr-only {
+                        position: absolute;
+                        width: 1px;
+                        height: 1px;
+                        padding: 0;
+                        margin: -1px;
+                        overflow: hidden;
+                        clip: rect(0, 0, 0, 0);
+                        white-space: nowrap;
+                        border-width: 0;
+                    }
+        /* Estilos específicos para esta sesión */
+        .math-formula {
+            background-color: #f8f9fa;
+            border-left: 4px solid #4a90e2;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+            overflow-x: auto;
+        }
+        
+        .definition-box {
+            background-color: #e8f4fd;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .example-box {
+            background-color: #e8f5e9;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .matrix {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+        }
+        
+        .matrix .bracket {
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 2em;
+            color: #6c757d;
+        }
+        
+        .matrix .content {
+            display: inline-block;
+            vertical-align: middle;
+            border: 1px solid #dee2e6;
+            padding: 5px;
+            background-color: white;
+        }
+        
+        .matrix .content table {
+            border-collapse: collapse;
+        }
+        
+        .matrix .content td {
+            padding: 5px 10px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        
+        .interactive-tool {
+            background-color: #fff8e6;
+            border: 1px solid #ffeeba;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .interactive-tool h3 {
+            margin-top: 0;
+            color: #856404;
+        }
+        
+        .interactive-tool label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        
+        .interactive-tool input, .interactive-tool select {
+            padding: 5px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .interactive-tool button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .interactive-tool button:hover {
+            background-color: #0056b3;
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            display: none;
+        }
+        
+        .vector-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin: 10px 0;
+        }
+        
+        .vector-input input {
+            width: 60px;
+            text-align: center;
+        }
+        
+        .vector-display {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <header class="session-header">
+        <div class="container">
+            <h1>2.1: Álgebra Lineal Básica</h1>
+            <p class="module">Módulo 2: Matemáticas para IA</p>
+            <div class="session-info">
+                <span><i class="far fa-clock"></i> Duración: 2 horas</span>
+                <span><i class="far fa-calendar-alt"></i> Fecha: [Fecha]</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="learning-objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <p>Al finalizar esta sesión, serás capaz de:</p>
+            <ul>
+                <li>Comprender los conceptos fundamentales del álgebra lineal</li>
+                <li>Realizar operaciones básicas con vectores y matrices</li>
+                <li>Entender la importancia del álgebra lineal en el aprendizaje automático</li>
+                <li>Aplicar conceptos de álgebra lineal utilizando Python y NumPy</li>
+                <li>Resolver problemas prácticos utilizando operaciones matriciales</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Introducción al Álgebra Lineal</h2>
+            <p>El álgebra lineal es una rama de las matemáticas que estudia conceptos como vectores, matrices, espacios vectoriales, transformaciones lineales y sistemas de ecuaciones lineales. Es fundamental para el aprendizaje automático y la inteligencia artificial, ya que proporciona el lenguaje matemático para describir y manipular datos de alta dimensión.</p>
+            
+            <div class="definition-box">
+                <h3>¿Por qué es importante el álgebra lineal en IA?</h3>
+                <ul>
+                    <li>Los datos se representan como vectores y matrices</li>
+                    <li>Las operaciones de red neuronal son esencialmente operaciones matriciales</li>
+                    <li>Las técnicas de reducción de dimensionalidad (como PCA) se basan en álgebra lineal</li>
+                    <li>Los algoritmos de procesamiento de imágenes y procesamiento del lenguaje natural utilizan operaciones matriciales</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-vector-square"></i> Vectores</h2>
+            <p>Un vector es una cantidad que tiene magnitud y dirección. En el contexto de la IA, los vectores se utilizan para representar datos, características y parámetros de modelos.</p>
+            
+            <div class="math-formula">
+                <p>Un vector en el espacio n-dimensional se puede representar como:</p>
+                \[ \mathbf{v} = \begin{bmatrix} v_1 \\ v_2 \\ \vdots \\ v_n \end{bmatrix} \]
+            </div>
+            
+            <h3>Operaciones con Vectores</h3>
+            
+            <div class="definition-box">
+                <h4>Suma de Vectores</h4>
+                <p>Dados dos vectores <strong>u</strong> y <strong>v</strong> de la misma dimensión:</p>
+                \[ \mathbf{u} + \mathbf{v} = \begin{bmatrix} u_1 + v_1 \\ u_2 + v_2 \\ \vdots \\ u_n + v_n \end{bmatrix} \]
+            </div>
+            
+            <div class="definition-box">
+                <h4>Producto Punto (Producto Escalar)</h4>
+                <p>Dados dos vectores <strong>u</strong> y <strong>v</strong> de la misma dimensión:</p>
+                \[ \mathbf{u} \cdot \mathbf{v} = u_1v_1 + u_2v_2 + \dots + u_nv_n = \sum_{i=1}^{n} u_i v_i \]
+            </div>
+            
+            <div class="example-box">
+                <h4>Ejemplo: Cálculo del Producto Punto</h4>
+                <p>Dados los vectores:</p>
+                \[ \mathbf{u} = \begin{bmatrix} 1 \\ 2 \\ 3 \end{bmatrix}, \quad \mathbf{v} = \begin{bmatrix} 4 \\ 5 \\ 6 \end{bmatrix} \]
+                <p>El producto punto es:</p>
+                \[ \mathbf{u} \cdot \mathbf{v} = (1 \times 4) + (2 \times 5) + (3 \times 6) = 4 + 10 + 18 = 32 \]
+            </div>
+            
+            <div class="interactive-tool">
+                <h3>Calculadora de Producto Punto</h3>
+                <div class="vector-input">
+                    <span>Vector u:</span>
+                    <input type="number" id="u1" placeholder="u₁" value="1">
+                    <input type="number" id="u2" placeholder="u₂" value="2">
+                    <input type="number" id="u3" placeholder="u₃" value="3">
+                </div>
+                <div class="vector-input">
+                    <span>Vector v:</span>
+                    <input type="number" id="v1" placeholder="v₁" value="4">
+                    <input type="number" id="v2" placeholder="v₂" value="5">
+                    <input type="number" id="v3" placeholder="v₃" value="6">
+                </div>
+                <button onclick="calcularProductoPunto()">Calcular Producto Punto</button>
+                <div id="resultado-producto-punto" class="result"></div>
+            </div>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-table"></i> Matrices</h2>
+            <p>Una matriz es un arreglo bidimensional de números dispuestos en filas y columnas. Las matrices son fundamentales en el aprendizaje automático para representar conjuntos de datos, transformaciones lineales y más.</p>
+            
+            <div class="math-formula">
+                <p>Una matriz A de m×n se representa como:</p>
+                \[ A = \begin{bmatrix} 
+                a_{11} & a_{12} & \cdots & a_{1n} \\
+                a_{21} & a_{22} & \cdots & a_{2n} \\
+                \vdots & \vdots & \ddots & \vdots \\
+                a_{m1} & a_{m2} & \cdots & a_{mn}
+                \end{bmatrix} \]
+            </div>
+            
+            <h3>Operaciones con Matrices</h3>
+            
+            <div class="definition-box">
+                <h4>Suma de Matrices</h4>
+                <p>Dadas dos matrices A y B de las mismas dimensiones m×n:</p>
+                \[ A + B = \begin{bmatrix} 
+                a_{11}+b_{11} & a_{12}+b_{12} & \cdots & a_{1n}+b_{1n} \\
+                a_{21}+b_{21} & a_{22}+b_{22} & \cdots & a_{2n}+b_{2n} \\
+                \vdots & \vdots & \ddots & \vdots \\
+                a_{m1}+b_{m1} & a_{m2}+b_{m2} & \cdots & a_{mn}+b_{mn}
+                \end{bmatrix} \]
+            </div>
+            
+            <div class="definition-box">
+                <h4>Multiplicación de Matrices</h4>
+                <p>Dada una matriz A de m×n y una matriz B de n×p, el producto C = AB es una matriz de m×p donde:</p>
+                \[ c_{ij} = \sum_{k=1}^{n} a_{ik}b_{kj} \]
+                <p>Para cada elemento en la fila i de A y la columna j de B, multiplicamos los elementos correspondientes y los sumamos.</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>Ejemplo: Multiplicación de Matrices</h4>
+                <p>Dadas las matrices:</p>
+                \[ A = \begin{bmatrix} 1 & 2 \\ 3 & 4 \end{bmatrix}, \quad B = \begin{bmatrix} 5 & 6 \\ 7 & 8 \end{bmatrix} \]
+                <p>El producto AB es:</p>
+                \[ AB = \begin{bmatrix} 
+                (1\times5 + 2\times7) & (1\times6 + 2\times8) \\
+                (3\times5 + 4\times7) & (3\times6 + 4\times8)
+                \end{bmatrix} = 
+                \begin{bmatrix} 
+                19 & 22 \\
+                43 & 50 
+                \end{bmatrix} \]
+            </div>
+            
+            <div class="interactive-tool">
+                <h3>Multiplicador de Matrices 2x2</h3>
+                <p>Matriz A:</p>
+                <div class="matrix">
+                    <div class="bracket">[</div>
+                    <div class="content">
+                        <table>
+                            <tr>
+                                <td>
+                                    <label for="a11" class="sr-only">Elemento a11</label>
+                                    <input type="number" id="a11" value="1" aria-label="Elemento a11">
+                                </td>
+                                <td>
+                                    <label for="a12" class="sr-only">Elemento a12</label>
+                                    <input type="number" id="a12" value="2" aria-label="Elemento a12">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="a21" class="sr-only">Elemento a21</label>
+                                    <input type="number" id="a21" value="3" aria-label="Elemento a21">
+                                </td>
+                                <td>
+                                    <label for="a22" class="sr-only">Elemento a22</label>
+                                    <input type="number" id="a22" value="4" aria-label="Elemento a22">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="bracket">]</div>
+                </div>
+                
+                <p>Matriz B:</p>
+                <div class="matrix">
+                    <div class="bracket">[</div>
+                    <div class="content">
+                        <table>
+                            <tr>
+                                <td>
+                                    <label for="b11" class="sr-only">Elemento b11</label>
+                                    <input type="number" id="b11" value="5" aria-label="Elemento b11">
+                                </td>
+                                <td>
+                                    <label for="b12" class="sr-only">Elemento b12</label>
+                                    <input type="number" id="b12" value="6" aria-label="Elemento b12">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="b21" class="sr-only">Elemento b21</label>
+                                    <input type="number" id="b21" value="7" aria-label="Elemento b21">
+                                </td>
+                                <td>
+                                    <label for="b22" class="sr-only">Elemento b22</label>
+                                    <input type="number" id="b22" value="8" aria-label="Elemento b22">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="bracket">]</div>
+                </div>
+                
+                <button onclick="multiplicarMatrices()">Multiplicar Matrices</button>
+                <div id="resultado-multiplicacion" class="result"></div>
+            </div>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-calculator"></i> Aplicaciones en Python con NumPy</h2>
+            <p>NumPy es una biblioteca fundamental para computación científica en Python. Proporciona soporte para matrices y operaciones matriciales de alto rendimiento.</p>
+            
+            <h3>Ejemplo: Operaciones con Vectores y Matrices</h3>
+            
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-language">Python</span>
+                    <button class="copy-button" onclick="copyToClipboard(this)">
+                        <i class="far fa-copy"></i> Copiar
+                    </button>
+                </div>
+                <pre><code>import numpy as np
+
+# Crear vectores
+u = np.array([1, 2, 3])
+v = np.array([4, 5, 6])
+
+# Suma de vectores
+suma = u + v  # array([5, 7, 9])
+
+# Producto punto
+producto_punto = np.dot(u, v)  # 32
+
+# Crear matrices
+A = np.array([[1, 2], [3, 4]])
+B = np.array([[5, 6], [7, 8]])
+
+# Multiplicación de matrices
+producto = np.matmul(A, B)  # array([[19, 22], [43, 50]])
+
+# Transpuesta de una matriz
+A_transpuesta = A.T  # array([[1, 3], [2, 4]])
+
+# Inversa de una matriz (si existe)
+try:
+    A_inv = np.linalg.inv(A)  # array([[-2. ,  1. ], [ 1.5, -0.5]])
+except np.linalg.LinAlgError:
+    print("La matriz no es invertible")
+
+# Determinante de una matriz
+det_A = np.linalg.det(A)  # -2.0</code></pre>
+            </div>
+        </section>
+
+        <section class="exercises">
+            <h2><i class="fas fa-dumbbell"></i> Ejercicios Prácticos</h2>
+            
+            <div class="exercise">
+                <h3>Ejercicio 1: Operaciones con Vectores</h3>
+                <p>Dados los siguientes vectores:</p>
+                \[ \mathbf{a} = \begin{bmatrix} 2 \\ -1 \\ 3 \end{bmatrix}, \quad \mathbf{b} = \begin{bmatrix} 0 \\ 4 \\ -2 \end{bmatrix} \]
+                <p>Calcula:</p>
+                <ol>
+                    <li>\( \mathbf{a} + \mathbf{b} \)</li>
+                    <li>\( 3\mathbf{a} - 2\mathbf{b} \)</li>
+                    <li>\( \mathbf{a} \cdot \mathbf{b} \)</li>
+                    <li>La norma (magnitud) de \( \mathbf{a} \)</li>
+                </ol>
+                
+                <button class="hint-button" onclick="toggleHint('hint-ej1')">Mostrar pista</button>
+                <div id="hint-ej1" class="hint">
+                    <p>Recuerda que para sumar vectores se suman sus componentes correspondientes, y para el producto punto se multiplican las componentes y se suman los resultados.</p>
+                </div>
+                
+                <button class="solution-button" onclick="toggleHint('sol-ej1')">Mostrar solución</button>
+                <div id="sol-ej1" class="solution">
+                    <ol>
+                        <li>\( \mathbf{a} + \mathbf{b} = \begin{bmatrix} 2+0 \\ -1+4 \\ 3+(-2) \end{bmatrix} = \begin{bmatrix} 2 \\ 3 \\ 1 \end{bmatrix} \)</li>
+                        <li>\( 3\mathbf{a} - 2\mathbf{b} = 3\begin{bmatrix} 2 \\ -1 \\ 3 \end{bmatrix} - 2\begin{bmatrix} 0 \\ 4 \\ -2 \end{bmatrix} = \begin{bmatrix} 6 \\ -3 \\ 9 \end{bmatrix} - \begin{bmatrix} 0 \\ 8 \\ -4 \end{bmatrix} = \begin{bmatrix} 6 \\ -11 \\ 13 \end{bmatrix} \)</li>
+                        <li>\( \mathbf{a} \cdot \mathbf{b} = (2\times0) + (-1\times4) + (3\times-2) = 0 - 4 - 6 = -10 \)</li>
+                        <li>\( \|\mathbf{a}\| = \sqrt{2^2 + (-1)^2 + 3^2} = \sqrt{4 + 1 + 9} = \sqrt{14} \)</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h3>Ejercicio 2: Multiplicación de Matrices</h3>
+                <p>Dadas las matrices:</p>
+                \[ A = \begin{bmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \end{bmatrix}, \quad B = \begin{bmatrix} 7 & 8 \\ 9 & 10 \\ 11 & 12 \end{bmatrix} \]
+                <p>Calcula el producto \( AB \) y determina si es posible calcular \( BA \).</p>
+                
+                <button class="hint-button" onclick="toggleHint('hint-ej2')">Mostrar pista</button>
+                <div id="hint-ej2" class="hint">
+                    <p>Recuerda que para que el producto de matrices sea posible, el número de columnas de la primera matriz debe ser igual al número de filas de la segunda matriz.</p>
+                </div>
+                
+                <button class="solution-button" onclick="toggleHint('sol-ej2')">Mostrar solución</button>
+                <div id="sol-ej2" class="solution">
+                    <p>El producto \( AB \) es posible porque A tiene 3 columnas y B tiene 3 filas.</p>
+                    \[ AB = \begin{bmatrix} 
+                    (1\times7 + 2\times9 + 3\times11) & (1\times8 + 2\times10 + 3\times12) \\
+                    (4\times7 + 5\times9 + 6\times11) & (4\times8 + 5\times10 + 6\times12)
+                    \end{bmatrix} = 
+                    \begin{bmatrix} 
+                    58 & 64 \\
+                    139 & 154 
+                    \end{bmatrix} \]
+                    
+                    <p>El producto \( BA \) no es posible porque B tiene 2 columnas y A tiene 2 filas, y 2 ≠ 3.</p>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h3>Ejercicio 3: Implementación en Python</h3>
+                <p>Escribe un programa en Python que:</p>
+                <ol>
+                    <li>Cree dos matrices aleatorias de 3x3</li>
+                    <li>Calcule su suma, producto y la transpuesta de la primera matriz</li>
+                    <li>Verifique si la primera matriz es invertible y, si lo es, calcule su inversa</li>
+                    <li>Muestre los resultados con formato legible</li>
+                </ol>
+                
+                <button class="hint-button" onclick="toggleHint('hint-ej3')">Mostrar pista</button>
+                <div id="hint-ej3" class="hint">
+                    <p>Usa NumPy para las operaciones matriciales. Para generar matrices aleatorias, puedes usar <code>np.random.rand(3, 3)</code>.</p>
+                </div>
+                
+                <button class="solution-button" onclick="toggleHint('sol-ej3')">Mostrar solución</button>
+                <div id="sol-ej3" class="solution">
+                    <div class="code-example">
+                        <div class="code-header">
+                            <span class="code-language">Python</span>
+                            <button class="copy-button" onclick="copyToClipboard(this)">
+                                <i class="far fa-copy"></i> Copiar
+                            </button>
+                        </div>
+                        <pre><code>import numpy as np
+
+def ejercicio_matrices():
+    # Crear matrices aleatorias 3x3
+    A = np.random.randint(1, 10, size=(3, 3))
+    B = np.random.randint(1, 10, size=(3, 3))
+    
+    print("Matriz A:")
+    print(A)
+    print("\nMatriz B:")
+    print(B)
+    
+    # Suma
+    print("\nSuma A + B:")
+    print(A + B)
+    
+    # Producto
+    print("\nProducto A * B:")
+    print(np.matmul(A, B))
+    
+    # Transpuesta de A
+    print("\nTranspuesta de A:")
+    print(A.T)
+    
+    # Verificar si A es invertible
+    det_A = np.linalg.det(A)
+    print(f"\nDeterminante de A: {det_A}")
+    
+    if abs(det_A) > 1e-10:  # Evitar problemas de precisión numérica
+        print("\nLa matriz A es invertible. Su inversa es:")
+        print(np.linalg.inv(A))
+    else:
+        print("\nLa matriz A no es invertible (determinante cero o muy cercano a cero).")
+
+# Ejecutar la función
+ejercicio_matrices()</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h2><i class="fas fa-clipboard-check"></i> Resumen</h2>
+            <p>En esta sesión, hemos cubierto los conceptos fundamentales del álgebra lineal que son esenciales para la inteligencia artificial:</p>
+            <ul>
+                <li><strong>Vectores</strong>: Definición, representación y operaciones básicas (suma, producto punto).</li>
+                <li><strong>Matrices</strong>: Definición, tipos especiales de matrices, operaciones (suma, multiplicación, transpuesta).</li>
+                <li><strong>Determinantes e inversas</strong>: Cálculo e importancia en la resolución de sistemas de ecuaciones.</li>
+                <li><strong>Implementación en Python</strong>: Uso de NumPy para operaciones matriciales eficientes.</li>
+            </ul>
+            
+            <div class="tip-box">
+                <i class="fas fa-lightbulb"></i> <strong>Consejo:</strong> Practica con ejercicios adicionales para afianzar los conceptos. El álgebra lineal es una herramienta poderosa en IA, y entenderla bien te permitirá comprender mejor cómo funcionan muchos algoritmos de aprendizaje automático.
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION1-15.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 1.15 Proyecto Integrador Python</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION2-2.html" class="btn">Siguiente Sesión: 2.2 Vectores y Matrices <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Función para calcular el producto punto
+        function calcularProductoPunto() {
+            // Obtener valores de los inputs
+            const u1 = parseFloat(document.getElementById('u1').value) || 0;
+            const u2 = parseFloat(document.getElementById('u2').value) || 0;
+            const u3 = parseFloat(document.getElementById('u3').value) || 0;
+            
+            const v1 = parseFloat(document.getElementById('v1').value) || 0;
+            const v2 = parseFloat(document.getElementById('v2').value) || 0;
+            const v3 = parseFloat(document.getElementById('v3').value) || 0;
+            
+            // Calcular producto punto
+            const producto = (u1 * v1) + (u2 * v2) + (u3 * v3);
+            
+            // Mostrar resultado
+            const resultado = document.getElementById('resultado-producto-punto');
+            resultado.innerHTML = `
+                <p>Vector u = [${u1}, ${u2}, ${u3}]</p>
+                <p>Vector v = [${v1}, ${v2}, ${v3}]</p>
+                <p>u · v = (${u1} × ${v1}) + (${u2} × ${v2}) + (${u3} × ${v3}) = ${producto}</p>
+            `;
+            resultado.style.display = 'block';
+        }
+        
+        // Función para multiplicar matrices 2x2
+        function multiplicarMatrices() {
+            // Obtener valores de los inputs
+            const a11 = parseFloat(document.getElementById('a11').value) || 0;
+            const a12 = parseFloat(document.getElementById('a12').value) || 0;
+            const a21 = parseFloat(document.getElementById('a21').value) || 0;
+            const a22 = parseFloat(document.getElementById('a22').value) || 0;
+            
+            const b11 = parseFloat(document.getElementById('b11').value) || 0;
+            const b12 = parseFloat(document.getElementById('b12').value) || 0;
+            const b21 = parseFloat(document.getElementById('b21').value) || 0;
+            const b22 = parseFloat(document.getElementById('b22').value) || 0;
+            
+            // Calcular producto de matrices
+            const c11 = (a11 * b11) + (a12 * b21);
+            const c12 = (a11 * b12) + (a12 * b22);
+            const c21 = (a21 * b11) + (a22 * b21);
+            const c22 = (a21 * b12) + (a22 * b22);
+            
+            // Mostrar resultado
+            const resultado = document.getElementById('resultado-multiplicacion');
+            resultado.innerHTML = `
+                <p>Resultado de A × B:</p>
+                <div style="display: flex; align-items: center; margin: 10px 0;">
+                    <div style="margin-right: 10px;">[</div>
+                    <div>
+                        <div>${c11.toFixed(2)} ${c12.toFixed(2)}</div>
+                        <div>${c21.toFixed(2)} ${c22.toFixed(2)}</div>
+                    </div>
+                    <div style="margin-left: 10px;">]</div>
+                </div>
+                <p>Cálculos intermedios:</p>
+                <ul>
+                    <li>c₁₁ = (${a11} × ${b11}) + (${a12} × ${b21}) = ${c11}</li>
+                    <li>c₁₂ = (${a11} × ${b12}) + (${a12} × ${b22}) = ${c12}</li>
+                    <li>c₂₁ = (${a21} × ${b11}) + (${a22} × ${b21}) = ${c21}</li>
+                    <li>c₂₂ = (${a21} × ${b12}) + (${a22} × ${b22}) = ${c22}</li>
+                </ul>
+            `;
+            resultado.style.display = 'block';
+        }
+        
+        // Función para copiar código al portapapeles
+        function copyToClipboard(button) {
+            const codeBlock = button.parentElement.nextElementSibling;
+            const code = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                // Cambiar el ícono a un check temporalmente
+                const icon = button.querySelector('i');
+                const originalClass = icon.className;
+                
+                icon.className = 'fas fa-check';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    icon.className = originalClass;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Error al copiar: ', err);
+            });
+        }
+        
+        // Función para mostrar/ocultar pistas y soluciones
+        function toggleHint(elementId) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.style.display = element.style.display === 'none' ? 'block' : 'none';
+            }
+        }
+        
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar tooltips (si se usa Bootstrap)
+            if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+                const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl);
+                });
+            }
+            
+            // Renderizar fórmulas matemáticas
+            if (typeof MathJax !== 'undefined') {
+                MathJax.typesetPromise();
+            }
+        });
+    </script>
+</body>
+</html>

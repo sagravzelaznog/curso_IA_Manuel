@@ -3,14 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sesión 1.5: Funciones en Python - Curso de IA</title>
+    <title>Sesión 1.5: Funciones y Módulos en Python - Curso de IA</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .solution {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #1e8449;
+        }
+        
+        .hint-button {
+            background-color: #1e8449;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .hint-button:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
 <body>
     <header class="session-header">
         <div class="container">
-            <h1>Sesión 1.5: Funciones en Python</h1>
+            <h1>Sesión 1.5: Funciones y Módulos en Python</h1>
             <p class="session-meta">Módulo 1: Introducción a Python | Duración: 60 minutos</p>
         </div>
     </header>
@@ -19,11 +46,11 @@
         <section class="learning-objectives">
             <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
             <ul>
-                <li>Comprender el concepto y la importancia de las funciones en programación</li>
-                <li>Aprender a definir y llamar funciones en Python</li>
-                <li>Entender los parámetros, argumentos y valores de retorno</li>
-                <li>Explorar el alcance de las variables (scope)</li>
-                <li>Practicar con ejemplos y ejercicios prácticos</li>
+                <li>Comprender el concepto y la sintaxis de las funciones en Python</li>
+                <li>Aprender a definir y utilizar funciones con y sin parámetros</li>
+                <li>Entender el alcance de las variables y el retorno de valores</li>
+                <li>Conocer los módulos y cómo importar funcionalidades</li>
+                <li>Practicar con ejemplos y ejercicios resueltos</li>
             </ul>
         </section>
 
@@ -31,391 +58,193 @@
             <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
             
             <article class="concept">
-                <h3>Introducción a las Funciones</h3>
-                <p>Las funciones son bloques de código reutilizables que realizan una tarea específica. Nos permiten organizar el código en partes más pequeñas y manejables, evitando la repetición y facilitando el mantenimiento.</p>
+                <h3>1. Introducción a las Funciones</h3>
+                <p>Una función es un bloque de código organizado y reutilizable que realiza una acción específica. Las funciones proporcionan una mejor modularidad para tu aplicación y un alto grado de reutilización de código.</p>
                 
-                <div class="info-box">
-                    <i class="fas fa-lightbulb"></i>
-                    <p><strong>Dato curioso:</strong> En programación, el principio DRY (Don't Repeat Yourself) nos anima a no repetir código. Las funciones son una de las mejores maneras de seguir este principio.</p>
-                </div>
-            </article>
-
-            <article class="concept">
-                <h3>1. Definición y Llamada de Funciones</h3>
-                
-                <h4>1.1 Sintaxis Básica</h4>
-                <p>Para definir una función en Python, usamos la palabra clave <code>def</code> seguida del nombre de la función y paréntesis <code>()</code>.</p>
-                
-                <pre><code class="language-python"># Definición de una función simple
-def saludar():
-    print("¡Hola, bienvenido al curso de IA!")
+                <h4>1.1 Definición de funciones</h4>
+                <p>En Python, una función se define utilizando la palabra clave <code>def</code>:</p>
+                <pre><code class="language-python">def saludar():
+    """Esta función imprime un saludo"""
+    print("¡Hola, bienvenido al curso de Python!")
 
 # Llamada a la función
-saludar()  # Imprime: ¡Hola, bienvenido al curso de IA!</code></pre>
+saludar()</code></pre>
 
-                <h4>1.2 Funciones con Parámetros</h4>
-                <p>Las funciones pueden recibir parámetros para procesar datos específicos.</p>
-                
+                <h4>1.2 Parámetros y argumentos</h4>
+                <p>Las funciones pueden recibir parámetros:</p>
                 <pre><code class="language-python">def saludar_personalizado(nombre):
-    print(f"¡Hola {nombre}, bienvenido al curso de IA!")
+    """Saluda a una persona por su nombre"""
+    print(f"¡Hola {nombre}, bienvenido al curso de Python!")
 
-saludar_personalizado("Ana")  # ¡Hola Ana, bienvenido al curso de IA!
-saludar_personalizado("Carlos")  # ¡Hola Carlos, bienvenido al curso de IA!</code></pre>
+saludar_personalizado("Juan")</code></pre>
 
-                <h4>1.3 Parámetros por Defecto</h4>
-                <p>Podemos asignar valores por defecto a los parámetros.</p>
-                
-                <pre><code class="language-python">def saludar_completo(nombre, mensaje="Bienvenido"):
-    print(f"{mensaje}, {nombre}.")
-
-saludar_completo("Ana")  # Bienvenido, Ana.
-saludar_completo("Carlos", "Hola de nuevo")  # Hola de nuevo, Carlos.</code></pre>
-
-                <div class="exercise">
-                    <h4><i class="fas fa-pencil-alt"></i> Ejercicio Práctico 1</h4>
-                    <p>Crea una función llamada <code>calcular_edad</code> que reciba el año de nacimiento y devuelva la edad actual. Luego, pide al usuario su año de nacimiento y muestra su edad.</p>
-                    <button class="hint-button" onclick="toggleHint('solucion1')">Mostrar Solución</button>
-                    <div id="solucion1" class="solution">
-                        <pre><code class="language-python">from datetime import datetime
-
-def calcular_edad(anio_nacimiento):
-    anio_actual = datetime.now().year
-    return anio_actual - anio_nacimiento
-
-# Solicitar año de nacimiento al usuario
-anio = int(input("Ingresa tu año de nacimiento: "))
-edad = calcular_edad(anio)
-print(f"Tienes {edad} años.")</code></pre>
-                    </div>
-                </div>
-            </article>
-
-            <article class="concept">
-                <h3>2. Valores de Retorno</h3>
-                <p>Las funciones pueden devolver valores usando la palabra clave <code>return</code>.</p>
-                
-                <h4>2.1 Retorno de un solo valor</h4>
+                <h4>1.3 Retorno de valores</h4>
+                <p>Las funciones pueden devolver valores usando la palabra clave <code>return</code>:</p>
                 <pre><code class="language-python">def sumar(a, b):
+    """Devuelve la suma de dos números"""
     return a + b
 
-resultado = sumar(5, 3)  # resultado = 8</code></pre>
-
-                <h4>2.2 Retorno de múltiples valores</h4>
-                <p>En Python, podemos devolver múltiples valores separados por comas.</p>
-                <pre><code class="language-python">def operaciones(a, b):
-    suma = a + b
-    resta = a - b
-    multiplicacion = a * b
-    division = a / b if b != 0 else "Error: División por cero"
-    return suma, resta, multiplicacion, division
-
-# Desempaquetado de la tupla retornada
-s, r, m, d = operaciones(10, 2)
-print(f"Suma: {s}, Resta: {r}, Multiplicación: {m}, División: {d}")</code></pre>
-
-                <div class="exercise">
-                    <h4><i class="fas fa-pencil-alt"></i> Ejercicio Práctico 2</h4>
-                    <p>Crea una función llamada <code>es_primo</code> que reciba un número y devuelva <code>True</code> si es primo y <code>False</code> en caso contrario. Luego, pide al usuario un número y muestra si es primo o no.</p>
-                    <button class="hint-button" onclick="toggleHint('solucion2')">Mostrar Solución</button>
-                    <div id="solucion2" class="solution">
-                        <pre><code class="language-python">def es_primo(numero):
-    if numero <= 1:
-        return False
-    for i in range(2, int(numero ** 0.5) + 1):
-        if numero % i == 0:
-            return False
-    return True
-
-# Solicitar número al usuario
-num = int(input("Ingresa un número mayor que 1: "))
-if es_primo(num):
-    print(f"{num} es un número primo.")
-else:
-    print(f"{num} no es un número primo.")</code></pre>
-                    </div>
-                </div>
+resultado = sumar(5, 3)
+print(f"La suma es: {resultado}")</code></pre>
             </article>
 
             <article class="concept">
-                <h3>3. Alcance de Variables (Scope)</h3>
-                <p>El alcance de una variable determina dónde puede ser accedida dentro del código.</p>
+                <h3>2. Módulos en Python</h3>
+                <p>Un módulo es un archivo que contiene definiciones y declaraciones de Python. El nombre del módulo es el nombre del archivo con el sufijo <code>.py</code>.</p>
                 
-                <h4>3.1 Variables Locales</h4>
-                <p>Solo existen dentro de la función donde fueron definidas.</p>
-                <pre><code class="language-python">def funcion_ejemplo():
-    variable_local = "Solo visible dentro de la función"
-    print(variable_local)
-
-funcion_ejemplo()  # Imprime el valor
-# print(variable_local)  # Error: NameError: name 'variable_local' is not defined</code></pre>
-
-                <h4>3.2 Variables Globales</h4>
-                <p>Pueden ser accedidas en cualquier parte del código.</p>
-                <pre><code class="language-python">variable_global = "Puedo ser accedida en cualquier lugar"
-
-def mostrar_global():
-    print(variable_global)  # Acceso a variable global
-
-mostrar_global()  # Imprime la variable global</code></pre>
-
-                <h4>3.3 La palabra clave <code>global</code></h4>
-                <p>Permite modificar una variable global desde dentro de una función.</p>
-                <pre><code class="language-python">contador = 0
-
-def incrementar_contador():
-    global contador
-    contador += 1
-    return contador
-
-print(incrementar_contador())  # 1
-print(incrementar_contador())  # 2</code></pre>
-
-                <div class="warning-box">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <p><strong>Precaución:</strong> El uso excesivo de variables globales puede hacer que el código sea difícil de mantener y depurar. Es preferible pasar los valores como parámetros y devolver resultados.</p>
-                </div>
-            </article>
-
-            <article class="concept">
-                <h3>4. Argumentos Flexibles</h3>
+                <h4>2.1 Crear un módulo</h4>
+                <p>Puedes crear tu propio módulo guardando tu código en un archivo con extensión <code>.py</code>.</p>
                 
-                <h4>4.1 Argumentos arbitrarios (<code>*args</code>)</h4>
-                <p>Permite pasar un número variable de argumentos a una función.</p>
-                <pre><code class="language-python">def sumar_numeros(*args):
-    return sum(args)
+                <h4>2.2 Importar un módulo</h4>
+                <pre><code class="language-python"># Importar todo el módulo
+import math
 
-print(sumar_numeros(1, 2, 3))  # 6
-print(sumar_numeros(5, 10, 15, 20))  # 50</code></pre>
+# Usar funciones del módulo
+raiz = math.sqrt(16)  # 4.0</code></pre>
 
-                <h4>4.2 Argumentos de palabras clave arbitrarias (<code>**kwargs</code>)</h4>
-                <p>Permite pasar un número variable de argumentos de palabras clave.</p>
-                <pre><code class="language-python">def mostrar_info(**kwargs):
-    for clave, valor in kwargs.items():
-        print(f"{clave}: {valor}")
+                <h4>2.3 Importar funciones específicas</h4>
+                <pre><code class="language-python"># Importar solo lo necesario
+from math import sqrt, pi
 
-mostrar_info(nombre="Ana", edad=25, ciudad="Madrid")
-# nombre: Ana
-# edad: 25
-# ciudad: Madrid</code></pre>
-
-                <div class="exercise">
-                    <h4><i class="fas fa-pencil-alt"></i> Ejercicio Práctico 3</h4>
-                    <p>Crea una función llamada <code>promedio</code> que acepte un número variable de argumentos numéricos y devuelva su promedio. La función también debe aceptar un parámetro opcional <code>redondear</code> que, si es <code>True</code>, redondee el resultado a 2 decimales.</p>
-                    <button class="hint-button" onclick="toggleHint('solucion3')">Mostrar Solución</button>
-                    <div id="solucion3" class="solution">
-                        <pre><code class="language-python">def promedio(*numeros, redondear=False):
-    if not numeros:
-        return 0
-    
-    resultado = sum(numeros) / len(numeros)
-    return round(resultado, 2) if redondear else resultado
-
-# Ejemplos de uso
-print(promedio(10, 20, 30))  # 20.0
-print(promedio(5, 10, 15, 20, redondear=True))  # 12.5
-print(promedio(1, 2, 3, 4, 5, redondear=True))  # 3.0</code></pre>
-                    </div>
-                </div>
-            </article>
-
-            <article class="concept">
-                <h3>5. Funciones Lambda (Anónimas)</h3>
-                <p>Son funciones pequeñas y anónimas que pueden tener cualquier número de argumentos, pero solo una expresión.</p>
-                
-                <pre><code class="language-python"># Función lambda para calcular el cuadrado de un número
-cuadrado = lambda x: x ** 2
-print(cuadrado(5))  # 25
-
-# Uso común con funciones como sorted()
-puntos = [(1, 2), (3, 1), (5, 0), (2, 4)]
-puntos_ordenados = sorted(puntos, key=lambda punto: punto[1])
-print(puntos_ordenados)  # [(5, 0), (3, 1), (1, 2), (2, 4)]</code></pre>
-
-                <div class="info-box">
-                    <i class="fas fa-lightbulb"></i>
-                    <p><strong>Consejo:</strong> Las funciones lambda son útiles para operaciones simples que se pueden escribir en una sola línea. Para lógica más compleja, es mejor usar funciones regulares con <code>def</code>.</p>
-                </div>
+# Usar directamente las funciones importadas
+area = pi * (5 ** 2)  # 78.53981633974483</code></pre>
             </article>
         </section>
 
         <section class="practical-activity">
-            <h2><i class="fas fa-laptop-code"></i> Proyecto Práctico</h2>
+            <h2><i class="fas fa-laptop-code"></i> Ejercicios Prácticos</h2>
             
-            <div class="project">
-                <h3>Sistema de Gestión de Tareas</h3>
-                <p>Crea un programa que permita gestionar una lista de tareas pendientes. El programa debe permitir al usuario agregar, ver, marcar como completada y eliminar tareas.</p>
+            <div class="exercise">
+                <h4><i class="fas fa-pencil-alt"></i> Ejercicio 1: Calculadora de IMC</h4>
+                <p>Crea una función llamada <code>calcular_imc</code> que reciba el peso (en kg) y la altura (en metros) de una persona y devuelva su Índice de Masa Corporal (IMC).</p>
                 
-                <h4>Requisitos:</h4>
-                <ol>
-                    <li>Usar funciones para cada operación (agregar, ver, completar, eliminar).</li>
-                    <li>Almacenar las tareas en una lista de diccionarios, donde cada diccionario represente una tarea con las siguientes propiedades:
-                        <ul>
-                            <li>id (número único)</li>
-                            <li>descripcion (texto de la tarea)</li>
-                            <li>completada (booleano)</li>
-                            <li>fecha_creacion (fecha y hora de creación)</li>
-                        </ul>
-                    </li>
-                    <li>Mostrar un menú interactivo que permita al usuario seleccionar la operación deseada.</li>
-                    <li>Validar las entradas del usuario.</li>
-                </ol>
-
-                <h4>Menú de ejemplo:</h4>
-                <pre><code class="language-plaintext">=== Gestor de Tareas ===
-1. Ver todas las tareas
-2. Agregar tarea
-3. Marcar tarea como completada
-4. Eliminar tarea
-5. Salir
-Seleccione una opción: </code></pre>
-
-                <button class="hint-button" onclick="toggleHint('solucion-proyecto')">Mostrar Solución</button>
-                <div id="solucion-proyecto" class="solution">
-                    <pre><code class="language-python">from datetime import datetime
-
-# Lista para almacenar las tareas
-tareas = []
-
-# Contador para generar IDs únicos
-contador_id = 1
-
-def obtener_fecha_actual():
-    """Devuelve la fecha y hora actual formateada"""
-    return datetime.now().strftime("%d/%m/%Y %H:%M")
-
-def agregar_tarea(descripcion):
-    """Agrega una nueva tarea a la lista"""
-    global contador_id
-    tarea = {
-        'id': contador_id,
-        'descripcion': descripcion,
-        'completada': False,
-        'fecha_creacion': obtener_fecha_actual()
-    }
-    tareas.append(tarea)
-    contador_id += 1
-    print(f"Tarea agregada con éxito (ID: {tarea['id']})")
-
-def ver_tareas(mostrar_completadas=True):
-    """Muestra todas las tareas"""
-    if not tareas:
-        print("No hay tareas pendientes.")
-        return
+                <button class="hint-button" onclick="toggleHint('solucion1')">Mostrar Solución</button>
+                <div id="solucion1" class="solution">
+                    <pre><code class="language-python">def calcular_imc(peso, altura):
+    """
+    Calcula el Índice de Masa Corporal (IMC)
     
-    print("\n=== LISTA DE TAREAS ===")
-    for tarea in tareas:
-        if not mostrar_completadas and tarea['completada']:
-            continue
-            
-        estado = "✓" if tarea['completada'] else " "
-        print(f"[{tarea['id']}] [{estado}] {tarea['descripcion']}")
-        print(f"   Creada: {tarea['fecha_creacion']}")
-
-def marcar_completada(id_tarea):
-    """Marca una tarea como completada"""
-    for tarea in tareas:
-        if tarea['id'] == id_tarea:
-            if tarea['completada']:
-                print(f"La tarea {id_tarea} ya está marcada como completada.")
-            else:
-                tarea['completada'] = True
-                print(f"Tarea {id_tarea} marcada como completada.")
-            return
-    print(f"No se encontró la tarea con ID {id_tarea}")
-
-def eliminar_tarea(id_tarea):
-    """Elimina una tarea de la lista"""
-    for i, tarea in enumerate(tareas):
-        if tarea['id'] == id_tarea:
-            confirmacion = input(f"¿Estás seguro de eliminar la tarea '{tarea['descripcion']}'? (s/n): ")
-            if confirmacion.lower() == 's':
-                tareas.pop(i)
-                print(f"Tarea {id_tarea} eliminada correctamente.")
-            return
-    print(f"No se encontró la tarea con ID {id_tarea}")
-
-# Menú principal
-def mostrar_menu():
-    while True:
-        print("\n=== GESTOR DE TAREAS ===")
-        print("1. Ver todas las tareas")
-        print("2. Ver tareas pendientes")
-        print("3. Agregar tarea")
-        print("4. Marcar tarea como completada")
-        print("5. Eliminar tarea")
-        print("6. Salir")
+    Args:
+        peso (float): Peso en kilogramos
+        altura (float): Altura en metros
         
-        opcion = input("\nSeleccione una opción: ")
-        
-        if opcion == '1':
-            ver_tareas()
-        elif opcion == '2':
-            ver_tareas(mostrar_completadas=False)
-        elif opcion == '3':
-            descripcion = input("Ingrese la descripción de la tarea: ").strip()
-            if descripcion:
-                agregar_tarea(descripcion)
-            else:
-                print("La descripción no puede estar vacía.")
-        elif opcion == '4':
-            ver_tareas(mostrar_completadas=False)
-            try:
-                id_tarea = int(input("\nIngrese el ID de la tarea a marcar como completada: "))
-                marcar_completada(id_tarea)
-            except ValueError:
-                print("Por favor, ingrese un ID válido (número).")
-        elif opcion == '5':
-            ver_tareas()
-            try:
-                id_tarea = int(input("\nIngrese el ID de la tarea a eliminar: "))
-                eliminar_tarea(id_tarea)
-            except ValueError:
-                print("Por favor, ingrese un ID válido (número).")
-        elif opcion == '6':
-            print("¡Hasta luego!")
-            break
-        else:
-            print("Opción no válida. Por favor, intente de nuevo.")
+    Returns:
+        float: Valor del IMC redondeado a 2 decimales
+    """
+    imc = peso / (altura ** 2)
+    return round(imc, 2)
 
-# Ejecutar el programa
-if __name__ == "__main__":
-    mostrar_menu()</code></pre>
+# Ejemplo de uso
+imc = calcular_imc(70, 1.75)
+print(f"Tu IMC es: {imc}")
+
+# Interpretación del IMC
+if imc < 18.5:
+    print("Bajo peso")
+elif 18.5 <= imc < 25:
+    print("Peso normal")
+elif 25 <= imc < 30:
+    print("Sobrepeso")
+else:
+    print("Obesidad")</code></pre>
                 </div>
             </div>
-        </section>
+            
+            <div class="exercise">
+                <h4><i class="fas fa-pencil-alt"></i> Ejercicio 2: Módulo de utilidades matemáticas</h4>
+                <p>Crea un módulo llamado <code>matematicas.py</code> con funciones para calcular el área de diferentes figuras geométricas. Luego impórtalo y úsalo.</p>
+                
+                <button class="hint-button" onclick="toggleHint('solucion2')">Mostrar Solución</button>
+                <div id="solucion2" class="solution">
+                    <p>1. Primero, crea un archivo llamado <code>matematicas.py</code> con el siguiente contenido:</p>
+                    <pre><code class="language-python">"""Módulo con funciones matemáticas útiles"""
+import math
 
-        <section class="resources">
-            <h2><i class="fas fa-book-open"></i> Recursos Adicionales</h2>
-            <ul>
-                <li><a href="https://docs.python.org/3/tutorial/controlflow.html#defining-functions" target="_blank" rel="noopener">Documentación oficial de Python: Funciones</a></li>
-                <li><a href="https://www.w3schools.com/python/python_functions.asp" target="_blank" rel="noopener">W3Schools: Python Functions</a></li>
-                <li><a href="https://realpython.com/defining-your-own-python-function/" target="_blank" rel="noopener">Real Python: Defining Your Own Python Function</a></li>
-                <li><a href="https://www.learnpython.org/en/Functions" target="_blank" rel="noopener">LearnPython: Functions</a></li>
-            </ul>
-        </section>
+def area_circulo(radio):
+    """Calcula el área de un círculo"""
+    return math.pi * (radio ** 2)
 
-        <section class="summary">
-            <h2><i class="fas fa-clipboard-check"></i> Resumen de la Sesión</h2>
-            <ul>
-                <li>Las funciones nos permiten organizar el código en bloques reutilizables.</li>
-                <li>Podemos definir funciones con parámetros y valores de retorno.</li>
-                <li>Las variables tienen un alcance (scope) que determina dónde pueden ser accedidas.</li>
-                <li>Python soporta argumentos flexibles con <code>*args</code> y <code>**kwargs</code>.</li>
-                <li>Las funciones lambda son útiles para operaciones simples en una sola línea.</li>
-            </ul>
-        </section>
+def area_rectangulo(base, altura):
+    """Calcula el área de un rectángulo"""
+    return base * altura
 
-        <section class="homework">
-            <h2><i class="fas fa-tasks"></i> Tarea</h2>
-            <p>Amplía el Gestor de Tareas del proyecto práctico con las siguientes funcionalidades:</p>
-            <ol>
-                <li>Agregar la opción de editar una tarea existente (cambiar su descripción).</li>
-                <li>Implementar la funcionalidad para guardar las tareas en un archivo de texto y cargarlas al iniciar el programa.</li>
-                <li>Agregar la opción de filtrar tareas por estado (completadas/pendientes).</li>
-                <li>Implementar la opción de buscar tareas que contengan una palabra clave en su descripción.</li>
-                <li>Agregar validaciones adicionales para entradas del usuario.</li>
-            </ol>
-            <p><strong>Entrega:</strong> Sube tu código a un archivo llamado <code>gestor_tareas_mejorado.py</code> y comparte el enlace o el archivo según las indicaciones del instructor.</p>
+def area_triangulo(base, altura):
+    """Calcula el área de un triángulo"""
+    return (base * altura) / 2
+
+def es_primo(numero):
+    """Determina si un número es primo"""
+    if numero < 2:
+        return False
+    for i in range(2, int(math.sqrt(numero)) + 1):
+        if numero % i == 0:
+            return False
+    return True</code></pre>
+
+                    <p>2. Luego, en otro archivo o en el intérprete interactivo:</p>
+                    <pre><code class="language-python"># Importar el módulo
+import matematicas
+
+# Usar las funciones del módulo
+print(f"Área del círculo: {matematicas.area_circulo(5):.2f}")
+print(f"Área del rectángulo: {matematicas.area_rectangulo(4, 6)}")
+print(f"¿El número 17 es primo? {matematicas.es_primo(17)}")
+
+# O importar solo lo necesario
+from matematicas import area_triangulo
+print(f"Área del triángulo: {area_triangulo(3, 4)}")</code></pre>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4><i class="fas fa-pencil-alt"></i> Ejercicio 3: Generador de contraseñas</h4>
+                <p>Crea una función que genere contraseñas seguras con letras mayúsculas, minúsculas, números y símbolos.</p>
+                
+                <button class="hint-button" onclick="toggleHint('solucion3')">Mostrar Solución</button>
+                <div id="solucion3" class="solution">
+                    <pre><code class="language-python">import random
+import string
+
+def generar_contraseña(longitud=12):
+    """
+    Genera una contraseña segura
+    
+    Args:
+        longitud (int): Longitud de la contraseña (mínimo 8 caracteres)
+        
+    Returns:
+        str: Contraseña generada
+    """
+    if longitud < 8:
+        longitud = 8  # Longitud mínima recomendada
+    
+    # Definir los conjuntos de caracteres
+    minusculas = string.ascii_lowercase
+    mayusculas = string.ascii_uppercase
+    digitos = string.digits
+    simbolos = '!@#$%^&*()_+-=[]{}|;:,.<>?'
+    
+    # Asegurar al menos un carácter de cada tipo
+    contraseña = [
+        random.choice(minusculas),
+        random.choice(mayusculas),
+        random.choice(digitos),
+        random.choice(simbolos)
+    ]
+    
+    # Completar el resto de la contraseña
+    todos_caracteres = minusculas + mayusculas + digitos + simbolos
+    contraseña.extend(random.choice(todos_caracteres) for _ in range(longitud - 4))
+    
+    # Mezclar los caracteres
+    random.shuffle(contraseña)
+    
+    return ''.join(contraseña)
+
+# Ejemplo de uso
+print("Contraseña generada:", generar_contraseña(16))</code></pre>
+                </div>
+            </div>
         </section>
     </main>
 
@@ -423,17 +252,31 @@ if __name__ == "__main__":
         <div class="container">
             <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
             <div class="navigation">
-                <a href="SESION1-4.html" class="btn">Sesión Anterior: 1.4 Estructuras de Control</a>
-                <a href="SESION1-6.html" class="btn">Siguiente Sesión: 1.6 Listas y Tuplas</a>
-            </div>
-            <div class="social-links">
-                <a href="#" class="social-link" title="Github" rel="noopener"><i class="fab fa-github"></i></a>
-                <a href="#" class="social-link" title="Twitter" rel="noopener"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="social-link" title="Linkedin" rel="noopener"><i class="fab fa-linkedin"></i></a>
+                <a href="SESION1-4.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 1.4 Estructuras de Control</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION1-6.html" class="btn">Siguiente Sesión: 1.6 Listas y Tuplas <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        // Función para mostrar/ocultar soluciones
+        function toggleHint(elementId) {
+            const element = document.getElementById(elementId);
+            if (element.style.display === 'none' || element.style.display === '') {
+                element.style.display = 'block';
+                element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                element.style.display = 'none';
+            }
+        }
+        
+        // Asegurar que las soluciones estén ocultas al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.solution').forEach(solution => {
+                solution.style.display = 'none';
+            });
+        });
+    </script>
 </body>
 </html>

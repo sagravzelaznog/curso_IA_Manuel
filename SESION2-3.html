@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesión 2.3: Sistemas de ecuaciones lineales - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+    <header class="session-header">
+        <div class="container">
+            <h1>Sesión 2.3: Sistemas de ecuaciones lineales</h1>
+            <p class="session-meta">Módulo 2: Matemáticas para IA | Duración: 60 minutos</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="learning-objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender los conceptos fundamentales de los sistemas de ecuaciones lineales</li>
+                <li>Aprender a representar sistemas de ecuaciones en forma matricial</li>
+                <li>Resolver sistemas de ecuaciones lineales usando diferentes métodos</li>
+                <li>Implementar la solución de sistemas lineales en Python</li>
+                <li>Entender la importancia de los sistemas lineales en IA y Machine Learning</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
+            
+            <article class="concept">
+                <h3>¿Qué es un sistema de ecuaciones lineales?</h3>
+                <p>Un sistema de ecuaciones lineales es un conjunto de ecuaciones lineales que involucran el mismo conjunto de variables. Por ejemplo:</p>
+                
+                <div class="math-equation">
+                    \[ 
+                    \begin{cases} 
+                    2x + 3y = 5 \\
+                    4x - y = 6 
+                    \end{cases}
+                    \]
+                </div>
+                
+                <p>Donde <em>x</em> e <em>y</em> son las variables que queremos encontrar.</p>
+                
+                <div class="info-box">
+                    <i class="fas fa-lightbulb"></i>
+                    <p><strong>Dato clave:</strong> Los sistemas de ecuaciones lineales son fundamentales en IA, especialmente en algoritmos como regresión lineal, redes neuronales y optimización.</p>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>Representación matricial</h3>
+                <p>Todo sistema de ecuaciones lineales puede representarse en forma matricial como <strong>AX = B</strong>, donde:</p>
+                
+                <ul>
+                    <li><strong>A</strong> es la matriz de coeficientes</li>
+                    <li><strong>X</strong> es el vector de incógnitas</li>
+                    <li><strong>B</strong> es el vector de términos independientes</li>
+                </ul>
+                
+                <p>Por ejemplo, el sistema anterior se puede escribir como:</p>
+                
+                <div class="math-equation">
+                    \[
+                    \begin{bmatrix}
+                    2 & 3 \\
+                    4 & -1
+                    \end{bmatrix}
+                    \begin{bmatrix}
+                    x \\
+                    y
+                    \end{bmatrix} =
+                    \begin{bmatrix}
+                    5 \\
+                    6
+                    \end{bmatrix}
+                    \]
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>Métodos de solución</h3>
+                
+                <h4>1. Método de sustitución</h4>
+                <p>Consiste en despejar una variable en una ecuación y sustituirla en las demás.</p>
+                
+                <h4>2. Método de eliminación de Gauss</h4>
+                <p>Transforma la matriz aumentada a su forma escalonada mediante operaciones elementales de fila.</p>
+                
+                <h4>3. Regla de Cramer</h4>
+                <p>Utiliza determinantes para encontrar la solución del sistema, aplicable solo cuando el determinante de la matriz de coeficientes es distinto de cero.</p>
+                
+                <h4>4. Método de la matriz inversa</h4>
+                <p>Si la matriz A es invertible, la solución es X = A<sup>-1</sup>B.</p>
+                
+                <div class="info-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p><strong>Importante:</strong> No todos los sistemas tienen solución. Un sistema puede ser:</p>
+                    <ul>
+                        <li><strong>Compatible determinado:</strong> Tiene una única solución</li>
+                        <li><strong>Compatible indeterminado:</strong> Tiene infinitas soluciones</li>
+                        <li><strong>Incompatible:</strong> No tiene solución</li>
+                    </ul>
+                </div>
+            </article>
+        </section>
+
+        <section class="practical-activity">
+            <h2><i class="fas fa-laptop-code"></i> Actividad Práctica</h2>
+            
+            <div class="step">
+                <h3>1. Resolución de sistemas con NumPy</h3>
+                <p>Vamos a resolver el siguiente sistema de ecuaciones usando Python y NumPy:</p>
+                
+                <div class="math-equation">
+                    \[ 
+                    \begin{cases} 
+                    2x + 3y = 5 \\
+                    4x - y = 6 
+                    \end{cases}
+                    \]
+                </div>
+                
+                <h4>Código en Python:</h4>
+                <pre><code class="language-python">import numpy as np
+
+# Definir la matriz de coeficientes
+A = np.array([[2, 3], [4, -1]])
+
+# Definir el vector de términos independientes
+B = np.array([5, 6])
+
+# Resolver el sistema
+solucion = np.linalg.solve(A, B)
+
+print(f"La solución es: x = {solucion[0]:.2f}, y = {solucion[1]:.2f}")
+</code></pre>
+
+                <div class="hint">
+                    <span class="hint-button" onclick="toggleHint('hint1')">
+                        <i class="fas fa-lightbulb"></i> Pista: ¿Qué hace np.linalg.solve?
+                    </span>
+                    <div id="hint1" class="hint-content">
+                        <p>La función <code>np.linalg.solve</code> resuelve un sistema de ecuaciones lineales de la forma AX = B, donde A es la matriz de coeficientes y B es el vector de términos independientes. Retorna el vector solución X.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>2. Ejercicio práctico</h3>
+                <p>Resuelve el siguiente sistema de ecuaciones usando el código anterior:</p>
+                
+                <div class="math-equation">
+                    \[ 
+                    \begin{cases} 
+                    3x + 2y - z = 1 \\
+                    2x - 2y + 4z = -2 \\
+                    -x + 0.5y - z = 0
+                    \end{cases}
+                    \]
+                </div>
+                
+                <div class="solution">
+                    <button class="btn" onclick="toggleSolution('sol1')">Mostrar solución</button>
+                    <div id="sol1" class="solution-content">
+                        <pre><code class="language-python">import numpy as np
+
+A = np.array([
+    [3, 2, -1],
+    [2, -2, 4],
+    [-1, 0.5, -1]
+])
+
+B = np.array([1, -2, 0])
+
+solucion = np.linalg.solve(A, B)
+print(f"Solución: x = {solucion[0]:.2f}, y = {solucion[1]:.2f}, z = {solucion[2]:.2f}")
+</code></pre>
+                        <p>La solución debería ser aproximadamente: x = 1.00, y = -2.00, z = -2.00</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h2><i class="fas fa-clipboard-check"></i> Resumen</h2>
+            <ul>
+                <li>Los sistemas de ecuaciones lineales son fundamentales en IA y Machine Learning.</li>
+                <li>Pueden representarse en forma matricial como AX = B.</li>
+                <li>Existen varios métodos para resolverlos, incluyendo sustitución, eliminación de Gauss, regla de Cramer y matriz inversa.</li>
+                <li>En Python, podemos usar NumPy para resolver sistemas de ecuaciones de manera eficiente.</li>
+                <li>Es importante verificar si un sistema tiene solución única, infinitas soluciones o ninguna solución.</li>
+            </ul>
+        </section>
+
+        <section class="additional-resources">
+            <h2><i class="fas fa-book-open"></i> Recursos Adicionales</h2>
+            <ul>
+                <li><a href="https://numpy.org/doc/stable/reference/generated/numpy.linalg.solve.html" target="_blank" rel="noopener">Documentación de numpy.linalg.solve</a></li>
+                <li><a href="https://es.khanacademy.org/math/linear-algebra" target="_blank" rel="noopener">Curso de Álgebra Lineal en Khan Academy</a></li>
+                <li><a href="https://www.youtube.com/watch?v=HhAC2Ge-9ac" target="_blank" rel="noopener">Video tutorial sobre sistemas de ecuaciones lineales</a></li>
+            </ul>
+        </section>
+
+        <section class="homework">
+            <h2><i class="fas fa-tasks"></i> Tarea</h2>
+            <ol>
+                <li>Resuelve manualmente el siguiente sistema usando el método de eliminación de Gauss:
+                    \[
+                    \begin{cases}
+                    x + 2y = 4 \\
+                    3x - y = 5
+                    \end{cases}
+                    \]
+                </li>
+                <li>Implementa en Python la solución para el sistema anterior usando NumPy.</li>
+                <li>Investiga y explica brevemente cómo se relacionan los sistemas de ecuaciones lineales con el algoritmo de regresión lineal.</li>
+            </ol>
+        </section>
+    </main>
+
+  
+    <footer>
+					<div class="container">
+									<p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+									<div class="navigation">
+													<a href="SESION2-2.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 2.2 vectores y matrices</a>
+													<a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+													<a href="SESION2-4.html" class="btn">Siguiente Sesión: 2.4 valores y vectores propios <i class="fas fa-arrow-right"></i></a>
+									</div>
+					</div>
+	</footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Configuración de MathJax para renderizar ecuaciones
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true,
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+                TeX: { equationNumbers: { autoNumber: "AMS" } }
+            }
+        });
+    </script>
+</body>
+</html>

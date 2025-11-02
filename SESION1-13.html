@@ -1,0 +1,1730 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesión 1.13: Módulos y Paquetes en Python - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .solution {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #1e8449;
+        }
+        
+        .hint-button {
+            background-color: #1e8449;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .hint-button:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+        }
+
+        .code-example {
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .code-example h4 {
+            margin-bottom: 0.5rem;
+            color: #1e8449;
+        }
+
+        .concept-box {
+            background-color: #f0f8ff;
+            border-left: 4px solid #3498db;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .tip-box {
+            background-color: #f8f9e6;
+            border-left: 4px solid #f1c40f;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .warning-box {
+            background-color: #fde8e8;
+            border-left: 4px solid #e74c3c;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        pre {
+            position: relative;
+            background-color: #f5f5f5;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .copy-button:hover {
+            opacity: 1;
+            background-color: #d0d0d0;
+        }
+
+        .exercise {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .exercise h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        .exercise-actions {
+            margin-top: 1rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .file-structure {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 1rem;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 1rem 0;
+        }
+
+        .file-structure .folder {
+            color: #2980b9;
+            font-weight: bold;
+        }
+
+        .file-structure .file {
+            color: #27ae60;
+        }
+
+        @media (max-width: 768px) {
+            .code-example pre {
+                font-size: 0.8rem;
+                padding: 0.75rem;
+            }
+            
+            .exercise-actions {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="session-header">
+        <div class="container">
+            <h1>Sesión 1.13: Módulos y Paquetes en Python</h1>
+            <p class="session-meta">Módulo 1: Introducción a Python | Duración: 90 minutos</p>
+                   </div>
+    </header>
+
+    <main class="container">
+        <section class="learning-objectives">
+            <h2>Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender el concepto de módulos en Python y su importancia en la organización del código.</li>
+                <li>Aprender a crear, importar y utilizar módulos propios.</li>
+                <li>Entender la estructura y creación de paquetes en Python.</li>
+                <li>Explorar módulos estándar de Python y paquetes de terceros.</li>
+                <li>Aprender a instalar paquetes externos con pip.</li>
+                <li>Comprender el uso de entornos virtuales para el manejo de dependencias.</li>
+                <li>Conocer las mejores prácticas para la organización de proyectos Python.</li>
+            </ul>
+        </section>
+
+        <section class="concept">
+            <h2>1. Introducción a los Módulos en Python</h2>
+            <p>Un módulo en Python es un archivo que contiene definiciones y sentencias de Python. Los módulos permiten organizar el código de manera lógica y reutilizable. Cualquier archivo con extensión <code>.py</code> es un módulo en Python.</p>
+            
+            <div class="concept-box">
+                <h4>Ventajas de usar módulos:</h4>
+                <ul>
+                    <li><strong>Reutilización de código:</strong> Permite usar el mismo código en diferentes programas.</li>
+                    <li>Organización: Facilita la estructuración lógica del código.</li>
+                    <li>Mantenimiento: Facilita la actualización y corrección de errores en un solo lugar.</li>
+                    <li>Espacios de nombres: Evita colisiones de nombres entre diferentes partes de un programa.</li>
+                </ul>
+            </div>
+
+            <h3>1.1 Creación y uso de módulos</h3>
+            <p>Para crear un módulo, simplemente guardamos nuestro código en un archivo con extensión <code>.py</code>.</p>
+            
+            <div class="code-example">
+                <h4>Ejemplo: Creación de un módulo simple</h4>
+                <p>Creemos un módulo llamado <code>matematicas.py</code>:</p>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copiar</button>
+                <pre><code class="language-python"># matematicas.py
+"""
+Módulo de operaciones matemáticas básicas.
+Incluye funciones para operaciones comunes como suma, resta, etc.
+"""
+
+def suma(a, b):
+    """Devuelve la suma de dos números."""
+    return a + b
+
+def resta(a, b):
+    """Devuelve la resta de dos números."""
+    return a - b
+
+def multiplicacion(a, b):
+    """Devuelve el producto de dos números."""
+    return a * b
+
+def division(a, b):
+    """
+    Devuelve la división de dos números.
+    Lanza una excepción si el divisor es cero.
+    """
+    if b == 0:
+        raise ValueError("No se puede dividir por cero")
+    return a / b
+
+# Variable del módulo
+PI = 3.14159265359
+
+# Ejecución condicional para pruebas
+if __name__ == "__main__":
+    # Código de prueba
+    print("Probando el módulo matemáticas:")
+    print(f"Suma: 5 + 3 = {suma(5, 3)}")
+    print(f"Resta: 5 - 3 = {resta(5, 3)}")
+    print(f"Multiplicación: 5 * 3 = {multiplicacion(5, 3)}")
+    try:
+        print(f"División: 5 / 3 = {division(5, 3):.2f}")
+        print(f"División por cero: {division(5, 0):.2f}")
+    except ValueError as e:
+        print(f"Error: {e}")</code></pre>
+            </div>
+
+            <h3>1.2 Importación de módulos</h3>
+            <p>Existen varias formas de importar módulos en Python. Veamos las más comunes:</p>
+            
+            <div class="code-example">
+                <h4>Ejemplo: Diferentes formas de importar módulos</h4>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copiar</button>
+                <pre><code class="language-python"># 1. Importar el módulo completo
+import matematicas
+
+# Usar funciones con notación de punto
+resultado = matematicas.suma(10, 5)
+print(f"10 + 5 = {resultado}")
+
+# 2. Importar funciones específicas
+from matematicas import resta, multiplicacion
+
+# Usar las funciones importadas directamente
+print(f"10 - 5 = {resta(10, 5)}")
+print(f"10 * 5 = {multiplicacion(10, 5)}")
+
+# 3. Importar con un alias
+import matematicas as m
+
+# Usar el alias
+print(f"Valor de PI: {m.PI}")
+
+# 4. Importar todas las funciones (no recomendado en producción)
+# from matematicas import *
+
+# 5. Importar con alias para funciones específicas
+from matematicas import division as div
+
+try:
+    print(f"10 / 5 = {div(10, 5)}")
+    print(f"10 / 0 = {div(10, 0)}")
+except ValueError as e:
+    print(f"Error: {e}")
+
+# Verificar el nombre del módulo
+print(f"El nombre del módulo es: {matematicas.__name__}")
+print(f"La documentación del módulo: {matematicas.__doc__}")
+print(f"Documentación de la función suma: {matematicas.suma.__doc__}")</code></pre>
+            </div>
+
+            <div class="tip-box">
+                <h4><i class="fas fa-lightbulb"></i> Buenas prácticas al importar módulos</h4>
+                <ul>
+                    <li>Evita usar <code>from modulo import *</code> ya que puede causar colisiones de nombres.</li>
+                    <li>Usa alias cortos pero descriptivos (ej: <code>import numpy as np</code>).</li>
+                    <li>Agrupa las importaciones en este orden:
+                        <ol>
+                            <li>Módulos estándar de Python</li>
+                            <li>Módulos de terceros</li>
+                            <li>Módulos de la aplicación</li>
+                        </ol>
+                    </li>
+                    <li>Usa <code>if __name__ == "__main__"</code> para código que solo debe ejecutarse cuando el módulo se ejecuta directamente.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="concept">
+            <h2>2. Paquetes en Python</h2>
+            <p>Un paquete es una forma de organizar módulos relacionados en una jerarquía de directorios. Los paquetes permiten una estructura de espacio de nombres plana para evitar colisiones de nombres entre módulos.</p>
+            
+            <h3>2.1 Estructura de un paquete</h3>
+            <p>Un paquete es un directorio que contiene un archivo especial llamado <code>__init__.py</code> (que puede estar vacío) y uno o más módulos.</p>
+            
+            <div class="file-structure">
+                <div>mi_paquete/</div>
+                <div class="folder">├── __init__.py</div>
+                <div class="folder">├── modulo1.py</div>
+                <div class="folder">├── modulo2.py</div>
+                <div class="folder">└── subpaquete/</div>
+                <div class="folder">    ├── __init__.py</div>
+                <div class="folder">    └── modulo3.py</div>
+            </div>
+
+            <div class="code-example">
+                <h4>Ejemplo: Creación de un paquete simple</h4>
+                <p>1. Primero, crea la siguiente estructura de directorios:</p>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copiar</button>
+                <pre><code class="language-bash">mkdir -p mi_paquete/subpaquete
+touch mi_paquete/__init__.py
+touch mi_paquete/modulo1.py
+touch mi_paquete/modulo2.py
+touch mi_paquete/subpaquete/__init__.py
+touch mi_paquete/subpaquete/modulo3.py</code></pre>
+                
+                <p>2. Contenido de <code>mi_paquete/__init__.py</code>:</p>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copiar</button>
+                <pre><code class="language-python">"""
+Paquete de ejemplo para demostrar la estructura de paquetes en Python.
+"""
+
+__version__ = '0.1.0'
+__author__ = 'Tu Nombre <tu@email.com>'
+
+# Importar funciones importantes al nivel del paquete
+from .modulo1 import saludar, despedirse
+from .modulo2 import sumar, restar
+
+# Hacer que estas funciones estén disponibles directamente desde el paquete
+__all__ = ['saludar', 'despedirse', 'sumar', 'restar']</code></pre>
+
+                <p>3. Contenido de <code>mi_paquete/modulo1.py</code>:</p>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copiar</button>
+                <pre><code class="language-python">def saludar(nombre: str) -> str:
+    """Devuelve un saludo personalizado."""
+    return f"¡Hola, {nombre}! Bienvenido al paquete de ejemplo."
+
+def despedirse(nombre: str) -> str:
+    """Devuelve una despedida personalizada."""
+    return f"¡Hasta luego, {nombre}! Fue un placer verte."
+
+if __name__ == "__main__":
+    # Código de prueba
+    print(saludar("Usuario"))
+    print(despedirse("Usuario"))</code></pre>
+
+                <p>4. Contenido de <code>mi_paquete/modulo2.py</code>:</p>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copiar</button>
+                <pre><code class="language-python">def sumar(a: float, b: float) -> float:
+    """Devuelve la suma de dos números."""
+    return a + b
+
+def restar(a: float, b: float) -> float:
+    """Devuelve la resta de dos números."""
+    return a - b
+
+def _funcion_privada():
+    """Función privada (por convención con _ al inicio)."""
+    return "Esta es una función privada"
+
+class Calculadora:
+    """Clase de ejemplo para una calculadora simple."""
+    
+    def __init__(self, valor_inicial: float = 0):
+        self.valor = valor_inicial
+    
+    def sumar(self, valor: float) -> 'Calculadora':
+        """Suma un valor al valor actual."""
+        self.valor += valor
+        return self
+    
+    def restar(self, valor: float) -> 'Calculadora':
+        """Resta un valor al valor actual."""
+        self.valor -= valor
+        return self
+    
+    def obtener_valor(self) -> float:
+        """Devuelve el valor actual."""
+        return self.valor</code></pre>
+
+                <p>5. Contenido de <code>mi_paquete/subpaquete/__init__.py</code>:</p>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copiar</button>
+                <pre><code class="language-python">"""
+Subpaquete de ejemplo dentro de mi_paquete.
+"""
+
+from .modulo3 import funcion_ejemplo
+
+__all__ = ['funcion_ejemplo']</code></pre>
+
+                <p>6. Contenido de <code>mi_paquete/subpaquete/modulo3.py</code>:</p>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copiar</button>
+                <pre><code class="language-python">def funcion_ejemplo():
+    """Función de ejemplo en el subpaquete."""
+    return "Esta es una función del subpaquete"
+
+class ClaseEjemplo:
+    """Clase de ejemplo en el subpaquete."""
+    
+    def __init__(self, nombre: str):
+        self.nombre = nombre
+    
+    def saludar(self) -> str:
+        """Devuelve un saludo personalizado."""
+        return f"¡Hola desde ClaseEjemplo, {self.nombre}!"
+
+                <p>7. Ahora, crea un archivo <code>usar_paquete.py</code> en el directorio principal para probar el paquete:</p>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copiar</button>
+                <pre><code class="language-python"># Importar desde el paquete
+import mi_paquete
+from mi_paquete import saludar, sumar
+from mi_paquete.modulo2 import restar, Calculadora
+from mi_paquete.subpaquete import funcion_ejemplo
+from mi_paquete.subpaquete.modulo3 import ClaseEjemplo
+
+def main():
+    # Usar funciones importadas directamente desde el paquete
+    print("=== Usando el paquete ===")
+    print(saludar("Estudiante"))
+    print(f"Suma: 10 + 5 = {sumar(10, 5)}")
+    print(f"Resta: 10 - 5 = {restar(10, 5)}")
+    
+    # Usar la clase Calculadora
+    calc = Calculadora(100)
+    calc.sumar(50).restar(25)
+    print(f"Valor de la calculadora: {calc.obtener_valor()}")
+    
+    # Usar el subpaquete
+    print("\n=== Usando el subpaquete ===")
+    print(funcion_ejemplo())
+    
+    # Usar la clase del subpaquete
+    ejemplo = ClaseEjemplo("Usuario")
+    print(ejemplo.saludar())
+    
+    # Acceder a atributos del paquete
+    print("\n=== Metadatos del paquete ===")
+    print(f"Versión del paquete: {mi_paquete.__version__}")
+    print(f"Autor: {mi_paquete.__author__}")
+    print(f"Documentación: {mi_paquete.__doc__.strip()}")
+
+if __name__ == "__main__":
+    main()</code></pre>
+            </div>
+
+            <div class="tip-box">
+                <h4><i class="fas fa-lightbulb"></i> Estructura recomendada para proyectos Python</h4>
+                <p>Para proyectos más grandes, se recomienda la siguiente estructura:</p>
+                <div class="file-structure">
+                    <div>nombre_proyecto/</div>
+                    <div class="folder">├── docs/</div>
+                    <div class="folder">├── tests/</div>
+                    <div class="folder">├── src/</div>
+                    <div class="folder">│   └── nombre_paquete/</div>
+                    <div class="folder">│       ├── __init__.py</div>
+                    <div class="folder">│       ├── modulo1.py</div>
+                    <div class="folder">│       └── subpaquete/</div>
+                    <div class="folder">│           └── ...</div>
+                    <div class="folder">├── setup.py</div>
+                    <div class="folder">├── requirements.txt</div>
+                    <div class="folder">├── README.md</div>
+                    <div class="folder">└── .gitignore</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="concept">
+            <h2>3. Módulos Estándar de Python</h2>
+            <p>Python viene con una amplia biblioteca estándar que incluye módulos para una variedad de tareas. Aquí hay algunos módulos útiles:</p>
+            
+            <h3>3.1 Módulos útiles de la biblioteca estándar</h3>
+            
+            <div class="code-example">
+                <h4>Ejemplo: Uso de módulos estándar</h4>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copiar</button>
+                <pre><code class="language-python"># Módulo para trabajar con el sistema operativo
+import os
+
+# Módulo para expresiones regulares
+import re
+
+# Módulo para trabajar con fechas y horas
+from datetime import datetime, timedelta
+
+# Módulo para trabajar con archivos JSON
+import json
+
+# Módulo para generar números aleatorios
+import random
+
+# Módulo para trabajar con URLs
+from urllib import request
+
+# Módulo para trabajar con rutas de archivos
+from pathlib import Path
+
+def ejemplo_modulos_estandar():
+    # Usando os
+    print("=== Módulo os ===")
+    print(f"Directorio actual: {os.getcwd()}")
+    print(f"Variables de entorno: {list(os.environ.items())[:2]}...")
+    
+    # Usando re
+    print("\n=== Módulo re (expresiones regulares) ===")
+    texto = "Mi número de teléfono es (123) 456-7890 y mi correo es ejemplo@dominio.com"
+    patron_telefono = r'\(\d{3}\) \d{3}-\d{4}'
+    patron_email = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    
+    telefono = re.search(patron_telefono, texto)
+    email = re.search(patron_email, texto)
+    
+    print(f"Teléfono encontrado: {telefono.group() if telefono else 'No encontrado'}")
+    print(f"Email encontrado: {email.group() if email else 'No encontrado'}")
+    
+    # Usando datetime
+    print("\n=== Módulo datetime ===")
+    hoy = datetime.now()
+    manana = hoy + timedelta(days=1)
+    print(f"Hoy es: {hoy.strftime('%A, %d de %B de %Y')}")
+    print(f"Mañana será: {manana.strftime('%A, %d de %B de %Y')}")
+    
+    # Usando json
+    print("\n=== Módulo json ===")
+    datos = {
+        "nombre": "Juan Pérez",
+        "edad": 30,
+        "ciudad": "Ciudad de México",
+        "hobbies": ["programar", "leer", "correr"],
+        "activo": True
+    }
+    
+    # Convertir diccionario a JSON
+    json_str = json.dumps(datos, indent=2, ensure_ascii=False)
+    print("Datos en formato JSON:")
+    print(json_str)
+    
+    # Convertir JSON a diccionario
+    datos_recuperados = json.loads(json_str)
+    print(f"\nNombre: {datos_recuperados['nombre']}")
+    
+    # Usando random
+    print("\n=== Módulo random ===")
+    print(f"Número aleatorio entre 1 y 100: {random.randint(1, 100)}")
+    print(f"Elemento aleatorio de una lista: {random.choice(['manzana', 'banana', 'naranja'])}")
+    
+    # Usando pathlib (manejo de rutas)
+    print("\n=== Módulo pathlib ===")
+    ruta_archivo = Path("datos") / "archivo.txt"
+    print(f"Ruta absoluta: {ruta_archivo.absolute()}")
+    print(f"¿Existe el archivo? {ruta_archivo.exists()}")
+
+if __name__ == "__main__":
+    ejemplo_modulos_estandar()</code></pre>
+            </div>
+        </section>
+
+        <section class="concept">
+            <h2>4. Instalación de Paquetes Externos</h2>
+            <p>Python tiene un rico ecosistema de paquetes de terceros que puedes instalar usando <code>pip</code>, el administrador de paquetes de Python.</p>
+            
+            <h3>4.1 Uso básico de pip</h3>
+            
+            <div class="code-example">
+                <h4>Comandos básicos de pip</h4>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copiar</button>
+                <pre><code class="language-bash"># Instalar un paquete
+pip install nombre_del_paquete
+
+# Instalar una versión específica
+pip install nombre_del_paquete==1.2.3
+
+# Actualizar un paquete
+pip install --upgrade nombre_del_paquete
+
+# Desinstalar un paquete
+pip uninstall nombre_del_paquete
+
+# Listar paquetes instalados
+pip list
+
+# Ver información de un paquete
+pip show nombre_del_paquete
+
+# Guardar dependencias en un archivo requirements.txt
+pip freeze > requirements.txt
+
+# Instalar dependencias desde requirements.txt
+pip install -r requirements.txt</code></pre>
+            </div>
+
+            <h3>4.2 Entornos virtuales</h3>
+            <p>Los entornos virtuales permiten aislar las dependencias de diferentes proyectos. Es una buena práctica usar un entorno virtual para cada proyecto.</p>
+            
+            <div class="code-example">
+                <h4>Uso de entornos virtuales</h4>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copiar</button>
+                <pre><code class="language-bash"># Crear un entorno virtual (en Windows)
+python -m venv venv
+
+# Activar el entorno virtual (Windows)
+.\venv\Scripts\activate
+
+# Crear un entorno virtual (en macOS/Linux)
+python3 -m venv venv
+
+# Activar el entorno virtual (macOS/Linux)
+source venv/bin/activate
+
+# Instalar paquetes en el entorno virtual
+pip install requests pandas numpy
+
+# Desactivar el entorno virtual
+deactivate</code></pre>
+            </div>
+
+            <div class="warning-box">
+                <h4><i class="fas fa-exclamation-triangle"></i> Importancia de los entornos virtuales</h4>
+                <p>Usar entornos virtuales es esencial para:</p>
+                <ul>
+                    <li>Evitar conflictos de versiones entre proyectos.</li>
+                    <li>Mantener limpio el entorno global de Python.</li>
+                    <li>Facilitar la replicación del entorno de desarrollo.</li>
+                    <li>Gestionar dependencias de manera más efectiva.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="exercises">
+            <h2>Ejercicios Prácticos</h2>
+            
+            <div class="exercise">
+                <h3>Ejercicio 1: Creación de un paquete Python</h3>
+                <p>Crea un paquete Python llamado <code>mi_utilerias</code> con la siguiente estructura:</p>
+                <div class="file-structure">
+                    <div>mi_utilerias/</div>
+                    <div class="folder">├── __init__.py</div>
+                    <div class="folder">├── matematicas/</div>
+                    <div class="folder">│   ├── __init__.py</div>
+                    <div class="folder">│   ├── basico.py</div>
+                    <div class="folder">│   └── estadistica.py</div>
+                    <div class="folder">├── texto/</div>
+                    <div class="folder">│   ├── __init__.py</div>
+                    <div class="folder">│   └── manipulacion.py</div>
+                    <div class="folder">└── archivos/</div>
+                    <div class="folder">    ├── __init__.py</div>
+                    <div class="folder">    └── manejo.py</div>
+                </div>
+                
+                <p>Implementa las siguientes funcionalidades:</p>
+                <ol>
+                    <li>En <code>matematicas/basico.py</code>: Funciones para operaciones matemáticas básicas.</li>
+                    <li>En <code>matematicas/estadistica.py</code>: Funciones estadísticas como media, mediana, moda.</li>
+                    <li>En <code>texto/manipulacion.py</code>: Funciones para manipular texto (invertir, contar vocales, etc.).</li>
+                    <li>En <code>archivos/manejo.py</code>: Funciones para leer, escribir y manipular archivos.</li>
+                    <li>En los archivos <code>__init__.py</code> correspondientes, importa las funciones principales para que estén disponibles directamente desde los paquetes.</li>
+                </ol>
+                
+                <button class="hint-button" onclick="toggleHint('solucion1')">Mostrar Solución</button>
+                <div id="solucion1" class="solution">
+                    <p>Estructura completa del paquete:</p>
+                    
+                    <p><strong>mi_utilerias/__init__.py</strong>:</p>
+                    <pre><code class="language-python">"""
+Paquete de utilerías para operaciones comunes.
+Incluye módulos para operaciones matemáticas, manipulación de texto y manejo de archivos.
+"""
+
+__version__ = '0.1.0'
+__author__ = 'Tu Nombre <tu@email.com>'
+
+# Importar funciones principales al nivel del paquete
+from .matematicas.basico import *
+from .matematicas.estadistica import *
+from .texto.manipulacion import *
+from .archivos.manejo import *
+
+__all__ = []
+__all__.extend(matematicas.basico.__all__)
+__all__.extend(matematicas.estadistica.__all__)
+__all__.extend(texto.manipulacion.__all__)
+__all__.extend(archivos.manejo.__all__)</code></pre>
+
+                    <p><strong>mi_utilerias/matematicas/__init__.py</strong>:</p>
+                    <pre><code class="language-python">"""
+Módulo para operaciones matemáticas básicas y estadísticas.
+"""
+
+from .basico import *
+from .estadistica import *
+
+__all__ = []
+__all__.extend(basico.__all__)
+__all__.extend(estadistica.__all__)</code></pre>
+
+                    <p><strong>mi_utilerias/matematicas/basico.py</strong>:</p>
+                    <pre><code class="language-python">"""
+Operaciones matemáticas básicas.
+"""
+
+def suma(a: float, b: float) -> float:
+    """Devuelve la suma de dos números."""
+    return a + b
+
+def resta(a: float, b: float) -> float:
+    """Devuelve la resta de dos números."""
+    return a - b
+
+def multiplicacion(a: float, b: float) -> float:
+    """Devuelve el producto de dos números."""
+    return a * b
+
+def division(a: float, b: float) -> float:
+    """
+    Devuelve la división de dos números.
+    
+    Args:
+        a: Dividendo
+        b: Divisor (debe ser distinto de cero)
+        
+    Returns:
+        float: Resultado de la división
+        
+    Raises:
+        ValueError: Si el divisor es cero
+    """
+    if b == 0:
+        raise ValueError("No se puede dividir por cero")
+    return a / b
+
+def potencia(base: float, exponente: float) -> float:
+    """Devuelve la base elevada al exponente."""
+    return base ** exponente
+
+def raiz_cuadrada(numero: float) -> float:
+    """
+    Calcula la raíz cuadrada de un número.
+    
+    Args:
+        numero: Número no negativo
+        
+    Returns:
+        float: Raíz cuadrada del número
+        
+    Raises:
+        ValueError: Si el número es negativo
+    """
+    if numero < 0:
+        raise ValueError("No se puede calcular la raíz de un número negativo")
+    return numero ** 0.5
+
+# Lista de símbolos exportados
+__all__ = [
+    'suma',
+    'resta',
+    'multiplicacion',
+    'division',
+    'potencia',
+    'raiz_cuadrada'
+]</code></pre>
+
+                    <p><strong>mi_utilerias/matematicas/estadistica.py</strong>:</p>
+                    <pre><code class="language-python">"""
+Funciones estadísticas básicas.
+"""
+from typing import List, Union, Dict, Any
+import math
+
+def media(numeros: List[float]) -> float:
+    """Calcula la media aritmética de una lista de números."""
+    if not numeros:
+        raise ValueError("La lista de números no puede estar vacía")
+    return sum(numeros) / len(numeros)
+
+def mediana(numeros: List[float]) -> float:
+    """Calcula la mediana de una lista de números."""
+    if not numeros:
+        raise ValueError("La lista de números no puede estar vacía")
+        
+    numeros_ordenados = sorted(numeros)
+    n = len(numeros_ordenados)
+    mitad = n // 2
+    
+    if n % 2 == 1:
+        return numeros_ordenados[mitad]
+    else:
+        return (numeros_ordenados[mitad - 1] + numeros_ordenados[mitad]) / 2
+
+def moda(numeros: List[float]) -> List[float]:
+    """
+    Calcula la moda de una lista de números.
+    
+    Returns:
+        List[float]: Lista de modas (puede haber más de una)
+    """
+    if not numeros:
+        raise ValueError("La lista de números no puede estar vacía")
+        
+    frecuencias: Dict[float, int] = {}
+    
+    for num in numeros:
+        if num in frecuencias:
+            frecuencias[num] += 1
+        else:
+            frecuencias[num] = 1
+    
+    max_frecuencia = max(frecuencias.values())
+    modas = [num for num, freq in frecuencias.items() if freq == max_frecuencia]
+    
+    return modas
+
+def desviacion_estandar(numeros: List[float], poblacional: bool = True) -> float:
+    """
+    Calcula la desviación estándar de una lista de números.
+    
+    Args:
+        numeros: Lista de números
+        poblacional: Si es True, calcula la desviación estándar poblacional.
+                    Si es False, calcula la desviación estándar muestral.
+    """
+    if not numeros:
+        raise ValueError("La lista de números no puede estar vacía")
+        
+    n = len(numeros)
+    if n == 1:
+        return 0.0
+        
+    m = media(numeros)
+    suma_cuadrados = sum((x - m) ** 2 for x in numeros)
+    
+    # Usar n-1 para la desviación estándar muestral (corrección de Bessel)
+    divisor = n if poblacional else (n - 1)
+    
+    return math.sqrt(suma_cuadrados / divisor)
+
+__all__ = ['media', 'mediana', 'moda', 'desviacion_estandar']</code></pre>
+
+                    <p><strong>mi_utilerias/texto/__init__.py</strong>:</p>
+                    <pre><code class="language-python">"""
+Módulo para manipulación de texto.
+"""
+
+from .manipulacion import *
+
+__all__ = []
+__all__.extend(manipulacion.__all__)</code></pre>
+
+                    <p><strong>mi_utilerias/texto/manipulacion.py</strong>:</p>
+                    <pre><code class="language-python">"""
+Funciones para manipulación de texto.
+"""
+import re
+from typing import List, Dict, Tuple, Union, Optional
+
+def invertir_texto(texto: str) -> str:
+    """Invierte el orden de los caracteres en un texto."""
+    return texto[::-1]
+
+def contar_vocales(texto: str) -> Dict[str, int]:
+    """
+    Cuenta la cantidad de cada vocal en un texto (sin distinguir mayúsculas/minúsculas).
+    
+    Returns:
+        Dict[str, int]: Diccionario con el conteo de cada vocal
+    """
+    texto = texto.lower()
+    vocales = {'a': 0, 'e': 0, 'i': 0, 'o': 0, 'u': 0}
+    
+    for letra in texto:
+        if letra in vocales:
+            vocales[letra] += 1
+    
+    return vocales
+
+def es_palindromo(texto: str, ignorar_espacios: bool = True, 
+                 ignorar_acentos: bool = True, 
+                 ignorar_mayusculas: bool = True) -> bool:
+    """
+    Determina si un texto es un palíndromo.
+    
+    Args:
+        texto: Texto a evaluar
+        ignorar_espacios: Si es True, ignora los espacios en blanco
+        ignorar_acentos: Si es True, ignora los acentos
+        ignorar_mayusculas: Si es True, no distingue entre mayúsculas y minúsculas
+        
+    Returns:
+        bool: True si el texto es un palíndromo, False en caso contrario
+    """
+    if not texto:
+        return False
+    
+    # Aplicar transformaciones según los parámetros
+    procesado = texto
+    
+    if ignorar_mayusculas:
+        procesado = procesado.lower()
+    
+    if ignorar_acentos:
+        # Reemplazar caracteres acentuados
+        reemplazos = {
+            'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u',
+            'Á': 'a', 'É': 'e', 'Í': 'i', 'Ó': 'o', 'Ú': 'u',
+            'ü': 'u', 'Ü': 'u', 'ñ': 'n', 'Ñ': 'n'
+        }
+        for original, reemplazo in reemplazos.items():
+            procesado = procesado.replace(original, reemplazo)
+    
+    # Eliminar caracteres que no sean letras ni números
+    procesado = re.sub(r'[^a-z0-9]', '', procesado)
+    
+    if not ignorar_espacios:
+        # Si no se ignoran los espacios, verificar que el texto original no tenga espacios
+        # ya que ya los eliminamos en el paso anterior
+        if ' ' in texto:
+            return False
+    
+    # Comparar con su versión invertida
+    return procesado == procesado[::-1]
+
+def contar_palabras(texto: str) -> int:
+    """
+    Cuenta el número de palabras en un texto.
+    
+    Args:
+        texto: Texto a analizar
+        
+    Returns:
+        int: Número de palabras en el texto
+    """
+    if not texto.strip():
+        return 0
+    
+    # Dividir por espacios en blanco y filtrar cadenas vacías
+    palabras = [palabra for palabra in texto.split() if palabra]
+    return len(palabras)
+
+__all__ = ['invertir_texto', 'contar_vocales', 'es_palindromo', 'contar_palabras']</code></pre>
+
+                    <p><strong>mi_utilerias/archivos/__init__.py</strong>:</p>
+                    <pre><code class="language-python">"""
+Módulo para manejo de archivos.
+"""
+
+from .manejo import *
+
+__all__ = []
+__all__.extend(manejo.__all__)</code></pre>
+
+                    <p><strong>mi_utilerias/archivos/manejo.py</strong>:</p>
+                    <pre><code class="language-python">"""
+Funciones para manejo de archivos.
+"""
+import os
+import json
+import csv
+from typing import Any, Dict, List, Union, Optional
+from pathlib import Path
+
+def leer_archivo(ruta: Union[str, Path], modo: str = 'r', 
+                codificacion: str = 'utf-8') -> str:
+    """
+    Lee el contenido de un archivo de texto.
+    
+    Args:
+        ruta: Ruta al archivo
+        modo: Modo de apertura ('r' para texto, 'rb' para binario)
+        codificacion: Codificación del archivo (solo para modo texto)
+        
+    Returns:
+        str: Contenido del archivo
+        
+    Raises:
+        FileNotFoundError: Si el archivo no existe
+        IOError: Si hay un error al leer el archivo
+    """
+    ruta_obj = Path(ruta) if isinstance(ruta, str) else ruta
+    
+    if 'b' in modo:
+        with open(ruta_obj, modo) as archivo:
+            return archivo.read()
+    else:
+        with open(ruta_obj, modo, encoding=codificacion) as archivo:
+            return archivo.read()
+
+escribir_archivo(ruta: Union[str, Path], contenido: Any, 
+                modo: str = 'w', 
+                codificacion: str = 'utf-8',
+                formato: Optional[str] = None) -> None:
+    """
+    Escribe contenido en un archivo.
+    
+    Args:
+        ruta: Ruta al archivo
+        contenido: Contenido a escribir (str, bytes o objeto serializable)
+        modo: Modo de apertura ('w' para sobrescribir, 'a' para anexar)
+        codificacion: Codificación del archivo (solo para modo texto)
+        formato: Formato de salida ('json', 'csv', None para texto plano)
+        
+    Raises:
+        IOError: Si hay un error al escribir el archivo
+        ValueError: Si el formato no es soportado
+    """
+    ruta_obj = Path(ruta) if isinstance(ruta, str) else ruta
+    
+    # Crear directorio si no existe
+    ruta_obj.parent.mkdir(parents=True, exist_ok=True)
+    
+    if formato == 'json':
+        with open(ruta_obj, modo, encoding=codificacion) as archivo:
+            json.dump(contenido, archivo, indent=2, ensure_ascii=False)
+    elif formato == 'csv':
+        with open(ruta_obj, modo, newline='', encoding=codificacion) as archivo:
+            if isinstance(contenido, list) and len(contenido) > 0:
+                writer = csv.DictWriter(archivo, fieldnames=contenido[0].keys())
+                writer.writeheader()
+                writer.writerows(contenido)
+            else:
+                raise ValueError("El contenido debe ser una lista de diccionarios para formato CSV")
+    else:
+        # Modo texto plano
+        if not isinstance(contenido, (str, bytes, bytearray)):
+            contenido = str(contenido)
+            
+        if 'b' in modo and isinstance(contenido, str):
+            contenido = contenido.encode(codificacion)
+        
+        with open(ruta_obj, 'b' + modo if 'b' not in modo else modo) as archivo:
+            archivo.write(contenido)
+
+def listar_directorio(ruta: Union[str, Path] = '.', 
+                     mostrar_ocultos: bool = False) -> List[Dict[str, Any]]:
+    """
+    Lista el contenido de un directorio.
+    
+    Args:
+        ruta: Ruta al directorio
+        mostrar_ocultos: Si es True, incluye archivos y carpetas ocultas
+        
+    Returns:
+        List[Dict[str, Any]]: Lista de diccionarios con información de cada elemento
+    """
+    ruta_obj = Path(ruta) if isinstance(ruta, str) else ruta
+    
+    if not ruta_obj.exists():
+        raise FileNotFoundError(f"El directorio no existe: {ruta_obj}")
+    
+    if not ruta_obj.is_dir():
+        raise NotADirectoryError(f"La ruta no es un directorio: {ruta_obj}")
+    
+    elementos = []
+    
+    for item in ruta_obj.iterdir():
+        # Saltar archivos ocultos si no se solicitan
+        if not mostrar_ocultos and item.name.startswith('.'):
+            continue
+            
+        try:
+            stat = item.stat()
+            elementos.append({
+                'nombre': item.name,
+                'ruta': str(item.absolute()),
+                'es_archivo': item.is_file(),
+                'es_directorio': item.is_dir(),
+                'tamano_bytes': stat.st_size if item.is_file() else 0,
+                'fecha_modificacion': stat.st_mtime,
+                'permisos': oct(stat.st_mode)[-3:]
+            })
+        except (OSError, PermissionError):
+            # Ignorar archivos a los que no se puede acceder
+            continue
+    
+    return elementos
+
+__all__ = ['leer_archivo', 'escribir_archivo', 'listar_directorio']</code></pre>
+
+                    <p><strong>ejemplo_uso.py</strong> (fuera del paquete):</p>
+                    <pre><code class="language-python">#!/usr/bin/env python3
+"""
+Ejemplo de uso del paquete mi_utilerias.
+"""
+
+# Importar desde el paquete
+import mi_utilerias
+from mi_utilerias import suma, media, es_palindromo, escribir_archivo, listar_directorio
+
+def main():
+    # Usar funciones del paquete
+    print("=== Ejemplo de uso de mi_utilerias ===\n")
+    
+    # Operaciones matemáticas
+    print("Operaciones matemáticas:")
+    print(f"Suma: 5 + 3 = {suma(5, 3)}")
+    print(f"Media de [1, 2, 3, 4, 5]: {media([1, 2, 3, 4, 5]):.2f}")
+    
+    # Manipulación de texto
+    print("\nManipulación de texto:")
+    texto = "Dábale arroz a la zorra el abad"
+    print(f"¿'{texto}' es un palíndromo? {es_palindromo(texto)}")
+    
+    # Manejo de archivos
+    print("\nManejo de archivos:")
+    try:
+        # Escribir un archivo
+        escribir_archivo("ejemplo.txt", "Este es un archivo de ejemplo.")
+        print("Archivo 'ejemplo.txt' creado exitosamente.")
+        
+        # Listar directorio actual
+        print("\nContenido del directorio actual:")
+        for item in listar_directorio():
+            tipo = "DIR" if item['es_directorio'] else "FILE"
+            print(f"[{tipo}] {item['nombre']} ({item['tamano_bytes']} bytes)")
+            
+    except Exception as e:
+        print(f"Error al trabajar con archivos: {e}")
+    
+    # Mostrar información del paquete
+    print("\nInformación del paquete:")
+    print(f"Versión: {mi_utilerias.__version__}")
+    print(f"Autor: {mi_utilerias.__author__}")
+    print(f"Documentación: {mi_utilerias.__doc__.strip()}")
+
+if __name__ == "__main__":
+    main()</code></pre>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h3>Ejercicio 2: Creación de un paquete instalable</h3>
+                <p>Convierte el paquete <code>mi_utilerias</code> en un paquete instalable creando un archivo <code>setup.py</code> en la raíz del proyecto.</p>
+                
+                <p>Requisitos:</p>
+                <ol>
+                    <li>Crea un archivo <code>setup.py</code> con la configuración necesaria.</li>
+                    <li>Incluye un archivo <code>README.md</code> con documentación básica.</li>
+                    <li>Agrega un archivo <code>requirements.txt</code> con las dependencias (si las hay).</li>
+                    <li>Prueba la instalación en modo desarrollo.</li>
+                </ol>
+                
+                <button class="hint-button" onclick="toggleHint('solucion2')">Mostrar Solución</button>
+                <div id="solucion2" class="solution">
+                    <p>Estructura del proyecto:</p>
+                    <div class="file-structure">
+                        <div>mi_proyecto/</div>
+                        <div class="folder">├── mi_utilerias/</div>
+                        <div class="folder">│   ├── __init__.py</div>
+                        <div class="folder">│   ├── matematicas/</div>
+                        <div class="folder">│   │   ├── __init__.py</div>
+                        <div class="folder">│   │   ├── basico.py</div>
+                        <div class="folder">│   │   └── estadistica.py</div>
+                        <div class="folder">│   ├── texto/</div>
+                        <div class="folder">│   │   ├── __init__.py</div>
+                        <div class="folder">│   │   └── manipulacion.py</div>
+                        <div class="folder">│   └── archivos/</div>
+                        <div class="folder">│       ├── __init__.py</div>
+                        <div class="folder">│       └── manejo.py</div>
+                        <div class="folder">├── tests/</div>
+                        <div class="folder">│   ├── __init__.py</div>
+                        <div class="folder">│   ├── test_matematicas.py</div>
+                        <div class="folder">│   └── test_texto.py</div>
+                        <div class="folder">├── docs/</div>
+                        <div class="folder">│   └── index.md</div>
+                        <div class="folder">├── .gitignore</div>
+                        <div class="folder">├── LICENSE</div>
+                        <div class="folder">├── MANIFEST.in</div>
+                        <div class="folder">├── README.md</div>
+                        <div class="folder">├── requirements.txt</div>
+                        <div class="folder">└── setup.py</div>
+                    </div>
+                    
+                    <p><strong>setup.py</strong>:</p>
+                    <pre><code class="language-python">from setuptools import setup, find_packages
+import codecs
+import os
+
+# Directorio base
+here = os.path.abspath(os.path.dirname(__file__))
+
+# Leer la descripción del README
+with codecs.open(os.path.join(here, 'README.md'), encoding='utf-8') as fh:
+    long_description = fh.read()
+
+# Leer las dependencias del archivo requirements.txt
+with open(os.path.join(here, 'requirements.txt'), 'r', encoding='utf-8') as f:
+    requirements = f.read().splitlines()
+
+setup(
+    name='mi_utilerias',
+    version='0.1.0',
+    author='Tu Nombre',
+    author_email='tu@email.com',
+    description='Un paquete de utilidades para operaciones matemáticas, manipulación de texto y manejo de archivos',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
+    url='https://github.com/tuusuario/mi_utilerias',
+    packages=find_packages(exclude=['tests*']),
+    package_data={
+        '': ['*.txt', '*.md'],
+    },
+    include_package_data=True,
+    install_requires=requirements,
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Operating System :: OS Independent',
+    ],
+    python_requires='>=3.7',
+    project_urls={
+        'Documentation': 'https://github.com/tuusuario/mi_utilerias#readme',
+        'Source': 'https://github.com/tuusuario/mi_utilerias',
+        'Bug Reports': 'https://github.com/tuusuario/mi_utilerias/issues',
+    },
+    keywords='utilidades matematicas texto archivos',
+    license='MIT',
+    zip_safe=False,
+    entry_points={
+        'console_scripts': [
+            'mi_utilerias=mi_utilerias.cli:main',
+        ],
+    },
+)</code></pre>
+
+                    <p><strong>MANIFEST.in</strong>:</p>
+                    <pre><code class="language-ini">include LICENSE
+include README.md
+include requirements.txt
+recursive-include docs *
+recursive-include tests *
+recursive-include examples *</code></pre>
+
+                    <p><strong>README.md</strong>:</p>
+                    <pre><code class="language-markdown"># Mi Utilerias
+
+Un paquete de Python con utilidades para operaciones matemáticas, manipulación de texto y manejo de archivos.
+
+## Características
+
+- **Módulo de matemáticas**: Operaciones básicas y funciones estadísticas.
+- **Módulo de texto**: Funciones para manipular y analizar texto.
+- **Módulo de archivos**: Utilidades para leer, escribir y manipular archivos.
+
+## Instalación
+
+```bash
+# Instalar desde PyPI (cuando esté publicado)
+pip install mi-utilerias
+
+# Instalar en modo desarrollo
+pip install -e .
+```
+
+## Uso básico
+
+```python
+import mi_utilerias
+from mi_utilerias import suma, media, es_palindromo
+
+# Operaciones matemáticas
+resultado = suma(5, 3)
+promedio = media([1, 2, 3, 4, 5])
+
+# Manipulación de texto
+es_pali = es_palindromo("Anita lava la tina")
+
+# Manejo de archivos
+from mi_utilerias.archivos import escribir_archivo, leer_archivo
+
+escribir_archivo("ejemplo.txt", "Contenido de ejemplo")
+contenido = leer_archivo("ejemplo.txt")
+```
+
+## Documentación
+
+Para más información, consulta la [documentación completa](docs/).
+
+## Licencia
+
+Este proyecto está bajo la licencia MIT. Ver el archivo [LICENSE](LICENSE) para más detalles.</code></pre>
+
+                    <p><strong>requirements.txt</strong>:</p>
+                    <pre><code class="language-ini"># Dependencias principales
+# (En este caso no hay dependencias externas, pero se incluye el archivo para futuras adiciones)
+
+# Para desarrollo
+pytest>=6.0.0
+pytest-cov>=2.0.0
+flake8>=3.9.0
+black>=21.5b2
+isort>=5.8.0</code></pre>
+
+                    <p><strong>.gitignore</strong>:</p>
+                    <pre><code class="language-ini"># Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Archivos temporales
+*.tmp
+*.bak
+*.swp
+*~</code></pre>
+
+                    <p><strong>LICENSE</strong> (MIT License):</p>
+                    <pre><code class="language-text">MIT License
+
+Copyright (c) 2023 Tu Nombre
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</code></pre>
+
+                    <h4>Instalación en modo desarrollo</h4>
+                    <p>Para instalar el paquete en modo desarrollo (desde el directorio que contiene <code>setup.py</code>):</p>
+                    <pre><code class="language-bash"># Crear y activar un entorno virtual (recomendado)
+python -m venv venv
+source venv/bin/activate  # En Windows: .\venv\Scripts\activate
+
+# Instalar en modo desarrollo
+pip install -e .
+
+# Instalar dependencias de desarrollo
+pip install -r requirements.txt</code></pre>
+
+                    <h4>Pruebas</h4>
+                    <p>Para ejecutar las pruebas:</p>
+                    <pre><code class="language-bash"># Ejecutar pruebas con pytest
+pytest
+
+# Con cobertura de código
+pytest --cov=mi_utilerias tests/</code></pre>
+
+                    <h4>Publicación en PyPI</h4>
+                    <p>Para publicar el paquete en PyPI:</p>
+                    <pre><code class="language-bash"># Instalar herramientas necesarias
+pip install --upgrade setuptools wheel twine
+
+# Crear los archivos de distribución
+python setup.py sdist bdist_wheel
+
+# Subir a TestPyPI (opcional, para pruebas)
+twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+
+# Subir a PyPI real
+twine upload dist/*</code></pre>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h3>Ejercicio 3: Documentación con Sphinx</h3>
+                <p>Crea documentación profesional para el paquete <code>mi_utilerias</code> usando Sphinx.</p>
+                
+                <p>Pasos:</p>
+                <ol>
+                    <li>Instala Sphinx y el tema Read the Docs.</li>
+                    <li>Configura la documentación con <code>sphinx-quickstart</code>.</li>
+                    <li>Genera documentación automática a partir de los docstrings.</li>
+                    <li>Crea páginas de documentación adicionales.</li>
+                    <li>Genera la documentación en HTML.</li>
+                </ol>
+                
+                <button class="hint-button" onclick="toggleHint('solucion3')">Mostrar Solución</button>
+                <div id="solucion3" class="solution">
+                    <h4>1. Instalar dependencias</h4>
+                    <pre><code class="language-bash">pip install sphinx sphinx-rtd-theme</code></pre>
+
+                    <h4>2. Configurar la documentación</h4>
+                    <p>Desde el directorio de tu proyecto:</p>
+                    <pre><code class="language-bash"># Crear directorio para la documentación
+mkdir -p docs
+cd docs
+
+# Inicializar la documentación (responder a las preguntas)
+sphinx-quickstart
+
+# Instalar el tema RTD
+pip install sphinx-rtd-theme</code></pre>
+
+                    <h4>3. Configurar conf.py</h4>
+                    <p>Edita el archivo <code>docs/conf.py</code>:</p>
+                    <pre><code class="language-python"># Agregar al principio del archivo
+import os
+import sys
+
+# Agregar la ruta al directorio del paquete
+sys.path.insert(0, os.path.abspath('..'))
+
+# Configuración de extensiones
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.napoleon',
+    'sphinx.ext.todo',
+    'sphinx.ext.coverage',
+]
+
+# Tema de la documentación
+html_theme = 'sphinx_rtd_theme'
+
+# Configuración de autodoc
+autodoc_default_options = {
+    'members': True,
+    'member-order': 'bysource',
+    'special-members': '__init__',
+    'undoc-members': True,
+    'exclude-members': '__weakref__'
+}
+
+# Configuración de napoleon
+napoleon_google_docstring = True
+napoleon_numpy_docstring = False
+napoleon_include_init_with_doc = True
+napoleon_include_private_with_doc = False
+napoleon_include_special_with_doc = True
+napoleon_use_admonition_for_examples = True
+napoleon_use_admonition_for_notes = True
+napoleon_use_admonition_for_references = False
+napoleon_use_ivar = False
+napoleon_use_param = True
+napoleon_use_rtype = True
+napoleon_type_aliases = None</code></pre>
+
+                    <h4>4. Crear archivos de documentación</h4>
+                    <p>Crea un archivo <code>docs/index.rst</code>:</p>
+                    <pre><code class="language-rst">.. Mi Utilerias documentation master file, created by
+   sphinx-quickstart on Sun Oct 30 12:00:00 2023.
+
+Bienvenido a la documentación de Mi Utilerias!
+============================================
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contenido:
+
+   modules
+   installation
+   usage
+   api
+
+
+Indices y tablas
+================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`</code></pre>
+
+                    <p>Crea un archivo <code>docs/installation.rst</code>:</p>
+                    <pre><code class="language-rst">.. _installation:
+
+Instalación
+===========
+
+Puedes instalar Mi Utilerias usando pip:
+
+.. code-block:: bash
+
+   pip install mi-utilerias
+
+O en modo desarrollo:
+
+.. code-block:: bash
+
+   git clone https://github.com/tuusuario/mi_utilerias.git
+   cd mi_utilerias
+   pip install -e .</code></pre>
+
+                    <p>Crea un archivo <code>docs/usage.rst</code>:</p>
+                    <pre><code class="language-rst">.. _usage:
+
+Guía de Uso
+===========
+
+Importar el paquete:
+
+.. code-block:: python
+
+   import mi_utilerias
+   from mi_utilerias import suma, media, es_palindromo
+
+Ejemplos:
+
+.. code-block:: python
+
+   # Operaciones matemáticas
+   resultado = suma(5, 3)
+   promedio = media([1, 2, 3, 4, 5])
+
+   # Manipulación de texto
+   es_pali = es_palindromo("Anita lava la tina")
+
+   # Manejo de archivos
+   from mi_utilerias.archivos import escribir_archivo, leer_archivo
+   
+   escribir_archivo("ejemplo.txt", "Contenido de ejemplo")
+   contenido = leer_archivo("ejemplo.txt")</code></pre>
+
+                    <h4>5. Generar documentación de la API</h4>
+                    <p>Crea un archivo <code>docs/api.rst</code>:</p>
+                    <pre><code class="language-rst">.. _api:
+
+Referencia de la API
+====================
+
+.. toctree::
+   :maxdepth: 2
+
+   modules/matematicas
+   modules/texto
+   modules/archivos</code></pre>
+
+                    <p>Crea un archivo <code>docs/modules.rst</code>:</p>
+                    <pre><code class="language-rst">.. _modules:
+
+Módulos de Mi Utilerias
+=======================
+
+.. toctree::
+   :maxdepth: 4
+
+   mi_utilerias</code></pre>
+
+                    <h4>6. Generar la documentación HTML</h4>
+                    <pre><code class="language-bash"># Desde el directorio docs/
+make html
+
+# O en Windows
+# .\make.bat html</code></pre>
+
+                    <p>La documentación generada estará disponible en <code>docs/_build/html/index.html</code>.</p>
+
+                    <h4>7. Configuración para Read the Docs</h4>
+                    <p>Crea un archivo <code>.readthedocs.yml</code> en la raíz del proyecto:</p>
+                    <pre><code class="language-yaml"># .readthedocs.yml
+version: 2
+
+sphinx:
+  configuration: docs/conf.py
+
+formats:
+  - pdf
+  - epub
+
+python:
+  version: 3.8
+  install:
+    - requirements: docs/requirements.txt
+    - method: pip
+      path: .
+      extra_requirements:
+        - docs</code></pre>
+
+                    <p>Crea un archivo <code>docs/requirements.txt</code>:</p>
+                    <pre><code class="language-ini">sphinx>=3.0.0
+sphinx-rtd-theme>=0.5.0</code></pre>
+
+                    <h4>8. Subir a GitHub</h4>
+                    <p>Crea un repositorio en GitHub y sube tu código:</p>
+                    <pre><code class="language-bash">git init
+git add .
+git commit -m "Primer commit"
+git branch -M main
+git remote add origin https://github.com/tuusuario/mi_utilerias.git
+git push -u origin main</code></pre>
+
+                    <h4>9. Configurar Read the Docs</h4>
+                    <ol>
+                        <li>Ve a <a href="https://readthedocs.org/" target="_blank" rel="noopener">Read the Docs</a> e inicia sesión con tu cuenta de GitHub.</li>
+                        <li>Haz clic en "Import a Project".</li>
+                        <li>Selecciona tu repositorio de GitHub.</li>
+                        <li>Configura las opciones según sea necesario y haz clic en "Next".</li>
+                        <li>La documentación se construirá automáticamente y estará disponible en <code>mi-utilerias.readthedocs.io</code>.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+    </main>
+
+   	<footer>
+					<div class="container">
+									<p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+									<div class="navigation">
+													<a href="SESION1-12.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 1.12 Programación Orientada a Objetos (II)</a>
+													<a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+													<a href="SESION1-14.html" class="btn">Siguiente Sesión: 1.14 Pruebas Unitarias <i class="fas fa-arrow-right"></i></a>
+									</div>
+					</div>
+	</footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Función para copiar código al portapapeles
+        function copyToClipboard(button) {
+            const codeBlock = button.nextElementSibling;
+            const code = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                // Cambiar el texto del botón temporalmente
+                const originalText = button.textContent;
+                button.textContent = '¡Copiado!';
+                button.style.backgroundColor = '#27ae60';
+                
+                // Restaurar el botón después de 2 segundos
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.backgroundColor = '';
+                }, 2000);
+            }).catch(err => {
+                console.error('Error al copiar el código: ', err);
+                button.textContent = 'Error al copiar';
+                button.style.backgroundColor = '#e74c3c';
+            });
+        }
+        
+        // Función para mostrar/ocultar soluciones
+        function toggleHint(elementId) {
+            const element = document.getElementById(elementId);
+            if (element.style.display === 'block') {
+                element.style.display = 'none';
+            } else {
+                element.style.display = 'block';
+                // Desplazarse suavemente a la solución
+                element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+        
+        // Asegurar que las soluciones estén ocultas al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.solution').forEach(solution => {
+                solution.style.display = 'none';
+            });
+            
+            // Añadir funcionalidad de copiar a todos los botones de copia
+            document.querySelectorAll('.copy-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    copyToClipboard(this);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

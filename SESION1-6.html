@@ -3,14 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sesión 1.6: Listas y Diccionarios - Curso de IA</title>
+    <title>Sesión 1.6: Listas y tuplas - Curso de IA</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .solution {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #1e8449;
+        }
+        
+        .hint-button {
+            background-color: #1e8449;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .hint-button:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+        }
+
+        .code-example {
+            margin: 1.5rem 0;
+        }
+
+        .code-example h4 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+    </style>
 </head>
 <body>
     <header class="session-header">
         <div class="container">
-            <h1>Sesión 1.6: Listas y Diccionarios en Python</h1>
+            <h1>Sesión 1.6: Listas y tuplas en Python</h1>
             <p class="session-meta">Módulo 1: Introducción a Python | Duración: 60 minutos</p>
         </div>
     </header>
@@ -19,10 +55,10 @@
         <section class="learning-objectives">
             <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
             <ul>
-                <li>Comprender la estructura y uso de listas en Python</li>
-                <li>Aprender a manipular listas mediante métodos integrados</li>
-                <li>Entender el concepto y la utilidad de los diccionarios</li>
-                <li>Explorar métodos comunes para trabajar con diccionarios</li>
+                <li>Comprender qué son las listas y tuplas en Python</li>
+                <li>Aprender a crear, acceder y modificar listas</li>
+                <li>Entender las diferencias entre listas y tuplas</li>
+                <li>Dominar los métodos más útiles de las listas</li>
                 <li>Aplicar estos conceptos en ejercicios prácticos</li>
             </ul>
         </section>
@@ -31,492 +67,232 @@
             <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
             
             <article class="concept">
-                <h3>Introducción a las Estructuras de Datos</h3>
-                <p>Las estructuras de datos nos permiten organizar y almacenar colecciones de datos de manera eficiente. En esta sesión nos enfocaremos en dos de las estructuras más utilizadas en Python: listas y diccionarios.</p>
+                <h3>1. Introducción a las listas</h3>
+                <p>Las listas son una de las estructuras de datos más versátiles en Python. Pueden contener elementos de diferentes tipos y son mutables (se pueden modificar después de su creación).</p>
                 
-                <div class="info-box">
-                    <i class="fas fa-lightbulb"></i>
-                    <p><strong>Dato curioso:</strong> Las listas y diccionarios son estructuras de datos fundamentales en Python y son ampliamente utilizadas en el desarrollo de inteligencia artificial para organizar y manipular datos.</p>
-                </div>
-            </article>
+                <div class="code-example">
+                    <h4>Creación de listas</h4>
+                    <pre><code class="language-python"># Lista vacía
+mi_lista = []
 
-            <article class="concept">
-                <h3>1. Listas en Python</h3>
-                <p>Las listas son colecciones ordenadas y mutables de elementos. Pueden contener elementos de diferentes tipos de datos.</p>
-                
-                <h4>1.1 Creación de listas</h4>
-                <pre><code class="language-python"># Lista vacía
-lista_vacia = []
-
-# Lista con elementos
+# Lista con elementos iniciales
 numeros = [1, 2, 3, 4, 5]
 frutas = ['manzana', 'banana', 'cereza']
 mezcla = [1, 'dos', 3.0, True]
 
 # Usando el constructor list()
-otra_lista = list((1, 2, 3))  # Nota el doble paréntesis
+otra_lista = list((1, 2, 3))  # Nota el doble paréntesis</code></pre>
+                </div>
 
-# Lista por comprensión
-cuadrados = [x**2 for x in range(10)]  # [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]</code></pre>
+                <h4>1.1 Acceso a elementos</h4>
+                <p>Los elementos de una lista se pueden acceder mediante índices, que comienzan en 0.</p>
+                <pre><code class="language-python">frutas = ['manzana', 'banana', 'cereza', 'dátil']
+print(frutas[0])    # 'manzana'
+print(frutas[-1])   # 'dátil' (último elemento)
+print(frutas[1:3])  # ['banana', 'cereza'] (slicing)</code></pre>
 
-                <h4>1.2 Acceso a elementos</h4>
-                <pre><code class="language-python">numeros = [10, 20, 30, 40, 50]
-
-# Índices positivos (0-based)
-primer_elemento = numeros[0]  # 10
-segundo_elemento = numeros[1]  # 20
-
-# Índices negativos (empiezan desde el final)
-ultimo = numeros[-1]     # 50
-penultimo = numeros[-2]  # 40
-
-# Slicing (rebanadas)
-primeros_tres = numeros[0:3]  # [10, 20, 30]
-del_segundo = numeros[1:]     # [20, 30, 40, 50]
-hasta_el_tercero = numeros[:3] # [10, 20, 30]
-
-# Paso en el slicing
-pares = numeros[::2]  # [10, 30, 50] - cada segundo elemento
-invertida = numeros[::-1]  # [50, 40, 30, 20, 10] - lista invertida</code></pre>
-
-                <h4>1.3 Métodos de listas</h4>
+                <h4>1.2 Métodos útiles de listas</h4>
                 <pre><code class="language-python"># Agregar elementos
-frutas = ['manzana', 'banana']
-frutas.append('naranja')      # Agrega al final
-frutas.insert(1, 'kiwi')      # Inserta en posición específica
-frutas.extend(['uva', 'mango'])  # Extiende con otra lista
+frutas.append('kiwi')        # Añade al final
+frutas.insert(1, 'naranja')  # Inserta en posición específica
 
 # Eliminar elementos
-ultimo = frutas.pop()         # Elimina y retorna el último elemento
-frutas.remove('banana')       # Elimina la primera ocurrencia del valor
-del frutas[0]                 # Elimina por índice
-frutas.clear()                # Vacía la lista
+frutas.remove('banana')      # Elimina el primer elemento con ese valor
+del frutas[0]               # Elimina por índice
+valor = frutas.pop()         # Elimina y devuelve el último elemento
 
 # Otras operaciones
-numeros = [5, 2, 8, 1, 9]
-numeros.sort()                # Ordena la lista (modifica la original)
-numeros_ordenados = sorted(numeros)  # Retorna una nueva lista ordenada
-cantidad = len(numeros)       # Longitud de la lista
-esta_presente = 5 in numeros  # Verifica pertenencia (True)</code></pre>
-
-                <div class="exercise">
-                    <h4><i class="fas fa-pencil-alt"></i> Ejercicio Práctico 1</h4>
-                    <p>Crea una función llamada <code>promedio_lista</code> que reciba una lista de números y devuelva su promedio. Luego, crea una función <code>filtrar_pares</code> que reciba una lista y devuelva una nueva lista solo con los números pares.</p>
-                    <button class="hint-button" onclick="toggleHint('solucion1')">Mostrar Solución</button>
-                    <div id="solucion1" class="solution">
-                        <pre><code class="language-python">def promedio_lista(numeros):
-    """Calcula el promedio de una lista de números."""
-    if not numeros:  # Si la lista está vacía
-        return 0
-    return sum(numeros) / len(numeros)
-
-def filtrar_pares(numeros):
-    """Filtra los números pares de una lista."""
-    return [num for num in numeros if num % 2 == 0]
-
-# Ejemplo de uso
-if __name__ == "__main__":
-    numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    print(f"Promedio: {promedio_lista(numeros)}")
-    print(f"Números pares: {filtrar_pares(numeros)}")</code></pre>
-                    </div>
-                </div>
+frutas.sort()               # Ordena la lista
+frutas.reverse()            # Invierte el orden
+nueva_lista = frutas.copy() # Crea una copia superficial</code></pre>
             </article>
 
             <article class="concept">
-                <h3>2. Diccionarios en Python</h3>
-                <p>Los diccionarios son colecciones no ordenadas de pares clave-valor. Son mutables y no permiten claves duplicadas.</p>
+                <h3>2. Tuplas en Python</h3>
+                <p>Las tuplas son similares a las listas pero son inmutables (no se pueden modificar después de su creación). Se definen con paréntesis o simplemente separando los elementos por comas.</p>
                 
-                <h4>2.1 Creación de diccionarios</h4>
-                <pre><code class="language-python"># Diccionario vacío
-dic_vacio = {}
-otro_dic = dict()
+                <div class="code-example">
+                    <h4>Creación de tuplas</h4>
+                    <pre><code class="language-python"># Tupla vacía
+mi_tupla = ()
 
-# Diccionario con elementos
-estudiante = {
-    'nombre': 'Ana',
-    'edad': 22,
-    'cursos': ['Matemáticas', 'Física', 'Programación'],
-    'activo': True
-}
+# Tupla con un solo elemento (necesita una coma)
+singleton = ('hola',)
 
-# Usando el constructor dict()
-otro_estudiante = dict(nombre='Carlos', edad=25)</code></pre>
+# Múltiples elementos
+colores = ('rojo', 'verde', 'azul')
 
-                <h4>2.2 Acceso y modificación</h4>
-                <pre><code class="language-python"># Acceso a valores
-nombre = estudiante['nombre']  # 'Ana'
-edad = estudiante.get('edad')  # 22
-
-# Si la clave no existe, get() retorna None (o un valor por defecto)
-apellido = estudiante.get('apellido')  # None
-apellido = estudiante.get('apellido', 'No especificado')  # 'No especificado'
-
-# Modificación de valores
-estudiante['edad'] = 23  # Actualiza el valor
-estudiante['universidad'] = 'UNAM'  # Agrega un nuevo par clave-valor
-
-# Eliminación
-del estudiante['activo']  # Elimina la clave 'activo' y su valor
-edad = estudiante.pop('edad')  # Elimina y retorna el valor de 'edad'</code></pre>
-
-                <h4>2.3 Métodos de diccionarios</h4>
-                <pre><code class="language-python"># Obtener claves, valores y pares
-claves = estudiante.keys()    # dict_keys(['nombre', 'cursos', 'universidad'])
-valores = estudiante.values() # dict_values(['Ana', ['Matemáticas', ...], 'UNAM'])
-pares = estudiante.items()    # dict_items([('nombre', 'Ana'), ...])
-
-# Verificar existencia de claves
-tiene_edad = 'edad' in estudiante  # False (la eliminamos antes)
-
-# Actualización múltiple
-estudiante.update({
-    'edad': 24,
-    'ciudad': 'Ciudad de México',
-    'cursos': ['IA', 'Machine Learning']  # Sobrescribe la lista completa
-})
-
-# Copiar diccionarios
-copia_superficial = estudiante.copy()
-import copy
-copia_profunda = copy.deepcopy(estudiante)</code></pre>
-
-                <div class="exercise">
-                    <h4><i class="fas fa-pencil-alt"></i> Ejercicio Práctico 2</h4>
-                    <p>Crea una función llamada <code>contar_palabras</code> que reciba un texto y devuelva un diccionario con la frecuencia de cada palabra. Ignora mayúsculas/minúsculas y signos de puntuación.</p>
-                    <button class="hint-button" onclick="toggleHint('solucion2')">Mostrar Solución</button>
-                    <div id="solucion2" class="solution">
-                        <pre><code class="language-python">import string
-
-def contar_palabras(texto):
-    """Cuenta la frecuencia de cada palabra en un texto."""
-    # Eliminar signos de puntuación y convertir a minúsculas
-    texto_limpio = texto.lower()
-    for signo in string.punctuation:
-        texto_limpio = texto_limpio.replace(signo, ' ')
-    
-    # Dividir en palabras y contar frecuencias
-    palabras = texto_limpio.split()
-    frecuencia = {}
-    
-    for palabra in palabras:
-        if palabra in frecuencia:
-            frecuencia[palabra] += 1
-        else:
-            frecuencia[palabra] = 1
-    
-    return frecuencia
-
-# Ejemplo de uso
-if __name__ == "__main__":
-    texto = """
-    La inteligencia artificial es la inteligencia llevada a cabo por máquinas.
-    En ciencias de la computación, una máquina inteligente ideal es un agente
-    flexible que percibe su entorno y lleva a cabo acciones que maximicen sus
-    posibilidades de éxito en algún objetivo o tarea.
-    """
-    resultado = contar_palabras(texto)
-    for palabra, cantidad in sorted(resultado.items()):
-        print(f"{palabra}: {cantidad}")</code></pre>
-                    </div>
+# Empaquetado/desempaquetado
+a, b, c = colores  # a='rojo', b='verde', c='azul'</code></pre>
                 </div>
-            </article>
 
-            <article class="concept">
-                <h3>3. Listas y Diccionarios Anidados</h3>
-                <p>Las listas pueden contener diccionarios y viceversa, permitiendo estructuras de datos complejas.</p>
-                
-                <h4>3.1 Lista de diccionarios</h4>
-                <pre><code class="language-python">estudiantes = [
-    {'nombre': 'Ana', 'edad': 22, 'notas': [9, 8, 10]},
-    {'nombre': 'Carlos', 'edad': 25, 'notas': [7, 6, 8]},
-    {'nombre': 'María', 'edad': 20, 'notas': [10, 9, 9]}
-]
-
-# Acceso a datos
-primera_estudiante = estudiantes[0]['nombre']  # 'Ana'
-segunda_nota = estudiantes[1]['notas'][1]      # 6
-
-# Agregar un nuevo estudiante
-estudiantes.append({'nombre': 'Juan', 'edad': 23, 'notas': [8, 7, 9]})</code></pre>
-
-                <h4>3.2 Diccionario de listas</h4>
-                <pre><code class="language-python">cursos = {
-    'matematicas': ['Ana', 'Carlos', 'María'],
-    'fisica': ['Carlos', 'Juan'],
-    'programacion': ['Ana', 'María', 'Juan']
-}
-
-# Agregar un estudiante a un curso
-if 'programacion' in cursos:
-    if 'Pedro' not in cursos['programacion']:
-        cursos['programacion'].append('Pedro')
-
-# Obtener todos los estudiantes únicos
-todos_estudiantes = set()
-for estudiantes_curso in cursos.values():
-    todos_estudiantes.update(estudiantes_curso)
-print(f"Total de estudiantes: {len(todos_estudientes)}")</code></pre>
-
-                <div class="exercise">
-                    <h4><i class="fas fa-pencil-alt"></i> Ejercicio Práctico 3</h4>
-                    <p>Crea una función que reciba una lista de diccionarios (como la de estudiantes del ejemplo) y devuelva el nombre del estudiante con el promedio más alto. Si hay empate, devuelve una lista con los nombres de los estudiantes con el promedio más alto.</p>
-                    <button class="hint-button" onclick="toggleHint('solucion3')">Mostrar Solución</button>
-                    <div id="solucion3" class="solution">
-                        <pre><code class="language-python">def mejor_estudiante(estudiantes):
-    """Encuentra al/los estudiante(s) con el mejor promedio."""
-    if not estudiantes:
-        return "No hay estudiantes"
-    
-    # Calcular promedios
-    promedios = []
-    for estudiante in estudiantes:
-        nombre = estudiante['nombre']
-        promedio = sum(estudiante['notas']) / len(estudiante['notas'])
-        promedios.append((nombre, promedio))
-    
-    # Encontrar el/los mejores promedios
-    mejor_promedio = max(promedios, key=lambda x: x[1])[1]
-    mejores = [nombre for nombre, prom in promedios if prom == mejor_promedio]
-    
-    return mejores[0] if len(mejores) == 1 else mejores
-
-# Ejemplo de uso
-if __name__ == "__main__":
-    estudiantes = [
-        {'nombre': 'Ana', 'edad': 22, 'notas': [9, 8, 10]},
-        {'nombre': 'Carlos', 'edad': 25, 'notas': [7, 6, 8]},
-        {'nombre': 'María', 'edad': 20, 'notas': [10, 9, 9]},
-        {'nombre': 'Juan', 'edad': 23, 'notas': [10, 9, 9]}  # Empate con María
-    ]
-    
-    resultado = mejor_estudiante(estudiantes)
-    if isinstance(resultado, list):
-        print(f"Los mejores estudiantes con promedio {sum(estudiantes[0]['notas'])/3:.2f} son: {', '.join(resultado)}")
-    else:
-        print(f"El mejor estudiante es {resultado}")</code></pre>
-                    </div>
-                </div>
+                <h4>2.1 ¿Cuándo usar tuplas?</h4>
+                <ul>
+                    <li>Cuando los datos no deben cambiar (inmutabilidad)</li>
+                    <li>Para claves en diccionarios (las listas no son hashables)</li>
+                    <li>Para mejorar el rendimiento (son más rápidas que las listas)</li>
+                </ul>
             </article>
         </section>
 
         <section class="practical-activity">
-            <h2><i class="fas fa-laptop-code"></i> Proyecto Práctico</h2>
+            <h2><i class="fas fa-laptop-code"></i> Ejercicios Prácticos</h2>
             
-            <div class="project">
-                <h3>Sistema de Inventario</h3>
-                <p>Crea un programa de gestión de inventario que permita realizar las siguientes operaciones:</p>
+            <div class="exercise">
+                <h4><i class="fas fa-pencil-alt"></i> Ejercicio 1: Estadísticas de lista</h4>
+                <p>Crea una función que reciba una lista de números y devuelva un diccionario con la suma, promedio, valor máximo y valor mínimo.</p>
                 
-                <h4>Requisitos:</h4>
-                <ol>
-                    <li>Usar un diccionario para almacenar los productos, donde las claves sean los códigos de producto y los valores sean diccionarios con la información de cada producto (nombre, precio, cantidad en stock).</li>
-                    <li>Implementar un menú interactivo con las siguientes opciones:
-                        <ul>
-                            <li>Agregar producto</li>
-                            <li>Actualizar stock</li>
-                            <li>Buscar producto</li>
-                            <li>Listar todos los productos</li>
-                            <li>Calcular valor total del inventario</li>
-                            <li>Salir</li>
-                        </ul>
-                    </li>
-                    <li>Validar todas las entradas del usuario.</li>
-                    <li>Manejar errores como productos duplicados o intentos de actualizar productos inexistentes.</li>
-                </ol>
-
-                <h4>Estructura de datos de ejemplo:</h4>
-                <pre><code class="language-python">inventario = {
-    'P001': {'nombre': 'Laptop', 'precio': 15000.0, 'cantidad': 10},
-    'P002': {'nombre': 'Mouse', 'precio': 250.0, 'cantidad': 50},
-    'P003': {'nombre': 'Teclado', 'precio': 500.0, 'cantidad': 30}
-}</code></pre>
-
-                <button class="hint-button" onclick="toggleHint('solucion-proyecto')">Mostrar Solución</button>
-                <div id="solucion-proyecto" class="solution">
-                    <pre><code class="language-python">def mostrar_menu():
-    """Muestra el menú principal y maneja la interacción del usuario."""
-    inventario = {}
+                <button class="hint-button" onclick="toggleHint('solucion1')">Mostrar Solución</button>
+                <div id="solucion1" class="solution">
+                    <pre><code class="language-python">def estadisticas_lista(numeros):
+    """
+    Calcula estadísticas básicas de una lista de números.
     
-    while True:
-        print("\n=== SISTEMA DE INVENTARIO ===")
-        print("1. Agregar producto")
-        print("2. Actualizar stock")
-        print("3. Buscar producto")
-        print("4. Listar todos los productos")
-        print("5. Calcular valor total del inventario")
-        print("6. Salir")
+    Args:
+        numeros (list): Lista de números
         
-        opcion = input("\nSeleccione una opción: ")
+    Returns:
+        dict: Diccionario con suma, promedio, máximo y mínimo
+    """
+    if not numeros:  # Si la lista está vacía
+        return {
+            'suma': 0,
+            'promedio': 0,
+            'maximo': None,
+            'minimo': None
+        }
         
-        if opcion == '1':
-            agregar_producto(inventario)
-        elif opcion == '2':
-            actualizar_stock(inventario)
-        elif opcion == '3':
-            buscar_producto(inventario)
-        elif opcion == '4':
-            listar_productos(inventario)
-        elif opcion == '5':
-            calcular_valor_total(inventario)
-        elif opcion == '6':
-            print("¡Hasta luego!")
-            break
-        else:
-            print("Opción no válida. Por favor, intente de nuevo.")
+    return {
+        'suma': sum(numeros),
+        'promedio': sum(numeros) / len(numeros),
+        'maximo': max(numeros),
+        'minimo': min(numeros)
+    }
 
-def agregar_producto(inventario):
-    """Agrega un nuevo producto al inventario."""
-    print("\n--- AGREGAR PRODUCTO ---")
-    
-    while True:
-        codigo = input("Código del producto (o 'cancelar' para volver): ").strip().upper()
-        if codigo.lower() == 'cancelar':
-            return
-        
-        if codigo in inventario:
-            print("Error: Ya existe un producto con ese código.")
-            continue
-            
-        nombre = input("Nombre del producto: ").strip()
-        
-        try:
-            precio = float(input("Precio unitario: "))
-            if precio <= 0:
-                print("El precio debe ser mayor que cero.")
-                continue
-                
-            cantidad = int(input("Cantidad en stock: "))
-            if cantidad < 0:
-                print("La cantidad no puede ser negativa.")
-                continue
-                
-            inventario[codigo] = {
-                'nombre': nombre,
-                'precio': precio,
-                'cantidad': cantidad
-            }
-            print(f"Producto '{nombre}' agregado correctamente.")
-            break
-            
-        except ValueError:
-            print("Error: Ingrese valores numéricos válidos para precio y cantidad.")
-
-def actualizar_stock(inventario):
-    """Actualiza el stock de un producto existente."""
-    if not inventario:
-        print("No hay productos en el inventario.")
-        return
-        
-    print("\n--- ACTUALIZAR STOCK ---")
-    codigo = input("Código del producto: ").strip().upper()
-    
-    if codigo not in inventario:
-        print("Error: Producto no encontrado.")
-        return
-    
-    try:
-        cantidad = int(input(f"Cantidad a {'agregar' if inventario[codigo]['cantidad'] > 0 else 'establecer'}: "))
-        if cantidad < 0:
-            print("La cantidad no puede ser negativa.")
-            return
-            
-        inventario[codigo]['cantidad'] += cantidad
-        print(f"Stock actualizado. Nueva cantidad: {inventario[codigo]['cantidad']}")
-        
-    except ValueError:
-        print("Error: Ingrese un número válido.")
-
-def buscar_producto(inventario):
-    """Busca un producto por código o nombre."""
-    if not inventario:
-        print("No hay productos en el inventario.")
-        return
-        
-    print("\n--- BUSCAR PRODUCTO ---")
-    busqueda = input("Ingrese código o nombre del producto: ").strip().lower()
-    
-    encontrados = []
-    for codigo, producto in inventario.items():
-        if (busqueda in codigo.lower()) or (busqueda in producto['nombre'].lower()):
-            encontrados.append((codigo, producto))
-    
-    if not encontrados:
-        print("No se encontraron productos que coincidan con la búsqueda.")
-    else:
-        print("\nResultados de la búsqueda:")
-        print("-" * 50)
-        for codigo, producto in encontrados:
-            print(f"Código: {codigo}")
-            print(f"Nombre: {producto['nombre']}")
-            print(f"Precio: ${producto['precio']:.2f}")
-            print(f"Stock: {producto['cantidad']}")
-            print("-" * 50)
-
-def listar_productos(inventario):
-    """Muestra todos los productos en el inventario."""
-    if not inventario:
-        print("No hay productos en el inventario.")
-        return
-        
-    print("\n--- LISTA DE PRODUCTOS ---")
-    print(f"{'CÓDIGO':<10} {'NOMBRE':<20} {'PRECIO':>10} {'STOCK':>10}")
-    print("-" * 55)
-    
-    for codigo, producto in inventario.items():
-        print(f"{codigo:<10} {producto['nombre']:<20} ${producto['precio']:>9.2f} {producto['cantidad']:>9}")
-
-def calcular_valor_total(inventario):
-    """Calcula el valor total del inventario."""
-    if not inventario:
-        print("No hay productos en el inventario.")
-        return
-        
-    valor_total = sum(producto['precio'] * producto['cantidad'] 
-                     for producto in inventario.values())
-    
-    print(f"\n--- VALOR TOTAL DEL INVENTARIO ---")
-    print(f"Número de productos diferentes: {len(inventario)}")
-    print(f"Valor total: ${valor_total:,.2f}")
-
-# Ejecutar el programa
-if __name__ == "__main__":
-    mostrar_menu()</code></pre>
+# Ejemplo de uso
+numeros = [10, 20, 30, 40, 50]
+resultado = estadisticas_lista(numeros)
+print(f"Suma: {resultado['suma']}")
+print(f"Promedio: {resultado['promedio']:.2f}")
+print(f"Máximo: {resultado['maximo']}")
+print(f"Mínimo: {resultado['minimo']}")</code></pre>
                 </div>
             </div>
-        </section>
+            
+            <div class="exercise">
+                <h4><i class="fas fa-pencil-alt"></i> Ejercicio 2: Filtrado de elementos</h4>
+                <p>Crea una función que reciba una lista de números y devuelva dos listas: una con los números pares y otra con los impares.</p>
+                
+                <button class="hint-button" onclick="toggleHint('solucion2')">Mostrar Solución</button>
+                <div id="solucion2" class="solution">
+                    <pre><code class="language-python">def separar_pares_impares(numeros):
+    """
+    Separa una lista de números en pares e impares.
+    
+    Args:
+        numeros (list): Lista de números enteros
+        
+    Returns:
+        tuple: (lista_pares, lista_impares)
+    """
+    pares = [num for num in numeros if num % 2 == 0]
+    impares = [num for num in numeros if num % 2 != 0]
+    return pares, impares
 
-        <section class="resources">
-            <h2><i class="fas fa-book-open"></i> Recursos Adicionales</h2>
-            <ul>
-                <li><a href="https://docs.python.org/3/tutorial/datastructures.html" target="_blank" rel="noopener">Documentación oficial de Python: Estructuras de datos</a></li>
-                <li><a href="https://www.w3schools.com/python/python_lists.asp" target="_blank" rel="noopener">W3Schools: Python Lists</a></li>
-                <li><a href="https://realpython.com/python-dicts/" target="_blank" rel="noopener">Real Python: Dictionaries in Python</a></li>
-                <li><a href="https://www.learnpython.org/en/Dictionaries" target="_blank" rel="noopener">LearnPython: Dictionaries</a></li>
-            </ul>
-        </section>
+# Ejemplo de uso
+numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+pares, impares = separar_pares_impares(numeros)
+print(f"Números pares: {pares}")
+print(f"Números impares: {impares}")</code></pre>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4><i class="fas fa-pencil-alt"></i> Ejercicio 3: Gestor de tareas</h4>
+                <p>Crea un programa que permita gestionar una lista de tareas. Debe permitir agregar, eliminar, marcar como completada y mostrar las tareas.</p>
+                
+                <button class="hint-button" onclick="toggleHint('solucion3')">Mostrar Solución</button>
+                <div id="solucion3" class="solution">
+                    <pre><code class="language-python">def mostrar_menu():
+    print("\n--- Gestor de Tareas ---")
+    print("1. Ver tareas")
+    print("2. Agregar tarea")
+    print("3. Marcar tarea como completada")
+    print("4. Eliminar tarea")
+    print("5. Salir")
+    return input("Selecciona una opción: ")
 
-        <section class="summary">
-            <h2><i class="fas fa-clipboard-check"></i> Resumen de la Sesión</h2>
-            <ul>
-                <li>Las listas son colecciones ordenadas y mutables de elementos, accesibles por índices.</li>
-                <li>Los diccionarios almacenan pares clave-valor, permitiendo acceso rápido a los valores mediante sus claves.</li>
-                <li>Ambas estructuras ofrecen métodos poderosos para manipular sus elementos.</li>
-                <li>Las listas y diccionarios pueden anidarse para crear estructuras de datos complejas.</li>
-                <li>La comprensión de listas y diccionarios proporciona una forma concisa de crear estas estructuras.</li>
-            </ul>
-        </section>
+def main():
+    tareas = []
+    
+    while True:
+        opcion = mostrar_menu()
+        
+        if opcion == '1':
+            if not tareas:
+                print("\nNo hay tareas pendientes.")
+            else:
+                print("\n--- Tareas Pendientes ---")
+                for i, tarea in enumerate(tareas, 1):
+                    estado = "✓" if tarea['completada'] else " "
+                    print(f"{i}. [{estado}] {tarea['descripcion']}")
+                    
+        elif opcion == '2':
+            descripcion = input("\nIngresa la descripción de la tarea: ")
+            tareas.append({'descripcion': descripcion, 'completada': False})
+            print("¡Tarea agregada con éxito!")
+            
+        elif opcion == '3':
+            if not tareas:
+                print("\nNo hay tareas para marcar como completadas.")
+                continue
+                
+            print("\n--- Tareas Pendientes ---")
+            for i, tarea in enumerate(tareas, 1):
+                if not tarea['completada']:
+                    print(f"{i}. {tarea['descripcion']}")
+                    
+            try:
+                num = int(input("\nNúmero de tarea a marcar como completada: ")) - 1
+                if 0 <= num < len(tareas) and not tareas[num]['completada']:
+                    tareas[num]['completada'] = True
+                    print("¡Tarea marcada como completada!")
+                else:
+                    print("Número de tarea inválido o ya está completada.")
+            except ValueError:
+                print("Por favor, ingresa un número válido.")
+                
+        elif opcion == '4':
+            if not tareas:
+                print("\nNo hay tareas para eliminar.")
+                continue
+                
+            print("\n--- Tareas ---")
+            for i, tarea in enumerate(tareas, 1):
+                estado = "✓" if tarea['completada'] else " "
+                print(f"{i}. [{estado}] {tarea['descripcion']}")
+                
+            try:
+                num = int(input("\nNúmero de tarea a eliminar: ")) - 1
+                if 0 <= num < len(tareas):
+                    tarea_eliminada = tareas.pop(num)
+                    print(f"Tarea eliminada: {tarea_eliminada['descripcion']}")
+                else:
+                    print("Número de tarea inválido.")
+            except ValueError:
+                print("Por favor, ingresa un número válido.")
+                
+        elif opcion == '5':
+            print("\n¡Gracias por usar el Gestor de Tareas! ¡Hasta luego!")
+            break
+            
+        else:
+            print("\nOpción no válida. Por favor, intenta de nuevo.")
 
-        <section class="homework">
-            <h2><i class="fas fa-tasks"></i> Tarea</h2>
-            <p>Amplía el Sistema de Inventario con las siguientes funcionalidades:</p>
-            <ol>
-                <li>Agregar la opción de guardar el inventario en un archivo JSON y cargarlo al iniciar el programa.</li>
-                <li>Implementar la funcionalidad de categorías de productos (electrónicos, ropa, alimentos, etc.).</li>
-                <li>Agregar la opción de registrar ventas, lo que reducirá el stock de los productos vendidos.</li>
-                <li>Implementar un sistema de alertas que notifique cuando el stock de un producto esté por debajo de un mínimo configurable.</li>
-                <li>Crear un informe de ventas que muestre los productos más vendidos y el total de ingresos.</li>
-            </ol>
-            <p><strong>Entrega:</strong> Sube tu código a un archivo llamado <code>sistema_inventario_mejorado.py</code> y comparte el enlace o el archivo según las indicaciones del instructor.</p>
+if __name__ == "__main__":
+    main()</code></pre>
+                </div>
+            </div>
         </section>
     </main>
 
@@ -524,17 +300,31 @@ if __name__ == "__main__":
         <div class="container">
             <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
             <div class="navigation">
-                <a href="SESION1-5.html" class="btn">Sesión Anterior: 1.5 Funciones y módulos</a>
-                <a href="SESION1-7.html" class="btn">Siguiente Sesión: 1.7 diccionarios y conjuntos</a>
-            </div>
-            <div class="social-links">
-                <a href="#" class="social-link" title="Github" rel="noopener"><i class="fab fa-github"></i></a>
-                <a href="#" class="social-link" title="Twitter" rel="noopener"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="social-link" title="Linkedin" rel="noopener"><i class="fab fa-linkedin"></i></a>
+                <a href="SESION1-5.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 1.5 Funciones y Módulos</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION1-7.html" class="btn">Siguiente Sesión: 1.7 Diccionarios y Conjuntos <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        // Función para mostrar/ocultar soluciones
+        function toggleHint(elementId) {
+            const element = document.getElementById(elementId);
+            if (element.style.display === 'none' || element.style.display === '') {
+                element.style.display = 'block';
+                element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                element.style.display = 'none';
+            }
+        }
+        
+        // Asegurar que las soluciones estén ocultas al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.solution').forEach(solution => {
+                solution.style.display = 'none';
+            });
+        });
+    </script>
 </body>
 </html>

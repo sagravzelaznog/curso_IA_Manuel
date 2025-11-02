@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesión 1.12: Programación Orientada a Objetos (II) - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .solution {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #1e8449;
+        }
+        
+        .hint-button {
+            background-color: #1e8449;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .hint-button:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+        }
+
+        .code-example {
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .code-example h4 {
+            margin-bottom: 0.5rem;
+            color: #1e8449;
+        }
+
+        .concept-box {
+            background-color: #f0f8ff;
+            border-left: 4px solid #3498db;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .tip-box {
+            background-color: #f8f9e6;
+            border-left: 4px solid #f1c40f;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .warning-box {
+            background-color: #fde8e8;
+            border-left: 4px solid #e74c3c;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        pre {
+            position: relative;
+            background-color: #f5f5f5;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .copy-button:hover {
+            opacity: 1;
+            background-color: #d0d0d0;
+        }
+
+        .exercise {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .exercise h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        .exercise-actions {
+            margin-top: 1rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .code-example pre {
+                font-size: 0.8rem;
+                padding: 0.75rem;
+            }
+            
+            .exercise-actions {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="session-header">
+        <div class="container">
+            <h1>Sesión 1.12: Programación Orientada a Objetos en Python (II)</h1>
+            <p class="session-meta">Módulo 1: Introducción a Python | Duración: 90 minutos</p>
+            <div class="session-navigation">
+                <a href="SESION1-11.html" class="nav-button"><i class="fas fa-arrow-left"></i> Anterior</a>
+                <a href="index.html" class="nav-button"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION1-13.html" class="nav-button">Siguiente <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="learning-objectives">
+            <h2>Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender los conceptos avanzados de la programación orientada a objetos en Python.</li>
+                <li>Aprender sobre herencia simple y múltiple, y cómo implementarlas en Python.</li>
+                <li>Entender el polimorfismo y su aplicación en el diseño de software.</li>
+                <li>Explorar las clases abstractas y las interfaces en Python.</li>
+                <li>Conocer los métodos especiales (magic methods) más utilizados en Python.</li>
+                <li>Aplicar estos conceptos en ejercicios prácticos para reforzar el aprendizaje.</li>
+            </ul>
+        </section>
+
+        <section class="concept">
+            <h2>1. Introducción a la Herencia</h2>
+            <p>La herencia es uno de los pilares fundamentales de la programación orientada a objetos que permite crear nuevas clases basadas en clases existentes, promoviendo la reutilización de código y la creación de jerarquías de clases.</p>
+            
+            <div class="concept-box">
+                <h4>Ventajas de la herencia:</h4>
+                <ul>
+                    <li><strong>Reutilización de código:</strong> Permite heredar atributos y métodos de una clase existente.</li>
+                    <li><strong>Jerarquía de clases:</strong> Facilita la organización del código en una estructura jerárquica.</li>
+                    <li><strong>Extensibilidad:</strong> Permite extender la funcionalidad de una clase sin modificar su código fuente.</li>
+                    <li><strong>Mantenimiento:</strong> Los cambios en la clase base se reflejan automáticamente en las clases derivadas.</li>
+                </ul>
+            </div>
+
+            <h3>1.1 Herencia Simple</h3>
+            <p>En Python, una clase puede heredar de una sola clase base (herencia simple). La sintaxis es la siguiente:</p>
+            
+            <div class="code-example">
+                <h4>Ejemplo de herencia simple:</h4>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copiar</button>
+                <pre><code class="language-python">class Animal:
+    def __init__(self, nombre, edad):
+        self.nombre = nombre
+        self.edad = edad
+    
+    def hacer_sonido(self):
+        return "Sonido genérico de animal"
+
+class Perro(Animal):  # Perro hereda de Animal
+    def __init__(self, nombre, edad, raza):
+        super().__init__(nombre, edad)  # Llama al constructor de la clase base
+        self.raza = raza
+    
+    # Sobrescritura de método
+    def hacer_sonido(self):
+        return "¡Guau!"
+    
+    def ladrar(self):
+        return "¡Guau! ¡Guau!"
+
+# Uso de las clases
+mi_animal = Animal("Genérico", 3)
+mi_perro = Perro("Firulais", 5, "Labrador")
+
+print(f"{mi_animal.nombre} hace: {mi_animal.hacer_sonido()}")
+print(f"{mi_perro.nombre} (un {mi_perro.raza}) hace: {mi_perro.hacer_sonido()}")
+print(f"Y también puede ladrar: {mi_perro.ladrar()}")</code></pre>
+            </div>
+
+            <div class="tip-box">
+                <h4><i class="fas fa-lightbulb"></i> Consejo: Uso de <code>super()</code></h4>
+                <p>La función <code>super()</code> se utiliza para acceder a los métodos de la clase padre. Es la forma recomendada de extender la funcionalidad de los métodos heredados, especialmente el constructor <code>__init__</code>.</p>
+            </div>
+
+            <h3>1.2 Herencia Múltiple</h3>
+            <p>Python soporta herencia múltiple, lo que significa que una clase puede heredar de varias clases base. Esto es útil para combinar funcionalidades de múltiples clases.</p>
+            
+            <div class="code-example">
+                <h4>Ejemplo de herencia múltiple:</h4>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copiar</button>
+                <pre><code class="language-python">class Nadador:
+    def nadar(self):
+        return "Nadando en el agua"
+
+class Volador:
+    def volar(self):
+        return "Volando por el aire"
+    
+    def hacer_sonido(self):
+        return "¡Zumbido!"
+
+class Pato(Nadador, Volador):
+    def __init__(self, nombre):
+        self.nombre = nombre
+    
+    def hacer_sonido(self):
+        return "¡Cuac!"
+
+# Crear un objeto Pato
+pato = Pato("Donald")
+
+# Acceder a métodos de ambas clases base
+print(f"{pato.nombre} está {pato.nadar()}")
+print(f"{pato.nombre} está {pato.volar()}")
+print(f"{pato.nombre} hace: {pato.hacer_sonido()}")
+
+# Orden de resolución de métodos (MRO)
+print("Orden de resolución de métodos (MRO):", Pato.mro())</code></pre>
+            </div>
+
+            <div class="warning-box">
+                <h4><i class="fas fa-exclamation-triangle"></i> Precaución: El problema del diamante</h4>
+                <p>La herencia múltiple puede llevar a ambigüedades cuando una clase hereda de múltiples clases que tienen un ancestro común. Python resuelve esto usando el MRO (Method Resolution Order), pero es importante ser consciente de este comportamiento para evitar comportamientos inesperados.</p>
+            </div>
+        </section>
+
+        <section class="concept">
+            <h2>2. Polimorfismo</h2>
+            <p>El polimorfismo permite que objetos de diferentes clases respondan al mismo mensaje (método) de diferentes maneras. Esto facilita escribir código más genérico y reutilizable.</p>
+            
+            <h3>2.1 Polimorfismo con herencia</h3>
+            <p>Las clases derivadas pueden sobrescribir los métodos de sus clases base para proporcionar una implementación específica.</p>
+            
+            <div class="code-example">
+                <h4>Ejemplo de polimorfismo con herencia:</h4>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copiar</button>
+                <pre><code class="language-python">class Figura:
+    def area(self):
+        pass  # Método abstracto
+    
+    def perimetro(self):
+        pass  # Método abstracto
+
+class Rectangulo(Figura):
+    def __init__(self, ancho, alto):
+        self.ancho = ancho
+        self.alto = alto
+    
+    def area(self):
+        return self.ancho * self.alto
+    
+    def perimetro(self):
+        return 2 * (self.ancho + self.alto)
+
+class Circulo(Figura):
+    def __init__(self, radio):
+        import math
+        self.radio = radio
+        self.pi = math.pi
+    
+    def area(self):
+        return self.pi * (self.radio ** 2)
+    
+    def perimetro(self):
+        return 2 * self.pi * self.radio
+
+# Función que usa polimorfismo
+def imprimir_informacion(figura):
+    print(f"Área: {figura.area():.2f}")
+    print(f"Perímetro: {figura.perimetro():.2f}")
+    print("-" * 30)
+
+# Crear figuras
+rectangulo = Rectangulo(5, 3)
+circulo = Circulo(4)
+
+# Usar la misma función con diferentes tipos de figuras
+print("Rectángulo (5x3):")
+imprimir_informacion(rectangulo)
+
+print("Círculo (radio=4):")
+imprimir_informacion(circulo)</code></pre>
+            </div>
+
+            <h3>2.2 Polimorfismo con duck typing</h3>
+            <p>En Python, el polimorfismo no requiere herencia explícita. Si un objeto implementa el método requerido, puede ser utilizado en cualquier lugar donde se espere ese método ("Si camina como un pato y suena como un pato, debe ser un pato").</p>
+            
+            <div class="code-example">
+                <h4>Ejemplo de duck typing:</h4>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copiar</button>
+                <pre><code class="language-python">class Pajaro:
+    def volar(self):
+        return "El pájaro vuela batiendo sus alas"
+
+class Avion:
+    def volar(self):
+        return "El avión vuela usando motores"
+
+class Cohete:
+    def volar(self):
+        return "El cohete despega con un gran estruendo"
+
+def hacer_volar(objeto_volador):
+    print(objeto_volador.volar())
+
+# Crear objetos de diferentes clases
+pajaro = Pajaro()
+avion = Avion()
+cohete = Cohete()
+
+# Llamar a la misma función con diferentes tipos de objetos
+hacer_volar(pajaro)
+hacer_volar(avion)
+hacer_volar(cohete)</code></pre>
+            </div>
+        </section>
+
+        <section class="concept">
+            <h2>3. Clases Abstractas</h2>
+            <p>Las clases abstractas son clases que no se pueden instanciar directamente y están diseñadas para ser subclasificadas. Proporcionan una interfaz común para todas las subclases.</p>
+            
+            <p>En Python, se utilizan el módulo <code>abc</code> (Abstract Base Classes) para definir clases abstractas.</p>
+            
+            <div class="code-example">
+                <h4>Ejemplo de clase abstracta:</h4>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copiar</button>
+                <pre><code class="language-python">from abc import ABC, abstractmethod
+
+class Animal(ABC):
+    def __init__(self, nombre):
+        self.nombre = nombre
+    
+    @abstractmethod
+    def hacer_sonido(self):
+        pass
+    
+    def presentarse(self):
+        return f"Soy un {self.__class__.__name__} llamado {self.nombre}"
+
+class Perro(Animal):
+    def hacer_sonido(self):
+        return "¡Guau!"
+
+class Gato(Animal):
+    def hacer_sonido(self):
+        return "¡Miau!"
+
+# Intentar crear una instancia de Animal generará un error
+# animal = Animal("Genérico")  # TypeError: Can't instantiate abstract class Animal with abstract method hacer_sonido
+
+# Crear instancias de las subclases
+perro = Perro("Firulais")
+gato = Gato("Michi")
+
+print(perro.presentarse())
+print(f"Dice: {perro.hacer_sonido()}")
+
+print(gato.presentarse())
+print(f"Dice: {gato.hacer_sonido()}")</code></pre>
+            </div>
+
+            <div class="tip-box">
+                <h4><i class="fas fa-lightbulb"></i> Buenas prácticas con clases abstractas</h4>
+                <ul>
+                    <li>Utiliza <code>@abstractmethod</code> para marcar métodos que deben ser implementados por las subclases.</li>
+                    <li>Las clases abstractas pueden tener implementaciones de métodos que serán heredados por las subclases.</li>
+                    <li>Usa clases abstractas cuando quieras asegurar que ciertos métodos sean implementados por todas las subclases.</li>
+                    <li>Considera usar el módulo <code>typing</code> junto con <code>Protocol</code> para definir interfaces de manera más flexible.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="concept">
+            <h2>4. Métodos Especiales (Magic Methods)</h2>
+            <p>Los métodos especiales (también conocidos como métodos mágicos o dunder methods) son métodos con nombres rodeados por doble guión bajo que permiten definir el comportamiento de las clases en situaciones específicas.</p>
+            
+            <h3>4.1 Métodos de representación</h3>
+            <div class="code-example">
+                <h4>Ejemplo de métodos de representación:</h4>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copiar</button>
+                <pre><code class="language-python">class Punto:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    
+    # Representación para programadores
+    def __repr__(self):
+        return f"Punto({self.x}, {self.y})"
+    
+    # Representación para usuarios finales
+    def __str__(self):
+        return f"({self.x}, {self.y})"
+    
+    # Para bool()
+    def __bool__(self):
+        return self.x != 0 or self.y != 0
+
+p = Punto(3, 4)
+print(repr(p))  # Punto(3, 4)
+print(str(p))   # (3, 4)
+print(p)        # (3, 4) - llama a __str__
+print(f"El punto es {p}")  # El punto es (3, 4)
+print(bool(p))  # True
+print(bool(Punto(0, 0)))  # False</code></pre>
+            </div>
+
+            <h3>4.2 Operadores aritméticos</h3>
+            <div class="code-example">
+                <h4>Ejemplo de operadores aritméticos:</h4>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copiar</button>
+                <pre><code class="language-python">class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    
+    def __add__(self, otro):
+        return Vector(self.x + otro.x, self.y + otro.y)
+    
+    def __sub__(self, otro):
+        return Vector(self.x - otro.x, self.y - otro.y)
+    
+    def __mul__(self, escalar):
+        return Vector(self.x * escalar, self.y * escalar)
+    
+    def __rmul__(self, escalar):
+        return self.__mul__(escalar)
+    
+    def __truediv__(self, escalar):
+        if escalar == 0:
+            raise ValueError("No se puede dividir por cero")
+        return Vector(self.x / escalar, self.y / escalar)
+    
+    def __abs__(self):
+        import math
+        return math.sqrt(self.x**2 + self.y**2)
+    
+    def __eq__(self, otro):
+        if not isinstance(otro, Vector):
+            return False
+        return self.x == otro.x and self.y == otro.y
+    
+    def __str__(self):
+        return f"Vector({self.x}, {self.y})"
+
+# Uso de la clase Vector
+v1 = Vector(2, 3)
+v2 = Vector(5, 7)
+
+print(f"v1 = {v1}")
+print(f"v2 = {v2}")
+print(f"v1 + v2 = {v1 + v2}")
+print(f"v2 - v1 = {v2 - v1}")
+print(f"v1 * 3 = {v1 * 3}")
+print(f"2 * v2 = {2 * v2}")  # Usa __rmul__
+print(f"|v1| = {abs(v1):.2f}")
+print(f"¿v1 == v2? {v1 == v2}")
+print(f"¿v1 == Vector(2, 3)? {v1 == Vector(2, 3)}")</code></pre>
+            </div>
+
+            <h3>4.3 Otros métodos especiales útiles</h3>
+            <div class="code-example">
+                <h4>Ejemplo de otros métodos especiales:</h4>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copiar</button>
+                <pre><code class="language-python">class Libro:
+    def __init__(self, titulo, autor, paginas):
+        self.titulo = titulo
+        self.autor = autor
+        self.paginas = paginas
+        self.pagina_actual = 1
+    
+    # Para len()
+    def __len__(self):
+        return self.paginas
+    
+    # Para operador in
+    def __contains__(self, item):
+        return item.lower() in self.titulo.lower() or item.lower() in self.autor.lower()
+    
+    # Para iteración
+    def __iter__(self):
+        self.pagina_actual = 1
+        return self
+    
+    def __next__(self):
+        if self.pagina_actual > self.paginas:
+            raise StopIteration
+        pagina = f"Página {self.pagina_actual} de {self.titulo}"
+        self.pagina_actual += 1
+        return pagina
+    
+    # Para llamar al objeto como una función
+    def __call__(self, calificacion):
+        return f"Has calificado el libro '{self.titulo}' con {calificacion}/5"
+    
+    # Para manejo de contexto (with)
+    def __enter__(self):
+        print(f"Iniciando lectura de '{self.titulo}'")
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print(f"Finalizada la lectura de '{self.titulo}'")
+    
+    def __str__(self):
+        return f"{self.titulo} por {self.autor} ({self.paginas} páginas)"
+
+# Uso de la clase Libro
+libro = Libro("El Principito", "Antoine de Saint-Exupéry", 96)
+
+# __len__
+print(f"El libro tiene {len(libro)} páginas")
+
+# __contains__
+print("¿El libro es de Saint-Exupéry?", "Saint-Exupéry" in libro)
+print("¿El libro habla de programación?", "programación" in libro)
+
+# __iter__ y __next__
+print("\nLeyendo el libro:")
+for pagina in libro:
+    print(f"  - {pagina}")
+
+# __call__
+print("\n" + libro(5))  # Llamando al objeto como una función
+
+# __enter__ y __exit__ (context manager)
+print("\nUsando el libro como contexto:")
+with libro:
+    print("  - Leyendo el libro...")
+    print(f"  - {next(iter(libro))}")
+    print("  - Sigo leyendo...")</code></pre>
+            </div>
+        </section>
+
+        <section class="exercises">
+            <h2>Ejercicios Prácticos</h2>
+            
+            <div class="exercise">
+                <h3>Ejercicio 1: Sistema de Figuras Geométricas</h3>
+                <p>Crea una jerarquía de clases para representar diferentes figuras geométricas. Debes implementar las siguientes clases:</p>
+                <ol>
+                    <li>Una clase abstracta <code>Figura</code> con los métodos abstractos <code>area()</code> y <code>perimetro()</code>.</li>
+                    <li>Las clases <code>Rectangulo</code>, <code>Circulo</code> y <code>Triangulo</code> que hereden de <code>Figura</code>.</li>
+                    <li>Implementa los métodos necesarios en cada clase para calcular el área y el perímetro.</li>
+                    <li>Añade un método <code>es_regular()</code> que devuelva <code>True</code> si la figura es regular.</li>
+                    <li>Sobrecarga los operadores <code>==</code> y <code>!=</code> para comparar figuras por su área.</li>
+                </ol>
+                
+                <button class="hint-button" onclick="toggleHint('solucion1')">Mostrar Solución</button>
+                <div id="solucion1" class="solution">
+                    <pre><code class="language-python">from abc import ABC, abstractmethod
+import math
+
+class Figura(ABC):
+    @abstractmethod
+    def area(self):
+        pass
+    
+    @abstractmethod
+    def perimetro(self):
+        pass
+    
+    def es_regular(self):
+        return False
+    
+    def __eq__(self, otro):
+        if not isinstance(otro, Figura):
+            return False
+        return self.area() == otro.area()
+    
+    def __ne__(self, otro):
+        return not self.__eq__(otro)
+
+class Rectangulo(Figura):
+    def __init__(self, ancho, alto):
+        self.ancho = ancho
+        self.alto = alto
+    
+    def area(self):
+        return self.ancho * self.alto
+    
+    def perimetro(self):
+        return 2 * (self.ancho + self.alto)
+    
+    def es_regular(self):
+        return self.ancho == self.alto
+    
+    def __str__(self):
+        return f"Rectángulo de {self.ancho}x{self.alto}"
+
+class Circulo(Figura):
+    def __init__(self, radio):
+        self.radio = radio
+    
+    def area(self):
+        return math.pi * (self.radio ** 2)
+    
+    def perimetro(self):
+        return 2 * math.pi * self.radio
+    
+    def es_regular(self):
+        return True  # Un círculo siempre es regular
+    
+    def __str__(self):
+        return f"Círculo de radio {self.radio}"
+
+class Triangulo(Figura):
+    def __init__(self, lado1, lado2, lado3):
+        self.lados = sorted([lado1, lado2, lado3])
+    
+    def area(self):
+        # Fórmula de Herón
+        s = self.perimetro() / 2
+        a, b, c = self.lados
+        return math.sqrt(s * (s - a) * (s - b) * (s - c))
+    
+    def perimetro(self):
+        return sum(self.lados)
+    
+    def es_regular(self):
+        return len(set(self.lados)) == 1  # Equilátero
+    
+    def __str__(self):
+        return f"Triángulo de lados {', '.join(map(str, self.lados))}"
+
+# Ejemplo de uso
+if __name__ == "__main__":
+    figuras = [
+        Rectangulo(4, 4),  # Cuadrado (regular)
+        Rectangulo(3, 5),  # Rectángulo no cuadrado
+        Circulo(3),
+        Triangulo(3, 4, 5),  # Triángulo rectángulo
+        Triangulo(5, 5, 5)   # Triángulo equilátero (regular)
+    ]
+    
+    for figura in figuras:
+        print(f"{figura}")
+        print(f"  Área: {figura.area():.2f}")
+        print(f"  Perímetro: {figura.perimetro():.2f}")
+        print(f"  ¿Es regular? {'Sí' if figura.es_regular() else 'No'}")
+        print()
+    
+    # Comparación de figuras por área
+    cuadrado = Rectangulo(4, 4)
+    circulo = Circulo(2.2568)  # Radio para que el área sea aproximadamente 16
+    
+    print(f"¿El cuadrado y el círculo tienen la misma área? {cuadrado == circulo}")
+    print(f"¿El cuadrado es diferente del círculo? {cuadrado != circulo}")</code></pre>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h3>Ejercicio 2: Sistema de Gestión de Empleados</h3>
+                <p>Crea un sistema de gestión de empleados con las siguientes características:</p>
+                <ol>
+                    <li>Una clase base <code>Empleado</code> con atributos como nombre, salario y métodos para calcular el salario anual y mostrar información del empleado.</li>
+                    <li>Dos subclases: <code>EmpleadoTiempoCompleto</code> y <code>EmpleadoPorHora</code> que hereden de <code>Empleado</code>.</li>
+                    <li>La clase <code>EmpleadoTiempoCompleto</code> debe tener un bono anual.</li>
+                    <li>La clase <code>EmpleadoPorHora</code> debe tener un atributo de horas trabajadas y tarifa por hora.</li>
+                    <li>Implementa el método <code>calcular_salario_anual()</code> en cada clase según corresponda.</li>
+                    <li>Crea una clase <code>Departamento</code> que pueda contener empleados y calcule el gasto total en salarios.</li>
+                    <li>Implementa el método <code>__add__</code> para combinar dos departamentos.</li>
+                </ol>
+                
+                <button class="hint-button" onclick="toggleHint('solucion2')">Mostrar Solución</button>
+                <div id="solucion2" class="solution">
+                    <pre><code class="language-python">from abc import ABC, abstractmethod
+from typing import List
+
+class Empleado(ABC):
+    def __init__(self, nombre: str, salario_base: float):
+        self.nombre = nombre
+        self.salario_base = salario_base
+    
+    @abstractmethod
+    def calcular_salario_anual(self) -> float:
+        pass
+    
+    def __str__(self) -> str:
+        return f"{self.__class__.__name__}: {self.nombre}"
+
+class EmpleadoTiempoCompleto(Empleado):
+    def __init__(self, nombre: str, salario_anual: float, bono_anual: float = 0.0):
+        super().__init__(nombre, salario_anual)
+        self.bono_anual = bono_anual
+    
+    def calcular_salario_anual(self) -> float:
+        return self.salario_base + self.bono_anual
+    
+    def __str__(self) -> str:
+        return f"{super().__str__()} - Salario: ${self.calcular_salario_anual():,.2f}/año (Incluye bono de ${self.bono_anual:,.2f})"
+
+class EmpleadoPorHora(Empleado):
+    HORAS_POR_ANIO = 2080  # 40 horas/semana * 52 semanas
+    
+    def __init__(self, nombre: str, tarifa_por_hora: float, horas_por_semana: float):
+        salario_anual_estimado = tarifa_por_hora * horas_por_semana * 52
+        super().__init__(nombre, salario_anual_estimado)
+        self.tarifa_por_hora = tarifa_por_hora
+        self.horas_por_semana = horas_por_semana
+    
+    def calcular_salario_anual(self) -> float:
+        return self.tarifa_por_hora * self.horas_por_semana * 52
+    
+    def __str__(self) -> str:
+        return f"{super().__str__()} - Tarifa: ${self.tarifa_por_hora}/h, {self.horas_por_semana} h/semana (${self.calcular_salario_anual():,.2f}/año)"
+
+class Departamento:
+    def __init__(self, nombre: str, presupuesto: float = 0.0):
+        self.nombre = nombre
+        self.presupuesto = presupuesto
+        self.empleados: List[Empleado] = []
+    
+    def agregar_empleado(self, empleado: Empleado) -> None:
+        self.empleados.append(empleado)
+    
+    def eliminar_empleado(self, nombre: str) -> bool:
+        for i, emp in enumerate(self.empleados):
+            if emp.nombre == nombre:
+                del self.empleados[i]
+                return True
+        return False
+    
+    def gasto_total_salarios(self) -> float:
+        return sum(emp.calcular_salario_anual() for emp in self.empleados)
+    
+    def saldo_presupuestario(self) -> float:
+        return self.presupuesto - self.gasto_total_salarios()
+    
+    def __add__(self, otro):
+        if not isinstance(otro, Departamento):
+            raise TypeError("Solo se pueden combinar departamentos")
+        
+        nuevo_nombre = f"{self.nombre} y {otro.nombre}"
+        nuevo_presupuesto = self.presupuesto + otro.presupuesto
+        nuevo_depto = Departamento(nuevo_nombre, nuevo_presupuesto)
+        
+        for emp in self.empleados + otro.empleados:
+            nuevo_depto.agregar_empleado(emp)
+        
+        return nuevo_depto
+    
+    def __str__(self) -> str:
+        empleados_info = "\n  ".join(str(emp) for emp in self.empleados)
+        return (
+            f"Departamento: {self.nombre}\n"
+            f"Presupuesto: ${self.presupuesto:,.2f}\n"
+            f"Gasto en salarios: ${self.gasto_total_salarios():,.2f}\n"
+            f"Saldo: ${self.saldo_presupuestario():,.2f}\n"
+            f"Empleados (total: {len(self.empleados)}):\n  {empleados_info}"
+        )
+
+# Ejemplo de uso
+if __name__ == "__main__":
+    # Crear empleados
+    juan = EmpleadoTiempoCompleto("Juan Pérez", 60000, 5000)
+    maria = EmpleadoTiempoCompleto("María García", 75000, 8000)
+    pedro = EmpleadoPorHora("Pedro López", 25.0, 40)  # 40 horas/semana
+    ana = EmpleadoPorHora("Ana Martínez", 30.0, 20)   # 20 horas/semana
+    
+    # Crear departamentos
+    ventas = Departamento("Ventas", 200000)
+    it = Departamento("Tecnologías de la Información", 300000)
+    
+    # Agregar empleados a departamentos
+    ventas.agregar_empleado(juan)
+    ventas.agregar_empleado(ana)
+    
+    it.agregar_empleado(maria)
+    it.agregar_empleado(pedro)
+    
+    # Mostrar información de departamentos
+    print("=== DEPARTAMENTO DE VENTAS ===")
+    print(ventas)
+    print("\n=== DEPARTAMENTO DE TI ===")
+    print(it)
+    
+    # Combinar departamentos
+    print("\n=== FUSIÓN DE DEPARTAMENTOS ===")
+    depto_combinado = ventas + it
+    print(depto_combinado)
+    
+    # Intentar eliminar un empleado
+    print("\nEliminando a Ana del departamento de Ventas...")
+    if ventas.eliminar_empleado("Ana Martínez"):
+        print("Ana eliminada con éxito del departamento de Ventas.")
+    else:
+        print("No se encontró a Ana en el departamento de Ventas.")
+    
+    print("\n=== DEPARTAMENTO DE VENTAS ACTUALIZADO ===")
+    print(ventas)</code></pre>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h3>Ejercicio 3: Sistema de Gestión de una Biblioteca (Avanzado)</h3>
+                <p>Amplía el sistema de gestión de biblioteca de la sesión anterior con las siguientes características:</p>
+                <ol>
+                    <li>Crea una jerarquía de clases para los ítems de la biblioteca con una clase base abstracta <code>ItemBiblioteca</code>.</li>
+                    <li>Implementa las clases <code>Libro</code>, <code>Revista</code> y <code>DVD</code> que hereden de <code>ItemBiblioteca</code>.</li>
+                    <li>Crea un sistema de préstamos con una clase <code>Prestamo</code> que asocie un ítem, un usuario y fechas de préstamo/devolución.</li>
+                    <li>Implementa la clase <code>Biblioteca</code> como un Singleton para garantizar que solo exista una instancia.</li>
+                    <li>Añade búsqueda avanzada con operadores de comparación sobrecargados.</li>
+                    <li>Implementa el patrón Observer para notificar a los usuarios cuando un ítem reservado está disponible.</li>
+                </ol>
+                
+                <button class="hint-button" onclick="toggleHint('solucion3')">Mostrar Solución</button>
+                <div id="solucion3" class="solution">
+                    <pre><code class="language-python">from abc import ABC, abstractmethod
+from datetime import datetime, timedelta
+from typing import List, Dict, Optional, Set
+from enum import Enum
+
+# Patrón Observer
+class Observer(ABC):
+    @abstractmethod
+    def actualizar(self, mensaje: str) -> None:
+        pass
+
+class Usuario(Observer):
+    def __init__(self, usuario_id: str, nombre: str, email: str):
+        self.usuario_id = usuario_id
+        self.nombre = nombre
+        self.email = email
+        self._prestamos_activos: List['Prestamo'] = []
+        self._notificaciones: List[str] = []
+    
+    def agregar_prestamo(self, prestamo: 'Prestamo') -> None:
+        self._prestamos_activos.append(prestamo)
+    
+    def devolver_prestamo(self, prestamo: 'Prestamo') -> bool:
+        if prestamo in self._prestamos_activos:
+            self._prestamos_activos.remove(prestamo)
+            return True
+        return False
+    
+    def tiene_prestamos_vencidos(self) -> bool:
+        ahora = datetime.now()
+        return any(p.fecha_devolucion < ahora for p in self._prestamos_activos)
+    
+    def actualizar(self, mensaje: str) -> None:
+        self._notificaciones.append(f"[{datetime.now()}] {mensaje}")
+    
+    def obtener_notificaciones(self) -> List[str]:
+        return self._notificaciones
+    
+    def __str__(self) -> str:
+        return f"Usuario({self.usuario_id}): {self.nombre} <{self.email}>"
+
+# Jerarquía de ítems de biblioteca
+class EstadoItem(Enum):
+    DISPONIBLE = "Disponible"
+    PRESTADO = "Prestado"
+    RESERVADO = "Reservado"
+    EN_REPARACION = "En reparación"
+
+class ItemBiblioteca(ABC):
+    def __init__(self, id_item: str, titulo: str, anio_publicacion: int):
+        self.id_item = id_item
+        self.titulo = titulo
+        self.anio_publicacion = anio_publicacion
+        self.estado = EstadoItem.DISPONIBLE
+        self._observadores: Set[Observer] = set()
+    
+    @abstractmethod
+    def obtener_tipo(self) -> str:
+        pass
+    
+    def prestar(self) -> bool:
+        if self.estado == EstadoItem.DISPONIBLE:
+            self.estado = EstadoItem.PRESTADO
+            return True
+        return False
+    
+    def devolver(self) -> bool:
+        if self.estado == EstadoItem.PRESTADO:
+            self.estado = EstadoItem.DISPONIBLE
+            self._notificar_observadores(f"El ítem '{self.titulo}' ha sido devuelto y está disponible.")
+            return True
+        return False
+    
+    def reservar(self) -> bool:
+        if self.estado == EstadoItem.DISPONIBLE:
+            self.estado = EstadoItem.RESERVADO
+            return True
+        return False
+    
+    def agregar_observador(self, observador: Observer) -> None:
+        self._observadores.add(observador)
+    
+    def eliminar_observador(self, observador: Observer) -> None:
+        self._observadores.discard(observador)
+    
+    def _notificar_observadores(self, mensaje: str) -> None:
+        for observador in self._observadores:
+            observador.actualizar(mensaje)
+    
+    # Sobrecarga de operadores de comparación
+    def __eq__(self, otro) -> bool:
+        if not isinstance(otro, ItemBiblioteca):
+            return False
+        return self.id_item == otro.id_item
+    
+    def __lt__(self, otro) -> bool:
+        if not isinstance(otro, ItemBiblioteca):
+            return NotImplemented
+        return self.anio_publicacion < otro.anio_publicacion
+    
+    def __le__(self, otro) -> bool:
+        if not isinstance(otro, ItemBiblioteca):
+            return NotImplemented
+        return self.anio_publicacion <= otro.anio_publicacion
+    
+    def __str__(self) -> str:
+        return f"{self.obtener_tipo()}: {self.titulo} ({self.anio_publicacion}) - {self.estado.value}"
+
+class Libro(ItemBiblioteca):
+    def __init__(self, id_item: str, titulo: str, autor: str, anio_publicacion: int, isbn: str, paginas: int):
+        super().__init__(id_item, titulo, anio_publicacion)
+        self.autor = autor
+        self.isbn = isbn
+        self.paginas = paginas
+    
+    def obtener_tipo(self) -> str:
+        return "Libro"
+    
+    def __str__(self) -> str:
+        return f"{super().__str__()}\n  Autor: {self.autor}, ISBN: {self.isbn}, {self.paginas} páginas"
+
+class Revista(ItemBiblioteca):
+    def __init__(self, id_item: str, titulo: str, numero: int, anio_publicacion: int, issn: str):
+        super().__init__(id_item, titulo, anio_publicacion)
+        self.numero = numero
+        self.issn = issn
+    
+    def obtener_tipo(self) -> str:
+        return f"Revista (N°{self.numero})"
+    
+    def __str__(self) -> str:
+        return f"{super().__str__()}\n  Número: {self.numero}, ISSN: {self.issn}"
+
+class DVD(ItemBiblioteca):
+    def __init__(self, id_item: str, titulo: str, anio_publicacion: int, duracion_minutos: int, director: str):
+        super().__init__(id_item, titulo, anio_publicacion)
+        self.duracion_minutos = duracion_minutos
+        self.director = director
+    
+    def obtener_tipo(self) -> str:
+        return "DVD"
+    
+    def __str__(self) -> str:
+        return f"{super().__str__()}\n  Director: {self.director}, Duración: {self.duracion_minutos} min"
+
+class Prestamo:
+    def __init__(self, item: ItemBiblioteca, usuario: Usuario, dias_prestamo: int = 14):
+        self.item = item
+        self.usuario = usuario
+        self.fecha_prestamo = datetime.now()
+        self.fecha_devolucion = self.fecha_prestamo + timedelta(days=dias_prestamo)
+        self.devuelto = False
+        self.item.prestar()
+        self.usuario.agregar_prestamo(self)
+    
+    def devolver(self) -> bool:
+        if not self.devuelto and self.item.devolver():
+            self.devuelto = True
+            self.usuario.devolver_prestamo(self)
+            return True
+        return False
+    
+    def esta_vencido(self) -> bool:
+        return not self.devuelto and datetime.now() > self.fecha_devolucion
+    
+    def dias_restantes(self) -> int:
+        if self.devuelto:
+            return 0
+        dias = (self.fecha_devolucion - datetime.now()).days
+        return max(0, dias)
+    
+    def __str__(self) -> str:
+        estado = "Devuelto" if self.devuelto else f"Pendiente (vence en {self.dias_restantes()} días)"
+        return (
+            f"Préstamo de '{self.item.titulo}' a {self.usuario.nombre}\n"
+            f"  Fecha de préstamo: {self.fecha_prestamo.strftime('%Y-%m-%d')}\n"
+            f"  Fecha de devolución: {self.fecha_devolucion.strftime('%Y-%m-%d')}\n"
+            f"  Estado: {estado}"
+        )
+
+# Singleton para la clase Biblioteca
+class Biblioteca:
+    _instancia = None
+    
+    def __new__(cls):
+        if cls._instancia is None:
+            cls._instancia = super(Biblioteca, cls).__new__(cls)
+            cls._instancia.inicializar()
+        return cls._instancia
+    
+    def inicializar(self):
+        self._catalogo: Dict[str, ItemBiblioteca] = {}
+        self._usuarios: Dict[str, Usuario] = {}
+        self._prestamos_activos: List[Prestamo] = []
+        self._prestamos_historial: List[Prestamo] = []
+    
+    # Métodos para gestionar el catálogo
+    def agregar_item(self, item: ItemBiblioteca) -> bool:
+        if item.id_item in self._catalogo:
+            return False
+        self._catalogo[item.id_item] = item
+        return True
+    
+    def eliminar_item(self, id_item: str) -> bool:
+        if id_item in self._catalogo:
+            del self._catalogo[id_item]
+            return True
+        return False
+    
+    def buscar_por_titulo(self, titulo: str) -> List[ItemBiblioteca]:
+        return [item for item in self._catalogo.values() if titulo.lower() in item.titulo.lower()]
+    
+    def buscar_por_autor(self, autor: str) -> List[ItemBiblioteca]:
+        return [item for item in self._catalogo.values() 
+                if isinstance(item, Libro) and autor.lower() in item.autor.lower()]
+    
+    def buscar_por_anio(self, anio: int) -> List[ItemBiblioteca]:
+        return [item for item in self._catalogo.values() if item.anio_publicacion == anio]
+    
+    # Métodos para gestionar usuarios
+    def registrar_usuario(self, usuario: Usuario) -> bool:
+        if usuario.usuario_id in self._usuarios:
+            return False
+        self._usuarios[usuario.usuario_id] = usuario
+        return True
+    
+    def eliminar_usuario(self, usuario_id: str) -> bool:
+        if usuario_id in self._usuarios:
+            del self._usuarios[usuario_id]
+            return True
+        return False
+    
+    # Métodos para gestionar préstamos
+    def prestar_item(self, item_id: str, usuario_id: str, dias: int = 14) -> Optional[Prestamo]:
+        if item_id not in self._catalogo or usuario_id not in self._usuarios:
+            return None
+        
+        item = self._catalogo[item_id]
+        usuario = self._usuarios[usuario_id]
+        
+        if item.estado != EstadoItem.DISPONIBLE:
+            # Si el ítem está prestado o reservado, el usuario puede reservarlo
+            if item.estado == EstadoItem.PRESTADO:
+                item.agregar_observador(usuario)
+                return None
+            return None
+        
+        prestamo = Prestamo(item, usuario, dias)
+        self._prestamos_activos.append(prestamo)
+        return prestamo
+    
+    def devolver_item(self, item_id: str) -> bool:
+        for i, prestamo in enumerate(self._prestamos_activos):
+            if prestamo.item.id_item == item_id and not prestamo.devuelto:
+                if prestamo.devolver():
+                    self._prestamos_historial.append(prestamo)
+                    del self._prestamos_activos[i]
+                    return True
+        return False
+    
+    def obtener_prestamos_activos(self) -> List[Prestamo]:
+        return self._prestamos_activos.copy()
+    
+    def obtener_prestamos_usuario(self, usuario_id: str) -> List[Prestamo]:
+        return [p for p in self._prestamos_activos if p.usuario.usuario_id == usuario_id]
+    
+    def obtener_prestamos_vencidos(self) -> List[Prestamo]:
+        return [p for p in self._prestamos_activos if p.esta_vencido()]
+    
+    # Métodos para generar informes
+    def generar_informe_estadisticas(self) -> Dict[str, int]:
+        return {
+            "total_items": len(self._catalogo),
+            "total_usuarios": len(self._usuarios),
+            "prestamos_activos": len(self._prestamos_activos),
+            "prestamos_historial": len(self._prestamos_historial),
+            "prestamos_vencidos": len(self.obtener_prestamos_vencidos()),
+            "items_disponibles": sum(1 for item in self._catalogo.values() 
+                                   if item.estado == EstadoItem.DISPONIBLE)
+        }
+    
+    def __str__(self) -> str:
+        stats = self.generar_informe_estadisticas()
+        return (
+            f"=== Biblioteca ===\n"
+            f"Total de ítems: {stats['total_items']}\n"
+            f"Total de usuarios: {stats['total_usuarios']}\n"
+            f"Préstamos activos: {stats['prestamos_activos']}\n"
+            f"Préstamos vencidos: {stats['prestamos_vencidos']}\n"
+            f"Ítems disponibles: {stats['items_disponibles']}"
+        )
+
+# Ejemplo de uso
+if __name__ == "__main__":
+    # Crear instancia de la biblioteca (Singleton)
+    biblioteca = Biblioteca()
+    
+    # Agregar algunos ítems al catálogo
+    libro1 = Libro("L001", "Python Avanzado", "Guido van Rossum", 2022, "978-1234567890", 450)
+    libro2 = Libro("L002", "Patrones de Diseño", "Erich Gamma", 1994, "978-0201633610", 395)
+    revista1 = Revista("R001", "Ciencia Hoy", 150, 2023, "1234-5678")
+    dvd1 = DVD("D001", "El Padrino", 1972, 175, "Francis Ford Coppola")
+    
+    biblioteca.agregar_item(libro1)
+    biblioteca.agregar_item(libro2)
+    biblioteca.agregar_item(revista1)
+    biblioteca.agregar_item(dvd1)
+    
+    # Registrar usuarios
+    usuario1 = Usuario("U001", "Juan Pérez", "juan@example.com")
+    usuario2 = Usuario("U002", "María García", "maria@example.com")
+    
+    biblioteca.registrar_usuario(usuario1)
+    biblioteca.registrar_usuario(usuario2)
+    
+    print("=== Catálogo de la biblioteca ===")
+    for item in [libro1, libro2, revista1, dvd1]:
+        print(f"- {item}")
+    
+    print("\n=== Realizando préstamos ===")
+    prestamo1 = biblioteca.prestar_item("L001", "U001", 7)  # 7 días de préstamo
+    if prestamo1:
+        print(f"Préstamo exitoso: {prestamo1}")
+    
+    # Intentar prestar el mismo ítem a otro usuario (debería estar prestado)
+    prestamo2 = biblioteca.prestar_item("L001", "U002")
+    if not prestamo2:
+        print("El ítem no está disponible. Se ha registrado una reserva.")
+    
+    # Devolver el ítem
+    print("\n=== Devolviendo ítem ===")
+    if biblioteca.devolver_item("L001"):
+        print("Ítem devuelto con éxito.")
+        # Verificar notificación al usuario que lo tenía reservado
+        print(f"Notificaciones para {usuario2.nombre}:")
+        for notif in usuario2.obtener_notificaciones():
+            print(f"  - {notif}")
+    
+    # Generar informe
+    print("\n=== Informe de la biblioteca ===")
+    print(biblioteca)
+    
+    # Búsqueda avanzada
+    print("\n=== Búsqueda de ítems ===")
+    print("Libros de Gamma:")
+    for libro in biblioteca.buscar_por_autor("Gamma"):
+        print(f"  - {libro.titulo} ({libro.anio_publicacion})")
+    
+    # Comparación de ítems
+    print("\n=== Comparación de ítems ===")
+    print(f"¿El libro de Python es más reciente que el de Patrones? {libro1 > libro2}")
+    print(f"¿El libro de Python es igual al de Patrones? {libro1 == libro2}")
+    
+    # Verificar préstamos vencidos
+    print("\n=== Préstamos vencidos ===")
+    vencidos = biblioteca.obtener_prestamos_vencidos()
+    if vencidos:
+        for prestamo in vencidos:
+            print(f"- {prestamo}")
+    else:
+        print("No hay préstamos vencidos.")</code></pre>
+                </div>
+            </div>
+        </section>
+    </main>
+
+				<footer>
+					<div class="container">
+									<p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+									<div class="navigation">
+													<a href="SESION1-11.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 1.11 Programación Orientada a Objetos (I)</a>
+													<a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+													<a href="SESION1-13.html" class="btn">Siguiente Sesión: 1.13 Módulos y Paquetes <i class="fas fa-arrow-right"></i></a>
+									</div>
+					</div>
+	</footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Función para copiar código al portapapeles
+        function copyToClipboard(button) {
+            const codeBlock = button.nextElementSibling;
+            const code = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                // Cambiar el texto del botón temporalmente
+                const originalText = button.textContent;
+                button.textContent = '¡Copiado!';
+                button.style.backgroundColor = '#27ae60';
+                
+                // Restaurar el botón después de 2 segundos
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.backgroundColor = '';
+                }, 2000);
+            }).catch(err => {
+                console.error('Error al copiar el código: ', err);
+                button.textContent = 'Error al copiar';
+                button.style.backgroundColor = '#e74c3c';
+            });
+        }
+        
+        // Función para mostrar/ocultar soluciones
+        function toggleHint(elementId) {
+            const element = document.getElementById(elementId);
+            if (element.style.display === 'block') {
+                element.style.display = 'none';
+            } else {
+                element.style.display = 'block';
+                // Desplazarse suavemente a la solución
+                element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+        
+        // Asegurar que las soluciones estén ocultas al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.solution').forEach(solution => {
+                solution.style.display = 'none';
+            });
+            
+            // Añadir funcionalidad de copiar a todos los botones de copia
+            document.querySelectorAll('.copy-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    copyToClipboard(this);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

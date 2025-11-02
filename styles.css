@@ -405,7 +405,7 @@ a:hover {
     background-color: #2c3e50; 
     color: #ecf0f1;
     border-radius: 4px;
-    padding: 15px;
+    padding: 2px;
     font-family: 'Courier New', Courier, monospace;
     line-height: 1.5;
 }
@@ -413,7 +413,7 @@ a:hover {
 .language-json { 
     background-color: #f5f5f5;
     border-radius: 4px;
-    padding: 15px;
+    padding: 2px;
     font-family: 'Courier New', Courier, monospace;
 }
 
@@ -495,6 +495,50 @@ code {
     color: var(--primary-color);
 }
 
+/* Interactive tools */
+.interactive-tool input[type="text"],
+.interactive-tool input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.interactive-tool input[type="text"]:focus,
+.interactive-tool input[type="number"]:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+/* Vector input groups */
+.vector-input-group {
+    margin-bottom: 10px;
+}
+
+.vector-input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.vector-field {
+    width: 150px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.vector-field:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
 /* Solution styles */
 .solution {
     display: none;
@@ -540,6 +584,79 @@ code {
 
 .exercise p {
     margin-bottom: 0.5rem;
+}
+
+/* Estilos para las tarjetas de sesión */
+.sessions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.session-card {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+}
+
+.session-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.session-link {
+    display: block;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+}
+
+.session-card .session-number {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    margin-bottom: 0.5rem;
+}
+
+.session-card .session-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+}
+
+.session-card .session-desc {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    line-height: 1.5;
+}
+
+.session-card.completed {
+    border-left: 4px solid var(--success-color);
+}
+
+.session-card.current {
+    border-left: 4px solid var(--accent-color);
+    background-color: #f8fafc;
+}
+
+.session-card.disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.session-card.disabled .session-link {
+    cursor: not-allowed;
+}
+
+.session-card.disabled .session-title {
+    color: var(--text-light);
 }
 
 /* Estilos para las pistas */

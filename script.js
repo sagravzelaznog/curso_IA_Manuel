@@ -271,6 +271,51 @@ function createSessionCard(number, title) {
     const card = document.createElement('div');
     card.className = 'session-card';
     
+    // Crear enlace que envuelve toda la tarjeta
+    const link = document.createElement('a');
+    link.className = 'session-link';
+    
+    // Determinar el nombre del archivo basado en el número de sesión
+    let fileName = '';
+    
+    if (number <= 15) {
+        // Módulo 1: SESION1-1.html a SESION1-15.html
+        fileName = `SESION1-${number}.html`;
+    } else if (number <= 30) {
+        // Módulo 2: SESION2-1.html a SESION2-15.html
+        fileName = `SESION2-${number - 15}.html`;
+    } else if (number <= 50) {
+        // Módulo 3: SESION3-1.html a SESION3-20.html
+        fileName = `SESION3-${number - 30}.html`;
+    } else if (number <= 80) {
+        // Módulo 4: SESION4-1.html a SESION4-30.html
+        fileName = `SESION4-${number - 50}.html`;
+    } else {
+        // Módulo 5: SESION5-1.html a SESION5-20.html
+        fileName = `SESION5-${number - 80}.html`;
+    }
+    
+    // Asignar la ruta del archivo al enlace
+    link.href = fileName;
+    
+    // Verificar si el archivo existe
+    checkFileExists(fileName, (exists) => {
+        if (!exists) {
+            link.classList.add('disabled');
+            link.href = '#';
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Esta sesión estará disponible próximamente.');
+            });
+        } else {
+            // Asegurarse de que el enlace funcione correctamente
+            link.addEventListener('click', (e) => {
+                // Permitir que el navegador maneje la navegación
+                return true;
+            });
+        }
+    });
+    
     const sessionNumber = document.createElement('div');
     sessionNumber.className = 'session-number';
     sessionNumber.textContent = `Sesión ${number}`;
@@ -283,9 +328,13 @@ function createSessionCard(number, title) {
     sessionDesc.className = 'session-desc';
     sessionDesc.textContent = getSessionDescription(number);
     
-    card.appendChild(sessionNumber);
-    card.appendChild(sessionTitle);
-    card.appendChild(sessionDesc);
+    // Añadir elementos al enlace
+    link.appendChild(sessionNumber);
+    link.appendChild(sessionTitle);
+    link.appendChild(sessionDesc);
+    
+    // Añadir el enlace a la tarjeta
+    card.appendChild(link);
     
     // Marcar la sesión actual
     const currentSession = getCurrentSession();
@@ -296,6 +345,21 @@ function createSessionCard(number, title) {
     }
     
     return card;
+}
+
+// Lista de archivos existentes (se llenará dinámicamente)
+const existingFiles = [
+    'SESION1-1.html', 'SESION1-2.html', 'SESION1-3.html', 'SESION1-4.html', 'SESION1-5.html',
+    'SESION1-6.html', 'SESION1-7.html', 'SESION1-8.html', 'SESION1-9.html', 'SESION1-10.html',
+    'SESION1-11.html', 'SESION1-12.html', 'SESION1-13.html', 'SESION1-14.html', 'SESION1-15.html',
+    'SESION2-1.html', 'SESION2-2.html'
+];
+
+// Función para verificar si un archivo existe
+function checkFileExists(url, callback) {
+    // Verificar contra la lista de archivos existentes
+    const exists = existingFiles.includes(url);
+    callback(exists);
 }
 
 // Función para obtener la descripción de la sesión

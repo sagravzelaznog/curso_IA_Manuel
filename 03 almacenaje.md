@@ -1,3 +1,20 @@
 # almacenaje
 
 - todos los archivos se almacenan en la carpeta 000 A PREPA\planeaciones especialidades\ia manuel curso
+, 'SESION2-3.html', 'SESION2-4.html', 'SESION2-5.html',
+    'SESION2-6.html', 'SESION2-7.html', 'SESION2-8.html', 'SESION2-9.html', 'SESION2-10.html',
+    'SESION2-11.html', 'SESION2-12.html', 'SESION2-13.html', 'SESION2-14.html', 'SESION2-15.html',
+    'SESION3-1.html', 'SESION3-2.html', 'SESION3-3.html', 'SESION3-4.html', 'SESION3-5.html',
+    'SESION3-6.html', 'SESION3-7.html', 'SESION3-8.html', 'SESION3-9.html', 'SESION3-10.html',
+    'SESION3-11.html', 'SESION3-12.html', 'SESION3-13.html', 'SESION3-14.html', 'SESION3-15.html',
+    'SESION3-16.html', 'SESION3-17.html', 'SESION3-18.html', 'SESION3-19.html', 'SESION3-20.html',
+    'SESION4-1.html', 'SESION4-2.html', 'SESION4-3.html', 'SESION4-4.html', 'SESION4-5.html',
+    'SESION4-6.html', 'SESION4-7.html', 'SESION4-8.html', 'SESION4-9.html', 'SESION4-10.html',
+    'SESION4-11.html', 'SESION4-12.html', 'SESION4-13.html', 'SESION4-14.html', 'SESION4-15.html',
+    'SESION4-16.html', 'SESION4-17.html', 'SESION4-18.html', 'SESION4-19.html', 'SESION4-20.html',
+    'SESION4-21.html', 'SESION4-22.html', 'SESION4-23.html', 'SESION4-24.html', 'SESION4-25.html',
+    'SESION4-26.html', 'SESION4-27.html', 'SESION4-28.html', 'SESION4-29.html', 'SESION4-30.html',
+    'SESION5-1.html', 'SESION5-2.html', 'SESION5-3.html', 'SESION5-4.html', 'SESION5-5.html',
+    'SESION5-6.html', 'SESION5-7.html', 'SESION5-8.html', 'SESION5-9.html', 'SESION5-10.html',
+    'SESION5-11.html', 'SESION5-12.html', 'SESION5-13.html', 'SESION5-14.html', 'SESION5-15.html',
+    'SESION5-16.html', 'SESION5-17.html', 'SESION5-18.html', 'SESION5-19.html', 'SESION5-20.html',

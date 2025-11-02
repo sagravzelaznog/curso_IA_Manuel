@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesión 2.4: Valores y vectores propios - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+    <header class="session-header">
+        <div class="container">
+            <h1>Sesión 2.4: Valores y vectores propios</h1>
+            <p class="session-meta">Módulo 2: Matemáticas para IA | Duración: 60 minutos</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="learning-objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender el concepto de valores y vectores propios</li>
+                <li>Aprender a calcular valores y vectores propios</li>
+                <li>Entender la importancia de la descomposición espectral</li>
+                <li>Implementar el cálculo de valores y vectores propios en Python</li>
+                <li>Explorar aplicaciones en IA y procesamiento de datos</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
+            
+            <article class="concept">
+                <h3>¿Qué son los valores y vectores propios?</h3>
+                <p>Dada una matriz cuadrada <em>A</em>, un vector no nulo <strong>v</strong> es un vector propio de <em>A</em> si se cumple que:</p>
+                
+                <div class="math-equation">
+                    \[ A\mathbf{v} = \lambda\mathbf{v} \]
+                </div>
+                
+                <p>Donde <em>λ</em> es un escalar llamado valor propio asociado al vector propio <strong>v</strong>.</p>
+                
+                <div class="info-box">
+                    <i class="fas fa-lightbulb"></i>
+                    <p><strong>Dato clave:</strong> Los valores y vectores propios son fundamentales en algoritmos de reducción de dimensionalidad como PCA (Análisis de Componentes Principales) y en el procesamiento de señales.</p>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>Cálculo de valores y vectores propios</h3>
+                <p>Para encontrar los valores propios de una matriz <em>A</em>, resolvemos la ecuación característica:</p>
+                
+                <div class="math-equation">
+                    \[ \det(A - \lambda I) = 0 \]
+                </div>
+                
+                <p>Donde <em>I</em> es la matriz identidad del mismo tamaño que <em>A</em>.</p>
+                
+                <h4>Ejemplo:</h4>
+                <p>Dada la matriz:</p>
+                <div class="math-equation">
+                    \[
+                    A = \begin{bmatrix}
+                    4 & 1 \\
+                    2 & 3
+                    \end{bmatrix}
+                    \]
+                </div>
+                
+                <p>La ecuación característica es:</p>
+                <div class="math-equation">
+                    \[
+                    \det\begin{bmatrix}
+                    4-\lambda & 1 \\
+                    2 & 3-\lambda
+                    \end{bmatrix} = 0
+                    \]
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>Descomposición espectral</h3>
+                <p>Una matriz cuadrada <em>A</em> puede descomponerse como:</p>
+                
+                <div class="math-equation">
+                    \[ A = P\Lambda P^{-1} \]
+                </div>
+                
+                <p>Donde:</p>
+                <ul>
+                    <li><em>P</em> es la matriz cuyas columnas son los vectores propios de <em>A</em></li>
+                    <li><em>Λ</em> es una matriz diagonal con los valores propios</li>
+                    <li><em>P<sup>-1</sup></em> es la inversa de <em>P</em></li>
+                </ul>
+                
+                <div class="info-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p><strong>Importante:</strong> No todas las matrices tienen una descomposición espectral. Las matrices simétricas reales siempre son diagonalizables y tienen valores propios reales.</p>
+                </div>
+            </article>
+        </section>
+
+        <section class="practical-activity">
+            <h2><i class="fas fa-laptop-code"></i> Actividad Práctica</h2>
+            
+            <div class="step">
+                <h3>1. Cálculo de valores y vectores propios con NumPy</h3>
+                <p>Vamos a calcular los valores y vectores propios de la siguiente matriz:</p>
+                
+                <div class="math-equation">
+                    \[
+                    A = \begin{bmatrix}
+                    4 & 1 \\
+                    2 & 3
+                    \end{bmatrix}
+                    \]
+                </div>
+                
+                <h4>Código en Python:</h4>
+                <pre><code class="language-python">import numpy as np
+
+# Definir la matriz
+A = np.array([[4, 1], [2, 3]])
+
+# Calcular valores y vectores propios
+eigenvalues, eigenvectors = np.linalg.eig(A)
+
+print("Valores propios:", eigenvalues)
+print("\nVectores propios (columnas):")
+print(eigenvectors)
+</code></pre>
+
+                <div class="hint">
+                    <span class="hint-button" onclick="toggleHint('hint1')">
+                        <i class="fas fa-lightbulb"></i> Pista: Interpretación de los resultados
+                    </span>
+                    <div id="hint1" class="hint-content">
+                        <p>La función <code>np.linalg.eig</code> devuelve dos arrays: el primero contiene los valores propios y el segundo una matriz donde cada columna es un vector propio normalizado correspondiente al valor propio en la misma posición.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>2. Aplicación: Matriz de covarianza</h3>
+                <p>En el análisis de componentes principales (PCA), los vectores propios de la matriz de covarianza representan las direcciones de máxima varianza en los datos.</p>
+                
+                <pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+
+# Generar datos aleatorios correlacionados
+np.random.seed(42)
+mean = [0, 0]
+cov = [[1, 0.8], [0.8, 1]]  # Matriz de covarianza
+x, y = np.random.multivariate_normal(mean, cov, 100).T
+
+# Calcular la matriz de covarianza de los datos
+data = np.vstack((x, y)).T
+cov_matrix = np.cov(data.T)
+
+# Calcular valores y vectores propios
+eigenvalues, eigenvectors = np.linalg.eig(cov_matrix)
+
+# Visualizar los datos y los vectores propios
+plt.figure(figsize=(8, 6))
+plt.scatter(x, y, alpha=0.6)
+
+# Dibujar los vectores propios en la media
+def draw_vector(v0, v1, color='red', label=None):
+    ax = plt.gca()
+    arrowprops = dict(arrowstyle='->', linewidth=2, color=color, shrinkA=0, shrinkB=0)
+    ax.annotate('', v1, v0, arrowprops=arrowprops)
+    if label:
+        ax.text(v1[0], v1[1], label, color=color, fontsize=12)
+
+# Dibujar los vectores propios escalados por los valores propios
+mean_x, mean_y = np.mean(x), np.mean(y)
+for i, (eigenvalue, eigenvector) in enumerate(zip(eigenvalues, eigenvectors.T)):
+    draw_vector([mean_x, mean_y], 
+               [mean_x + eigenvalue * eigenvector[0], 
+                mean_y + eigenvalue * eigenvector[1]],
+               label=f'Vector propio {i+1}')
+
+plt.title('Vectores propios de la matriz de covarianza')
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.axis('equal')
+plt.grid(True)
+plt.show()
+</code></pre>
+                
+                <div class="solution">
+                    <button class="btn" onclick="toggleSolution('sol1')">Explicación de la visualización</button>
+                    <div id="sol1" class="solution-content">
+                        <p>En esta visualización:</p>
+                        <ul>
+                            <li>Los puntos azules representan los datos bidimensionales.</li>
+                            <li>Las flechas rojas muestran las direcciones de los vectores propios de la matriz de covarianza.</li>
+                            <li>La longitud de cada flecha es proporcional al valor propio correspondiente.</li>
+                            <li>El vector propio con el mayor valor propio (mayor varianza) indica la dirección de máxima variación en los datos.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h2><i class="fas fa-clipboard-check"></i> Resumen</h2>
+            <ul>
+                <li>Los valores y vectores propios son conceptos fundamentales en álgebra lineal con aplicaciones en IA.</li>
+                <li>Un vector propio es un vector que solo se escala cuando se le aplica una transformación lineal.</li>
+                <li>La descomposición espectral permite representar una matriz en términos de sus valores y vectores propios.</li>
+                <li>En Python, podemos usar <code>np.linalg.eig()</code> para calcular valores y vectores propios.</li>
+                <li>Las aplicaciones incluyen PCA, procesamiento de señales y sistemas dinámicos.</li>
+            </ul>
+        </section>
+
+        <section class="additional-resources">
+            <h2><i class="fas fa-book-open"></i> Recursos Adicionales</h2>
+            <ul>
+                <li><a href="https://numpy.org/doc/stable/reference/generated/numpy.linalg.eig.html" target="_blank" rel="noopener">Documentación de numpy.linalg.eig</a></li>
+                <li><a href="https://es.wikipedia.org/wiki/Vector_propio_y_valor_propio" target="_blank" rel="noopener">Vectores y valores propios en Wikipedia</a></li>
+                <li><a href="https://www.youtube.com/watch?v=PFDu9oVAE-g" target="_blank" rel="noopener">Video explicativo sobre valores y vectores propios</a></li>
+            </ul>
+        </section>
+
+        <section class="homework">
+            <h2><i class="fas fa-tasks"></i> Tarea</h2>
+            <ol>
+                <li>Calcula manualmente los valores y vectores propios de la siguiente matriz:
+                    \[
+                    \begin{bmatrix}
+                    5 & 2 \\
+                    3 & 4
+                    \end{bmatrix}
+                    \]
+                </li>
+                <li>Implementa en Python la solución para la matriz anterior y verifica tus resultados.</li>
+                <li>Investiga y explica brevemente cómo se utilizan los valores y vectores propios en el algoritmo de Análisis de Componentes Principales (PCA).</li>
+            </ol>
+        </section>
+    </main>
+
+    <footer>
+					<div class="container">
+									<p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+									<div class="navigation">
+													<a href="SESION2-3.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 2.3 Sistemas de ecuaciones lineales</a>
+													<a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+													<a href="SESION2-5.html" class="btn">Siguiente Sesión: 2.5 calculo diferencial (I) <i class="fas fa-arrow-right"></i></a>
+									</div>
+					</div>
+	</footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Configuración de MathJax para renderizar ecuaciones
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true,
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+                TeX: { equationNumbers: { autoNumber: "AMS" } }
+            }
+        });
+    </script>
+</body>
+</html>

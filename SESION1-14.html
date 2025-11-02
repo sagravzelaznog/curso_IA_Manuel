@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1.14: Pruebas Unitarias - Curso de Inteligencia Artificial</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos específicos para esta sesión */
+        .test-case {
+            background-color: #f8f9fa;
+            border-left: 4px solid #4a90e2;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .test-success {
+            border-left-color: #28a745;
+        }
+        
+        .test-failure {
+            border-left-color: #dc3545;
+        }
+        
+        .test-skip {
+            border-left-color: #ffc107;
+        }
+        
+        .test-parametrize {
+            background-color: #f0f7ff;
+            border-left: 4px solid #17a2b8;
+        }
+        
+        .test-fixture {
+            background-color: #f8f5ff;
+            border-left: 4px solid #6f42c1;
+        }
+        
+        .test-mock {
+            background-color: #fff8f8;
+            border-left: 4px solid #e83e8c;
+        }
+        
+        .test-coverage {
+            background-color: #e8f5e9;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .coverage-bar {
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .coverage-fill {
+            height: 100%;
+            background-color: #28a745;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
+        
+        .test-command {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px 15px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <header class="session-header">
+        <div class="container">
+            <h1>1.14: Pruebas Unitarias</h1>
+            <p class="module">Módulo 1: Introducción a Python</p>
+            <div class="session-info">
+                <span><i class="far fa-clock"></i> Duración: 1 hora</span>
+                <span><i class="far fa-calendar-alt"></i> Fecha: [Fecha]</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="learning-objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender la importancia de las pruebas unitarias en el desarrollo de software</li>
+                <li>Aprender a escribir pruebas unitarias con el módulo <code>unittest</code> de Python</li>
+                <li>Conocer los conceptos de pruebas parametrizadas, fixtures y mocks</li>
+                <li>Entender cómo medir la cobertura de código</li>
+                <li>Aplicar pruebas unitarias en un proyecto real</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Introducción a las Pruebas Unitarias</h2>
+            <p>Las pruebas unitarias son una práctica fundamental en el desarrollo de software que consiste en verificar que cada unidad de código (funciones, métodos, clases) funcione correctamente de forma aislada. En Python, el módulo <code>unittest</code> proporciona un marco de trabajo para escribir y ejecutar pruebas.</p>
+            
+            <div class="concept-box">
+                <h3>¿Por qué son importantes las pruebas unitarias?</h3>
+                <ul>
+                    <li><strong>Detección temprana de errores</strong>: Permiten identificar problemas en las primeras etapas del desarrollo.</li>
+                    <li><strong>Documentación viva</strong>: Sirven como documentación del comportamiento esperado del código.</li>
+                    <li><strong>Facilitan el mantenimiento</strong>: Permiten realizar cambios con confianza, sabiendo que las pruebas detectarán regresiones.</li>
+                    <li><strong>Mejoran el diseño</strong>: Escribir código que sea fácil de probar generalmente conduce a un mejor diseño.</li>
+                </ul>
+            </div>
+            
+            <h3>Estructura básica de una prueba unitaria</h3>
+            <p>Una prueba unitaria típica sigue el patrón "Arrange-Act-Assert" (Organizar-Actuar-Afirmar):</p>
+            
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-language">Python</span>
+                    <button class="copy-button" onclick="copyToClipboard(this)">
+                        <i class="far fa-copy"></i> Copiar
+                    </button>
+                </div>
+                <pre><code>import unittest
+
+# Código a probar
+def suma(a, b):
+    return a + b
+
+# Clase de prueba
+class TestSuma(unittest.TestCase):
+    def test_suma_positivos(self):
+        # Organizar (Arrange)
+        a = 5
+        b = 3
+        
+        # Actuar (Act)
+        resultado = suma(a, b)
+        
+        # Afirmar (Assert)
+        self.assertEqual(resultado, 8, "La suma de 5 + 3 debe ser 8")
+
+    def test_suma_negativos(self):
+        self.assertEqual(suma(-1, -1), -2, "La suma de -1 + (-1) debe ser -2")
+
+    def test_suma_mezclada(self):
+        self.assertEqual(suma(10, -5), 5, "La suma de 10 + (-5) debe ser 5")
+
+if __name__ == '__main__':
+    unittest.main()</code></pre>
+            </div>
+            
+            <p>Para ejecutar las pruebas, guarda el código en un archivo (por ejemplo, <code>test_suma.py</code>) y ejecuta:</p>
+            
+            <div class="test-command">
+python -m unittest test_suma.py
+</div>
+
+            <div class="tip-box">
+                <i class="fas fa-lightbulb"></i> <strong>Consejo:</strong> Puedes ejecutar una prueba específica con <code>python -m unittest test_suma.TestSuma.test_suma_positivos</code> o usar el flag <code>-v</code> para obtener más detalles: <code>python -m unittest -v test_suma.py</code>
+            </div>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-tools"></i> Aserciones Comunes</h2>
+            <p>El módulo <code>unittest</code> proporciona varios métodos de aserción. Aquí están los más utilizados:</p>
+            
+            <table class="code-table">
+                <thead>
+                    <tr>
+                        <th>Método</th>
+                        <th>Comprueba que</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>assertEqual(a, b)</code></td>
+                        <td>a == b</td>
+                        <td><code>self.assertEqual(suma(2,2), 4)</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>assertNotEqual(a, b)</code></td>
+                        <td>a != b</td>
+                        <td><code>self.assertNotEqual(func(), None)</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>assertTrue(x)</code></td>
+                        <td>bool(x) es True</td>
+                        <td><code>self.assertTrue(es_par(4))</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>assertFalse(x)</code></td>
+                        <td>bool(x) es False</td>
+                        <td><code>self.assertFalse(es_par(3))</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>assertIs(a, b)</code></td>
+                        <td>a es b</td>
+                        <td><code>self.assertIs(obj, None)</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>assertIsNot(a, b)</code></td>
+                        <td>a no es b</td>
+                        <td><code>self.assertIsNot(result, None)</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>assertIsNone(x)</code></td>
+                        <td>x es None</td>
+                        <td><code>self.assertIsNone(resultado)</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>assertIn(a, b)</code></td>
+                        <td>a en b</td>
+                        <td><code>self.assertIn(3, [1, 2, 3])</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>assertNotIn(a, b)</code></td>
+                        <td>a no está en b</td>
+                        <td><code>self.assertNotIn(4, [1, 2, 3])</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>assertRaises(exc, fun, *args, **kwds)</code></td>
+                        <td>fun(*args, **kwds) lanza exc</td>
+                        <td><code>with self.assertRaises(ValueError): int('no_es_un_numero')</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-magic"></i> Pruebas Parametrizadas</h2>
+            <p>Las pruebas parametrizadas permiten ejecutar la misma lógica de prueba con diferentes conjuntos de datos. Aunque <code>unittest</code> no tiene soporte nativo para pruebas parametrizadas, podemos usar el decorador <code>@parameterized</code> de la biblioteca <code>parameterized</code>.</p>
+            
+            <p>Primero, instala la biblioteca:</p>
+            <div class="test-command">
+pip install parameterized
+</div>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-language">Python</span>
+                    <button class="copy-button" onclick="copyToClipboard(this)">
+                        <i class="far fa-copy"></i> Copiar
+                    </button>
+                </div>
+                <pre><code>import unittest
+from parameterized import parameterized
+
+def es_par(numero):
+    """Devuelve True si el número es par, False en caso contrario."""
+    if not isinstance(numero, int):
+        raise TypeError("El argumento debe ser un entero")
+    return numero % 2 == 0
+
+class TestEsParParametrizado(unittest.TestCase):
+    @parameterized.expand([
+        (2, True),
+        (3, False),
+        (0, True),
+        (-2, True),
+        (-3, False),
+    ])
+    def test_es_par(self, numero, esperado):
+        self.assertEqual(es_par(numero), esperado, 
+                        f"es_par({numero}) debería ser {esperado}")
+    
+    def test_tipo_no_entero(self):
+        with self.assertRaises(TypeError):
+            es_par("no es un número")
+
+if __name__ == '__main__':
+    unittest.main()</code></pre>
+            </div>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-plug"></i> Fixtures (Preparación y Limpieza)</h2>
+            <p>Los fixtures permiten configurar un entorno conocido antes de cada prueba y limpiarlo después. Los métodos más utilizados son <code>setUp()</code> y <code>tearDown()</code>.</p>
+            
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-language">Python</span>
+                    <button class="copy-button" onclick="copyToClipboard(this)">
+                        <i class="far fa-copy"></i> Copiar
+                    </button>
+                </div>
+                <pre><code>import unittest
+import os
+import tempfile
+
+class TestArchivos(unittest.TestCase):
+    def setUp(self):
+        # Se ejecuta antes de cada prueba
+        self.directorio_temporal = tempfile.mkdtemp()
+        self.archivo_temporal = os.path.join(self.directorio_temporal, 'datos.txt')
+        with open(self.archivo_temporal, 'w') as f:
+            f.write("Hola, mundo!")
+    
+    def tearDown(self):
+        # Se ejecuta después de cada prueba
+        if os.path.exists(self.archivo_temporal):
+            os.remove(self.archivo_temporal)
+        if os.path.exists(self.directorio_temporal):
+            os.rmdir(self.directorio_temporal)
+    
+    def test_archivo_existe(self):
+        self.assertTrue(os.path.exists(self.archivo_temporal))
+    
+    def test_contenido_archivo(self):
+        with open(self.archivo_temporal, 'r') as f:
+            contenido = f.read()
+        self.assertEqual(contenido, "Hola, mundo!")
+
+if __name__ == '__main__':
+    unittest.main()</code></pre>
+            </div>
+            
+            <div class="concept-box">
+                <h3>Métodos de Configuración</h3>
+                <ul>
+                    <li><code>setUp()</code>: Se ejecuta antes de cada método de prueba.</li>
+                    <li><code>tearDown()</code>: Se ejecuta después de cada método de prueba.</li>
+                    <li><code>setUpClass()</code>: Método de clase que se ejecuta una vez antes de todas las pruebas de la clase.</li>
+                    <li><code>tearDownClass()</code>: Método de clase que se ejecuta una vez después de todas las pruebas de la clase.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-user-secret"></i> Mocks y Parches</h2>
+            <p>Los mocks son objetos simulados que imitan el comportamiento de objetos reales de manera controlada. Son útiles para aislar el código bajo prueba de sus dependencias externas.</p>
+            
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-language">Python</span>
+                    <button class="copy-button" onclick="copyToClipboard(this)">
+                        <i class="far fa-copy"></i> Copiar
+                    </button>
+                </div>
+                <pre><code>import unittest
+from unittest.mock import patch, MagicMock
+
+# Código a probar
+def obtener_datos_desde_api(url):
+    import requests
+    response = requests.get(url)
+    return response.json()
+
+# Clase de prueba
+class TestAPIMocking(unittest.TestCase):
+    @patch('requests.get')
+    def test_obtener_datos_desde_api(self, mock_get):
+        # Configurar el mock
+        mock_response = MagicMock()
+        mock_response.json.return_value = {"clave": "valor"}
+        mock_get.return_value = mock_response
+        
+        # Ejecutar el código bajo prueba
+        resultado = obtener_datos_desde_api("https://api.ejemplo.com/datos")
+        
+        # Verificar que se llamó a requests.get con la URL correcta
+        mock_get.assert_called_once_with("https://api.ejemplo.com/datos")
+        
+        # Verificar el resultado
+        self.assertEqual(resultado, {"clave": "valor"})
+
+if __name__ == '__main__':
+    unittest.main()</code></pre>
+            </div>
+            
+            <div class="tip-box">
+                <i class="fas fa-lightbulb"></i> <strong>Consejo:</strong> Usa <code>@patch</code> para reemplazar objetos en el espacio de nombres del módulo que estás probando. El mock se pasa como argumento a la función de prueba.
+            </div>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-chart-bar"></i> Cobertura de Código</h2>
+            <p>La cobertura de código mica qué parte de tu código está siendo ejercitada por las pruebas. Para medir la cobertura, puedes usar la biblioteca <code>coverage.py</code>.</p>
+            
+            <p>Primero, instala la biblioteca:</p>
+            <div class="test-command">
+pip install coverage
+</div>
+
+            <p>Supongamos que tienes un módulo <code>calculadora.py</code>:</p>
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-language">Python</span>
+                    <button class="copy-button" onclick="copyToClipboard(this)">
+                        <i class="far fa-copy"></i> Copiar
+                    </button>
+                </div>
+                <pre><code># calculadora.py
+def suma(a, b):
+    return a + b
+
+def resta(a, b):
+    return a - b
+
+def multiplicacion(a, b):
+    return a * b
+
+def division(a, b):
+    if b == 0:
+        raise ValueError("No se puede dividir por cero")
+    return a / b</code></pre>
+            </div>
+            
+            <p>Y un archivo de prueba <code>test_calculadora.py</code>:</p>
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-language">Python</span>
+                    <button class="copy-button" onclick="copyToClipboard(this)">
+                        <i class="far fa-copy"></i> Copiar
+                    </button>
+                </div>
+                <pre><code># test_calculadora.py
+import unittest
+from calculadora import suma, division
+
+class TestCalculadora(unittest.TestCase):
+    def test_suma(self):
+        self.assertEqual(suma(2, 3), 5)
+        self.assertEqual(suma(-1, 1), 0)
+    
+    def test_division(self):
+        self.assertEqual(division(10, 2), 5)
+        with self.assertRaises(ValueError):
+            division(10, 0)
+
+if __name__ == '__main__':
+    unittest.main()</code></pre>
+            </div>
+            
+            <p>Para ejecutar las pruebas con cobertura:</p>
+            <div class="test-command">
+                coverage run -m unittest test_calculadora.py
+            </div>
+            
+            <p>Para ver el informe de cobertura:</p>
+            <div class="test-command">
+                coverage report -m
+            </div>
+            
+            <p>O para un informe HTML más detallado:</p>
+            <div class="test-command">
+                coverage html
+            </div>
+            
+            <p>Esto generará un directorio <code>htmlcov/</code> con un informe HTML que puedes abrir en tu navegador.</p>
+            
+            <div class="test-coverage">
+                <h4>Ejemplo de informe de cobertura</h4>
+                <p>Archivo: calculadora.py</p>
+                <div class="coverage-bar">
+                    <div class="coverage-fill"></div>
+                </div>
+                <p>75% de cobertura</p>
+                <p>Las funciones <code>resta()</code> y <code>multiplicacion()</code> no están siendo probadas.</p>
+            </div>
+        </section>
+
+        <section class="exercises">
+            <h2><i class="fas fa-dumbbell"></i> Ejercicios Prácticos</h2>
+            
+            <div class="exercise">
+                <h3>Ejercicio 1: Pruebas para una calculadora científica</h3>
+                <p>Crea una clase <code>CalculadoraCientifica</code> con los siguientes métodos y escribe pruebas unitarias para cada uno:</p>
+                <ul>
+                    <li><code>raiz_cuadrada(x)</code>: Devuelve la raíz cuadrada de x</li>
+                    <li><code>potencia(base, exponente)</code>: Devuelve base elevada a exponente</li>
+                    <li><code>factorial(n)</code>: Devuelve el factorial de n (n!)</li>
+                    <li><code>es_primo(n)</code>: Devuelve True si n es primo, False en caso contrario</li>
+                </ul>
+                
+                <button class="hint-button" onclick="toggleHint('hint-ej1')">Mostrar pista</button>
+                <div id="hint-ej1" class="hint">
+                    <p>Recuerda probar casos límite como números negativos, cero y uno. Para el método <code>es_primo</code>, asegúrate de probar con números primos y no primos.</p>
+                </div>
+                
+                <button class="solution-button" onclick="toggleHint('sol-ej1')">Mostrar solución</button>
+                <div id="sol-ej1" class="solution">
+                    <div class="code-example">
+                        <div class="code-header">
+                            <span class="code-language">Python</span>
+                            <button class="copy-button" onclick="copyToClipboard(this)">
+                                <i class="far fa-copy"></i> Copiar
+                            </button>
+                        </div>
+                        <pre><code>import math
+import unittest
+
+class CalculadoraCientifica:
+    @staticmethod
+    def raiz_cuadrada(x):
+        if x < 0:
+            raise ValueError("No se puede calcular la raíz cuadrada de un número negativo")
+        return math.sqrt(x)
+    
+    @staticmethod
+    def potencia(base, exponente):
+        return base ** exponente
+    
+    @staticmethod
+    def factorial(n):
+        if not isinstance(n, int) or n < 0:
+            raise ValueError("El factorial solo está definido para enteros no negativos")
+        if n == 0 or n == 1:
+            return 1
+        return n * CalculadoraCientifica.factorial(n - 1)
+    
+    @staticmethod
+    def es_primo(n):
+        if n <= 1:
+            return False
+        if n == 2:
+            return True
+        if n % 2 == 0:
+            return False
+        for i in range(3, int(math.sqrt(n)) + 1, 2):
+            if n % i == 0:
+                return False
+        return True
+
+class TestCalculadoraCientifica(unittest.TestCase):
+    def setUp(self):
+        self.calc = CalculadoraCientifica()
+    
+    def test_raiz_cuadrada(self):
+        self.assertAlmostEqual(self.calc.raiz_cuadrada(16), 4.0)
+        self.assertAlmostEqual(self.calc.raiz_cuadrada(0), 0.0)
+        with self.assertRaises(ValueError):
+            self.calc.raiz_cuadrada(-1)
+    
+    def test_potencia(self):
+        self.assertEqual(self.calc.potencia(2, 3), 8)
+        self.assertEqual(self.calc.potencia(5, 0), 1)
+        self.assertAlmostEqual(self.calc.potencia(4, -1), 0.25)
+    
+    def test_factorial(self):
+        self.assertEqual(self.calc.factorial(0), 1)
+        self.assertEqual(self.calc.factorial(1), 1)
+        self.assertEqual(self.calc.factorial(5), 120)
+        with self.assertRaises(ValueError):
+            self.calc.factorial(-1)
+        with self.assertRaises(ValueError):
+            self.calc.factorial(2.5)
+    
+    def test_es_primo(self):
+        self.assertFalse(self.calc.es_primo(0))
+        self.assertFalse(self.calc.es_primo(1))
+        self.assertTrue(self.calc.es_primo(2))
+        self.assertTrue(self.calc.es_primo(3))
+        self.assertFalse(self.calc.es_primo(4))
+        self.assertTrue(self.calc.es_primo(5))
+        self.assertFalse(self.calc.es_primo(9))
+        self.assertTrue(self.calc.es_primo(13))
+
+if __name__ == '__main__':
+    unittest.main()</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h3>Ejercicio 2: Pruebas para una clase Usuario</h3>
+                <p>Crea una clase <code>Usuario</code> con los siguientes atributos y métodos, y escribe pruebas unitarias para ella:</p>
+                <ul>
+                    <li>Atributos: <code>nombre</code>, <code>email</code>, <code>contrasena</code>, <code>activo</code> (booleano)</li>
+                    <li>Métodos:
+                        <ul>
+                            <li><code>cambiar_contrasena(actual, nueva)</code>: Cambia la contraseña si la actual es correcta</li>
+                            <li><code>activar_cuenta()</code>: Activa la cuenta</li>
+                            <li><code>desactivar_cuenta()</code>: Desactiva la cuenta</li>
+                            <li><code>es_contraseña_segura()</code>: Devuelve True si la contraseña tiene al menos 8 caracteres, incluyendo mayúsculas, minúsculas y números</li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <button class="hint-button" onclick="toggleHint('hint-ej2')">Mostrar pista</button>
+                <div id="hint-ej2" class="hint">
+                    <p>Para probar el método <code>es_contraseña_segura</code>, considera usar expresiones regulares o cualquier otro método para verificar los requisitos de seguridad. Asegúrate de probar diferentes casos de contraseñas (demasiado cortas, sin mayúsculas, sin números, etc.).</p>
+                </div>
+                
+                <button class="solution-button" onclick="toggleHint('sol-ej2')">Mostrar solución</button>
+                <div id="sol-ej2" class="solution">
+                    <div class="code-example">
+                        <div class="code-header">
+                            <span class="code-language">Python</span>
+                            <button class="copy-button" onclick="copyToClipboard(this)">
+                                <i class="far fa-copy"></i> Copiar
+                            </button>
+                        </div>
+                        <pre><code>import re
+import unittest
+
+class Usuario:
+    def __init__(self, nombre, email, contrasena, activo=True):
+        self.nombre = nombre
+        self.email = email
+        self.contrasena = contrasena
+        self.activo = activo
+    
+    def cambiar_contrasena(self, actual, nueva):
+        if self.contrasena != actual:
+            raise ValueError("La contraseña actual no es correcta")
+        if not self.es_contraseña_segura(nueva):
+            raise ValueError("La nueva contraseña no cumple con los requisitos de seguridad")
+        self.contrasena = nueva
+        return True
+    
+    def activar_cuenta(self):
+        self.activo = True
+        return True
+    
+    def desactivar_cuenta(self):
+        self.activo = False
+        return True
+    
+    def es_contraseña_segura(self, contrasena=None):
+        if contrasena is None:
+            contrasena = self.contrasena
+        
+        if len(contrasena) < 8:
+            return False
+        if not re.search(r'[A-Z]', contrasena):
+            return False
+        if not re.search(r'[a-z]', contrasena):
+            return False
+        if not re.search(r'\d', contrasena):
+            return False
+        return True
+
+class TestUsuario(unittest.TestCase):
+    def setUp(self):
+        self.usuario = Usuario(
+            nombre="Juan Pérez",
+            email="juan@ejemplo.com",
+            contrasena="Segura123"
+        )
+    
+    def test_inicializacion(self):
+        self.assertEqual(self.usuario.nombre, "Juan Pérez")
+        self.assertEqual(self.usuario.email, "juan@ejemplo.com")
+        self.assertTrue(self.usuario.activo)
+    
+    def test_cambiar_contrasena(self):
+        # Cambio exitoso
+        self.assertTrue(self.usuario.cambiar_contrasena("Segura123", "NuevaPass123"))
+        self.assertEqual(self.usuario.contrasena, "NuevaPass123")
+        
+        # Contraseña actual incorrecta
+        with self.assertRaises(ValueError):
+            self.usuario.cambiar_contrasena("incorrecta", "OtraPass123")
+        
+        # Nueva contraseña insegura
+        with self.assertRaises(ValueError):
+            self.usuario.cambiar_contrasena("NuevaPass123", "corta")
+    
+    def test_activar_desactivar_cuenta(self):
+        # Desactivar cuenta
+        self.assertTrue(self.usuario.desactivar_cuenta())
+        self.assertFalse(self.usuario.activo)
+        
+        # Reactivar cuenta
+        self.assertTrue(self.usuario.activar_cuenta())
+        self.assertTrue(self.usuario.activo)
+    
+    def test_es_contraseña_segura(self):
+        # Contraseñas seguras
+        self.assertTrue(self.usuario.es_contraseña_segura("Segura123"))
+        self.assertTrue(self.usuario.es_contraseña_segura("OtraSegura456"))
+        
+        # Contraseñas inseguras
+        self.assertFalse(self.usuario.es_contraseña_segura("corta"))  # Demasiado corta
+        self.assertFalse(self.usuario.es_contraseña_segura("solominusculas"))  # Sin mayúsculas ni números
+        self.assertFalse(self.usuario.es_contrase_segura("SOLOMAYUSCULAS"))  # Sin minúsculas ni números
+        self.assertFalse(self.usuario.es_contraseña_segura("12345678"))  # Sin letras
+        self.assertFalse(self.usuario.es_contraseña_segura("SoloLetras"))  # Sin números
+
+if __name__ == '__main__':
+    unittest.main()</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h3>Ejercicio 3: Pruebas para una API REST simulada</h3>
+                <p>Escribe pruebas unitarias para la siguiente clase que simula un cliente para una API REST. Usa mocks para simular las respuestas HTTP.</p>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">Python</span>
+                    </div>
+                    <pre><code># api_client.py
+import requests
+
+class APIClient:
+    def __init__(self, base_url, api_key=None):
+        self.base_url = base_url.rstrip('/')
+        self.api_key = api_key
+        self.session = requests.Session()
+        if self.api_key:
+            self.session.headers.update({"Authorization": f"Bearer {self.api_key}"})
+    
+    def get_resource(self, resource_id):
+        """Obtiene un recurso por su ID."""
+        url = f"{self.base_url}/resources/{resource_id}"
+        response = self.session.get(url)
+        response.raise_for_status()
+        return response.json()
+    
+    def create_resource(self, data):
+        """Crea un nuevo recurso."""
+        if not self.api_key:
+            raise ValueError("Se requiere una API key para crear recursos")
+        url = f"{self.base_url}/resources"
+        response = self.session.post(url, json=data)
+        response.raise_for_status()
+        return response.json()
+    
+    def update_resource(self, resource_id, data):
+        """Actualiza un recurso existente."""
+        if not self.api_key:
+            raise ValueError("Se requiere una API key para actualizar recursos")
+        url = f"{self.base_url}/resources/{resource_id}"
+        response = self.session.put(url, json=data)
+        response.raise_for_status()
+        return response.json()
+    
+    def delete_resource(self, resource_id):
+        """Elimina un recurso."""
+        if not self.api_key:
+            raise ValueError("Se requiere una API key para eliminar recursos")
+        url = f"{self.base_url}/resources/{resource_id}"
+        response = self.session.delete(url)
+        response.raise_for_status()
+        return response.status_code == 204</code></pre>
+                </div>
+                
+                <button class="hint-button" onclick="toggleHint('hint-ej3')">Mostrar pista</button>
+                <div id="hint-ej3" class="hint">
+                    <p>Usa el decorador <code>@patch</code> para simular las llamadas a <code>requests.Session</code>. Configura los mocks para que devuelvan respuestas simuladas y verifica que los métodos de la clase <code>APIClient</code> se comporten correctamente en diferentes escenarios (éxito, error de autenticación, recurso no encontrado, etc.).</p>
+                </div>
+                
+                <button class="solution-button" onclick="toggleHint('sol-ej3')">Mostrar solución</button>
+                <div id="sol-ej3" class="solution">
+                    <div class="code-example">
+                        <div class="code-header">
+                            <span class="code-language">Python</span>
+                            <button class="copy-button" onclick="copyToClipboard(this)">
+                                <i class="far fa-copy"></i> Copiar
+                            </button>
+                        </div>
+                        <pre><code>import unittest
+from unittest.mock import patch, MagicMock
+import requests
+from api_client import APIClient
+
+class TestAPIClient(unittest.TestCase):
+    def setUp(self):
+        self.base_url = "https://api.ejemplo.com"
+        self.api_key = "test-api-key"
+        self.client = APIClient(self.base_url, self.api_key)
+        self.mock_response = MagicMock()
+        self.mock_response.json.return_value = {"id": 1, "name": "Test Resource"}
+    
+    @patch('requests.Session')
+    def test_get_resource_success(self, mock_session_class):
+        # Configurar el mock
+        mock_session = mock_session_class.return_value
+        mock_session.get.return_value = self.mock_response
+        
+        # Llamar al método bajo prueba
+        result = self.client.get_resource(1)
+        
+        # Verificar que se hizo la petición correcta
+        mock_session.get.assert_called_once_with(
+            f"{self.base_url}/resources/1"
+        )
+        
+        # Verificar el resultado
+        self.assertEqual(result, {"id": 1, "name": "Test Resource"})
+    
+    @patch('requests.Session')
+    def test_get_resource_not_found(self, mock_session_class):
+        # Configurar el mock para simular un error 404
+        mock_session = mock_session_class.return_value
+        mock_response = MagicMock()
+        mock_response.raise_for_status.side_effect = requests.HTTPError("404 Not Found")
+        mock_session.get.return_value = mock_response
+        
+        # Verificar que se lanza la excepción
+        with self.assertRaises(requests.HTTPError):
+            self.client.get_resource(999)
+    
+    @patch('requests.Session')
+    def test_create_resource_success(self, mock_session_class):
+        # Configurar el mock
+        mock_session = mock_session_class.return_value
+        mock_session.post.return_value = self.mock_response
+        
+        # Datos de prueba
+        test_data = {"name": "Nuevo Recurso"}
+        
+        # Llamar al método bajo prueba
+        result = self.client.create_resource(test_data)
+        
+        # Verificar que se hizo la petición correcta
+        mock_session.post.assert_called_once_with(
+            f"{self.base_url}/resources",
+            json=test_data
+        )
+        
+        # Verificar que se incluyó el encabezado de autorización
+        self.assertIn("Authorization", mock_session.headers)
+        self.assertEqual(mock_session.headers["Authorization"], f"Bearer {self.api_key}")
+        
+        # Verificar el resultado
+        self.assertEqual(result, {"id": 1, "name": "Test Resource"})
+    
+    def test_create_resource_missing_api_key(self):
+        # Crear un cliente sin API key
+        client = APIClient(self.base_url)
+        
+        # Verificar que se lanza la excepción
+        with self.assertRaises(ValueError):
+            client.create_resource({"name": "Recurso"})
+    
+    @patch('requests.Session')
+    def test_update_resource_success(self, mock_session_class):
+        # Configurar el mock
+        mock_session = mock_session_class.return_value
+        mock_session.put.return_value = self.mock_response
+        
+        # Datos de prueba
+        test_data = {"name": "Recurso Actualizado"}
+        
+        # Llamar al método bajo prueba
+        result = self.client.update_resource(1, test_data)
+        
+        # Verificar que se hizo la petición correcta
+        mock_session.put.assert_called_once_with(
+            f"{self.base_url}/resources/1",
+            json=test_data
+        )
+        
+        # Verificar el resultado
+        self.assertEqual(result, {"id": 1, "name": "Test Resource"})
+    
+    @patch('requests.Session')
+    def test_delete_resource_success(self, mock_session_class):
+        # Configurar el mock
+        mock_session = mock_session_class.return_value
+        mock_response = MagicMock()
+        mock_response.status_code = 204
+        mock_session.delete.return_value = mock_response
+        
+        # Llamar al método bajo prueba
+        result = self.client.delete_resource(1)
+        
+        # Verificar que se hizo la petición correcta
+        mock_session.delete.assert_called_once_with(
+            f"{self.base_url}/resources/1"
+        )
+        
+        # Verificar el resultado
+        self.assertTrue(result)
+    
+    @patch('requests.Session')
+    def test_delete_resource_not_found(self, mock_session_class):
+        # Configurar el mock para simular un error 404
+        mock_session = mock_session_class.return_value
+        mock_session.delete.return_value.raise_for_status.side_effect = requests.HTTPError("404 Not Found")
+        
+        # Verificar que se lanza la excepción
+        with self.assertRaises(requests.HTTPError):
+            self.client.delete_resource(999)
+
+if __name__ == '__main__':
+    unittest.main()</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h2><i class="fas fa-clipboard-check"></i> Resumen</h2>
+            <p>En esta sesión, hemos cubierto los conceptos fundamentales de las pruebas unitarias en Python:</p>
+            <ul>
+                <li>La importancia de las pruebas unitarias en el desarrollo de software.</li>
+                <li>Cómo escribir y ejecutar pruebas con el módulo <code>unittest</code>.</li>
+                <li>Los diferentes tipos de aserciones disponibles.</li>
+                <li>Cómo usar fixtures para configurar y limpiar pruebas.</li>
+                <li>Cómo escribir pruebas parametrizadas con el módulo <code>parameterized</code>.</li>
+                <li>Cómo usar mocks para aislar el código bajo prueba de sus dependencias.</li>
+                <li>Cómo medir la cobertura de código con <code>coverage.py</code>.</li>
+            </ul>
+            
+            <div class="tip-box">
+                <i class="fas fa-lightbulb"></i> <strong>Consejo final:</strong> Las pruebas unitarias son una inversión en la calidad y mantenibilidad de tu código. Intenta escribir pruebas para todo el código nuevo que escribas y mantén una alta cobertura de pruebas para evitar regresiones.
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION1-13.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 1.13 Módulos y Paquetes</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION1-15.html" class="btn">Siguiente Sesión: 1.15 Proyecto Integrador Python <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Función para copiar código al portapapeles
+        function copyToClipboard(button) {
+            const codeBlock = button.parentElement.nextElementSibling;
+            const code = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                // Cambiar el ícono a un check temporalmente
+                const icon = button.querySelector('i');
+                const originalClass = icon.className;
+                
+                icon.className = 'fas fa-check';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    icon.className = originalClass;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Error al copiar: ', err);
+            });
+        }
+        
+        // Función para mostrar/ocultar pistas y soluciones
+        function toggleHint(elementId) {
+            const element = document.getElementById(elementId);
+            if (element.style.display === 'none' || !element.style.display) {
+                element.style.display = 'block';
+            } else {
+                element.style.display = 'none';
+            }
+        }
+        
+        // Inicializar tooltips
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar tooltips de Bootstrap (si está incluido)
+            if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+                const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl);
+                });
+            }
+            
+            // Mostrar la barra de cobertura con animación
+            const coverageFill = document.querySelector('.coverage-fill');
+            if (coverageFill) {
+                // Forzar un reflujo para que la animación funcione
+                void coverageFill.offsetWidth;
+                coverageFill.style.width = '75%';
+            }
+        });
+    </script>
+</body>
+</html>

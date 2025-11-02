@@ -3,178 +3,864 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sesión 1.9: Funciones en Python - Curso de IA</title>
+    <title>Sesión 1.9: Manejo de Excepciones - Curso de IA</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .solution {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #1e8449;
+        }
+        
+        .hint-button {
+            background-color: #1e8449;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .hint-button:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+        }
+
+        .code-example {
+            margin: 1.5rem 0;
+        }
+
+        .code-example h4 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .exception-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        .exception-table th, .exception-table td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        .exception-table th {
+            background-color: #f2f2f2;
+        }
+
+        .exception-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .exception-hierarchy {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .tip-box {
+            background-color: #d1ecf1;
+            border-left: 4px solid #0dcaf0;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <h1>Módulo 1: Introducción a Python</h1>
-            <h2>Sesión 1.9: Funciones en Python</h2>
-        
+    <header class="session-header">
+        <div class="container">
+            <h1>Sesión 1.9: Manejo de Excepciones en Python</h1>
+            <p class="session-meta">Módulo 1: Introducción a Python | Duración: 60 minutos</p>
         </div>
     </header>
 
-    <main>
+    <main class="container">
         <section class="learning-objectives">
-            <h3>Objetivos de Aprendizaje</h3>
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
             <ul>
-                <li>Comprender el concepto de funciones en programación</li>
-                <li>Aprender a definir y llamar funciones en Python</li>
-                <li>Entender los parámetros y argumentos de funciones</li>
-                <li>Explorar el retorno de valores</li>
-                <li>Conocer el alcance de las variables</li>
+                <li>Comprender el concepto de excepciones en programación</li>
+                <li>Aprender a manejar excepciones con bloques try-except</li>
+                <li>Conocer las excepciones integradas en Python</li>
+                <li>Crear excepciones personalizadas</li>
+                <li>Implementar buenas prácticas en el manejo de errores</li>
+                <li>Aplicar el manejo de excepciones en casos prácticos</li>
             </ul>
         </section>
 
         <section class="content">
-            <h3>1. Introducción a las Funciones</h3>
-            <p>Las funciones son bloques de código reutilizables que realizan una tarea específica. Nos permiten organizar el código, hacerlo más legible y evitar la repetición.</p>
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
             
-            <div class="code-block">
-                <h4>Sintaxis básica de una función</h4>
-                <pre><code class="python">def nombre_funcion(parametros):
-    """Docstring: Descripción de la función"""
-    # Cuerpo de la función
-    return valor_retorno</code></pre>
-            </div>
+            <article class="concept">
+                <h3>1. Introducción a las Excepciones</h3>
+                <p>Una excepción es un evento que ocurre durante la ejecución de un programa que interrumpe el flujo normal de ejecución. En Python, cuando ocurre un error, se genera una excepción que, si no se maneja, detiene el programa y muestra un mensaje de error.</p>
+                
+                <div class="code-example">
+                    <h4>Ejemplo de error sin manejo</h4>
+                    <pre><code class="language-python"># Intentar dividir por cero genera una excepción
+resultado = 10 / 0  # ZeroDivisionError: division by zero</code></pre>
+                </div>
 
-            <h3>2. Definición y Llamada de Funciones</h3>
-            <p>Vamos a ver un ejemplo práctico de cómo definir y llamar una función simple:</p>
-            
-            <div class="code-block">
-                <h4>Ejemplo: Función de saludo</h4>
-                <pre><code class="python">def saludar(nombre):
-    """Esta función recibe un nombre y devuelve un saludo"""
-    return f"¡Hola, {nombre}! Bienvenido al curso de IA."
+                <h4>1.1 Tipos de Errores Comunes</h4>
+                <table class="exception-table">
+                    <tr>
+                        <th>Tipo de Error</th>
+                        <th>Descripción</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                    <tr>
+                        <td><code>SyntaxError</code></td>
+                        <td>Error de sintaxis en el código</td>
+                        <td><code>print("Hola'')</code> (comillas no coinciden)</td>
+                    </tr>
+                    <tr>
+                        <td><code>NameError</code></td>
+                        <td>Variable no definida</td>
+                        <td><code>print(variable_inexistente)</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>TypeError</code></td>
+                        <td>Operación en tipo de dato incorrecto</td>
+                        <td><code>"5" + 3</code> (no se puede concatenar str e int)</td>
+                    </tr>
+                    <tr>
+                        <td><code>IndexError</code></td>
+                        <td>Índice fuera de rango</td>
+                        <td><code>lista = [1, 2]; print(lista[2])</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>KeyError</code></td>
+                        <td>Clave no encontrada en diccionario</td>
+                        <td><code>d = {"a": 1}; print(d["b"])</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>ValueError</code></td>
+                        <td>Argumento con valor incorrecto</td>
+                        <td><code>int("abc")</code> (no se puede convertir a entero)</td>
+                    </tr>
+                    <tr>
+                        <td><code>FileNotFoundError</code></td>
+                        <td>Archivo no encontrado</td>
+                        <td><code>open("archivo_inexistente.txt")</code></td>
+                    </tr>
+                </table>
 
-# Llamando a la función
-mensaje = saludar("Ana")
-print(mensaje)  # Imprime: ¡Hola, Ana! Bienvenido al curso de IA.</code></pre>
-            </div>
+                <h4>1.2 Jerarquía de Excepciones</h4>
+                <p>Todas las excepciones en Python heredan de la clase base <code>BaseException</code>. La mayoría de las excepciones heredan de <code>Exception</code>.</p>
+                
+                <div class="exception-hierarchy">BaseException
+ ├── SystemExit
+ ├── KeyboardInterrupt
+ ├── GeneratorExit
+ └── Exception
+      ├── ArithmeticError
+      │    ├── ZeroDivisionError
+      │    ├── FloatingPointError
+      │    └── OverflowError
+      ├── AssertionError
+      ├── AttributeError
+      ├── BufferError
+      ├── EOFError
+      ├── ImportError
+      ├── LookupError
+      │    ├── IndexError
+      │    └── KeyError
+      ├── MemoryError
+      ├── NameError
+      │    └── UnboundLocalError
+      ├── OSError
+      │    ├── FileNotFoundError
+      │    ├── PermissionError
+      │    └── TimeoutError
+      ├── ReferenceError
+      ├── RuntimeError
+      │    └── NotImplementedError
+      ├── StopAsyncIteration
+      ├── StopIteration
+      ├── SyntaxError
+      │    └── IndentationError
+      ├── SystemError
+      ├── TypeError
+      └── ValueError
+           └── UnicodeError
+                └── UnicodeDecodeError</div>
+            </article>
 
-            <h3>3. Parámetros y Argumentos</h3>
-            <p>Las funciones pueden recibir múltiples parámetros y podemos definir valores por defecto:</p>
-            
-            <div class="code-block">
-                <h4>Ejemplo: Función con múltiples parámetros</h4>
-                <pre><code class="python">def calcular_imc(peso, estatura):
-    """Calcula el Índice de Masa Corporal (IMC)"""
-    return peso / (estatura ** 2)
+            <article class="concept">
+                <h3>2. Manejo de Excepciones con try-except</h3>
+                
+                <h4>2.1 Sintaxis Básica</h4>
+                <p>El bloque <code>try-except</code> permite capturar y manejar excepciones.</p>
+                
+                <div class="code-example">
+                    <h4>Ejemplo básico de try-except</h4>
+                    <pre><code class="language-python">try:
+    # Código que podría generar una excepción
+    resultado = 10 / 0
+except ZeroDivisionError:
+    # Se ejecuta si ocurre ZeroDivisionError
+    print("¡Error: No se puede dividir por cero!")
+else:
+    # Se ejecuta si no hay excepciones
+    print(f"El resultado es {resultado}")
+finally:
+    # Siempre se ejecuta, haya o no excepciones
+    print("Fin del bloque try-except")</code></pre>
+                </div>
 
-# Llamada con argumentos posicionales
-imc = calcular_imc(70, 1.75)
+                <h4>2.2 Múltiples bloques except</h4>
+                <p>Puedes capturar diferentes tipos de excepciones con múltiples bloques <code>except</code>.</p>
+                
+                <div class="code-example">
+                    <h4>Manejo de múltiples excepciones</h4>
+                    <pre><code class="language-python">try:
+    # Código que podría generar diferentes excepciones
+    indice = int(input("Ingrese un índice: "))
+    lista = [10, 20, 30]
+    print(f"El valor es: {lista[indice]}")
+except ValueError:
+    print("Error: Debe ingresar un número entero")
+except IndexError:
+    print(f"Error: El índice debe estar entre 0 y {len(lista)-1}")
+except Exception as e:
+    print(f"Ocurrió un error inesperado: {e}")</code></pre>
+                </div>
 
-# Llamada con argumentos nombrados
-imc = calcular_imc(estatura=1.75, peso=70)</code></pre>
-            </div>
+                <h4>2.3 Captura de múltiples excepciones</h4>
+                <p>Puedes capturar múltiples excepciones en una sola línea.</p>
+                
+                <div class="code-example">
+                    <h4>Captura de múltiples excepciones</h4>
+                    <pre><code class="language-python">try:
+    # Código que podría generar excepciones
+    valor = int(input("Ingrese un número: "))
+    resultado = 100 / valor
+except (ValueError, ZeroDivisionError) as e:
+    print(f"Error: {e}")
+    if isinstance(e, ValueError):
+        print("Debe ingresar un número entero")
+    else:
+        print("No se puede dividir por cero")</code></pre>
+                </div>
 
-            <h3>4. Valores de retorno</h3>
-            <p>Las funciones pueden devolver múltiples valores usando tuplas:</p>
-            
-            <div class="code-block">
-                <h4>Ejemplo: Retorno múltiple</h4>
-                <pre><code class="python">def operaciones(a, b):
-    """Realiza operaciones básicas y devuelve múltiples valores"""
-    suma = a + b
-    resta = a - b
-    multiplicacion = a * b
-    division = a / b if b != 0 else "Error: división por cero"
-    return suma, resta, multiplicacion, division
+                <div class="warning-box">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Advertencia</h4>
+                    <p>Evita capturar la excepción genérica <code>Exception</code> sin una buena razón, ya que puede ocultar errores de programación. Es mejor capturar excepciones específicas.</p>
+                </div>
+            </article>
 
-# Desempaquetado de la tupla retornada
-s, r, m, d = operaciones(10, 5)
-print(f"Suma: {s}, Resta: {r}, Multiplicación: {m}, División: {d}")</code></pre>
-            </div>
+            <article class="concept">
+                <h3>3. La cláusula else y finally</h3>
+                
+                <h4>3.1 La cláusula else</h4>
+                <p>El bloque <code>else</code> se ejecuta solo si no se produjeron excepciones en el bloque <code>try</code>.</p>
+                
+                <div class="code-example">
+                    <h4>Uso de else con try-except</h4>
+                    <pre><code class="language-python">try:
+    numero = int(input("Ingrese un número: "))
+    resultado = 100 / numero
+except (ValueError, ZeroDivisionError) as e:
+    print(f"Error: {e}")
+else:
+    print(f"El resultado es: {resultado}")
+    # Este bloque solo se ejecuta si no hubo excepciones
+    print("Operación completada con éxito")</code></pre>
+                </div>
 
-            <h3>5. Alcance de Variables</h3>
-            <p>Las variables pueden ser globales o locales según donde se definan:</p>
-            
-            <div class="code-block">
-                <h4>Ejemplo: Variables locales y globales</h4>
-                <pre><code class="python"># Variable global
-contador = 0
+                <h4>3.2 La cláusula finally</h4>
+                <p>El bloque <code>finally</code> se ejecuta siempre, haya o no excepciones. Es útil para tareas de limpieza.</p>
+                
+                <div class="code-example">
+                    <h4>Uso de finally para limpieza</h4>
+                    <pre><code class="language-python">archivo = None
+try:
+    archivo = open("datos.txt", "r")
+    contenido = archivo.read()
+    # Procesar el contenido
+    print(contenido)
+except FileNotFoundError:
+    print("Error: El archivo no existe")
+finally:
+    # Asegurarse de que el archivo se cierre
+    if archivo is not None:
+        archivo.close()
+        print("Archivo cerrado correctamente")</code></pre>
+                </div>
 
-def incrementar():
-    # Para modificar una variable global dentro de una función
-    global contador
-    contador += 1
-    # Variable local
-    mensaje = f"Contador: {contador}"
-    return mensaje
+                <div class="tip-box">
+                    <h4><i class="fas fa-lightbulb"></i> Mejor práctica</h4>
+                    <p>Usa el contexto <code>with</code> para manejar recursos como archivos, ya que se encarga automáticamente de cerrarlos, incluso si ocurre una excepción.</p>
+                    <pre><code class="language-python"># Forma recomendada para trabajar con archivos
+try:
+    with open("datos.txt", "r") as archivo:
+        contenido = archivo.read()
+        print(contenido)
+except FileNotFoundError:
+    print("Error: El archivo no existe")</code></pre>
+                </div>
+            </article>
 
-print(incrementar())  # Contador: 1
-print(incrementar())  # Contador: 2</code></pre>
-            </div>
-        </section>
+            <article class="concept">
+                <h3>4. Excepciones Personalizadas</h3>
+                <p>Puedes crear tus propias excepciones heredando de la clase <code>Exception</code> o de alguna de sus subclases.</p>
+                
+                <div class="code-example">
+                    <h4>Creación de una excepción personalizada</h4>
+                    <pre><code class="language-python">class ValorDemasiadoPequenoError(ValueError):
+    """Excepción lanzada cuando un valor es demasiado pequeño."""
+    def __init__(self, valor, minimo):
+        self.valor = valor
+        self.minimo = minimo
+        mensaje = f"El valor {valor} es menor que el mínimo permitido ({minimo})"
+        super().__init__(mensaje)
 
-        <section class="exercises">
-            <h3>Ejercicios Prácticos</h3>
-            
-            <div class="exercise">
-                <h4>Ejercicio 1: Calculadora de Factorial</h4>
-                <p>Crea una función que calcule el factorial de un número entero no negativo.</p>
-                <button onclick="mostrarSolucion('sol1')">Mostrar Solución</button>
-                <div id="sol1" class="solution">
-                    <pre><code class="python">def factorial(n):
-    """Calcula el factorial de un número"""
-    if n == 0 or n == 1:
-        return 1
-    return n * factorial(n - 1)
+def validar_edad(edad):
+    if edad < 18:
+        raise ValorDemasiadoPequenoError(edad, 18)
+    return True
+
+try:
+    edad = int(input("Ingrese su edad: "))
+    validar_edad(edad)
+    print("¡Acceso concedido!")
+except ValorDemasiadoPequenoError as e:
+    print(f"Error: {e}")
+    print(f"Valor proporcionado: {e.valor}, Mínimo requerido: {e.minimo}")
+except ValueError:
+    print("Error: Debe ingresar un número entero válido")</code></pre>
+                </div>
+
+                <h4>4.1 Buenas prácticas para excepciones personalizadas</h4>
+                <ul>
+                    <li>Hereda de <code>Exception</code> o de una de sus subclases existentes.</li>
+                    <li>Usa nombres que terminen en "Error" para mantener consistencia.</li>
+                    <li>Proporciona mensajes de error descriptivos.</li>
+                    <li>Documenta las excepciones personalizadas con docstrings.</li>
+                    <li>Agrega atributos adicionales si es necesario para proporcionar más contexto.</li>
+                </ul>
+            </article>
+
+            <article class="concept">
+                <h3>5. Buenas Prácticas en el Manejo de Excepciones</h3>
+                
+                <h4>5.1 Qué hacer y qué no hacer</h4>
+                
+                <div class="tip-box">
+                    <h4><i class="fas fa-check-circle"></i> Hacer</h4>
+                    <ul>
+                        <li>Captura excepciones específicas en lugar de la genérica <code>Exception</code>.</li>
+                        <li>Proporciona mensajes de error útiles y descriptivos.</li>
+                        <li>Registra las excepciones para depuración.</li>
+                        <li>Limpia los recursos en bloques <code>finally</code> o usa el contexto <code>with</code>.</li>
+                        <li>Documenta las excepciones que puede lanzar una función.</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h4><i class="fas fa-times-circle"></i> No hacer</h4>
+                    <ul>
+                        <li>No uses excepciones para controlar el flujo normal del programa.</li>
+                        <li>No captures excepciones sin manejarlas adecuadamente.</li>
+                        <li>No expongas información sensible en los mensajes de error.</li>
+                        <li>No uses excepciones para validaciones que pueden hacerse con condicionales.</li>
+                    </ul>
+                </div>
+
+                <h4>5.2 Registro de excepciones</h4>
+                <p>Es una buena práctica registrar las excepciones para facilitar la depuración.</p>
+                
+                <div class="code-example">
+                    <h4>Registro de excepciones con el módulo logging</h4>
+                    <pre><code class="language-python">import logging
+
+# Configuración básica del registro
+logging.basicConfig(
+    filename='app.log',
+    level=logging.ERROR,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+
+def dividir(a, b):
+    try:
+        return a / b
+    except ZeroDivisionError as e:
+        logging.error(f"Intento de división por cero: {a}/{b}", exc_info=True)
+        raise  # Relanza la excepción después de registrarla
+    except Exception as e:
+        logging.error(f"Error inesperado: {e}", exc_info=True)
+        raise
 
 # Ejemplo de uso
-print(factorial(5))  # 120</code></pre>
+try:
+    resultado = dividir(10, 0)
+except Exception as e:
+    print("Ocurrió un error. Por favor, revise el archivo de registro.")</code></pre>
                 </div>
-            </div>
-
-            <div class="exercise">
-                <h4>Ejercicio 2: Contador de Vocales</h4>
-                <p>Escribe una función que cuente cuántas vocales tiene una cadena de texto.</p>
-                <button onclick="mostrarSolucion('sol2')">Mostrar Solución</button>
-                <div id="sol2" class="solution">
-                    <pre><code class="python">def contar_vocales(texto):
-    """Cuenta el número de vocales en un texto"""
-    vocales = 'aeiouAEIOUáéíóúÁÉÍÓÚ'
-    contador = 0
-    for letra in texto:
-        if letra in vocales:
-            contador += 1
-    return contador
-
-# Ejemplo de uso
-print(contar_vocales("Hola Mundo"))  # 4</code></pre>
-                </div>
-            </div>
+            </article>
         </section>
 
-        <section class="summary">
-            <h3>Resumen de la Sesión</h3>
-            <ul>
-                <li>Las funciones nos permiten organizar el código en bloques reutilizables.</li>
-                <li>Podemos definir funciones con <code>def</code> y llamarlas por su nombre.</li>
-                <li>Las funciones pueden recibir parámetros y devolver valores.</li>
-                <li>Es importante entender el alcance de las variables (globales y locales).</li>
-                <li>Las funciones pueden devolver múltiples valores usando tuplas.</li>
-            </ul>
+        <section class="practical-activity">
+            <h2><i class="fas fa-laptop-code"></i> Ejercicios Prácticos</h2>
+            
+            <div class="exercise">
+                <h4><i class="fas fa-pencil-alt"></i> Ejercicio 1: Calculadora Segura</h4>
+                <p>Crea una calculadora que maneje adecuadamente las excepciones al realizar operaciones matemáticas.</p>
+                
+                <button class="hint-button" onclick="toggleHint('solucion1')">Mostrar Solución</button>
+                <div id="solucion1" class="solution">
+                    <pre><code class="language-python">class OperacionInvalidaError(Exception):
+    """Excepción para operaciones inválidas."""
+    pass
+
+def calcular():
+    """Calculadora que maneja excepciones."""
+    print("Calculadora Segura")
+    print("Operaciones disponibles: +, -, *, /, ** (potencia)")
+    
+    while True:
+        try:
+            # Obtener entrada del usuario
+            entrada = input("\nIngrese una operación (ej: 5 + 3) o 'salir' para terminar: ").strip()
+            
+            if entrada.lower() == 'salir':
+                print("¡Hasta luego!")
+                break
+                
+            # Dividir la entrada en componentes
+            partes = entrada.split()
+            
+            if len(partes) != 3:
+                raise ValueError("Formato incorrecto. Use: número operador número")
+                
+            num1_str, operador, num2_str = partes
+            
+            # Validar números
+            try:
+                num1 = float(num1_str)
+                num2 = float(num2_str)
+            except ValueError:
+                raise ValueError("Ambos operandos deben ser números")
+            
+            # Realizar operación
+            if operador == '+':
+                resultado = num1 + num2
+            elif operador == '-':
+                resultado = num1 - num2
+            elif operador == '*':
+                resultado = num1 * num2
+            elif operador == '/':
+                if num2 == 0:
+                    raise ZeroDivisionError("No se puede dividir por cero")
+                resultado = num1 / num2
+            elif operador == '**':
+                resultado = num1 ** num2
+            else:
+                raise OperacionInvalidaError(f"Operador no soportado: {operador}")
+            
+            # Mostrar resultado
+            print(f"Resultado: {resultado}")
+            
+        except ZeroDivisionError as e:
+            print(f"Error: {e}")
+        except ValueError as e:
+            print(f"Error de valor: {e}")
+        except OperacionInvalidaError as e:
+            print(f"Error de operación: {e}")
+        except Exception as e:
+            print(f"Error inesperado: {e}")
+        finally:
+            print("-" * 30)
+
+if __name__ == "__main__":
+    calcular()</code></pre>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4><i class="fas fa-pencil-alt"></i> Ejercicio 2: Gestor de Contactos con Manejo de Errores</h4>
+                <p>Mejora el gestor de contactos de sesiones anteriores agregando un manejo robusto de excepciones.</p>
+                
+                <button class="hint-button" onclick="toggleHint('solucion2')">Mostrar Solución</button>
+                <div id="solucion2" class="solution">
+                    <pre><code class="language-python">import json
+import os
+from datetime import datetime
+
+class ContactoExistenteError(Exception):
+    """Excepción para contactos que ya existen."""
+    pass
+
+class ContactoNoEncontradoError(Exception):
+    """Excepción para contactos que no existen."""
+    pass
+
+class FormatoInvalidoError(Exception):
+    """Excepción para formatos de entrada inválidos."""
+    pass
+
+class GestorContactos:
+    """Clase para gestionar contactos con manejo de excepciones."""
+    
+    def __init__(self, archivo_contactos='contactos.json'):
+        """Inicializa el gestor con el archivo de contactos."""
+        self.archivo_contactos = archivo_contactos
+        self.contactos = self._cargar_contactos()
+    
+    def _cargar_contactos(self):
+        """Carga los contactos desde el archivo JSON."""
+        try:
+            if os.path.exists(self.archivo_contactos):
+                with open(self.archivo_contactos, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            return {}
+        except (json.JSONDecodeError, IOError) as e:
+            print(f"Error al cargar los contactos: {e}")
+            return {}
+    
+    def _guardar_contactos(self):
+        """Guarda los contactos en el archivo JSON."""
+        try:
+            with open(self.archivo_contactos, 'w', encoding='utf-8') as f:
+                json.dump(self.contactos, f, indent=4, ensure_ascii=False)
+            return True
+        except IOError as e:
+            print(f"Error al guardar los contactos: {e}")
+            return False
+    
+    def validar_email(self, email):
+        """Valida el formato de un correo electrónico."""
+        if not isinstance(email, str) or '@' not in email or '.' not in email:
+            raise FormatoInvalidoError("Formato de correo electrónico inválido")
+        return email.lower()
+    
+    def validar_telefono(self, telefono):
+        """Valida el formato de un número de teléfono."""
+        if not isinstance(telefono, str) or not telefono.isdigit() or len(telefono) < 8:
+            raise FormatoInvalidoError("El teléfono debe contener solo números y tener al menos 8 dígitos")
+        return telefono
+    
+    def agregar_contacto(self, nombre, email, telefono):
+        """Agrega un nuevo contacto."""
+        try:
+            # Validar entradas
+            if not nombre or not isinstance(nombre, str):
+                raise FormatoInvalidoError("El nombre es obligatorio y debe ser texto")
+            
+            email = self.validar_email(email)
+            telefono = self.validar_telefono(telefono)
+            
+            # Verificar si el contacto ya existe
+            if email in self.contactos:
+                raise ContactoExistenteError(f"Ya existe un contacto con el email: {email}")
+            
+            # Agregar el contacto
+            self.contactos[email] = {
+                'nombre': nombre,
+                'telefono': telefono,
+                'fecha_creacion': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                'fecha_actualizacion': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            }
+            
+            # Guardar cambios
+            if self._guardar_contactos():
+                print(f"Contacto '{nombre}' agregado correctamente.")
+                return True
+            return False
+            
+        except (FormatoInvalidoError, ContactoExistenteError) as e:
+            print(f"Error: {e}")
+            return False
+        except Exception as e:
+            print(f"Error inesperado al agregar contacto: {e}")
+            return False
+    
+    def buscar_contacto(self, email):
+        """Busca un contacto por email."""
+        try:
+            email = self.validar_email(email)
+            if email not in self.contactos:
+                raise ContactoNoEncontradoError(f"No se encontró ningún contacto con el email: {email}")
+            return self.contactos[email]
+        except (FormatoInvalidoError, ContactoNoEncontradoError) as e:
+            print(f"Error: {e}")
+            return None
+        except Exception as e:
+            print(f"Error inesperado al buscar contacto: {e}")
+            return None
+    
+    def listar_contactos(self):
+        """Lista todos los contactos."""
+        if not self.contactos:
+            print("No hay contactos guardados.")
+            return
+        
+        print("\n--- Lista de Contactos ---")
+        for email, datos in self.contactos.items():
+            print(f"\nEmail: {email}")
+            for clave, valor in datos.items():
+                if clave != 'email':  # Ya mostramos el email como clave
+                    print(f"{clave.capitalize()}: {valor}")
+    
+    def eliminar_contacto(self, email):
+        """Elimina un contacto por email."""
+        try:
+            email = self.validar_email(email)
+            if email not in self.contactos:
+                raise ContactoNoEncontradoError(f"No se encontró ningún contacto con el email: {email}")
+            
+            nombre = self.contactos[email]['nombre']
+            del self.contactos[email]
+            
+            if self._guardar_contactos():
+                print(f"Contacto '{nombre}' eliminado correctamente.")
+                return True
+            return False
+            
+        except (FormatoInvalidoError, ContactoNoEncontradoError) as e:
+            print(f"Error: {e}")
+            return False
+        except Exception as e:
+            print(f"Error inesperado al eliminar contacto: {e}")
+            return False
+
+def mostrar_menu():
+    """Muestra el menú de opciones."""
+    print("\n--- Gestor de Contactos ---")
+    print("1. Agregar contacto")
+    print("2. Buscar contacto")
+    print("3. Listar contactos")
+    print("4. Eliminar contacto")
+    print("5. Salir")
+    return input("Seleccione una opción: ")
+
+def main():
+    """Función principal del programa."""
+    gestor = GestorContactos()
+    
+    while True:
+        try:
+            opcion = mostrar_menu()
+            
+            if opcion == '1':
+                print("\n--- Agregar Nuevo Contacto ---")
+                nombre = input("Nombre: ").strip()
+                email = input("Email: ").strip()
+                telefono = input("Teléfono: ").strip()
+                gestor.agregar_contacto(nombre, email, telefono)
+                
+            elif opcion == '2':
+                print("\n--- Buscar Contacto ---")
+                email = input("Ingrese el email del contacto: ").strip()
+                contacto = gestor.buscar_contacto(email)
+                if contacto:
+                    print("\nContacto encontrado:")
+                    for clave, valor in contacto.items():
+                        print(f"{clave.capitalize()}: {valor}")
+                
+            elif opcion == '3':
+                gestor.listar_contactos()
+                
+            elif opcion == '4':
+                print("\n--- Eliminar Contacto ---")
+                email = input("Ingrese el email del contacto a eliminar: ").strip()
+                gestor.eliminar_contacto(email)
+                
+            elif opcion == '5':
+                print("¡Hasta luego!")
+                break
+                
+            else:
+                print("\nOpción no válida. Por favor, intente de nuevo.")
+                
+        except KeyboardInterrupt:
+            print("\n\nOperación cancelada por el usuario.")
+            break
+        except Exception as e:
+            print(f"\nError inesperado: {e}")
+
+if __name__ == "__main__":
+    main()</code></pre>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4><i class="fas fa-pencil-alt"></i> Ejercicio 3: Validador de Contraseñas</h4>
+                <p>Crea una función que valide contraseñas según ciertos criterios y lance excepciones personalizadas.</p>
+                
+                <button class="hint-button" onclick="toggleHint('solucion3')">Mostrar Solución</button>
+                <div id="solucion3" class="solution">
+                    <pre><code class="language-python">class LongitudInvalidaError(Exception):
+    """Excepción para contraseñas con longitud inválida."""
+    pass
+
+class FaltaMayusculaError(Exception):
+    """Excepción para contraseñas sin mayúsculas."""
+    pass
+
+class FaltaMinusculaError(Exception):
+    """Excepción para contraseñas sin minúsculas."""
+    pass
+
+class FaltaDigitoError(Exception):
+    """Excepción para contraseñas sin dígitos."""
+    pass
+
+class FaltaCaracterEspecialError(Exception):
+    """Excepción para contraseñas sin caracteres especiales."""
+    pass
+
+def validar_contrasena(contrasena, longitud_minima=8, caracteres_especiales="!@#$%^&*()_+-=[]{}|;:,.<>?"):
+    """
+    Valida una contraseña según varios criterios.
+    
+    Args:
+        contrasena (str): La contraseña a validar.
+        longitud_minima (int): Longitud mínima requerida.
+        caracteres_especiales (str): Caracteres especiales permitidos.
+        
+    Returns:
+        bool: True si la contraseña es válida.
+        
+    Raises:
+        LongitudInvalidaError: Si la longitud es menor a la requerida.
+        FaltaMayusculaError: Si no hay letras mayúsculas.
+        FaltaMinusculaError: Si no hay letras minúsculas.
+        FaltaDigitoError: Si no hay dígitos.
+        FaltaCaracterEspecialError: Si no hay caracteres especiales.
+    """
+    # Validar tipo de entrada
+    if not isinstance(contrasena, str):
+        raise TypeError("La contraseña debe ser una cadena de texto")
+    
+    # Validar longitud
+    if len(contrasena) < longitud_minima:
+        raise LongitudInvalidaError(
+            f"La contraseña debe tener al menos {longitud_minima} caracteres"
+        )
+    
+    # Verificar mayúsculas
+    if not any(c.isupper() for c in contrasena):
+        raise FaltaMayusculaError(
+            "La contraseña debe contener al menos una letra mayúscula"
+        )
+    
+    # Verificar minúsculas
+    if not any(c.islower() for c in contrasena):
+        raise FaltaMinusculaError(
+            "La contraseña debe contener al menos una letra minúscula"
+        )
+    
+    # Verificar dígitos
+    if not any(c.isdigit() for c in contrasena):
+        raise FaltaDigitoError(
+            "La contraseña debe contener al menos un dígito"
+        )
+    
+    # Verificar caracteres especiales
+    if not any(c in caracteres_especiales for c in contrasena):
+        raise FaltaCaracterEspecialError(
+            f"La contraseña debe contener al menos un carácter especial: {caracteres_especiales}"
+        )
+    
+    return True
+
+def probar_contrasena():
+    """Función para probar el validador de contraseñas."""
+    print("Validador de Contraseñas")
+    print("La contraseña debe cumplir con los siguientes requisitos:")
+    print(f"- Mínimo 8 caracteres")
+    print("- Al menos una letra mayúscula")
+    print("- Al menos una letra minúscula")
+    print("- Al menos un dígito")
+    print("- Al menos un carácter especial: !@#$%^&*()_+-=[]{}|;:,.<>?")
+    
+    while True:
+        try:
+            contrasena = input("\nIngrese una contraseña (o 'salir' para terminar): ")
+            
+            if contrasena.lower() == 'salir':
+                print("¡Hasta luego!")
+                break
+                
+            if validar_contrasena(contrasena):
+                print("¡Contraseña válida!")
+                break
+                
+        except LongitudInvalidaError as e:
+            print(f"Error de longitud: {e}")
+        except FaltaMayusculaError as e:
+            print(f"Error: {e}")
+        except FaltaMinusculaError as e:
+            print(f"Error: {e}")
+        except FaltaDigitoError as e:
+            print(f"Error: {e}")
+        except FaltaCaracterEspecialError as e:
+            print(f"Error: {e}")
+        except Exception as e:
+            print(f"Error inesperado: {e}")
+        finally:
+            print("-" * 50)
+
+if __name__ == "__main__":
+    probar_contrasena()</code></pre>
+                </div>
+            </div>
         </section>
     </main>
 
-
     <footer>
-					<div class="container">
-									<p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
-									<div class="navigation">
-													<a href="SESION1-8.html" class="btn">Sesión Anterior: 1.8 Manejo de archivos</a>
-													<a href="SESION1-10.html" class="btn">Siguiente Sesión: 1.10 Programación funcional</a>
-									</div>
-									<div class="social-links">
-													<a href="#" class="social-link" title="Github" rel="noopener"><i class="fab fa-github"></i></a>
-													<a href="#" class="social-link" title="Twitter" rel="noopener"><i class="fab fa-twitter"></i></a>
-													<a href="#" class="social-link" title="Linkedin" rel="noopener"><i class="fab fa-linkedin"></i></a>
-									</div>
-					</div>
-	</footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION1-8.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 1.8 Manejo de Archivos</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION1-10.html" class="btn">Siguiente Sesión: 1.10 Programación Funcional <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </footer>
 
-    <script src="script.js"></script>
+    <script>
+        // Función para mostrar/ocultar soluciones
+        function toggleHint(elementId) {
+            const element = document.getElementById(elementId);
+            if (element.style.display === 'none' || element.style.display === '') {
+                element.style.display = 'block';
+                element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                element.style.display = 'none';
+            }
+        }
+        
+        // Asegurar que las soluciones estén ocultas al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.solution').forEach(solution => {
+                solution.style.display = 'none';
+            });
+        });
+    </script>
 </body>
 </html>

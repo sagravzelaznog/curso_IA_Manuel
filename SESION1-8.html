@@ -3,442 +3,635 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sesión 1.8 - Módulos y Paquetes en Python</title>
+    <title>Sesión 1.8: Manejo de Archivos - Curso de IA</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .solution {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #1e8449;
+        }
+        
+        .hint-button {
+            background-color: #1e8449;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .hint-button:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+        }
+
+        .code-example {
+            margin: 1.5rem 0;
+        }
+
+        .code-example h4 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .file-structure {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 1rem;
+            font-family: monospace;
+            margin: 1rem 0;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .file-structure .file {
+            color: #2c3e50;
+        }
+
+        .file-structure .folder {
+            color: #2980b9;
+            font-weight: bold;
+        }
+
+        .file-structure .folder::before {
+            content: '📁 ';
+        }
+
+        .file-structure .file::before {
+            content: '📄 ';
+        }
+
+        .indent-1 { margin-left: 1rem; }
+        .indent-2 { margin-left: 2rem; }
+        .indent-3 { margin-left: 3rem; }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <h1><i class="fas fa-folder-open"></i> Módulos y Paquetes en Python</h1>
-            <p>Sesión 1.8: Aprendiendo a organizar y reutilizar código con módulos y paquetes</p>
+    <header class="session-header">
+        <div class="container">
+            <h1>Sesión 1.8: Manejo de Archivos en Python</h1>
+            <p class="session-meta">Módulo 1: Introducción a Python | Duración: 60 minutos</p>
         </div>
     </header>
 
-    <main>
+    <main class="container">
         <section class="learning-objectives">
             <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
             <ul>
-                <li>Comprender qué son los módulos y paquetes en Python</li>
-                <li>Aprender a crear y usar módulos propios</li>
-                <li>Entender cómo importar módulos estándar y de terceros</li>
-                <li>Crear y estructurar paquetes de Python</li>
-                <li>Gestionar dependencias con pip</li>
+                <li>Comprender los conceptos básicos del manejo de archivos en Python</li>
+                <li>Aprender a leer y escribir archivos de texto</li>
+                <li>Entender los diferentes modos de apertura de archivos</n                <li>Manejar archivos CSV y JSON</li>
+                <li>Gestionar archivos y directorios con el módulo os</li>
+                <li>Manejar excepciones al trabajar con archivos</li>
             </ul>
         </section>
 
         <section class="content">
-            <h2><i class="fas fa-book"></i> Contenido</h2>
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
             
-            <div class="tab">
-                <button class="tab-button active" onclick="openTab(event, 'modulos')">Módulos</button>
-                <button class="tab-button" onclick="openTab(event, 'paquetes')">Paquetes</button>
-                <button class="tab-button" onclick="openTab(event, 'pip')">PIP</button>
-                <button class="tab-button" onclick="openTab(event, 'proyecto')">Proyecto</button>
-            </div>
-
-            <div id="modulos" class="tab-content active">
-                <h3><i class="fas fa-file-code"></i> Módulos en Python</h3>
-                <p>Un módulo es un archivo que contiene definiciones y declaraciones de Python. El nombre del archivo es el nombre del módulo con el sufijo <code>.py</code>.</p>
+            <article class="concept">
+                <h3>1. Conceptos Básicos de Archivos</h3>
+                <p>Los archivos son contenedores de información que se almacenan en el sistema de archivos. En Python, trabajamos con archivos utilizando objetos de archivo.</p>
                 
-                <h4>Crear un módulo:</h4>
-                <p>Crea un archivo llamado <code>saludos.py</code> con el siguiente contenido:</p>
-                <pre><code class="language-python"># saludos.py
-def saludar(nombre):
-    """Saluda a una persona por su nombre."""
-    return f"¡Hola, {nombre}! ¿Cómo estás?"
-
-PI = 3.14159
-
-class Persona:
-    def __init__(self, nombre, edad):
-        self.nombre = nombre
-        self.edad = edad
-    
-    def presentarse(self):
-        return f"Soy {self.nombre} y tengo {self.edad} años."</code></pre>
-
-                <h4>Usar un módulo:</h4>
-                <pre><code class="language-python"># Importar todo el módulo
-import saludos
-
-# Usar funciones, variables y clases del módulo
-print(saludos.saludar("Juan"))
-print(f"El valor de PI es: {saludos.PI}"
-
-persona = saludos.Persona("Ana", 25)
-print(persona.presentarse())
-
-# Importar elementos específicos
-from saludos import saludar, PI
-
-# Ahora podemos usarlos directamente
-print(saludar("Carlos"))
-print(PI)
-
-# Importar con un alias
-import saludos as s
-from saludos import Persona as P
-
-print(s.saludar("María")
-persona2 = P("Pedro", 30)</code></pre>
-
-                <h4>Módulos estándar de Python:</h4>
-                <p>Python viene con una biblioteca estándar extensa. Algunos módulos útiles:</p>
-                <pre><code class="language-python">import math
-import random
-import datetime
-import os
-import sys
-import json
-import csv
-import re
-import urllib.request
-
-# Ejemplos de uso
-print(math.sqrt(16))  # 4.0
-print(random.randint(1, 10))  # Número aleatorio entre 1 y 10
-print(datetime.datetime.now())  # Fecha y hora actual</code></pre>
-            </div>
-
-            <div id="paquetes" class="tab-content">
-                <h3><i class="fas fa-folder"></i> Paquetes en Python</h3>
-                <p>Un paquete es una forma de organizar módulos relacionados en una jerarquía de directorios.</p>
-                
-                <h4>Estructura de un paquete:</h4>
-                <pre><code class="language-bash">mi_paquete/
-├── __init__.py
-├── modulo1.py
-├── modulo2.py
-└── subpaquete/
-    ├── __init__.py
-    └── modulo3.py</code></pre>
-
-                <h4>Crear un paquete:</h4>
-                <p>1. Crea una carpeta llamada <code>mi_paquete</code></p>
-                <p>2. Dentro de la carpeta, crea un archivo <code>__init__.py</code> (puede estar vacío o contener código de inicialización)</p>
-                
-                <h4>Ejemplo de un paquete simple:</h4>
-                <p><strong>mi_paquete/__init__.py</strong>:</p>
-                <pre><code class="language-python"># Este archivo hace que Python trate el directorio como un paquete
-__version__ = '1.0.0'
-
-# Podemos definir qué se importa con 'from paquete import *'
-__all__ = ['modulo1', 'modulo2']</code></pre>
-
-                <p><strong>mi_paquete/modulo1.py</strong>:</p>
-                <pre><code class="language-python">def hola():
-    return "¡Hola desde modulo1!"</code></pre>
-
-                <p><strong>mi_paquete/modulo2.py</strong>:</p>
-                <pre><code class="language-python">def despedida():
-    return "¡Adiós desde modulo2!"</code></pre>
-
-                <h4>Usar el paquete:</h4>
-                <pre><code class="language-python"># Importar todo el paquete
-import mi_paquete
-
-# Usar módulos del paquete
-print(mi_paquete.modulo1.hola())
-print(mi_paquete.modulo2.despedida())
-
-# Importar módulos específicos
-from mi_paquete import modulo1, modulo2
-
-# Importar funciones específicas
-from mi_paquete.modulo1 import hola
-from mi_paquete.modulo2 import despedida as adios</code></pre>
-
-                <h4>Paquetes anidados:</h4>
-                <p>Puedes tener paquetes dentro de paquetes. Por ejemplo, crea una carpeta <code>subpaquete</code> dentro de <code>mi_paquete</code> con su propio <code>__init__.py</code> y módulos.</p>
-            </div>
-
-            <div id="pip" class="tab-content">
-                <h3><i class="fab fa-python"></i> Gestión de Paquetes con pip</h3>
-                <p>pip es el sistema de gestión de paquetes de Python. Te permite instalar y administrar paquetes de terceros.</p>
-                
-                <h4>Comandos básicos de pip:</h4>
-                <pre><code class="language-bash"># Instalar un paquete
-pip install nombre_del_paquete
-
-# Instalar una versión específica
-pip install nombre_del_paquete==1.2.3
-
-# Actualizar un paquete
-pip install --upgrade nombre_del_paquete
-
-# Desinstalar un paquete
-pip uninstall nombre_del_paquete
-
-# Listar paquetes instalados
-pip list
-
-# Ver información de un paquete instalado
-pip show nombre_del_paquete
-
-# Guardar dependencias en un archivo
-pip freeze > requirements.txt
-
-# Instalar dependencias desde un archivo
-pip install -r requirements.txt</code></pre>
-
-                <h4>Entornos virtuales:</h4>
-                <p>Es una buena práctica usar entornos virtuales para aislar las dependencias de cada proyecto.</p>
-                
-                <pre><code class="language-bash"># Crear un entorno virtual
-python -m venv mi_entorno
-
-# Activar el entorno (Windows)
-mi_entorno\Scripts\activate
-
-# Activar el entorno (macOS/Linux)
-source mi_entorno/bin/activate
-
-# Desactivar el entorno (cualquier sistema)
-deactivate</code></pre>
-
-                <h4>Paquetes populares de Python:</h4>
+                <h4>1.1 Tipos de Archivos</h4>
                 <ul>
-                    <li><strong>NumPy</strong>: Cómputo numérico</li>
-                    <li><strong>Pandas</strong>: Análisis de datos</li>
-                    <li><strong>Matplotlib</strong>: Visualización de datos</li>
-                    <li><strong>Requests</strong>: Peticiones HTTP</li>
-                    <li><strong>Flask/Django</strong>: Desarrollo web</li>
+                    <li><strong>Archivos de texto</strong>: Contienen texto plano y son legibles por humanos (ej. .txt, .py, .html)</li>
+                    <li><strong>Archivos binarios</strong>: Contienen datos en formato binario (ej. .jpg, .exe, .pdf)</li>
+                    <li><strong>Archivos estructurados</strong>: Siguen un formato específico (ej. .csv, .json, .xml)</li>
                 </ul>
-            </div>
 
-            <div id="proyecto" class="tab-content">
-                <h3><i class="fas fa-project-diagram"></i> Proyecto: Sistema de Gestión de Tareas</h3>
-                <p>Vamos a crear un sistema de gestión de tareas organizado en módulos y paquetes.</p>
+                <h4>1.2 Rutas de Archivos</h4>
+                <p>Las rutas pueden ser absolutas o relativas. Es recomendable usar rutas relativas cuando sea posible para mayor portabilidad.</p>
                 
-                <h4>Estructura del proyecto:</h4>
-                <pre><code class="language-bash">gestor_tareas/
-├── gestor_tareas/
-│   ├── __init__.py
-│   ├── tareas.py
-│   ├── almacenamiento.py
-│   ├── interfaz/
-│   │   ├── __init__.py
-│   │   └── consola.py
-│   └── utilidades/
-│       ├── __init__.py
-│       └── validadores.py
-└── main.py</code></pre>
+                <div class="code-example">
+                    <h4>Ejemplo de rutas</h4>
+                    <pre><code class="language-python"># Ruta absoluta (completa)
+ruta_absoluta = "C:/Usuarios/MiUsuario/Documentos/archivo.txt"
 
-                <h4>gestor_tareas/tareas.py</h4>
-                <pre><code class="language-python">class Tarea:
-    def __init__(self, titulo, descripcion='', completada=False):
-        self.titulo = titulo
-        self.descripcion = descripcion
-        self.completada = completada
-        self.fecha_creacion = datetime.datetime.now()
-    
-    def marcar_completada(self):
-        self.completada = True
-    
-    def __str__(self):
-        estado = "✓" if self.completada else " "
-        return f"[{estado}] {self.titulo}"
+# Ruta relativa (relativa al directorio actual)
+ruta_relativa = "datos/archivo.txt"
 
+# Usar os.path para manejo de rutas multiplataforma
+import os
+ruta = os.path.join('carpeta', 'subcarpeta', 'archivo.txt')  # 'carpeta/subcarpeta/archivo.txt'</code></pre>
+                </div>
+            </article>
 
-class GestorTareas:
-    def __init__(self):
-        self.tareas = []
-    
-    def agregar_tarea(self, titulo, descripcion=''):
-        tarea = Tarea(titulo, descripcion)
-        self.tareas.append(tarea)
-        return tarea
-    
-    def listar_tareas(self, solo_pendientes=False):
-        if solo_pendientes:
-            return [t for t in self.tareas if not t.completada]
-        return self.tareas
-    
-    def marcar_como_completada(self, indice):
-        if 0 <= indice < len(self.tareas):
-            self.tareas[indice].marcar_completada()
-            return True
-        return False</code></pre>
+            <article class="concept">
+                <h3>2. Trabajando con Archivos de Texto</h3>
+                
+                <h4>2.1 Abrir y Cerrar Archivos</h4>
+                <p>La forma recomendada de trabajar con archivos es usando el contexto <code>with</code>, que se asegura de que el archivo se cierre correctamente.</p>
+                
+                <div class="code-example">
+                    <h4>Modos de apertura de archivos</h4>
+                    <pre><code class="language-python"># Modos básicos
+with open('archivo.txt', 'r') as archivo:  # Lectura (por defecto)
+    contenido = archivo.read()
 
-                <h4>gestor_tareas/almacenamiento.py</h4>
-                <pre><code class="language-python">import json
-from datetime import datetime
+with open('archivo.txt', 'w') as archivo:  # Escritura (sobrescribe)
+    archivo.write("Nuevo contenido")
 
-class AlmacenamientoTareas:
-    def __init__(self, archivo='tareas.json'):
-        self.archivo = archivo
-    
-    def guardar(self, gestor_tareas):
-        datos = []
-        for tarea in gestor_tareas.tareas:
-            datos.append({
-                'titulo': tarea.titulo,
-                'descripcion': tarea.descripcion,
-                'completada': tarea.completada,
-                'fecha_creacion': tarea.fecha_creacion.isoformat()
-            })
+with open('archivo.txt', 'a') as archivo:  # Anexar al final
+    archivo.write("\nMás contenido")
+
+with open('archivo.txt', 'r+') as archivo:  # Lectura y escritura
+    contenido = archivo.read()
+    archivo.write("\nActualización")
+
+# Modo binario (para archivos no de texto)
+with open('imagen.jpg', 'rb') as archivo_binario:
+    datos = archivo_binario.read()</code></pre>
+                </div>
+
+                <h4>2.2 Leyendo Archivos</h4>
+                <p>Existen varios métodos para leer archivos según las necesidades:</p>
+                
+                <div class="code-example">
+                    <h4>Métodos de lectura</h4>
+                    <pre><code class="language-python"># Leer todo el contenido como una cadena
+with open('archivo.txt', 'r') as archivo:
+    contenido = archivo.read()
+
+# Leer una línea a la vez
+with open('archivo.txt', 'r') as archivo:
+    for linea in archivo:
+        print(linea.strip())  # strip() elimina saltos de línea
+
+# Leer todas las líneas en una lista
+with open('archivo.txt', 'r') as archivo:
+    lineas = archivo.readlines()
+
+# Leer una cantidad específica de caracteres
+with open('archivo.txt', 'r') as archivo:
+    primeros_100 = archivo.read(100)  # Lee los primeros 100 caracteres</code></pre>
+                </div>
+
+                <h4>2.3 Escribiendo en Archivos</h4>
+                <p>Para escribir en archivos, podemos usar <code>write()</code> o <code>writelines()</code>.</p>
+                
+                <div class="code-example">
+                    <h4>Métodos de escritura</h4>
+                    <pre><code class="language-python"># Escribir una cadena
+with open('salida.txt', 'w') as archivo:
+    archivo.write("Línea 1\n")
+    archivo.write("Línea 2\n")
+
+# Escribir múltiples líneas desde una lista
+lineas = ["Línea 1\n", "Línea 2\n", "Línea 3\n"]
+with open('salida.txt', 'w') as archivo:
+    archivo.writelines(lineas)
+
+# Usar print para escribir en archivos (útil para formateo)
+with open('salida.txt', 'w') as archivo:
+    print("Línea 1", file=archivo)
+    print("Línea 2", file=archivo)
+    print(f"La suma de 2 + 2 es {2+2}", file=archivo)</code></pre>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>3. Trabajando con Archivos CSV</h3>
+                <p>Los archivos CSV (Comma-Separated Values) son comunes para almacenar datos tabulares.</p>
+                
+                <div class="code-example">
+                    <h4>Leyendo archivos CSV</h4>
+                    <pre><code class="language-python">import csv
+
+# Leer un archivo CSV
+with open('datos.csv', 'r', newline='', encoding='utf-8') as archivo:
+    lector = csv.reader(archivo)
+    encabezados = next(lector)  # Leer la primera fila (encabezados)
+    for fila in lector:
+        print(f"Nombre: {fila[0]}, Edad: {fila[1]}")
+
+# Leer como diccionario (usando encabezados como claves)
+with open('datos.csv', 'r', newline='', encoding='utf-8') as archivo:
+    lector = csv.DictReader(archivo)
+    for fila in lector:
+        print(f"{fila['Nombre']} tiene {fila['Edad']} años")</code></pre>
+                </div>
+
+                <div class="code-example">
+                    <h4>Escribiendo archivos CSV</h4>
+                    <pre><code class="language-python">import csv
+
+# Datos a guardar
+datos = [
+    ['Nombre', 'Edad', 'Ciudad'],
+    ['Juan', '25', 'Madrid'],
+    ['Ana', '30', 'Barcelona'],
+    ['Carlos', '35', 'Valencia']
+]
+
+# Escribir en un archivo CSV
+with open('personas.csv', 'w', newline='', encoding='utf-8') as archivo:
+    escritor = csv.writer(archivo)
+    escritor.writerows(datos)
+
+# Escribir usando diccionarios
+personas = [
+    {'Nombre': 'Juan', 'Edad': '25', 'Ciudad': 'Madrid'},
+    {'Nombre': 'Ana', 'Edad': '30', 'Ciudad': 'Barcelona'},
+    {'Nombre': 'Carlos', 'Edad': '35', 'Ciudad': 'Valencia'}
+]
+
+with open('personas_dict.csv', 'w', newline='', encoding='utf-8') as archivo:
+    campos = ['Nombre', 'Edad', 'Ciudad']
+    escritor = csv.DictWriter(archivo, fieldnames=campos)
+    escritor.writeheader()
+    escritor.writerows(personas)</code></pre>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>4. Trabajando con Archivos JSON</h3>
+                <p>JSON (JavaScript Object Notation) es un formato ligero de intercambio de datos.</p>
+                
+                <div class="code-example">
+                    <h4>Leer y escribir archivos JSON</h4>
+                    <pre><code class="language-python">import json
+
+# Datos de ejemplo
+datos = {
+    "nombre": "Juan Pérez",
+    "edad": 30,
+    "ciudad": "Madrid",
+    "hobbies": ["leer", "programar", "viajar"],
+    "activo": True
+}
+
+# Escribir en un archivo JSON
+with open('usuario.json', 'w', encoding='utf-8') as archivo:
+    json.dump(datos, archivo, indent=4, ensure_ascii=False)
+
+# Leer de un archivo JSON
+with open('usuario.json', 'r', encoding='utf-8') as archivo:
+    datos_cargados = json.load(archivo)
+    print(datos_cargados['nombre'])  # Imprime: Juan Pérez</code></pre>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>5. Manejo de Archivos y Directorios</h3>
+                <p>El módulo <code>os</code> proporciona funciones para interactuar con el sistema operativo.</p>
+                
+                <div class="code-example">
+                    <h4>Operaciones comunes con archivos</h4>
+                    <pre><code class="language-python">import os
+import shutil
+from pathlib import Path  # Alternativa moderna a os.path
+
+# Obtener el directorio actual
+directorio_actual = os.getcwd()
+
+# Listar archivos en un directorio
+archivos = os.listdir('.')
+
+# Verificar si un archivo o directorio existe
+if os.path.exists('archivo.txt'):
+    print("El archivo existe")
+
+# Crear un directorio
+os.makedirs('nuevo_directorio', exist_ok=True)
+
+# Renombrar un archivo
+os.rename('viejo.txt', 'nuevo.txt')
+
+# Eliminar un archivo
+os.remove('archivo_a_eliminar.txt')
+
+# Eliminar un directorio vacío
+os.rmdir('directorio_vacio')
+
+# Eliminar un directorio y su contenido (¡cuidado!)
+shutil.rmtree('directorio_con_contenido')
+
+# Usando pathlib (más moderno)
+ruta = Path('carpeta') / 'subcarpeta' / 'archivo.txt'
+ruta.parent.mkdir(parents=True, exist_ok=True)  # Crear directorios padres si no existen
+ruta.write_text('Contenido del archivo')  # Escribir en el archivo</code></pre>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>6. Manejo de Excepciones con Archivos</h3>
+                <p>Es importante manejar posibles errores al trabajar con archivos.</p>
+                
+                <div class="code-example">
+                    <h4>Manejo de errores</h4>
+                    <pre><code class="language-python">try:
+    with open('archivo_inexistente.txt', 'r') as archivo:
+        contenido = archivo.read()
+except FileNotFoundError:
+    print("El archivo no existe")
+except PermissionError:
+    print("No tienes permiso para leer el archivo")
+except IOError as e:
+    print(f"Error de E/S: {e}")
+except Exception as e:
+    print(f"Error inesperado: {e}")
+else:
+    print("Archivo leído correctamente")
+finally:
+    print("Este bloque siempre se ejecuta")</code></pre>
+                </div>
+            </article>
+        </section>
+
+        <section class="practical-activity">
+            <h2><i class="fas fa-laptop-code"></i> Ejercicios Prácticos</h2>
+            
+            <div class="exercise">
+                <h4><i class="fas fa-pencil-alt"></i> Ejercicio 1: Contador de Palabras</h4>
+                <p>Crea un programa que lea un archivo de texto y cuente la frecuencia de cada palabra, guardando los resultados en un archivo CSV.</p>
+                
+                <button class="hint-button" onclick="toggleHint('solucion1')">Mostrar Solución</button>
+                <div id="solucion1" class="solution">
+                    <pre><code class="language-python">import re
+from collections import Counter
+import csv
+
+def limpiar_palabra(palabra):
+    """Elimina caracteres no alfabéticos y convierte a minúsculas"""
+    return re.sub(r'[^\w]', '', palabra).lower()
+
+def contar_palabras(archivo_entrada, archivo_salida):
+    try:
+        # Leer el archivo de entrada
+        with open(archivo_entrada, 'r', encoding='utf-8') as archivo:
+            texto = archivo.read()
         
-        with open(self.archivo, 'w') as f:
-            json.dump(datos, f, indent=2)
-    
-    def cargar(self):
+        # Dividir en palabras y limpiar
+        palabras = texto.split()
+        palabras_limpias = [limpiar_palabra(p) for p in palabras if limpiar_palabra(p)]
+        
+        # Contar frecuencias
+        contador = Counter(palabras_limpias)
+        
+        # Ordenar por frecuencia (de mayor a menor)
+        palabras_comunes = contador.most_common()
+        
+        # Guardar resultados en CSV
+        with open(archivo_salida, 'w', newline='', encoding='utf-8') as archivo_csv:
+            escritor = csv.writer(archivo_csv)
+            escritor.writerow(['Palabra', 'Frecuencia'])
+            escritor.writerows(palabras_comunes)
+        
+        print(f"Análisis completado. Resultados guardados en {archivo_salida}")
+        
+    except FileNotFoundError:
+        print(f"Error: No se pudo encontrar el archivo {archivo_entrada}")
+    except Exception as e:
+        print(f"Ocurrió un error: {e}")
+
+if __name__ == "__main__":
+    # Ejemplo de uso
+    archivo_entrada = input("Ruta del archivo de texto: ")
+    archivo_salida = input("Ruta del archivo de salida CSV: ")
+    contar_palabras(archivo_entrada, archivo_salida)</code></pre>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4><i class="fas fa-pencil-alt"></i> Ejercicio 2: Gestor de Tareas con Archivos</h4>
+                <p>Amplía el gestor de tareas de la sesión anterior para que guarde las tareas en un archivo JSON y las cargue al iniciar.</p>
+                
+                <button class="hint-button" onclick="toggleHint('solucion2')">Mostrar Solución</button>
+                <div id="solucion2" class="solution">
+                    <pre><code class="language-python">import json
+import os
+
+ARCHIVO_TAREAS = 'tareas.json'
+
+def cargar_tareas():
+    """Carga las tareas desde el archivo JSON."""
+    if os.path.exists(ARCHIVO_TAREAS):
         try:
-            with open(self.archivo, 'r') as f:
-                datos = json.load(f)
-            
-            gestor = GestorTareas()
-            for tarea_data in datos:
-                tarea = Tarea(
-                    tarea_data['titulo'],
-                    tarea_data.get('descripcion', ''),
-                    tarea_data.get('completada', False)
-                )
-                tarea.fecha_creacion = datetime.fromisoformat(tarea_data['fecha_creacion'])
-                gestor.tareas.append(tarea)
-            
-            return gestor
-        except FileNotFoundError:
-            return GestorTareas()</code></pre>
+            with open(ARCHIVO_TAREAS, 'r', encoding='utf-8') as archivo:
+                return json.load(archivo)
+        except (json.JSONDecodeError, IOError) as e:
+            print(f"Error al cargar las tareas: {e}")
+            print("Se creará una nueva lista de tareas.")
+    return []
 
-                <h4>gestor_tareas/interfaz/consola.py</h4>
-                <pre><code class="language-python">from ..tareas import GestorTareas
+def guardar_tareas(tareas):
+    """Guarda las tareas en el archivo JSON."""
+    try:
+        with open(ARCHIVO_TAREAS, 'w', encoding='utf-8') as archivo:
+            json.dump(tareas, archivo, indent=4, ensure_ascii=False)
+        return True
+    except IOError as e:
+        print(f"Error al guardar las tareas: {e}")
+        return False
 
-class InterfazConsola:
-    def __init__(self, gestor_tareas):
-        self.gestor = gestor_tareas
+def mostrar_tareas(tareas):
+    """Muestra las tareas numeradas."""
+    if not tareas:
+        print("No hay tareas pendientes.")
+        return
     
-    def mostrar_menu(self):
-        print("\n--- Gestor de Tareas ---")
-        print("1. Ver tareas")
-        print("2. Agregar tarea")
-        print("3. Marcar tarea como completada")
-        print("4. Salir")
-    
-    def ejecutar(self):
-        while True:
-            self.mostrar_menu()
-            opcion = input("\nSelecciona una opción: ")
-            
-            if opcion == '1':
-                self.mostrar_tareas()
-            elif opcion == '2':
-                self.agregar_tarea()
-            elif opcion == '3':
-                self.marcar_como_completada()
-            elif opcion == '4':
-                print("¡Hasta luego!")
-                break
-            else:
-                print("Opción no válida. Intenta de nuevo.")
-    
-    def mostrar_tareas(self):
-        print("\n--- Tareas ---")
-        tareas = self.gestor.listar_tareas()
-        if not tareas:
-            print("No hay tareas.")
-            return
-        
-        for i, tarea in enumerate(tareas, 1):
-            print(f"{i}. {tarea}")
-    
-    def agregar_tarea(self):
-        print("\n--- Nueva Tarea ---")
-        titulo = input("Título: ")
-        descripcion = input("Descripción (opcional): ")
-        self.gestor.agregar_tarea(titulo, descripcion)
-        print("¡Tarea agregada!")
-    
-    def marcar_como_completada(self):
-        self.mostrar_tareas()
-        tareas = self.gestor.listar_tareas(solo_pendientes=True)
-        
-        if not tareas:
-            print("No hay tareas pendientes.")
-            return
-        
-        try:
-            indice = int(input("Número de tarea a marcar como completada: ")) - 1
-            if 0 <= indice < len(tareas):
-                tarea = tareas[indice]
-                tarea.marcar_completada()
-                print(f"Tarea '{tarea.titulo}' marcada como completada.")
-            else:
-                print("Número de tarea inválido.")
-        except ValueError:
-            print("Por favor ingresa un número válido.")</code></pre>
+    print("\n--- Tareas Pendientes ---")
+    for i, tarea in enumerate(tareas, 1):
+        estado = "[✓]" if tarea.get('completada', False) else "[ ]"
+        print(f"{i}. {estado} {tarea['descripcion']}")
 
-                <h4>main.py</h4>
-                <pre><code class="language-python">from gestor_tareas.almacenamiento import AlmacenamientoTareas
-from gestor_tareas.interfaz.consola import InterfazConsola
+def agregar_tarea(tareas, descripcion):
+    """Agrega una nueva tarea."""
+    tarea = {
+        'descripcion': descripcion,
+        'completada': False,
+        'fecha_creacion': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+    tareas.append(tarea)
+    if guardar_tareas(tareas):
+        print("\n¡Tarea agregada con éxito!")
+    return tareas
+
+def marcar_completada(tareas, indice):
+    """Marca una tarea como completada."""
+    if 1 <= indice <= len(tareas):
+        tareas[indice-1]['completada'] = True
+        tareas[indice-1]['fecha_completada'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if guardar_tareas(tareas):
+            print("\n¡Tarea marcada como completada!")
+    else:
+        print("\n¡Número de tarea inválido!")
+    return tareas
+
+def eliminar_tarea(tareas, indice):
+    """Elimina una tarea."""
+    if 1 <= indice <= len(tareas):
+        tarea_eliminada = tareas.pop(indice-1)
+        if guardar_tareas(tareas):
+            print(f"\nTarea eliminada: {tarea_eliminada['descripcion']}")
+    else:
+        print("\n¡Número de tarea inválido!")
+    return tareas
+
+def mostrar_menu():
+    """Muestra el menú de opciones."""
+    print("\n--- Gestor de Tareas ---")
+    print("1. Ver tareas")
+    print("2. Agregar tarea")
+    print("3. Marcar tarea como completada")
+    print("4. Eliminar tarea")
+    print("5. Salir")
+    return input("Selecciona una opción: ")
 
 def main():
-    # Inicializar el almacenamiento
-    almacenamiento = AlmacenamientoTareas()
+    """Función principal del programa."""
+    tareas = cargar_tareas()
     
-    # Cargar tareas existentes
-    gestor = almacenamiento.cargar()
-    
-    # Iniciar la interfaz de usuario
-    interfaz = InterfazConsola(gestor)
-    
+    while True:
+        opcion = mostrar_menu()
+        
+        if opcion == '1':
+            mostrar_tareas(tareas)
+            
+        elif opcion == '2':
+            descripcion = input("\nDescripción de la tarea: ").strip()
+            if descripcion:
+                tareas = agregar_tarea(tareas, descripcion)
+            else:
+                print("La descripción no puede estar vacía.")
+                
+        elif opcion == '3':
+            mostrar_tareas(tareas)
+            if tareas:
+                try:
+                    num = int(input("\nNúmero de tarea a marcar como completada: "))
+                    tareas = marcar_completada(tareas, num)
+                except ValueError:
+                    print("Por favor, ingresa un número válido.")
+                    
+        elif opcion == '4':
+            mostrar_tareas(tareas)
+            if tareas:
+                try:
+                    num = int(input("\nNúmero de tarea a eliminar: "))
+                    confirmacion = input("¿Estás seguro? (s/n): ")
+                    if confirmacion.lower() == 's':
+                        tareas = eliminar_tarea(tareas, num)
+                except ValueError:
+                    print("Por favor, ingresa un número válido.")
+                    
+        elif opcion == '5':
+            print("\n¡Hasta luego!")
+            break
+            
+        else:
+            print("\nOpción no válida. Por favor, intenta de nuevo.")
+
+if __name__ == "__main__":
+    from datetime import datetime
+    main()</code></pre>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4><i class="fas fa-pencil-alt"></i> Ejercicio 3: Organizador de Archivos</h4>
+                <p>Crea un script que organice los archivos de un directorio en subdirectorios según su extensión.</p>
+                
+                <button class="hint-button" onclick="toggleHint('solucion3')">Mostrar Solución</button>
+                <div id="solucion3" class="solution">
+                    <pre><code class="language-python">import os
+import shutil
+from pathlib import Path
+
+def crear_directorios(directorio_base, extensiones):
+    """Crea los directorios necesarios para organizar los archivos."""
+    for extension in extensiones:
+        ruta_directorio = directorio_base / extension.upper()
+        ruta_directorio.mkdir(exist_ok=True)
+
+def obtener_extension(archivo):
+    """Obtiene la extensión de un archivo, devuelve 'SIN_EXTENSION' si no tiene."""
+    extension = os.path.splitext(archivo)[1].lower()
+    return extension[1:] if extension else 'SIN_EXTENSION'
+
+def organizar_archivos(directorio):
+    """Organiza los archivos del directorio en subdirectorios por extensión."""
     try:
-        interfaz.ejecutar()
-    finally:
-        # Guardar las tareas al salir
-        almacenamiento.guardar(gestor)
+        # Convertir a objeto Path si es una cadena
+        directorio = Path(directorio) if isinstance(directorio, str) else directorio
+        
+        if not directorio.exists() or not directorio.is_dir():
+            print(f"Error: '{directorio}' no es un directorio válido.")
+            return
+        
+        # Obtener todos los archivos (excluyendo directorios)
+        archivos = [f for f in directorio.iterdir() if f.is_file()]
+        
+        if not archivos:
+            print(f"No se encontraron archivos en '{directorio}'.")
+            return
+        
+        # Obtener todas las extensiones únicas
+        extensiones = {obtener_extension(archivo.name) for archivo in archivos}
+        
+        # Crear directorios para cada extensión
+        crear_directorios(directorio, extensiones)
+        
+        # Mover archivos a sus respectivos directorios
+        for archivo in archivos:
+            extension = obtener_extension(archivo.name)
+            directorio_destino = directorio / extension.upper()
+            
+            try:
+                # Verificar si el archivo ya existe en el destino
+                destino = directorio_destino / archivo.name
+                if destino.exists():
+                    # Si el archivo ya existe, agregar un sufijo numérico
+                    contador = 1
+                    while destino.exists():
+                        nombre_base = f"{archivo.stem}_{contador}{archivo.suffix}"
+                        destino = directorio_destino / nombre_base
+                        contador += 1
+                
+                shutil.move(str(archivo), str(destino))
+                print(f"Movido: {archivo.name} -> {directorio_destino.name}/")
+                
+            except Exception as e:
+                print(f"Error al mover {archivo.name}: {e}")
+        
+        print("\n¡Organización completada con éxito!")
+        
+    except Exception as e:
+        print(f"Ocurrió un error: {e}")
+
+def main():
+    """Función principal del programa."""
+    print("--- Organizador de Archivos ---\n")
+    
+    # Obtener el directorio actual si no se especifica uno
+    directorio_actual = os.getcwd()
+    ruta = input(f"Ingresa la ruta del directorio a organizar (Enter para usar '{directorio_actual}'): ")
+    
+    # Usar el directorio actual si no se proporciona una ruta
+    ruta = ruta.strip() if ruta.strip() else directorio_actual
+    
+    # Mostrar advertencia
+    print("\n¡ADVERTENCIA: Este programa moverá los archivos a subdirectorios según su extensión.")
+    print("Asegúrate de hacer una copia de seguridad de tus archivos importantes.")
+    confirmacion = input("\n¿Deseas continuar? (s/n): ")
+    
+    if confirmacion.lower() == 's':
+        organizar_archivos(ruta)
+    else:
+        print("Operación cancelada.")
 
 if __name__ == "__main__":
     main()</code></pre>
-
-                <h4>Instrucciones para ejecutar el proyecto:</h4>
-                <ol>
-                    <li>Crea la estructura de directorios y archivos como se muestra arriba</li>
-                    <li>Copia el código correspondiente a cada archivo</li>
-                    <li>Asegúrate de tener Python instalado</li>
-                    <li>Ejecuta el programa con: <code>python main.py</code></li>
-                </ol>
-            </div>
-        </section>
-
-        <section class="summary">
-            <h2><i class="fas fa-clipboard-list"></i> Resumen</h2>
-            <div class="summary-grid">
-                <div class="summary-card">
-                    <h3>Módulos</h3>
-                    <ul>
-                        <li>Archivos <code>.py</code> con código Python</li>
-                        <li>Pueden contener funciones, clases y variables</li>
-                        <li>Se importan con <code>import modulo</code> o <code>from modulo import algo</code></li>
-                    </ul>
-                </div>
-                
-                <div class="summary-card">
-                    <h3>Paquetes</h3>
-                    <ul>
-                        <li>Directorios con un archivo <code>__init__.py</code></li>
-                        <li>Organizan módulos relacionados</li>
-                        <li>Pueden contener subpaquetes</li>
-                    </ul>
-                </div>
-                
-                <div class="summary-card">
-                    <h3>PIP</h3>
-                    <ul>
-                        <li>Sistema de gestión de paquetes</li>
-                        <li><code>pip install paquete</code> para instalar</li>
-                        <li><code>requirements.txt</code> para dependencias</li>
-                    </ul>
-                </div>
-                
-                <div class="summary-card">
-                    <h3>Buenas Prácticas</h3>
-                    <ul>
-                        <li>Usar entornos virtuales</li>
-                        <li>Documentar módulos y funciones</li>
-                        <li>Estructura clara de paquetes</li>
-                    </ul>
                 </div>
             </div>
         </section>
@@ -448,40 +641,29 @@ if __name__ == "__main__":
         <div class="container">
             <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
             <div class="navigation">
-                <a href="SESION1-7.html" class="btn">Sesión Anterior: 1.7 Diccionarios y conjuntos</a>
-                <a href="SESION1-9.html" class="btn">Siguiente Sesión: 1.9 Manejo de excepciones</a>
-            </div>
-            <div class="social-links">
-                <a href="#" class="social-link" title="Github" rel="noopener"><i class="fab fa-github"></i></a>
-                <a href="#" class="social-link" title="Twitter" rel="noopener"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="social-link" title="Linkedin" rel="noopener"><i class="fab fa-linkedin"></i></a>
+                <a href="SESION1-7.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 1.7 Diccionarios y Conjuntos</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION1-9.html" class="btn">Siguiente Sesión: 1.9 Manejo de Excepciones <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
-    <script src="script.js"></script>
     <script>
-        // Inicializar Prism para resaltar el código
+        // Función para mostrar/ocultar soluciones
+        function toggleHint(elementId) {
+            const element = document.getElementById(elementId);
+            if (element.style.display === 'none' || element.style.display === '') {
+                element.style.display = 'block';
+                element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                element.style.display = 'none';
+            }
+        }
+        
+        // Asegurar que las soluciones estén ocultas al cargar la página
         document.addEventListener('DOMContentLoaded', function() {
-            Prism.highlightAll();
-            
-            // Agregar botones de copiar a los bloques de código
-            document.querySelectorAll('pre code').forEach((block) => {
-                const button = document.createElement('button');
-                button.className = 'copy-button';
-                button.title = 'Copiar al portapapeles';
-                button.innerHTML = '<i class="far fa-copy"></i>';
-                button.onclick = () => copyToClipboard(block);
-                
-                // Agregar el botón al bloque de código
-                const pre = block.parentNode;
-                if (pre.parentNode.classList.contains('copyable')) {
-                    pre.parentNode.insertBefore(button, pre);
-                } else {
-                    pre.insertBefore(button, block);
-                }
+            document.querySelectorAll('.solution').forEach(solution => {
+                solution.style.display = 'none';
             });
         });
     </script>

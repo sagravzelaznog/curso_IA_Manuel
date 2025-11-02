@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesión 2.5: Cálculo Diferencial (I) - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+    <header class="session-header">
+        <div class="container">
+            <h1>Sesión 2.5: Cálculo Diferencial (I)</h1>
+            <p class="session-meta">Módulo 2: Matemáticas para IA | Duración: 60 minutos</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="learning-objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender el concepto fundamental de derivada</li>
+                <li>Aprender las reglas básicas de derivación</li>
+                <li>Entender la interpretación geométrica de la derivada</li>
+                <li>Implementar derivadas en Python usando SymPy</li>
+                <li>Explorar aplicaciones en optimización de funciones</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
+            
+            <article class="concept">
+                <h3>¿Qué es el cálculo diferencial?</h3>
+                <p>El cálculo diferencial es una rama de las matemáticas que estudia cómo cambian las funciones cuando sus variables cambian. Su concepto principal es la <strong>derivada</strong>.</p>
+                
+                <p>La derivada de una función en un punto representa la pendiente de la recta tangente a la curva en ese punto, lo que equivale a la tasa de cambio instantánea de la función.</p>
+                
+                <div class="math-equation">
+                    \[ f'(x) = \lim_{h \to 0} \frac{f(x + h) - f(x)}{h} \]
+                </div>
+                
+                <div class="info-box">
+                    <i class="fas fa-lightbulb"></i>
+                    <p><strong>Dato clave:</strong> En aprendizaje automático, las derivadas son fundamentales para el algoritmo de descenso de gradiente, que se utiliza para optimizar modelos.</p>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>Reglas básicas de derivación</h3>
+                
+                <h4>1. Derivada de una constante</h4>
+                <div class="math-equation">
+                    \[ \frac{d}{dx}(c) = 0 \]
+                </div>
+                
+                <h4>2. Regla de la potencia</h4>
+                <div class="math-equation">
+                    \[ \frac{d}{dx}(x^n) = nx^{n-1} \]
+                </div>
+                
+                <h4>3. Regla de la suma/resta</h4>
+                <div class="math-equation">
+                    \[ \frac{d}{dx}[f(x) \pm g(x)] = f'(x) \pm g'(x) \]
+                </div>
+                
+                <h4>4. Regla del producto</h4>
+                <div class="math-equation">
+                    \[ \frac{d}{dx}[f(x) \cdot g(x)] = f'(x) \cdot g(x) + f(x) \cdot g'(x) \]
+                </div>
+                
+                <h4>5. Regla del cociente</h4>
+                <div class="math-equation">
+                    \[ \frac{d}{dx}\left(\frac{f(x)}{g(x)}\right) = \frac{f'(x)g(x) - f(x)g'(x)}{[g(x)]^2} \]
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>Derivadas de funciones comunes</h3>
+                <table class="derivative-table">
+                    <tr>
+                        <th>Función</th>
+                        <th>Derivada</th>
+                    </tr>
+                    <tr>
+                        <td>\( \sin(x) \)</td>
+                        <td>\( \cos(x) \)</td>
+                    </tr>
+                    <tr>
+                        <td>\( \cos(x) \)</td>
+                        <td>\( -\sin(x) \)</td>
+                    </tr>
+                    <tr>
+                        <td>\( e^x \)</td>
+                        <td>\( e^x \)</td>
+                    </tr>
+                    <tr>
+                        <td>\( \ln(x) \)</td>
+                        <td>\( \frac{1}{x} \)</td>
+                    </tr>
+                </table>
+            </article>
+        </section>
+
+        <section class="practical-activity">
+            <h2><i class="fas fa-laptop-code"></i> Actividad Práctica</h2>
+            
+            <div class="step">
+                <h3>1. Cálculo de derivadas con SymPy</h3>
+                <p>Vamos a calcular derivadas usando la biblioteca SymPy en Python, que nos permite hacer cálculo simbólico.</p>
+                
+                <h4>Código en Python:</h4>
+                <pre><code class="language-python">from sympy import symbols, diff, exp, sin, cos, ln, simplify
+
+# Definir la variable simbólica
+x = symbols('x')
+
+# Ejemplo 1: Derivada de un polinomio
+f1 = x**3 - 2*x**2 + 5*x - 3
+df1 = diff(f1, x)
+print("1. Derivada de", f1, ":")
+print("   ", df1)
+
+# Ejemplo 2: Derivada de una función trigonométrica
+f2 = sin(x) * cos(x)
+df2 = diff(f2, x)
+print("\n2. Derivada de", f2, ":")
+print("   ", simplify(df2))  # simplify simplifica la expresión
+
+# Ejemplo 3: Derivada de una función exponencial
+f3 = exp(2*x) + ln(x)
+df3 = diff(f3, x)
+print("\n3. Derivada de", f3, ":")
+print("   ", df3)
+</code></pre>
+
+                <div class="hint">
+                    <span class="hint-button" onclick="toggleHint('hint1')">
+                        <i class="fas fa-lightbulb"></i> Explicación del código
+                    </span>
+                    <div id="hint1" class="hint-content">
+                        <p>Este código utiliza la biblioteca SymPy para cálculo simbólico. La función <code>diff()</code> calcula la derivada de una expresión con respecto a la variable especificada.</p>
+                        <p>El método <code>simplify()</code> se utiliza para simplificar expresiones matemáticas cuando sea posible.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>2. Visualización de la derivada como pendiente</h3>
+                <p>Vamos a visualizar cómo la derivada representa la pendiente de la recta tangente en un punto.</p>
+                
+                <pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+
+def f(x):
+    return x**2  # Función cuadrática
+
+def df(x):
+    return 2*x  # Derivada de x^2 es 2x
+
+# Punto donde calcularemos la recta tangente
+x0 = 1.5
+y0 = f(x0)
+m = df(x0)  # Pendiente de la recta tangente
+
+# Crear datos para la gráfica
+x = np.linspace(-2, 3, 400)
+y = f(x)
+
+# Ecuación de la recta tangente: y = m(x - x0) + y0
+tangent_line = m * (x - x0) + y0
+
+# Crear la gráfica
+plt.figure(figsize=(10, 6))
+plt.plot(x, y, label='f(x) = x²', linewidth=2)
+plt.plot(x, tangent_line, 'r--', label=f'Recta tangente en x={x0}')
+plt.scatter([x0], [y0], color='red')  # Punto de tangencia
+
+# Configuración de la gráfica
+plt.axhline(0, color='black', linewidth=0.5)
+plt.axvline(0, color='black', linewidth=0.5)
+plt.grid(True, linestyle='--', alpha=0.7)
+plt.title('Interpretación geométrica de la derivada')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()
+plt.axis('equal')
+plt.show()
+</code></pre>
+                
+                <div class="solution">
+                    <button class="btn" onclick="toggleSolution('sol1')">Explicación de la visualización</button>
+                    <div id="sol1" class="solution-content">
+                        <p>En esta visualización:</p>
+                        <ul>
+                            <li>La curva azul representa la función cuadrática f(x) = x².</li>
+                            <li>La línea roja discontinua es la recta tangente a la curva en el punto x=1.5.</li>
+                            <li>La pendiente de esta recta tangente es igual al valor de la derivada en ese punto (que es 3 cuando x=1.5).</li>
+                            <li>Puedes cambiar el valor de <code>x0</code> para ver cómo cambia la recta tangente en diferentes puntos de la curva.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>3. Aplicación: Encontrar mínimos de una función</h3>
+                <p>Un uso común de las derivadas es encontrar mínimos (o máximos) de funciones, lo cual es fundamental en algoritmos de optimización como el descenso de gradiente.</p>
+                
+                <pre><code class="language-python">from scipy.optimize import minimize_scalar
+
+def f(x):
+    return x**4 - 4*x**2 + 2*x + 5
+
+# Encontrar el mínimo de la función
+result = minimize_scalar(f)
+min_x = result.x
+min_y = result.fun
+
+print(f"El mínimo de la función está en x = {min_x:.4f}, f(x) = {min_y:.4f}")
+
+# Graficar la función y el mínimo encontrado
+x = np.linspace(-2, 2, 400)
+y = f(x)
+
+plt.figure(figsize=(10, 6))
+plt.plot(x, y, label='f(x) = x⁴ - 4x² + 2x + 5')
+plt.scatter([min_x], [min_y], color='red', label=f'Mínimo en ({min_x:.2f}, {min_y:.2f})')
+plt.axhline(0, color='black', linewidth=0.5)
+plt.axvline(0, color='black', linewidth=0.5)
+plt.grid(True, linestyle='--', alpha=0.7)
+plt.title('Encontrar el mínimo de una función')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()
+plt.show()
+</code></pre>
+                
+                <div class="hint">
+                    <span class="hint-button" onclick="toggleHint('hint2')">
+                        <i class="fas fa-lightbulb"></i> Relación con el aprendizaje automático
+                    </span>
+                    <div id="hint2" class="hint-content">
+                        <p>En aprendizaje automático, el proceso de entrenamiento de un modelo a menudo implica minimizar una función de pérdida. El algoritmo de descenso de gradiente, que utiliza derivadas, es fundamental para este propósito.</p>
+                        <p>La idea es similar al ejemplo mostrado, pero en múltiples dimensiones, donde la derivada se convierte en un gradiente (vector de derivadas parciales).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h2><i class="fas fa-clipboard-check"></i> Resumen</h2>
+            <ul>
+                <li>La derivada mide la tasa de cambio instantánea de una función.</li>
+                <li>Las reglas básicas de derivación nos permiten encontrar derivadas de funciones complejas.</li>
+                <li>Geométricamente, la derivada en un punto es la pendiente de la recta tangente a la curva en ese punto.</li>
+                <li>En Python, podemos usar SymPy para cálculo simbólico de derivadas.</li>
+                <li>Las derivadas son fundamentales en algoritmos de optimización como el descenso de gradiente, ampliamente utilizado en aprendizaje automático.</li>
+            </ul>
+        </section>
+
+        <section class="additional-resources">
+            <h2><i class="fas fa-book-open"></i> Recursos Adicionales</h2>
+            <ul>
+                <li><a href="https://es.khanacademy.org/math/differential-calculus" target="_blank" rel="noopener">Curso de Cálculo Diferencial en Khan Academy</a></li>
+                <li><a href="https://docs.sympy.org/latest/tutorial/calculus.html" target="_blank" rel="noopener">Documentación de SymPy para cálculo</a></li>
+                <li><a href="https://www.youtube.com/watch?v=9vKqVkMQHKk" target="_blank" rel="noopener">Video: Introducción al cálculo diferencial</a></li>
+            </ul>
+        </section>
+
+        <section class="homework">
+            <h2><i class="fas fa-tasks"></i> Tarea</h2>
+            <ol>
+                <li>Calcula manualmente las derivadas de las siguientes funciones:
+                    <ol type="a">
+                        <li>\( f(x) = 3x^4 - 2x^3 + 5x - 7 \)</li>
+                        <li>\( g(x) = \sin(x) \cdot e^x \) (usa la regla del producto)</li>
+                        <li>\( h(x) = \frac{x^2 + 1}{x - 1} \) (usa la regla del cociente)</li>
+                    </ol>
+                </li>
+                <li>Usa SymPy para verificar tus respuestas del ejercicio anterior.</li>
+                <li>Investiga y explica brevemente cómo se utiliza el concepto de derivada en el algoritmo de descenso de gradiente para el entrenamiento de redes neuronales.</li>
+                <li>Opcional: Modifica el código de visualización para mostrar la función y su derivada en la misma gráfica (usando dos ejes Y).</li>
+            </ol>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION2-4.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 2.4 Valores y vectores propios</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION2-6.html" class="btn">Siguiente Sesión: 2.6 Cálculo Diferencial (II) <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Configuración de MathJax para renderizar ecuaciones
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true,
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+                TeX: { equationNumbers: { autoNumber: "AMS" } }
+            }
+        });
+    </script>
+</body>
+</html>

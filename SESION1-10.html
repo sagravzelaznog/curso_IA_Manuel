@@ -3,262 +3,921 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sesión 1.10: Estructuras de Control en Python</title>
+    <title>Sesión 1.10: Programación Funcional - Curso de IA</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .solution {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #1e8449;
+        }
+        
+        .hint-button {
+            background-color: #1e8449;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .hint-button:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+        }
+
+        .code-example {
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .code-example h4 {
+            margin-bottom: 0.5rem;
+            color: #1e8449;
+        }
+
+        .concept-box {
+            background-color: #f0f8ff;
+            border-left: 4px solid #3498db;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .tip-box {
+            background-color: #e8f5e9;
+            border-left: 4px solid #2ecc71;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .warning-box {
+            background-color: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .function-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        .function-table th, .function-table td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        .function-table th {
+            background-color: #f2f2f2;
+        }
+
+        .function-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .function-signature {
+            font-family: monospace;
+            color: #d63384;
+            background-color: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <h1>Curso de Inteligencia Artificial</h1>
-            <h2>Sesión 1.10: Estructuras de Control en Python</h2>
-            <p class="session-duration"><i class="far fa-clock"></i> Duración: 60 minutos</p>
+    <header class="session-header">
+        <div class="container">
+            <h1>Sesión 1.10: Programación Funcional en Python</h1>
+            <p class="session-meta">Módulo 1: Introducción a Python | Duración: 60 minutos</p>
         </div>
     </header>
 
-    <main>
+    <main class="container">
         <section class="learning-objectives">
-            <h3><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h3>
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
             <ul>
-                <li>Comprender el uso de estructuras condicionales (if, elif, else)</li>
-                <li>Dominar los diferentes tipos de bucles (for, while)</li>
-                <li>Aplicar estructuras de control anidadas</li>
-                <li>Utilizar break, continue y pass en bucles</li>
-                <li>Resolver problemas prácticos con estructuras de control</li>
+                <li>Comprender los principios fundamentales de la programación funcional</li>
+                <li>Dominar el uso de funciones de orden superior</li>
+                <li>Aprender a trabajar con funciones lambda</li>
+                <li>Utilizar las funciones map, filter y reduce</li>
+                <li>Entender el concepto de inmutabilidad en programación funcional</li>
+                <li>Aplicar la programación funcional en problemas prácticos</li>
             </ul>
         </section>
 
         <section class="content">
-            <article>
-                <h3><i class="fas fa-code"></i> 1. Estructuras Condicionales</h3>
-                
-                <div class="code-container">
-                    <h4>Condicional if</h4>
-                    <pre><code class="language-python"># Estructura básica de if
-edad = 18
-if edad >= 18:
-    print("Eres mayor de edad")
-</code></pre>
-                </div>
-
-                <div class="code-container">
-                    <h4>Condicional if-else</h4>
-                    <pre><code class="language-python"># Estructura if-else
-nota = 7
-if nota >= 6:
-    print("¡Aprobado!")
-else:
-    print("Reprobado")
-</code></pre>
-                </div>
-
-                <div class="code-container">
-                    <h4>Condicional if-elif-else</h4>
-                    <pre><code class="language-python"># Estructura if-elif-else
-puntaje = 85
-
-if puntaje >= 90:
-    print("Excelente (A)")
-elif puntaje >= 80:
-    print("Muy bien (B)")
-elif puntaje >= 70:
-    print("Bien (C)")
-else:
-    print("Necesitas mejorar")
-</code></pre>
-                </div>
-            </article>
-
-            <article>
-                <h3><i class="fas fa-sync"></i> 2. Bucles en Python</h3>
-                
-                <div class="code-container">
-                    <h4>Bucle for</h4>
-                    <pre><code class="language-python"># Recorrer una lista
-frutas = ["manzana", "banana", "cereza"]
-for fruta in frutas:
-    print(f"Me gusta la {fruta}")
-
-# Usando range()
-for i in range(5):  # 0, 1, 2, 3, 4
-    print(f"Número: {i}")
-
-# Con inicio y fin
-for i in range(2, 6):  # 2, 3, 4, 5
-    print(i)
-
-# Con paso
-for i in range(0, 10, 2):  # 0, 2, 4, 6, 8
-    print(i)
-</code></pre>
-                </div>
-
-                <div class="code-container">
-                    <h4>Bucle while</h4>
-                    <pre><code class="language-python"># Contador con while
-contador = 0
-while contador < 5:
-    print(f"Contador: {contador}")
-    contador += 1
-
-# Bucle con condición de salida
-respuesta = ""
-while respuesta.lower() != "salir":
-    respuesta = input("Escribe 'salir' para terminar: ")
-    print(f"Escribiste: {respuesta}")
-</code></pre>
-                </div>
-            </article>
-
-            <article>
-                <h3><i class="fas fa-project-diagram"></i> 3. Estructuras de Control Anidadas</h3>
-                
-                <div class="code-container">
-                    <pre><code class="language-python"># Ejemplo de estructuras anidadas
-for i in range(1, 6):
-    print(f"\nTabla del {i}:")
-    print("-" * 12)
-    
-    j = 1
-    while j <= 10:
-        if i % 2 == 0:  # Si es par
-            print(f"{i} x {j:2} = {i*j:2}  (par)")
-        else:
-            print(f"{i} x {j:2} = {i*j:2}  (impar)")
-        j += 1
-</code></pre>
-                </div>
-            </article>
-
-            <article>
-                <h3><i class="fas fa-arrows-alt"></i> 4. Control de Flujo en Bucles</h3>
-                
-                <div class="code-container">
-                    <h4>break, continue y pass</h4>
-                    <pre><code class="language-python"># Uso de break
-print("Ejemplo de break:")
-for i in range(10):
-    if i == 5:
-        break  # Sale del bucle cuando i es 5
-    print(i)
-
-# Uso de continue
-print("\nEjemplo de continue:")
-for i in range(5):
-    if i == 2:
-        continue  # Salta a la siguiente iteración cuando i es 2
-    print(i)
-
-# Uso de pass
-print("\nEjemplo de pass:")
-for i in range(3):
-    pass  # No hace nada, se usa como marcador de posición
-    print("Después de pass")
-</code></pre>
-                </div>
-            </article>
-
-            <article class="practical-exercise">
-                <h3><i class="fas fa-laptop-code"></i> Ejercicio Práctico</h3>
-                <p>Crea un programa que simule un cajero automático con las siguientes características:</p>
-                <ol>
-                    <li>El saldo inicial es de $10,000</li>
-                    <li>Muestra un menú con opciones: Consultar saldo, Retirar, Depositar, Salir</li>
-                    <li>Usa estructuras de control para manejar las diferentes opciones</li>
-                    <li>Valida que no se pueda retirar más dinero del disponible</li>
-                    <li>El programa debe continuar ejecutándose hasta que el usuario elija Salir</li>
-                </ol>
-
-                <button onclick="toggleHint('solucion-cajero')">Mostrar Solución</button>
-                
-                <div id="solucion-cajero" class="solution">
-                    <pre><code class="language-python"># Solución del cajero automático
-saldo = 10000
-
-while True:
-    print("\n=== CAJERO AUTOMÁTICO ===")
-    print("1. Consultar saldo")
-    print("2. Retirar efectivo")
-    print("3. Depositar efectivo")
-    print("4. Salir")
-    
-    opcion = input("\nSeleccione una opción (1-4): ")
-    
-    if opcion == "1":
-        print(f"\nSu saldo actual es: ${saldo:,.2f}")
-        
-    elif opcion == "2":
-        try:
-            monto = float(input("\nIngrese el monto a retirar: "))
-            if monto <= 0:
-                print("El monto debe ser mayor a cero.")
-            elif monto > saldo:
-                print("Fondos insuficientes.")
-            else:
-                saldo -= monto
-                print(f"Retiro exitoso. Su nuevo saldo es: ${saldo:,.2f}")
-        except ValueError:
-            print("Por favor ingrese un monto válido.")
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
             
-    elif opcion == "3":
-        try:
-            monto = float(input("\nIngrese el monto a depositar: "))
-            if monto <= 0:
-                print("El monto debe ser mayor a cero.")
-            else:
-                saldo += monto
-                print(f"Depósito exitoso. Su nuevo saldo es: ${saldo:,.2f}")
-        except ValueError:
-            print("Por favor ingrese un monto válido.")
-            
-    elif opcion == "4":
-        print("\n¡Gracias por usar nuestro cajero automático!")
-        break
-        
+            <article class="concept">
+                <h3>1. Introducción a la Programación Funcional</h3>
+                
+                <p>La programación funcional es un paradigma de programación que trata la computación como la evaluación de funciones matemáticas y evita cambiar el estado y los datos mutables. Python, aunque no es un lenguaje puramente funcional, incorpora varios conceptos de programación funcional.</p>
+                
+                <div class="concept-box">
+                    <h4>Principios de la Programación Funcional</h4>
+                    <ul>
+                        <li><strong>Funciones como ciudadanos de primera clase</strong>: Las funciones pueden ser asignadas a variables, pasadas como argumentos y devueltas por otras funciones.</li>
+                        <li><strong>Inmutabilidad</strong>: Los datos no deben modificarse después de su creación.</li>
+                        <li><strong>Funciones puras</strong>: Funciones que siempre producen el mismo resultado para los mismos argumentos y no tienen efectos secundarios.</li>
+                        <li><strong>Recursión</strong>: Uso de funciones que se llaman a sí mismas.</li>
+                        <li><strong>Evaluación perezosa</strong>: La evaluación de expresiones se retrasa hasta que su valor sea necesario.</li>
+                    </ul>
+                </div>
+
+                <h4>1.1 Funciones como ciudadanos de primera clase</h4>
+                <p>En Python, las funciones son objetos de primera clase, lo que significa que pueden ser:</p>
+                
+                <div class="code-example">
+                    <h4>Funciones como objetos</h4>
+                    <pre><code class="language-python"># Asignar una función a una variable
+def saludar(nombre):
+    return f"¡Hola, {nombre}!"
+
+mi_funcion = saludar
+print(mi_funcion("Juan"))  # Salida: ¡Hola, Juan!
+
+# Pasar una función como argumento
+def aplicar_funcion(func, valor):
+    return func(valor)
+
+print(aplicar_funcion(saludar, "Ana"))  # Salida: ¡Hola, Ana!
+
+# Devolver una función desde otra función
+def crear_saludo(idioma):
+    def espanol(nombre):
+        return f"¡Hola, {nombre}!"
+    
+    def ingles(nombre):
+        return f"Hello, {name}!"
+    
+    if idioma == "es":
+        return espanol
     else:
-        print("\nOpción no válida. Por favor seleccione una opción del 1 al 4.")
-</code></pre>
+        return ingles
+
+saludo = crear_saludo("es")
+print(saludo("Carlos"))  # Salida: ¡Hola, Carlos!</code></pre>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>2. Funciones Lambda</h3>
+                
+                <p>Las funciones lambda son funciones anónimas (sin nombre) que pueden tener cualquier número de argumentos, pero solo una expresión. Son útiles para operaciones simples que pueden expresarse en una sola línea.</p>
+                
+                <div class="code-example">
+                    <h4>Sintaxis de funciones lambda</h4>
+                    <pre><code class="language-python"># Función normal
+def cuadrado(x):
+    return x ** 2
+
+# Equivalente con lambda
+cuadrado_lambda = lambda x: x ** 2
+
+print(cuadrado(5))          # Salida: 25
+print(cuadrado_lambda(5))   # Salida: 25
+
+# Uso común: ordenamiento con lambda
+personas = [
+    {"nombre": "Ana", "edad": 25},
+    {"nombre": "Juan", "edad": 30},
+    {"nombre": "María", "edad": 20}
+]
+
+# Ordenar por edad
+personas_ordenadas = sorted(personas, key=lambda p: p["edad"])
+print([p["nombre"] for p in personas_ordenadas])  # Salida: ['María', 'Ana', 'Juan']</code></pre>
+                </div>
+
+                <div class="tip-box">
+                    <h4><i class="fas fa-lightbulb"></i> Mejor práctica</h4>
+                    <p>Usa funciones lambda para operaciones simples que se pueden expresar en una sola expresión. Para lógica más compleja, es mejor definir una función con <code>def</code> para mayor claridad.</p>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>3. Funciones de Orden Superior</h3>
+                
+                <p>Las funciones de orden superior son funciones que toman una o más funciones como argumentos o devuelven una función como resultado.</p>
+                
+                <h4>3.1 Funciones integradas de orden superior</h4>
+                
+                <table class="function-table">
+                    <tr>
+                        <th>Función</th>
+                        <th>Descripción</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                    <tr>
+                        <td><code>map(función, iterable)</code></td>
+                        <td>Aplica una función a cada elemento de un iterable</td>
+                        <td><code>map(lambda x: x*2, [1,2,3]) → [2,4,6]</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>filter(función, iterable)</code></td>
+                        <td>Filtra elementos de un iterable según una condición</td>
+                        <td><code>filter(lambda x: x>2, [1,2,3,4]) → [3,4]</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>functools.reduce(función, iterable)</code></td>
+                        <td>Reduce un iterable a un solo valor aplicando una función acumulativa</td>
+                        <td><code>reduce(lambda x,y: x+y, [1,2,3,4]) → 10</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>sorted(iterable, key=función)</code></td>
+                        <td>Ordena un iterable según una función clave</td>
+                        <td><code>sorted(["manzana", "banana", "cereza"], key=len) → ["banana", "cereza", "manzana"]</code></td>
+                    </tr>
+                </table>
+                
+                <div class="code-example">
+                    <h4>Ejemplos prácticos de funciones de orden superior</h4>
+                    <pre><code class="language-python">from functools import reduce
+
+# Ejemplo de map: convertir temperaturas de Celsius a Fahrenheit
+celsius = [0, 10, 20, 30, 40]
+fahrenheit = list(map(lambda c: (9/5) * c + 32, celsius))
+print(fahrenheit)  # Salida: [32.0, 50.0, 68.0, 86.0, 104.0]
+
+# Ejemplo de filter: filtrar números pares
+numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+pares = list(filter(lambda x: x % 2 == 0, numeros))
+print(pares)  # Salida: [2, 4, 6, 8, 10]
+
+# Ejemplo de reduce: calcular el producto de todos los números
+producto = reduce(lambda x, y: x * y, [1, 2, 3, 4])
+print(producto)  # Salida: 24 (1*2*3*4)
+
+# Ejemplo de sorted con key: ordenar palabras por longitud
+palabras = ["manzana", "banana", "cereza", "kiwi", "uva"]
+palabras_ordenadas = sorted(palabras, key=len)
+print(palabras_ordenadas)  # Salida: ['uva', 'kiwi', 'banana', 'cereza', 'manzana']</code></pre>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>4. Comprensiones vs. Funciones de Orden Superior</h3>
+                
+                <p>En Python, las comprensiones de listas, conjuntos y diccionarios ofrecen una alternativa más legible a las funciones <code>map</code> y <code>filter</code> en muchos casos.</p>
+                
+                <div class="code-example">
+                    <h4>Comparación: map/filter vs. Comprensiones</h4>
+                    <pre><code class="language-python"># Usando map y filter
+numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+cuadrados_pares = list(map(lambda x: x**2, filter(lambda x: x % 2 == 0, numeros)))
+
+# Usando comprensión de lista
+cuadrados_pares_comp = [x**2 for x in numeros if x % 2 == 0]
+
+print(cuadrados_pares)       # Salida: [4, 16, 36, 64, 100]
+print(cuadrados_pares_comp)  # Salida: [4, 16, 36, 64, 100]
+
+# Comprensión de diccionario
+nombres = ["Ana", "Juan", "María"]
+edades = [25, 30, 28]
+personas = {nombre: edad for nombre, edad in zip(nombres, edades)}
+print(personas)  # Salida: {'Ana': 25, 'Juan': 30, 'María': 28}
+
+# Comprensión de conjunto
+numeros_duplicados = [1, 2, 2, 3, 4, 4, 5]
+numeros_unicos = {x for x in numeros_duplicados}
+print(numeros_unicos)  # Salida: {1, 2, 3, 4, 5}</code></pre>
+                </div>
+
+                <div class="tip-box">
+                    <h4><i class="fas fa-lightbulb"></i> Cuándo usar cada una</h4>
+                    <ul>
+                        <li><strong>Usa comprensiones</strong> cuando la operación sea simple y la legibilidad sea importante.</li>
+                        <li><strong>Usa map/filter</strong> cuando la operación ya esté definida como una función o cuando necesites encadenar operaciones.</li>
+                        <li><strong>Prefiere comprensiones</strong> en la mayoría de los casos por su mejor legibilidad y rendimiento.</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>5. Funciones de Orden Superior Personalizadas</h3>
+                
+                <p>Podemos crear nuestras propias funciones de orden superior para abstraer patrones comunes.</p>
+                
+                <div class="code-example">
+                    <h4>Ejemplo: Función de orden superior para temporizador</h4>
+                    <pre><code class="language-python">import time
+
+def temporizador(funcion):
+    ""
+    Decorador que mide el tiempo de ejecución de una función.
+    """
+    def envoltura(*args, **kwargs):
+        inicio = time.time()
+        resultado = funcion(*args, **kwargs)
+        fin = time.time()
+        print(f"{funcion.__name__} tardó {fin - inicio:.4f} segundos")
+        return resultado
+    return envoltura
+
+# Uso del decorador
+@temporizador
+def factorial(n):
+    """Calcula el factorial de n."""
+    if n == 0 or n == 1:
+        return 1
+    return n * factorial(n-1)
+
+# Llamada a la función decorada
+print(f"El factorial de 10 es: {factorial(10)}")
+
+# Salida:
+# factorial tardó 0.0000 segundos
+# El factorial de 10 es: 3628800</code></pre>
+                </div>
+
+                <div class="code-example">
+                    <h4>Ejemplo: Función de orden superior para reintentos</h4>
+                    <pre><code class="language-python">import random
+import time
+
+def reintentos(max_reintentos, delay=1, excepciones=(Exception,)):
+    """
+    Decorador que reintenta ejecutar una función si falla.
+    
+    Args:
+        max_reintentos: Número máximo de reintentos
+        delay: Segundos a esperar entre reintentos
+        excepciones: Tupla de excepciones que deben capturarse
+    """
+    def decorador(funcion):
+        def envoltura(*args, **kwargs):
+            intentos = 0
+            while True:
+                try:
+                    return funcion(*args, **kwargs)
+                except excepciones as e:
+                    intentos += 1
+                    if intentos > max_reintentos:
+                        print(f"Se agotaron los {max_reintentos} intentos")
+                        raise
+                    print(f"Intento {intentos} fallido: {e}. Reintentando en {delay} segundos...")
+                    time.sleep(delay)
+        return envoltura
+    return decorador
+
+# Uso del decorador
+@reintentos(max_reintentos=3, delay=2, excepciones=(ValueError, ZeroDivisionError))
+def operacion_arriesgada():
+    """Función que puede fallar aleatoriamente."""
+    valor = random.random()
+    if valor < 0.3:
+        raise ValueError("¡Valor demasiado bajo!")
+    elif valor > 0.7:
+        raise ZeroDivisionError("¡División por cero!")
+    return "¡Operación exitosa!"
+
+# Probamos la función
+for _ in range(5):
+    try:
+        print(operacion_arriesgada())
+    except Exception as e:
+        print(f"Error no manejado: {e}")
+    print("-" * 30)</code></pre>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>6. Recursión</h3>
+                
+                <p>La recursión es una técnica en la que una función se llama a sí misma para resolver un problema. Es un concepto fundamental en la programación funcional.</p>
+                
+                <div class="code-example">
+                    <h4>Ejemplo clásico: Factorial recursivo</h4>
+                    <pre><code class="language-python">def factorial(n):
+    """Calcula el factorial de n de forma recursiva."""
+    # Caso base
+    if n == 0 or n == 1:
+        return 1
+    # Caso recursivo
+    return n * factorial(n - 1)
+
+print(f"5! = {factorial(5)}")  # Salida: 5! = 120</code></pre>
+                </div>
+
+                <div class="code-example">
+                    <h4>Ejemplo: Búsqueda binaria recursiva</h4>
+                    <pre><code class="language-python">def busqueda_binaria(arr, objetivo, inicio=0, fin=None):
+    """
+    Implementación recursiva de búsqueda binaria.
+    Devuelve el índice del elemento si se encuentra, o -1 si no está.
+    """
+    if fin is None:
+        fin = len(arr) - 1
+    
+    # Caso base: elemento no encontrado
+    if inicio > fin:
+        return -1
+    
+    medio = (inicio + fin) // 2
+    
+    # Caso base: elemento encontrado
+    if arr[medio] == objetivo:
+        return medio
+    
+    # Búsqueda recursiva en la mitad correspondiente
+    if arr[medio] > objetivo:
+        return busqueda_binaria(arr, objetivo, inicio, medio - 1)
+    else:
+        return busqueda_binaria(arr, objetivo, medio + 1, fin)
+
+# Ejemplo de uso
+lista_ordenada = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
+objetivo = 11
+indice = busqueda_binaria(lista_ordenada, objetivo)
+
+if indice != -1:
+    print(f"El elemento {objetivo} se encuentra en el índice {indice}")
+else:
+    print(f"El elemento {objetivo} no está en la lista")</code></pre>
+                </div>
+
+                <div class="warning-box">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Limitaciones de la recursión en Python</h4>
+                    <p>Python tiene un límite de profundidad de recursión (generalmente 1000) para evitar desbordamientos de pila. Para funciones recursivas que podrían alcanzar este límite, considera usar iteración o la técnica de "tail recursion" con decoradores.</p>
                 </div>
             </article>
         </section>
 
-        <section class="summary">
-            <h3><i class="fas fa-clipboard-list"></i> Resumen de la Sesión</h3>
-            <ul>
-                <li>Las estructuras condicionales (if, elif, else) permiten ejecutar código basado en condiciones.</li>
-                <li>Los bucles (for, while) permiten repetir bloques de código.</li>
-                <li>Las estructuras de control pueden anidarse para crear lógicas más complejas.</li>
-                <li>Las palabras clave break, continue y pass ofrecen mayor control sobre el flujo de los bucles.</li>
-                <li>Las estructuras de control son fundamentales para crear programas interactivos y dinámicos.</li>
-            </ul>
-        </section>
+        <section class="practical-activity">
+            <h2><i class="fas fa-laptop-code"></i> Ejercicios Prácticos</h2>
+            
+            <div class="exercise">
+                <h4><i class="fas fa-pencil-alt"></i> Ejercicio 1: Procesador de Texto Funcional</h4>
+                <p>Crea un programa que procese un texto aplicando una serie de transformaciones funcionales.</p>
+                
+                <button class="hint-button" onclick="toggleHint('solucion1')">Mostrar Solución</button>
+                <div id="solucion1" class="solution">
+                    <pre><code class="language-python">from functools import reduce
+import re
 
-        <section class="resources">
-            <h3><i class="fas fa-book"></i> Recursos Adicionales</h3>
-            <ul>
-                <li><a href="https://docs.python.org/3/tutorial/controlflow.html" target="_blank" rel="noopener">Documentación oficial de Python sobre control de flujo</a></li>
-                <li><a href="https://www.w3schools.com/python/python_conditions.asp" target="_blank" rel="noopener">Tutorial de condiciones en W3Schools</a></li>
-                <li><a href="https://www.learnpython.org/es/" target="_blank" rel="noopener">Aprende Python (español)</a></li>
-            </ul>
+def procesar_texto(texto, transformaciones):
+    """
+    Aplica una serie de transformaciones funcionales a un texto.
+    
+    Args:
+        texto: El texto a procesar
+        transformaciones: Lista de funciones de transformación a aplicar
+        
+    Returns:
+        El texto transformado
+    """
+    return reduce(lambda t, f: f(t), transformaciones, texto)
+
+# Funciones de transformación
+a_minusculas = lambda t: t.lower()
+a_mayusculas = lambda t: t.upper()
+quitar_espacios = lambda t: ' '.join(t.split())
+quitar_signos = lambda t: re.sub(r'[^\w\s]', '', t)
+invertir_palabras = lambda t: ' '.join(t.split()[::-1])
+contar_palabras = lambda t: f"El texto tiene {len(t.split())} palabras"
+
+# Texto de ejemplo
+texto_ejemplo = """
+    La programación funcional es un paradigma de programación que trata la computación 
+    como la evaluación de funciones matemáticas y evita cambiar el estado y los datos mutables.
+"""
+
+# Definir el flujo de transformaciones
+transformaciones = [
+    a_minusculas,
+    quitar_signos,
+    quitar_espacios,
+    invertir_palabras,
+    contar_palabras
+]
+
+# Procesar el texto
+resultado = procesar_texto(texto_ejemplo, transformaciones)
+print(resultado)
+
+# Ejercicio adicional: Crear una función que permita al usuario construir su propio flujo
+def constructor_transformaciones():
+    """Interfaz para construir un flujo de transformaciones personalizado."""
+    print("\n--- Constructor de Flujo de Transformaciones ---")
+    print("Transformaciones disponibles:")
+    print("1. Convertir a minúsculas")
+    print("2. Convertir a mayúsculas")
+    print("3. Eliminar espacios adicionales")
+    print("4. Eliminar signos de puntuación")
+    print("5. Invertir orden de palabras")
+    print("6. Contar palabras")
+    print("0. Terminar")
+    
+    # Mapeo de opciones a funciones
+    opciones = {
+        1: ("Convertir a minúsculas", a_minusculas),
+        2: ("Convertir a mayúsculas", a_mayusculas),
+        3: ("Eliminar espacios adicionales", quitar_espacios),
+        4: ("Eliminar signos de puntuación", quitar_signos),
+        5: ("Invertir orden de palabras", invertir_palabras),
+        6: ("Contar palabras", contar_palabras)
+    }
+    
+    transformaciones_elegidas = []
+    
+    while True:
+        try:
+            opcion = int(input("\nSeleccione una transformación (0 para terminar): "))
+            
+            if opcion == 0:
+                if not transformaciones_elegidas:
+                    print("Debe seleccionar al menos una transformación.")
+                    continue
+                break
+                
+            if opcion not in opciones:
+                print("Opción no válida. Intente de nuevo.")
+                continue
+                
+            nombre, funcion = opciones[opcion]
+            transformaciones_elegidas.append(funcion)
+            print(f"Transformación agregada: {nombre}")
+            
+        except ValueError:
+            print("Por favor, ingrese un número válido.")
+    
+    return transformaciones_elegidas
+
+# Ejecutar el constructor de transformaciones
+print("\n--- Procesador de Texto Interactivo ---")
+texto_usuario = input("Ingrese el texto a procesar: ")
+transformaciones_usuario = constructor_transformaciones()
+
+if transformaciones_usuario:
+    resultado_final = procesar_texto(texto_usuario, transformaciones_usuario)
+    print("\n--- Resultado ---")
+    print(resultado_final)
+else:
+    print("No se aplicaron transformaciones.")</code></pre>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4><i class="fas fa-pencil-alt"></i> Ejercicio 2: Calculadora de Expresiones Funcional</h4>
+                <p>Crea una calculadora que evalúe expresiones matemáticas utilizando programación funcional.</p>
+                
+                <button class="hint-button" onclick="toggleHint('solucion2')">Mostrar Solución</button>
+                <div id="solucion2" class="solution">
+                    <pre><code class="language-python">from functools import reduce
+from operator import add, sub, mul, truediv
+import re
+
+# Diccionario de operaciones soportadas
+OPERACIONES = {
+    '+': {'func': add, 'precedencia': 1, 'asociatividad': 'izq'},
+    '-': {'func': sub, 'precedencia': 1, 'asociatividad': 'izq'},
+    '*': {'func': mul, 'precedencia': 2, 'asociatividad': 'izq'},
+    '/': {'func': truediv, 'precedencia': 2, 'asociatividad': 'izq'},
+    '^': {'func': lambda x, y: x ** y, 'precedencia': 3, 'asociatividad': 'der'}
+}
+
+def tokenizar(expresion):
+    """Convierte una expresión matemática en una lista de tokens."""
+    # Expresión regular para identificar números, operadores y paréntesis
+    patron = r'\d+\.?\d*|[+\-*/^()]|\b(sin|cos|tan|sqrt|log)\b'
+    tokens = re.findall(patron, expresion)
+    return tokens
+
+def evaluar_expresion(expresion):
+    """Evalúa una expresión matemática en notación infija."""
+    # Convertir a notación polaca inversa (RPN) usando el algoritmo Shunting-yard
+    rpn = []
+    pila_operadores = []
+    
+    for token in tokenizar(expresion):
+        if re.match(r'\d+\.?\d*', token):
+            # Es un número
+            rpn.append(float(token) if '.' in token else int(token))
+        elif token in OPERACIONES:
+            # Es un operador
+            while (pila_operadores and 
+                   pila_operadores[-1] != '(' and
+                   (OPERACIONES[pila_operadores[-1]]['precedencia'] > OPERACIONES[token]['precedencia'] or
+                    (OPERACIONES[pila_operadores[-1]]['precedencia'] == OPERACIONES[token]['precedencia'] and
+                     OPERACIONES[token]['asociatividad'] == 'izq'))):
+                rpn.append(pila_operadores.pop())
+            pila_operadores.append(token)
+        elif token == '(':
+            # Paréntesis izquierdo
+            pila_operadores.append(token)
+        elif token == ')':
+            # Paréntesis derecho
+            while pila_operadores and pila_operadores[-1] != '(':
+                rpn.append(pila_operadores.pop())
+            if not pila_operadores:
+                raise ValueError("Paréntesis desbalanceados")
+            pila_operadores.pop()  # Sacar el paréntesis izquierdo
+    
+    # Vaciar la pila de operadores
+    while pila_operadores:
+        if pila_operadores[-1] == '(':
+            raise ValueError("Paréntesis desbalanceados")
+        rpn.append(pila_operadores.pop())
+    
+    # Evaluar la expresión en notación polaca inversa
+    pila = []
+    
+    for token in rpn:
+        if isinstance(token, (int, float)):
+            pila.append(token)
+        elif token in OPERACIONES:
+            if len(pila) < 2:
+                raise ValueError("Expresión inválida")
+            b = pila.pop()
+            a = pila.pop()
+            try:
+                resultado = OPERACIONES[token]['func'](a, b)
+                pila.append(resultado)
+            except ZeroDivisionError:
+                raise ValueError("División por cero")
+    
+    if len(pila) != 1:
+        raise ValueError("Expresión inválida")
+    
+    return pila[0]
+
+def calculadora_interactiva():
+    """Interfaz interactiva para la calculadora funcional."""
+    print("Calculadora Funcional")
+    print("Operadores soportados: +, -, *, /, ^ (potencia)")
+    print("Ingrese 'salir' para terminar")
+    
+    while True:
+        try:
+            expresion = input("\nExpresión: ").strip()
+            
+            if expresion.lower() in ('salir', 'exit', 'q'):
+                print("¡Hasta luego!")
+                break
+                
+            if not expresion:
+                continue
+                
+            resultado = evaluar_expresion(expresion)
+            print(f"Resultado: {resultado}")
+            
+        except (ValueError, KeyError) as e:
+            print(f"Error: {e}")
+        except Exception as e:
+            print(f"Error inesperado: {e}")
+
+if __name__ == "__main__":
+    # Ejemplos de uso
+    expresiones = [
+        "3 + 4 * 2 / (1 - 5) ^ 2",
+        "(1 + 2) * 3",
+        "2 ^ 3 ^ 2",  # 2^(3^2) = 512, no (2^3)^2 = 64
+        "10 / (2 + 3) * 4"
+    ]
+    
+    print("Ejemplos de expresiones:")
+    for expr in expresiones:
+        try:
+            resultado = evaluar_expresion(expr)
+            print(f"{expr} = {resultado}")
+        except Exception as e:
+            print(f"Error al evaluar '{expr}': {e}")
+    
+    # Iniciar calculadora interactiva
+    calculadora_interactiva()</code></pre>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4><i class="fas fa-pencil-alt"></i> Ejercicio 3: Generador de Reportes con Programación Funcional</h4>
+                <p>Crea un sistema de generación de reportes utilizando programación funcional.</p>
+                
+                <button class="hint-button" onclick="toggleHint('solucion3')">Mostrar Solución</button>
+                <div id="solucion3" class="solution">
+                    <pre><code class="language-python">from functools import reduce
+from datetime import datetime
+from typing import List, Dict, Callable, Any
+import json
+import csv
+
+# Tipo de datos para los registros
+Registro = Dict[str, Any]
+Filtro = Callable[[Registro], bool]
+Transformacion = Callable[[Registro], Registro]
+Agregacion = Callable[[List[Registro]], Any]
+
+class GeneradorReportes:
+    """Clase para generar reportes usando programación funcional."""
+    
+    def __init__(self, datos: List[Registro]):
+        self.datos = datos
+    
+    def filtrar(self, *filtros: Filtro) -> 'GeneradorReportes':
+        """Aplica una serie de filtros a los datos."""
+        datos_filtrados = self.datos
+        
+        # Aplicar cada filtro de forma secuencial
+        for filtro in filtros:
+            datos_filtrados = list(filter(filtro, datos_filtrados))
+            
+        return GeneradorReportes(datos_filtrados)
+    
+    def transformar(self, *transformaciones: Transformacion) -> 'GeneradorReportes':
+        """Aplica una serie de transformaciones a los datos."""
+        datos_transformados = self.datos
+        
+        # Aplicar cada transformación de forma secuencial
+        for transformacion in transformaciones:
+            datos_transformados = list(map(transformacion, datos_transformados))
+            
+        return GeneradorReportes(datos_transformados)
+    
+    def agregar(self, clave: str, funcion_agregacion: Agregacion) -> 'GeneradorReportes':
+        """Agrega un campo calculado a los datos."""
+        valor_agregado = funcion_agregacion(self.datos)
+        return GeneradorReportes([{**d, clave: valor_agregado} for d in self.datos])
+    
+    def obtener_datos(self) -> List[Registro]:
+        """Obtiene los datos procesados."""
+        return self.datos
+    
+    def a_json(self, archivo_salida: str) -> None:
+        """Exporta los datos a un archivo JSON."""
+        with open(archivo_salida, 'w', encoding='utf-8') as f:
+            json.dump(self.datos, f, indent=2, ensure_ascii=False)
+    
+    def a_csv(self, archivo_salida: str) -> None:
+        """Exporta los datos a un archivo CSV."""
+        if not self.datos:
+            return
+            
+        # Obtener los nombres de las columnas
+        campos = list(self.datos[0].keys())
+        
+        with open(archivo_salida, 'w', newline='', encoding='utf-8') as f:
+            writer = csv.DictWriter(f, fieldnames=campos)
+            writer.writeheader()
+            writer.writerows(self.datos)
+    
+    def resumir(self, campo: str, funcion_resumen: Callable[[List[Any]], Any]) -> Dict[str, Any]:
+        """Genera un resumen de un campo específico."""
+        valores = [d.get(campo) for d in self.datos if campo in d]
+        return {
+            'campo': campo,
+            'resumen': funcion_resumen(valores),
+            'total_registros': len(valores)
+        }
+
+def cargar_datos_ejemplo() -> List[Registro]:
+    """Carga un conjunto de datos de ejemplo."""
+    return [
+        {'id': 1, 'nombre': 'Laptop', 'categoria': 'Electrónicos', 'precio': 1200, 'stock': 15, 'fecha': '2023-01-15'},
+        {'id': 2, 'nombre': 'Smartphone', 'categoria': 'Electrónicos', 'precio': 800, 'stock': 30, 'fecha': '2023-02-20'},
+        {'id': 3, 'nombre': 'Auriculares', 'categoria': 'Accesorios', 'precio': 100, 'stock': 50, 'fecha': '2023-03-10'},
+        {'id': 4, 'nombre': 'Teclado', 'categoria': 'Accesorios', 'precio': 50, 'stock': 25, 'fecha': '2023-01-25'},
+        {'id': 5, 'nombre': 'Mouse', 'categoria': 'Accesorios', 'precio': 30, 'stock': 40, 'fecha': '2023-04-05'},
+        {'id': 6, 'nombre': 'Monitor', 'categoria': 'Electrónicos', 'precio': 300, 'stock': 10, 'fecha': '2023-02-15'},
+        {'id': 7, 'nombre': 'Impresora', 'categoria': 'Oficina', 'precio': 200, 'stock': 8, 'fecha': '2023-03-01'},
+        {'id': 8, 'nombre': 'Tablet', 'categoria': 'Electrónicos', 'precio': 250, 'stock': 20, 'fecha': '2023-01-10'},
+        {'id': 9, 'nombre': 'Cargador', 'categoria': 'Accesorios', 'precio': 25, 'stock': 60, 'fecha': '2023-04-12'},
+        {'id': 10, 'nombre': 'Disco Duro', 'categoria': 'Almacenamiento', 'precio': 120, 'stock': 18, 'fecha': '2023-03-20'}
+    ]
+
+def main():
+    # Cargar datos de ejemplo
+    datos = cargar_datos_ejemplo()
+    
+    # Crear instancia del generador de reportes
+    reportes = GeneradorReportes(datos)
+    
+    # Definir filtros
+    def stock_bajo(umbral: int) -> Filtro:
+        return lambda x: x['stock'] < umbral
+    
+    def en_categoria(*categorias: str) -> Filtro:
+        return lambda x: x['categoria'] in categorias
+    
+    # Definir transformaciones
+    def agregar_iva(iva: float = 0.16) -> Transformacion:
+        return lambda x: {**x, 'precio_con_iva': x['precio'] * (1 + iva)}
+    
+    def formatear_fecha(formato: str = '%d/%m/%Y') -> Transformacion:
+        return lambda x: {
+            **x,
+            'fecha_formateada': datetime.strptime(x['fecha'], '%Y-%m-%d').strftime(formato)
+        }
+    
+    # Generar reporte 1: Productos electrónicos con stock bajo
+    print("\n--- Reporte 1: Productos electrónicos con stock bajo ---")
+    reporte1 = (
+        reportes
+        .filtrar(
+            en_categoria('Electrónicos'),
+            stock_bajo(20)
+        )
+        .transformar(
+            agregar_iva(0.16),
+            formatear_fecha()
+        )
+    )
+    
+    for producto in reporte1.obtener_datos():
+        print(f"{producto['nombre']} - Stock: {producto['stock']} - Precio con IVA: ${producto['precio_con_iva']:.2f}")
+    
+    # Generar reporte 2: Resumen por categoría
+    print("\n--- Reporte 2: Resumen por categoría ---")
+    categorias = set(d['categoria'] for d in datos)
+    
+    for categoria in categorias:
+        reporte_categoria = reportes.filtrar(lambda x: x['categoria'] == categoria)
+        total_productos = len(reporte_categoria.obtener_datos())
+        total_stock = sum(p['stock'] for p in reporte_categoria.obtener_datos())
+        valor_inventario = sum(p['precio'] * p['stock'] for p in reporte_categoria.obtener_datos())
+        
+        print(f"\nCategoría: {categoria}")
+        print(f"  - Productos: {total_productos}")
+        print(f"  - Stock total: {total_stock}")
+        print(f"  - Valor de inventario: ${valor_inventario:.2f}")
+    
+    # Generar reporte 3: Productos con descuento especial
+    print("\n--- Reporte 3: Productos con descuento especial ---")
+    
+    def aplicar_descuento(porcentaje: float) -> Transformacion:
+        return lambda x: {
+            **x,
+            'precio_descuento': x['precio'] * (1 - porcentaje / 100),
+            'descuento_aplicado': f"{porcentaje}%"
+        }
+    
+    reporte3 = (
+        reportes
+        .filter(lambda x: x['precio'] > 100)
+        .transform(
+            aplicar_descuento(15),
+            formatear_fecha()
+        )
+    )
+    
+    for producto in reporte3.obtener_datos():
+        print(f"{producto['nombre']} - Precio original: ${producto['precio']:.2f} "
+              f"| Descuento: {producto['descuento_aplicado']} "
+              f"| Precio con descuento: ${producto['precio_descuento']:.2f}")
+    
+    # Exportar reportes a archivos
+    reporte1.a_json('reporte_electronicos_stock_bajo.json')
+    reporte3.a_csv('productos_con_descuento.csv')
+    
+    print("\nReportes exportados correctamente.")
+
+if __name__ == "__main__":
+    main()</code></pre>
+                </div>
+            </div>
         </section>
     </main>
 
-   
     <footer>
-					<div class="container">
-									<p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
-									<div class="navigation">
-													<a href="SESION1-9.html" class="btn">Sesión Anterior: 1.9 Manejo de excepciones</a>
-													<a href="SESION1-11.html" class="btn">Siguiente Sesión: 1.11 Programación orientada a objetos (I)</a>
-									</div>
-									<div class="social-links">
-													<a href="#" class="social-link" title="Github" rel="noopener"><i class="fab fa-github"></i></a>
-													<a href="#" class="social-link" title="Twitter" rel="noopener"><i class="fab fa-twitter"></i></a>
-													<a href="#" class="social-link" title="Linkedin" rel="noopener"><i class="fab fa-linkedin"></i></a>
-									</div>
-					</div>
-	</footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION1-9.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 1.9 Manejo de Excepciones</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION1-11.html" class="btn">Siguiente Sesión: 1.11 Programación Orientada a Objetos (I) <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </footer>
 
-    <script src="script.js"></script>
+    <script>
+        // Función para mostrar/ocultar soluciones
+        function toggleHint(elementId) {
+            const element = document.getElementById(elementId);
+            if (element.style.display === 'none' || element.style.display === '') {
+                element.style.display = 'block';
+                element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                element.style.display = 'none';
+            }
+        }
+        
+        // Asegurar que las soluciones estén ocultas al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.solution').forEach(solution => {
+                solution.style.display = 'none';
+            });
+        });
+    </script>
 </body>
 </html>
