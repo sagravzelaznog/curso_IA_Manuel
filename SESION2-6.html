@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesión 2.6: Cálculo Diferencial (II) - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+    <header class="session-header">
+        <div class="container">
+            <h1>Sesión 2.6: Cálculo Diferencial (II)</h1>
+            <p class="session-meta">Módulo 2: Matemáticas para IA | Duración: 60 minutos</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="learning-objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender el concepto de derivadas de orden superior</li>
+                <li>Aprender sobre la regla de la cadena y su importancia</li>
+                <li>Entender la regla de L'Hôpital para límites indeterminados</li>
+                <li>Explorar aplicaciones en optimización y análisis de funciones</li>
+                <li>Implementar conceptos avanzados de cálculo en Python</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
+            
+            <article class="concept">
+                <h3>Derivadas de Orden Superior</h3>
+                <p>Las derivadas de orden superior son simplemente derivadas de derivadas. La segunda derivada es la derivada de la primera derivada, la tercera derivada es la derivada de la segunda derivada, y así sucesivamente.</p>
+                
+                <div class="math-equation">
+                    \[ f''(x) = \frac{d}{dx}\left(\frac{df}{dx}\right) = \frac{d^2f}{dx^2} \]
+                </div>
+                
+                <div class="info-box">
+                    <i class="fas fa-lightbulb"></i>
+                    <p><strong>Aplicación:</strong> En física, la primera derivada de la posición con respecto al tiempo es la velocidad, y la segunda derivada es la aceleración.</p>
+                </div>
+                
+                <h4>Ejemplo:</h4>
+                <p>Para \( f(x) = x^3 + 2x^2 + x + 1 \):</p>
+                <div class="math-equation">
+                    \[ f'(x) = 3x^2 + 4x + 1 \]
+                    \[ f''(x) = 6x + 4 \]
+                    \[ f'''(x) = 6 \]
+                    \[ f^{(4)}(x) = 0 \]
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>Regla de la Cadena</h3>
+                <p>La regla de la cadena nos permite derivar funciones compuestas. Si tenemos una función \( y = f(g(x)) \), entonces:</p>
+                
+                <div class="math-equation">
+                    \[ \frac{dy}{dx} = f'(g(x)) \cdot g'(x) \]
+                </div>
+                
+                <h4>Ejemplo:</h4>
+                <p>Para \( y = \sin(x^2) \):</p>
+                <div class="math-equation">
+                    \[ \frac{dy}{dx} = \cos(x^2) \cdot 2x \]
+                </div>
+                
+                <div class="info-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p><strong>Importante:</strong> La regla de la cadena es fundamental en el entrenamiento de redes neuronales, donde se utiliza en la retropropagación (backpropagation).</p>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>Regla de L'Hôpital</h3>
+                <p>Esta regla es útil para evaluar límites indeterminados de la forma \( \frac{0}{0} \) o \( \frac{\infty}{\infty} \).</p>
+                
+                <p>Si \( \lim_{x \to a} \frac{f(x)}{g(x)} \) es una forma indeterminada, entonces:</p>
+                <div class="math-equation">
+                    \[ \lim_{x \to a} \frac{f(x)}{g(x)} = \lim_{x \to a} \frac{f'(x)}{g'(x)} \]
+                </div>
+                
+                <h4>Ejemplo:</h4>
+                <p>Evaluar \( \lim_{x \to 0} \frac{\sin(x)}{x} \):</p>
+                <div class="math-equation">
+                    \[ \lim_{x \to 0} \frac{\sin(x)}{x} = \lim_{x \to 0} \frac{\cos(x)}{1} = 1 \]
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>Análisis de Funciones</h3>
+                <p>Las derivadas nos permiten analizar el comportamiento de las funciones:</p>
+                
+                <table class="derivative-table">
+                    <tr>
+                        <th>Característica</th>
+                        <th>Condición</th>
+                        <th>Interpretación</th>
+                    </tr>
+                    <tr>
+                        <td>Máximo local</td>
+                        <td>\( f'(x) = 0 \) y \( f''(x) < 0 \)</td>
+                        <td>La función tiene un pico en este punto</td>
+                    </tr>
+                    <tr>
+                        <td>Mínimo local</td>
+                        <td>\( f'(x) = 0 \) y \( f''(x) > 0 \)</td>
+                        <td>La función tiene un valle en este punto</td>
+                    </tr>
+                    <tr>
+                        <td>Punto de inflexión</td>
+                        <td>\( f''(x) = 0 \) y cambia de signo</td>
+                        <td>La concavidad de la función cambia</td>
+                    </tr>
+                </table>
+            </article>
+        </section>
+
+        <section class="practical-activity">
+            <h2><i class="fas fa-laptop-code"></i> Actividad Práctica</h2>
+            
+            <div class="step">
+                <h3>1. Cálculo de derivadas con SymPy</h3>
+                <p>Vamos a calcular derivadas de orden superior y aplicar la regla de la cadena usando SymPy.</p>
+                
+                <h4>Código en Python:</h4>
+                <pre><code class="language-python">from sympy import symbols, diff, sin, cos, exp, ln, simplify
+
+# Definir la variable simbólica
+x = symbols('x')
+
+# Ejemplo 1: Derivadas de orden superior
+f1 = x**4 - 3*x**3 + 2*x**2 - 5*x + 1
+df1 = diff(f1, x)        # Primera derivada
+d2f1 = diff(f1, x, 2)    # Segunda derivada
+d3f1 = diff(f1, x, 3)    # Tercera derivada
+
+print("1. Función:", f1)
+print("   Primera derivada:", df1)
+print("   Segunda derivada:", d2f1)
+print("   Tercera derivada:", d3f1)
+
+# Ejemplo 2: Regla de la cadena
+f2 = sin(x**2 + 3*x)  # f(g(x)) donde g(x) = x² + 3x
+df2 = diff(f2, x)
+print("\n2. Función:", f2)
+print("   Derivada usando regla de la cadena:", df2)
+
+# Ejemplo 3: Regla de L'Hôpital
+from sympy import limit, oo
+
+# Definir la función
+f3 = (exp(x) - 1 - x) / (x**2)
+
+# Calcular el límite cuando x->0
+lim_f3 = limit(f3, x, 0)
+print("\n3. Límite usando L'Hôpital:")
+print(f"   lim(x->0) (e^x - 1 - x)/x² = {lim_f3}")
+</code></pre>
+
+                <div class="hint">
+                    <span class="hint-button" onclick="toggleHint('hint1')">
+                        <i class="fas fa-lightbulb"></i> Explicación del código
+                    </span>
+                    <div id="hint1" class="hint-content">
+                        <p>Este código muestra cómo calcular derivadas de orden superior usando <code>diff(f, x, n)</code> donde <code>n</code> es el orden de la derivada.</p>
+                        <p>También demuestra la regla de la cadena en acción y cómo usar SymPy para evaluar límites que requieren la regla de L'Hôpital.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>2. Análisis de Funciones</h3>
+                <p>Vamos a analizar una función para encontrar sus puntos críticos, máximos, mínimos y puntos de inflexión.</p>
+                
+                <pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import minimize_scalar
+from scipy.misc import derivative
+
+def f(x):
+    return x**4 - 4*x**3 + 2
+
+def df(x):
+    return 4*x**3 - 12*x**2
+
+def d2f(x):
+    return 12*x**2 - 24*x
+
+# Encontrar puntos críticos (donde f'(x) = 0)
+from scipy.optimize import root
+critical_points = root(df, x0=[1, 3]).x  # Valores iniciales para encontrar raíces
+critical_points = np.sort(critical_points)  # Ordenar los puntos críticos
+
+# Clasificar los puntos críticos
+for x0 in critical_points:
+    d2f_x0 = d2f(x0)
+    if d2f_x0 > 0:
+        point_type = "Mínimo local"
+    elif d2f_x0 < 0:
+        point_type = "Máximo local"
+    else:
+        point_type = "Punto de silla o punto de inflexión"
+    print(f"Punto crítico en x = {x0:.4f}: {point_type}")
+
+# Encontrar puntos de inflexión (donde f''(x) = 0)
+inflection_points = root(d2f, x0=[0, 2]).x
+inflection_points = np.sort(inflection_points)
+print(f"\nPuntos de inflexión en x = {inflection_points[0]:.4f} y x = {inflection_points[1]:.4f}")
+
+# Crear la gráfica
+x_vals = np.linspace(-1, 4, 400)
+y_vals = f(x_vals)
+
+plt.figure(figsize=(12, 8))
+plt.plot(x_vals, y_vals, label='f(x) = x⁴ - 4x³ + 2', linewidth=2)
+
+# Marcar puntos críticos
+for x0 in critical_points:
+    y0 = f(x0)
+    plt.scatter([x0], [y0], color='red', s=100, zorder=5)
+    plt.annotate(f'({x0:.2f}, {y0:.2f})', 
+                 (x0, y0), 
+                 textcoords="offset points",
+                 xytext=(0,10), 
+                 ha='center')
+
+# Marcar puntos de inflexión
+for x0 in inflection_points:
+    y0 = f(x0)
+    plt.scatter([x0], [y0], color='green', s=100, marker='s', zorder=5)
+    plt.annotate(f'Inf. ({x0:.2f}, {y0:.2f})', 
+                 (x0, y0), 
+                 textcoords="offset points",
+                 xytext=(0,-15), 
+                 ha='center')
+
+# Configuración de la gráfica
+plt.axhline(0, color='black', linewidth=0.5)
+plt.axvline(0, color='black', linewidth=0.5)
+plt.grid(True, linestyle='--', alpha=0.7)
+plt.title('Análisis de la función f(x) = x⁴ - 4x³ + 2')
+plt.xlabel('x')
+plt.ylabel('f(x)')
+plt.legend()
+plt.show()
+</code></pre>
+                
+                <div class="solution">
+                    <button class="btn" onclick="toggleSolution('sol1')">Explicación de la visualización</button>
+                    <div id="sol1" class="solution-content">
+                        <p>En esta visualización:</p>
+                        <ul>
+                            <li>La curva azul representa la función f(x) = x⁴ - 4x³ + 2.</li>
+                            <li>Los puntos rojos son los puntos críticos (donde f'(x) = 0).</li>
+                            <li>Los cuadrados verdes son los puntos de inflexión (donde f''(x) = 0).</li>
+                            <li>Las anotaciones muestran las coordenadas de estos puntos importantes.</li>
+                            <li>Puedes modificar la función en el código para analizar otras funciones.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>3. Optimización con Derivadas</h3>
+                <p>Vamos a implementar el método de Newton para encontrar raíces de una función, que utiliza derivadas para converger más rápidamente que los métodos de bisección o secante.</p>
+                
+                <pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+
+def newton_method(f, df, x0, tol=1e-6, max_iter=100):
+    """
+    Método de Newton para encontrar raíces de f(x) = 0
+    
+    Parámetros:
+    f -- función para la que buscamos raíces
+    df -- derivada de la función f
+    x0 -- estimación inicial
+    tol -- tolerancia para la convergencia
+    max_iter -- número máximo de iteraciones
+    """
+    print(f"\nMétodo de Newton para f(x) = 0")
+    print("-" * 50)
+    print(f"{'Iteración':<10} {'x':<15} {'f(x)':<15} 'Error'")
+    print("-" * 50)
+    
+    x = x0
+    for i in range(max_iter):
+        fx = f(x)
+        if abs(fx) < tol:
+            print(f"Convergencia alcanzada en {i} iteraciones.")
+            return x
+        
+        dfx = df(x)
+        if dfx == 0:
+            print("Derivada cero. No se puede continuar.")
+            return None
+            
+        x_new = x - fx / dfx
+        error = abs(x_new - x)
+        
+        print(f"{i:<10} {x:<15.8f} {fx:<15.8f} {error:.2e}")
+        
+        if error < tol:
+            print(f"Convergencia alcanzada en {i+1} iteraciones.")
+            return x_new
+            
+        x = x_new
+    
+    print("Número máximo de iteraciones alcanzado.")
+    return x
+
+# Definir una función y su derivada
+def f(x):
+    return x**3 - 2*x - 5  # Queremos resolver x³ - 2x - 5 = 0
+
+def df(x):
+    return 3*x**2 - 2
+
+# Aplicar el método de Newton
+root = newton_method(f, df, x0=2.0)
+print(f"\nRaíz aproximada: x ≈ {root:.8f}")
+print(f"f({root:.8f}) = {f(root):.8f}")
+
+# Visualización
+x_vals = np.linspace(1, 3, 400)
+y_vals = f(x_vals)
+
+plt.figure(figsize=(10, 6))
+plt.plot(x_vals, y_vals, label='f(x) = x³ - 2x - 5')
+plt.axhline(0, color='black', linewidth=0.5)
+plt.scatter([root], [0], color='red', label=f'Raíz aproximada: x ≈ {root:.6f}')
+plt.title('Método de Newton para encontrar raíces')
+plt.xlabel('x')
+plt.ylabel('f(x)')
+plt.legend()
+plt.grid(True, linestyle='--', alpha=0.7)
+plt.show()
+</code></pre>
+                
+                <div class="hint">
+                    <span class="hint-button" onclick="toggleHint('hint2')">
+                        <i class="fas fa-lightbulb"></i> Relación con el aprendizaje automático
+                    </span>
+                    <div id="hint2" class="hint-content">
+                        <p>El método de Newton es un algoritmo de optimización que utiliza información de segundo orden (derivadas segundas) para converger más rápidamente a un mínimo o raíz. En el contexto del aprendizaje automático:</p>
+                        <ul>
+                            <li>Es la base para métodos de optimización de segundo orden como el método de Newton-Raphson.</li>
+                            <li>Es más rápido que el descenso de gradiente estándar pero puede ser más costoso computacionalmente para problemas de alta dimensión.</li>
+                            <li>Se utiliza en algoritmos como el método de Newton-CG para regresión logística.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h2><i class="fas fa-clipboard-check"></i> Resumen</h2>
+            <ul>
+                <li>Las derivadas de orden superior nos permiten analizar la concavidad y puntos de inflexión de funciones.</li>
+                <li>La regla de la cadena es esencial para derivar funciones compuestas y es fundamental en la retropropagación de redes neuronales.</li>
+                <li>La regla de L'Hôpital es útil para evaluar límites indeterminados.</li>
+                <li>El análisis de funciones con derivadas nos ayuda a encontrar máximos, mínimos y puntos de inflexión.</li>
+                <li>Los métodos numéricos como el de Newton utilizan derivadas para encontrar raíces y optimizar funciones de manera eficiente.</li>
+            </ul>
+        </section>
+
+        <section class="additional-resources">
+            <h2><i class="fas fa-book-open"></i> Recursos Adicionales</h2>
+            <ul>
+                <li><a href="https://es.khanacademy.org/math/differential-calculus/dc-chain" target="_blank" rel="noopener">Regla de la cadena en Khan Academy</a></li>
+                <li><a href="https://es.wikipedia.org/wiki/Regla_de_l%27H%C3%B4pital" target="_blank" rel="noopener">Regla de L'Hôpital en Wikipedia</a></li>
+                <li><a href="https://www.youtube.com/watch?v=WOw8Bb4VQ7Y" target="_blank" rel="noopener">Video: Método de Newton explicado</a></li>
+            </ul>
+        </section>
+
+        <section class="homework">
+            <h2><i class="fas fa-tasks"></i> Tarea</h2>
+            <ol>
+                <li>Calcula manualmente las siguientes derivadas:
+                    <ol type="a">
+                        <li>\( \frac{d^2}{dx^2} (x^4 - 3x^3 + 2x^2 - x + 5) \)</li>
+                        <li>\( \frac{d}{dx} \cos(3x^2 + 2) \) (usa la regla de la cadena)</li>
+                        <li>\( \frac{d^3}{dx^3} e^{2x} \)</li>
+                    </ol>
+                </li>
+                <li>Usa SymPy para verificar tus respuestas del ejercicio anterior.</li>
+                <li>Evalúa los siguientes límites usando la regla de L'Hôpital:
+                    <ol type="a">
+                        <li>\( \lim_{x \to 0} \frac{e^x - 1 - x}{x^2} \)</li>
+                        <li>\( \lim_{x \to \infty} \frac{\ln(x)}{x} \)</li>
+                    </ol>
+                </li>
+                <li>Implementa una función en Python que encuentre todos los puntos críticos de una función dada y los clasifique en máximos, mínimos o puntos de silla.</li>
+                <li>Investiga y explica brevemente cómo se relaciona el método de Newton con el algoritmo de optimización de Newton-Raphson utilizado en aprendizaje automático.</li>
+            </ol>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION2-5.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 2.5 Cálculo Diferencial (I)</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION2-7.html" class="btn">Siguiente Sesión: 2.7 Gradientes y Derivadas Parciales <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Configuración de MathJax para renderizar ecuaciones
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true,
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+                TeX: { equationNumbers: { autoNumber: "AMS" } }
+            }
+        });
+    </script>
+</body>
+</html>

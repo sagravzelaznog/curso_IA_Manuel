@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.15: Ejercicios Integradores - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>2.15: Ejercicios Integradores</h1>
+            <p>Módulo 2: Matemáticas para IA</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Integrar y aplicar los conceptos matemáticos aprendidos en el módulo</li>
+                <li>Resolver problemas complejos que combinan múltiples áreas de las matemáticas</li>
+                <li>Desarrollar habilidades para modelar situaciones del mundo real</li>
+                <li>Fortalecer el razonamiento matemático y la resolución de problemas</li>
+                <li>Prepararse para los desafíos del siguiente módulo de Machine Learning</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
+            
+            <div class="review">
+                <h3>1. Repaso de Conceptos Clave</h3>
+                
+                <div class="concept">
+                    <h4>1.1 Álgebra Lineal</h4>
+                    <ul>
+                        <li>Vectores y operaciones vectoriales</li>
+                        <li>Matrices y operaciones matriciales</li>
+                        <li>Sistemas de ecuaciones lineales</li>
+                        <li>Valores y vectores propios</li>
+                        <li>Descomposición de matrices</li>
+                    </ul>
+                </div>
+
+                <div class="concept">
+                    <h4>1.2 Cálculo</h4>
+                    <ul>
+                        <li>Límites y continuidad</li>
+                        <li>Derivadas y gradientes</li>
+                        <li>Regla de la cadena</li>
+                        <li>Optimización</li>
+                        <li>Integrales</li>
+                    </ul>
+                </div>
+
+                <div class="concept">
+                    <h4>1.3 Probabilidad y Estadística</h4>
+                    <ul>
+                        <li>Variables aleatorias</li>
+                        <li>Distribuciones de probabilidad</li>
+                        <li>Teorema de Bayes</li>
+                        <li>Estadística descriptiva</li>
+                        <li>Inferencia estadística</li>
+                    </ul>
+                </div>
+
+                <div class="concept">
+                    <h4>1.4 Optimización</h4>
+                    <ul>
+                        <li>Problemas de optimización</li>
+                        <li>Métodos de gradiente</li>
+                        <li>Métodos de segundo orden</li>
+                        <li>Optimización estocástica</li>
+                        <li>Hiperparámetros y ajuste de modelos</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="practical">
+            <h2><i class="fas fa-laptop-code"></i> Ejercicios Integradores</h2>
+            
+            <div class="exercise">
+                <h3>Ejercicio 1: Análisis de Componentes Principales (PCA) desde Cero</h3>
+                <p>Implementa el algoritmo de Análisis de Componentes Principales (PCA) desde cero y aplícalo a un conjunto de datos.</p>
+                
+                <div class="problem">
+                    <h4>Instrucciones:</h4>
+                    <ol>
+                        <li>Genera o carga un conjunto de datos multidimensional.</li>
+                        <li>Estandariza los datos.</li>
+                        <li>Calcula la matriz de covarianza.</li>
+                        <li>Encuentra los valores y vectores propios.</li>
+                        <li>Ordena los vectores propios por valores propios descendentes.</li>
+                        <li>Proyecta los datos en el nuevo espacio de características.</li>
+                        <li>Visualiza los resultados.</li>
+                    </ol>
+                </div>
+                
+                <button class="solution-btn" onclick="toggleSolution('sol1')">Mostrar Solución</button>
+                <div id="sol1" class="solution">
+                    <pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.preprocessing import StandardScaler
+
+class PCA:
+    def __init__(self, n_components):
+        self.n_components = n_components
+        self.components = None
+        self.mean = None
+    
+    def fit(self, X):
+        # 1. Estandarizar los datos
+        self.mean = np.mean(X, axis=0)
+        X_centered = X - self.mean
+        
+        # 2. Calcular la matriz de covarianza
+        cov_matrix = np.cov(X_centered, rowvar=False)
+        
+        # 3. Calcular valores y vectores propios
+        eigenvalues, eigenvectors = np.linalg.eigh(cov_matrix)
+        
+        # 4. Ordenar valores propios en orden descendente
+        sorted_indices = np.argsort(eigenvalues)[::-1]
+        self.components = eigenvectors[:, sorted_indices[:self.n_components]]
+    
+    def transform(self, X):
+        X_centered = X - self.mean
+        return np.dot(X_centered, self.components)
+    
+    def fit_transform(self, X):
+        self.fit(X)
+        return self.transform(X)
+
+# Cargar conjunto de datos de ejemplo
+data = load_iris()
+X = data.data
+y = data.target
+
+# Estandarizar los datos
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Aplicar PCA
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X_scaled)
+
+# Visualizar los resultados
+plt.figure(figsize=(10, 6))
+scatter = plt.scatter(X_pca[:, 0], X_pca[:, 1], c=y, cmap='viridis', alpha=0.8)
+plt.colorbar(scatter)
+plt.title('PCA del Conjunto de Datos Iris')
+plt.xlabel('Primera Componente Principal')
+plt.ylabel('Segunda Componente Principal')
+plt.grid(alpha=0.3)
+plt.show()
+
+# Comparar con la implementación de sklearn
+from sklearn.decomposition import PCA as SKPCA
+
+sk_pca = SKPCA(n_components=2)
+X_sk_pca = sk_pca.fit_transform(X_scaled)
+
+plt.figure(figsize=(10, 6))
+scatter = plt.scatter(X_sk_pca[:, 0], X_sk_pca[:, 1], c=y, cmap='viridis', alpha=0.8)
+plt.colorbar(scatter)
+plt.title('PCA con scikit-learn')
+plt.xlabel('Primera Componente Principal')
+plt.ylabel('Segunda Componente Principal')
+plt.grid(alpha=0.3)
+plt.show()
+
+# Verificar que los resultados son similares
+print("Diferencia entre implementaciones:", np.mean(np.abs(X_pca - X_sk_pca)))</code></pre>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h3>Ejercicio 2: Clasificación con Regresión Logística y Regularización</h3>
+                <p>Implementa la regresión logística con regularización L1 y L2 desde cero y aplícala a un problema de clasificación.</p>
+                
+                <div class="problem">
+                    <h4>Instrucciones:</h4>
+                    <ol>
+                        <li>Genera o carga un conjunto de datos de clasificación binaria.</li>
+                        <li>Divide los datos en conjuntos de entrenamiento y prueba.</li>
+                        <li>Implementa la función sigmoide.</li>
+                        <li>Implementa la función de costo con regularización L1 y L2.</li>
+                        <li>Implementa el descenso de gradiente para optimizar los parámetros.</li>
+                        <li>Evalúa el rendimiento del modelo.</li>
+                        <li>Compara los efectos de diferentes valores de lambda en la regularización.</li>
+                    </ol>
+                </div>
+                
+                <button class="solution-btn" onclick="toggleSolution('sol2')">Mostrar Solución</button>
+                <div id="sol2" class="solution">
+                    <pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, classification_report
+
+class LogisticRegression:
+    def __init__(self, learning_rate=0.01, num_iterations=1000, lambda_l1=0.1, lambda_l2=0.1):
+        self.learning_rate = learning_rate
+        self.num_iterations = num_iterations
+        self.lambda_l1 = lambda_l1
+        self.lambda_l2 = lambda_l2
+        self.weights = None
+        self.bias = None
+        self.loss_history = []
+    
+    def sigmoid(self, z):
+        return 1 / (1 + np.exp(-z))
+    
+    def initialize_parameters(self, n_features):
+        self.weights = np.zeros(n_features)
+        self.bias = 0
+    
+    def compute_cost(self, X, y):
+        m = X.shape[0]
+        z = np.dot(X, self.weights) + self.bias
+        h = self.sigmoid(z)
+        
+        # Calcular la pérdida de entropía cruzada
+        cost = (-1/m) * np.sum(y * np.log(h + 1e-8) + (1 - y) * np.log(1 - h + 1e-8))
+        
+        # Agregar términos de regularización
+        l1_regularization = (self.lambda_l1 / (2 * m)) * np.sum(np.abs(self.weights))
+        l2_regularization = (self.lambda_l2 / (2 * m)) * np.sum(self.weights ** 2)
+        
+        cost += l1_regularization + l2_regularization
+        return cost
+    
+    def fit(self, X, y):
+        m, n = X.shape
+        self.initialize_parameters(n)
+        
+        for i in range(self.num_iterations):
+            # Propagación hacia adelante
+            z = np.dot(X, self.weights) + self.bias
+            h = self.sigmoid(z)
+            
+            # Retropropagación
+            dw = (1/m) * np.dot(X.T, (h - y))
+            db = (1/m) * np.sum(h - y)
+            
+            # Agregar términos de regularización a los gradientes
+            dw += (self.lambda_l1 * np.sign(self.weights) / m) + (self.lambda_l2 * self.weights / m)
+            
+            # Actualizar parámetros
+            self.weights -= self.learning_rate * dw
+            self.bias -= self.learning_rate * db
+            
+            # Guardar historial de pérdida
+            if i % 100 == 0:
+                loss = self.compute_cost(X, y)
+                self.loss_history.append(loss)
+    
+    def predict_proba(self, X):
+        z = np.dot(X, self.weights) + self.bias
+        return self.sigmoid(z)
+    
+    def predict(self, X, threshold=0.5):
+        return (self.predict_proba(X) >= threshold).astype(int)
+
+# Generar datos de ejemplo
+X, y = make_classification(
+    n_samples=1000, 
+    n_features=20, 
+    n_informative=15, 
+    n_redundant=5, 
+    random_state=42,
+    class_sep=0.8
+)
+
+# Dividir en conjuntos de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Normalizar características
+X_mean = np.mean(X_train, axis=0)
+X_std = np.std(X_train, axis=0)
+X_train = (X_train - X_mean) / (X_std + 1e-8)
+X_test = (X_test - X_mean) / (X_std + 1e-8)
+
+# Entrenar modelo sin regularización
+model_no_reg = LogisticRegression(learning_rate=0.1, num_iterations=2000, lambda_l1=0, lambda_l2=0)
+model_no_reg.fit(X_train, y_train)
+
+# Entrenar modelo con regularización L1
+model_l1 = LogisticRegression(learning_rate=0.1, num_iterations=2000, lambda_l1=0.5, lambda_l2=0)
+model_l1.fit(X_train, y_train)
+
+# Entrenar modelo con regularización L2
+model_l2 = LogisticRegression(learning_rate=0.1, num_iterations=2000, lambda_l1=0, lambda_l2=0.5)
+model_l2.fit(X_train, y_train)
+
+# Evaluar modelos
+def evaluate_model(model, X, y, name):
+    y_pred = model.predict(X)
+    accuracy = accuracy_score(y, y_pred)
+    print(f"\n{name} - Precisión: {accuracy:.4f}")
+    print(classification_report(y, y_pred))
+    return accuracy
+
+print("\n--- Resultados en el conjunto de entrenamiento ---")
+acc_train_no_reg = evaluate_model(model_no_reg, X_train, y_train, "Sin regularización")
+acc_train_l1 = evaluate_model(model_l1, X_train, y_train, "Regularización L1")
+acc_train_l2 = evaluate_model(model_l2, X_train, y_train, "Regularización L2")
+
+print("\n--- Resultados en el conjunto de prueba ---")
+acc_test_no_reg = evaluate_model(model_no_reg, X_test, y_test, "Sin regularización")
+acc_test_l1 = evaluate_model(model_l1, X_test, y_test, "Regularización L1")
+acc_test_l2 = evaluate_model(model_l2, X_test, y_test, "Regularización L2")
+
+# Visualizar curvas de aprendizaje
+plt.figure(figsize=(12, 6))
+plt.plot(range(0, 2000, 100), model_no_reg.loss_history, label='Sin regularización')
+plt.plot(range(0, 2000, 100), model_l1.loss_history, label='Regularización L1')
+plt.plot(range(0, 2000, 100), model_l2.loss_history, label='Regularización L2')
+plt.xlabel('Iteraciones')
+plt.ylabel('Pérdida')
+plt.title('Curvas de Aprendizaje')
+plt.legend()
+plt.grid(alpha=0.3)
+plt.show()
+
+# Comparar pesos de los modelos
+plt.figure(figsize=(15, 5))
+
+plt.subplot(1, 3, 1)
+plt.bar(range(len(model_no_reg.weights)), model_no_reg.weights)
+plt.title('Pesos - Sin regularización')
+plt.xlabel('Característica')
+plt.ylabel('Valor del peso')
+
+plt.subplot(1, 3, 2)
+plt.bar(range(len(model_l1.weights)), model_l1.weights)
+plt.title('Pesos - Regularización L1')
+plt.xlabel('Característica')
+
+plt.subplot(1, 3, 3)
+plt.bar(range(len(model_l2.weights)), model_l2.weights)
+plt.title('Pesos - Regularización L2')
+plt.xlabel('Característica')
+
+plt.tight_layout()
+plt.show()</code></pre>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h3>Ejercicio 3: Red Neuronal desde Cero</h3>
+                <p>Implementa una red neuronal de una capa oculta desde cero utilizando solo NumPy.</p>
+                
+                <div class="problem">
+                    <h4>Instrucciones:</h4>
+                    <ol>
+                        <li>Implementa las funciones de activación (sigmoid, ReLU, tanh).</li>
+                        <li>Implementa la inicialización de pesos.</li>
+                        <li>Implementa la propagación hacia adelante.</li>
+                        <li>Implementa la función de pérdida.</li>
+                        <li>Implementa la retropropagación.</li>
+                        <li>Actualiza los parámetros usando el descenso de gradiente.</li>
+                        <li>Entrena la red en un conjunto de datos de clasificación.</li>
+                        <li>Visualiza la pérdida y la precisión durante el entrenamiento.</li>
+                    </ol>
+                </div>
+                
+                <button class="solution-btn" onclick="toggleSolution('sol3')">Mostrar Solución</button>
+                <div id="sol3" class="solution">
+                    <pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_moons
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# Generar datos de ejemplo no linealmente separables
+X, y = make_moons(n_samples=1000, noise=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Visualizar los datos
+plt.figure(figsize=(8, 6))
+plt.scatter(X[y == 0][:, 0], X[y == 0][:, 1], color='red', label='Clase 0', alpha=0.6)
+plt.scatter(X[y == 1][:, 0], X[y == 1][:, 1], color='blue', label='Clase 1', alpha=0.6)
+plt.title('Conjunto de Datos de Clasificación No Lineal')
+plt.xlabel('Característica 1')
+plt.ylabel('Característica 2')
+plt.legend()
+plt.grid(alpha=0.3)
+plt.show()
+
+class NeuralNetwork:
+    def __init__(self, input_size, hidden_size, output_size):
+        self.input_size = input_size
+        self.hidden_size = hidden_size
+        self.output_size = output_size
+        
+        # Inicializar pesos y sesgos
+        self.W1 = np.random.randn(self.input_size, self.hidden_size) * 0.01
+        self.b1 = np.zeros((1, self.hidden_size))
+        self.W2 = np.random.randn(self.hidden_size, self.output_size) * 0.01
+        self.b2 = np.zeros((1, self.output_size))
+        
+        # Historial de pérdida y precisión
+        self.loss_history = []
+        self.accuracy_history = []
+    
+    def sigmoid(self, z):
+        return 1 / (1 + np.exp(-z))
+    
+    def sigmoid_derivative(self, z):
+        return z * (1 - z)
+    
+    def relu(self, z):
+        return np.maximum(0, z)
+    
+    def relu_derivative(self, z):
+        return (z > 0).astype(float)
+    
+    def forward(self, X):
+        # Capa oculta
+        self.z1 = np.dot(X, self.W1) + self.b1
+        self.a1 = self.relu(self.z1)
+        
+        # Capa de salida
+        self.z2 = np.dot(self.a1, self.W2) + self.b2
+        self.a2 = self.sigmoid(self.z2)
+        
+        return self.a2
+    
+    def compute_loss(self, y, y_hat):
+        m = y.shape[0]
+        # Pérdida de entropía cruzada binaria
+        loss = -np.mean(y * np.log(y_hat + 1e-8) + (1 - y) * np.log(1 - y_hat + 1e-8))
+        return loss
+    
+    def backward(self, X, y, y_hat, learning_rate):
+        m = X.shape[0]
+        
+        # Gradientes de la capa de salida
+        dz2 = y_hat - y.reshape(-1, 1)
+        dW2 = (1/m) * np.dot(self.a1.T, dz2)
+        db2 = (1/m) * np.sum(dz2, axis=0, keepdims=True)
+        
+        # Gradientes de la capa oculta
+        dz1 = np.dot(dz2, self.W2.T) * self.relu_derivative(self.a1)
+        dW1 = (1/m) * np.dot(X.T, dz1)
+        db1 = (1/m) * np.sum(dz1, axis=0, keepdims=True)
+        
+        # Actualizar parámetros
+        self.W2 -= learning_rate * dW2
+        self.b2 -= learning_rate * db2
+        self.W1 -= learning_rate * dW1
+        self.b1 -= learning_rate * db1
+    
+    def predict(self, X, threshold=0.5):
+        y_hat = self.forward(X)
+        return (y_hat >= threshold).astype(int)
+    
+    def train(self, X, y, X_val=None, y_val=None, learning_rate=0.01, epochs=1000, verbose=True):
+        for i in range(epochs):
+            # Propagación hacia adelante
+            y_hat = self.forward(X)
+            
+            # Calcular pérdida
+            loss = self.compute_loss(y, y_hat)
+            self.loss_history.append(loss)
+            
+            # Calcular precisión
+            y_pred = self.predict(X)
+            accuracy = accuracy_score(y, y_pred)
+            self.accuracy_history.append(accuracy)
+            
+            # Retropropagación
+            self.backward(X, y, y_hat, learning_rate)
+            
+            # Imprimir progreso
+            if verbose and i % 100 == 0:
+                val_accuracy = ""
+                if X_val is not None and y_val is not None:
+                    val_pred = self.predict(X_val)
+                    val_acc = accuracy_score(y_val, val_pred)
+                    val_accuracy = f" | Val Accuracy: {val_acc:.4f}"
+                print(f"Epoch {i}: Loss = {loss:.4f} | Accuracy: {accuracy:.4f}{val_accuracy}")
+
+# Crear y entrenar la red neuronal
+input_size = 2
+hidden_size = 5
+output_size = 1
+
+# Dividir en conjuntos de entrenamiento y validación
+X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.2, random_state=42)
+
+# Crear y entrenar la red neuronal
+nn = NeuralNetwork(input_size, hidden_size, output_size)
+nn.train(X_train, y_train, X_val, y_val, learning_rate=0.1, epochs=2000)
+
+# Evaluar en el conjunto de prueba
+y_test_pred = nn.predict(X_test)
+test_accuracy = accuracy_score(y_test, y_test_pred)
+print(f"\nPrecisión en el conjunto de prueba: {test_accuracy:.4f}")
+
+# Visualizar la pérdida y precisión durante el entrenamiento
+plt.figure(figsize=(12, 5))
+
+plt.subplot(1, 2, 1)
+plt.plot(nn.loss_history)
+plt.title('Pérdida durante el Entrenamiento')
+plt.xlabel('Época')
+plt.ylabel('Pérdida')
+plt.grid(alpha=0.3)
+
+plt.subplot(1, 2, 2)
+plt.plot(nn.accuracy_history)
+plt.title('Precisión durante el Entrenamiento')
+plt.xlabel('Época')
+plt.ylabel('Precisión')
+plt.grid(alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Visualizar la frontera de decisión
+def plot_decision_boundary(model, X, y):
+    # Crear una cuadrícula de puntos
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.linspace(x_min, x_max, 100),
+                         np.linspace(y_min, y_max, 100))
+    
+    # Predecir para cada punto de la cuadrícula
+    Z = model.predict(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape(xx.shape)
+    
+    # Crear el gráfico de contorno
+    plt.contourf(xx, yy, Z, alpha=0.3, cmap=plt.cm.RdBu)
+    plt.scatter(X[y == 0][:, 0], X[y == 0][:, 1], color='red', label='Clase 0', alpha=0.6)
+    plt.scatter(X[y == 1][:, 0], X[y == 1][:, 1], color='blue', label='Clase 1', alpha=0.6)
+    plt.title('Frontera de Decisión de la Red Neuronal')
+    plt.xlabel('Característica 1')
+    plt.ylabel('Característica 2')
+    plt.legend()
+    plt.grid(alpha=0.3)
+
+plt.figure(figsize=(8, 6))
+plot_decision_boundary(nn, X_test, y_test)
+plt.show()</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h2><i class="fas fa-clipboard-list"></i> Resumen</h2>
+            <ul>
+                <li>Hemos implementado tres algoritmos fundamentales en aprendizaje automático desde cero: PCA, Regresión Logística con regularización, y una Red Neuronal.</li>
+                <li>El <strong>Análisis de Componentes Principales (PCA)</strong> es una técnica poderosa para la reducción de dimensionalidad que nos permite visualizar y analizar datos de alta dimensión.</li>
+                <li>La <strong>Regresión Logística con regularización</strong> es un modelo lineal que puede manejar problemas de clasificación binaria, donde la regularización ayuda a prevenir el sobreajuste.</li>
+                <li>Las <strong>Redes Neuronales</strong> son modelos potentes que pueden aprender representaciones no lineales de los datos, lo que las hace adecuadas para problemas complejos.</li>
+                <li>La implementación desde cero nos ha permitido comprender los detalles internos de estos algoritmos, lo que es fundamental para convertirse en un experto en inteligencia artificial.</li>
+                <li>Estos ejercicios integradores combinan conceptos de álgebra lineal, cálculo, probabilidad y optimización, mostrando cómo se interrelacionan las diferentes áreas de las matemáticas en el campo de la IA.</li>
+            </ul>
+        </section>
+
+        <section class="resources">
+            <h2><i class="fas fa-book"></i> Recursos Adicionales</h2>
+            <ul>
+                <li><a href="https://www.deeplearningbook.org/" target="_blank" rel="noopener noreferrer">Deep Learning Book</a> - Ian Goodfellow, Yoshua Bengio, and Aaron Courville</li>
+                <li><a href="https://www.coursera.org/learn/machine-learning" target="_blank" rel="noopener noreferrer">Machine Learning Course</a> - Andrew Ng (Coursera)</li>
+                <li><a href="https://cs231n.github.io/" target="_blank" rel="noopener noreferrer">CS231n: Convolutional Neural Networks for Visual Recognition</a> - Stanford University</li>
+                <li><a href="https://www.fast.ai/" target="_blank" rel="noopener noreferrer">Practical Deep Learning for Coders</a> - fast.ai</li>
+                <li><a href="https://github.com/ageron/handson-ml2" target="_blank" rel="noopener noreferrer">Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow</a> - Aurélien Géron</li>
+            </ul>
+        </section>
+
+        <section class="homework">
+            <h2><i class="fas fa-home"></i> Tarea</h2>
+            <ol>
+                <li><strong>Ampliación del PCA:</strong> Modifica la implementación de PCA para incluir el método de descomposición en valores singulares (SVD) y compara los resultados con el método de descomposición propia.</li>
+                <li><strong>Clasificación Multiclase:</strong> Extiende la implementación de regresión logística para manejar problemas de clasificación multiclase usando la estrategia uno contra todos (one-vs-rest).</li>
+                <li><strong>Mejora de la Red Neuronal:</strong> Añade más capas ocultas a la red neuronal, implementa la inicialización He o Xavier, y añade dropout para regularización.</li>
+                <li><strong>Análisis Comparativo:</strong> Compara el rendimiento de tus implementaciones con las versiones equivalentes en scikit-learn o TensorFlow en términos de precisión y tiempo de entrenamiento.</li>
+                <li><strong>Aplicación a un Conjunto de Datos Real:</strong> Aplica estos algoritmos a un conjunto de datos del mundo real de tu elección, realizando todo el proceso de preprocesamiento, modelado y evaluación.</li>
+            </ol>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION2-14.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 2.14 Aplicaciones Prácticas</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION3-1.html" class="btn">Siguiente Módulo: 3.1 Introducción a ML <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Función para copiar código al portapapeles
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling.querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Cambiar el ícono temporalmente para mostrar que se copió
+            const icon = button.querySelector('i');
+            const originalClass = icon.className;
+            icon.className = 'fas fa-check';
+            
+            setTimeout(() => {
+                icon.className = originalClass;
+            }, 2000);
+        }
+        
+        // Función para mostrar/ocultar soluciones
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            if (solution.style.display === 'block') {
+                solution.style.display = 'none';
+                event.target.textContent = 'Mostrar Solución';
+            } else {
+                solution.style.display = 'block';
+                event.target.textContent = 'Ocultar Solución';
+            }
+        }
+    </script>
+</body>
+</html>

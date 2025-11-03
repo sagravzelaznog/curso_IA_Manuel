@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.14: Aplicaciones Prácticas - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>2.14: Aplicaciones Prácticas</h1>
+            <p>Módulo 2: Matemáticas para IA</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Aplicar los conceptos matemáticos aprendidos a problemas del mundo real</li>
+                <li>Desarrollar soluciones prácticas utilizando álgebra lineal, cálculo y probabilidad</li>
+                <li>Implementar algoritmos de optimización en contextos reales</li>
+                <li>Analizar datos y extraer información relevante</li>
+                <li>Integrar múltiples conceptos matemáticos en proyectos completos</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
+            
+            <h3>1. Revisión de Conceptos Clave</h3>
+            <p>Antes de sumergirnos en las aplicaciones, repasemos brevemente los conceptos matemáticos fundamentales que hemos cubierto:</p>
+            
+            <div class="concept">
+                <h4>1.1 Álgebra Lineal</h4>
+                <ul>
+                    <li>Vectores y operaciones vectoriales</li>
+                    <li>Matrices y operaciones matriciales</li>
+                    <li>Sistemas de ecuaciones lineales</li>
+                    <li>Valores y vectores propios</li>
+                </ul>
+            </div>
+
+            <div class="concept">
+                <h4>1.2 Cálculo</h4>
+                <ul>
+                    <li>Derivadas y gradientes</li>
+                    <li>Regla de la cadena</li>
+                    <li>Optimización de funciones</li>
+                    <li>Derivadas parciales</li>
+                </ul>
+            </div>
+
+            <div class="concept">
+                <h4>1.3 Probabilidad y Estadística</h4>
+                <ul>
+                    <li>Variables aleatorias</li>
+                    <li>Distribuciones de probabilidad</li>
+                    <li>Teorema de Bayes</li>
+                    <li>Estadística descriptiva</li>
+                </ul>
+            </div>
+
+            <h3>2. Aplicaciones en Procesamiento de Imágenes</h3>
+            <p>El álgebra lineal es fundamental en el procesamiento de imágenes digitales. Cada imagen puede representarse como una matriz de píxeles, donde cada píxel tiene un valor que representa su intensidad o color.</p>
+            
+            <div class="application">
+                <h4>2.1 Filtros y Convoluciones</h4>
+                <p>Los filtros de imagen son operaciones matriciales que modifican una imagen aplicando una transformación lineal. La convolución es una operación fundamental en el procesamiento de imágenes que combina dos matrices para producir una tercera.</p>
+                
+                <p>La operación de convolución 2D se define como:</p>
+                <p>\[ (I * K)(i,j) = \sum_{m} \sum_{n} I(i+m, j+n) \cdot K(m, n) \]</p>
+                
+                <p>Donde \( I \) es la imagen de entrada, \( K \) es el kernel del filtro, y \( (i,j) \) son las coordenadas del píxel de salida.</p>
+            </div>
+
+            <h3>3. Aplicaciones en Procesamiento de Lenguaje Natural (PLN)</h3>
+            <p>La representación de texto como vectores es un componente clave en PLN. Los modelos de lenguaje utilizan estas representaciones para entender y generar texto.</p>
+            
+            <div class="application">
+                <h4>3.1 Word Embeddings</h4>
+                <p>Los word embeddings son representaciones vectoriales de palabras donde palabras similares tienen representaciones vectoriales similares. Matemáticamente, podemos representar un vocabulario como una matriz de incidencia donde cada fila es un vector que representa una palabra.</p>
+                
+                <p>La similitud entre palabras se puede calcular usando el producto punto entre sus vectores:</p>
+                <p>\[ \text{sim}(w_1, w_2) = \frac{\mathbf{v}_{w_1} \cdot \mathbf{v}_{w_2}}{\|\mathbf{v}_{w_1}\| \|\mathbf{v}_{w_2}\|} \]</p>
+            </div>
+        </section>
+
+        <section class="practical">
+            <h2><i class="fas fa-laptop-code"></i> Actividad Práctica</h2>
+            
+            <div class="activity">
+                <h3>1. Procesamiento de Imágenes con Filtros</h3>
+                <p>En esta actividad, aplicaremos diferentes filtros a una imagen utilizando operaciones matriciales.</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copiar</button>
+                    <pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+from scipy import ndimage
+from skimage import data, color, io
+
+# Cargar una imagen de ejemplo
+image = color.rgb2gray(data.astronaut())
+
+# Definir kernels para diferentes filtros
+kernels = {
+    'Identidad': np.array([[0, 0, 0], [0, 1, 0], [0, 0, 0]]),
+    'Desenfoque': np.ones((3, 3)) / 9.0,
+    'Bordes': np.array([[-1, -1, -1], [-1, 8, -1], [-1, -1, -1]]),
+    'Enfoque': np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]]),
+    'Relieve': np.array([[-2, -1, 0], [-1, 1, 1], [0, 1, 2]])
+}
+
+# Aplicar cada filtro y mostrar resultados
+plt.figure(figsize=(15, 10))
+plt.subplot(2, 3, 1)
+plt.imshow(image, cmap='gray')
+plt.title('Imagen Original')
+plt.axis('off')
+
+for i, (name, kernel) in enumerate(kernels.items(), 2):
+    filtered = ndimage.convolve(image, kernel, mode='reflect')
+    plt.subplot(2, 3, i)
+    plt.imshow(filtered, cmap='gray')
+    plt.title(f'Filtro: {name}')
+    plt.axis('off')
+
+plt.tight_layout()
+plt.show()
+
+# Función para aplicar un filtro personalizado
+def apply_custom_filter(image, kernel):
+    """Aplica un filtro personalizado a una imagen."""
+    # Asegurarse de que el kernel sea un array de NumPy
+    kernel = np.array(kernel, dtype=np.float32)
+    
+    # Normalizar el kernel si es necesario
+    if np.sum(kernel) != 0:
+        kernel = kernel / np.sum(kernel)
+    
+    # Aplicar la convolución
+    return ndimage.convolve(image, kernel, mode='reflect')
+
+# Ejemplo de uso con un filtro personalizado (realce de bordes)
+custom_kernel = [
+    [-1, -1, -1],
+    [-1,  9, -1],
+    [-1, -1, -1]
+]
+
+filtered_image = apply_custom_filter(image, custom_kernel)
+
+# Mostrar el resultado
+plt.figure(figsize=(10, 5))
+plt.subplot(1, 2, 1)
+plt.imshow(image, cmap='gray')
+plt.title('Imagen Original')
+plt.axis('off')
+
+plt.subplot(1, 2, 2)
+plt.imshow(filtered_image, cmap='gray')
+plt.title('Filtro Personalizado (Realce de Bordes)')
+plt.axis('off')
+
+plt.tight_layout()
+plt.show()</code></pre>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3>2. Análisis de Sentimientos con Word Embeddings</h3>
+                <p>En esta actividad, usaremos word embeddings pre-entrenados para analizar el sentimiento de textos.</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copiar</button>
+                    <pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.manifold import TSNE
+from sklearn.decomposition import PCA
+import gensim.downloader as api
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+import nltk
+import string
+
+# Descargar recursos necesarios de NLTK
+nltk.download('punkt')
+nltk.download('stopwords')
+
+# Cargar un modelo de word embeddings pre-entrenado
+print("Cargando el modelo de word embeddings (esto puede tomar un momento)...")
+word_vectors = api.load('glove-wiki-gigaword-100')  # 100 dimensiones
+
+# Función para preprocesar texto
+def preprocess_text(text):
+    # Convertir a minúsculas
+    text = text.lower()
+    # Tokenizar
+    tokens = word_tokenize(text)
+    # Eliminar signos de puntuación
+    tokens = [word for word in tokens if word not in string.punctuation]
+    # Eliminar stopwords
+    stop_words = set(stopwords.words('english'))
+    tokens = [word for word in tokens if word not in stop_words]
+    return tokens
+
+# Función para obtener el vector promedio de un texto
+def get_text_vector(text, word_vectors):
+    words = preprocess_text(text)
+    word_embeddings = [word_vectors[word] for word in words if word in word_vectors]
+    
+    if len(word_embeddings) == 0:
+        return None
+    
+    # Calcular el vector promedio
+    return np.mean(word_embeddings, axis=0)
+
+# Ejemplo de textos para analizar
+texts = [
+    "I love this movie, it's fantastic!",
+    "This is the best film I've ever seen!",
+    "I really enjoyed the plot and the acting was great.",
+    "I didn't like this movie at all, it was boring.",
+    "The worst movie ever made, complete waste of time.",
+    "I was expecting more, but it was just okay.",
+    "The acting was terrible and the story made no sense.",
+    "A masterpiece of cinema, brilliant direction and performances.",
+    "I couldn't finish it, it was so bad.",
+    "One of the greatest films of all time, highly recommended!"
+]
+
+# Obtener vectores para cada texto
+vectors = []
+valid_texts = []
+
+for text in texts:
+    vec = get_text_vector(text, word_vectors)
+    if vec is not None:
+        vectors.append(vec)
+        valid_texts.append(text)
+
+vectors = np.array(vectors)
+
+# Reducir la dimensionalidad para visualización
+pca = PCA(n_components=2)
+vectors_2d = pca.fit_transform(vectors)
+
+# Visualizar los textos en el espacio semántico
+plt.figure(figsize=(12, 8))
+for i, (x, y) in enumerate(vectors_2d):
+    plt.scatter(x, y)
+    plt.annotate(f"{i+1}", (x, y), xytext=(5, 5), textcoords='offset points')
+
+plt.title('Visualización de Textos en el Espacio Semántico')
+plt.xlabel('Componente Principal 1')
+plt.ylabel('Componente Principal 2')
+plt.grid(True, alpha=0.3)
+
+# Mostrar los textos numerados
+print("\nTextos analizados:")
+for i, text in enumerate(valid_texts, 1):
+    print(f"{i}. {text}")
+
+# Calcular similitud entre textos
+def text_similarity(text1, text2, word_vectors):
+    vec1 = get_text_vector(text1, word_vectors)
+    vec2 = get_text_vector(text2, word_vectors)
+    
+    if vec1 is None or vec2 is None:
+        return 0.0
+    
+    # Calcular similitud del coseno
+    return np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
+
+# Ejemplo de similitud entre textos
+print("\nSimilitud entre textos:")
+print(f"1 y 2: {text_similarity(valid_texts[0], valid_texts[1], word_vectors):.4f}")
+print(f"1 y 4: {text_similarity(valid_texts[0], valid_texts[3], word_vectors):.4f}")
+print(f"4 y 5: {text_similarity(valid_texts[3], valid_texts[4], word_vectors):.4f}")
+print(f"2 y 9: {text_similarity(valid_texts[1], valid_texts[8], word_vectors):.4f}")
+
+plt.show()</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="exercises">
+            <h2><i class="fas fa-tasks"></i> Ejercicios</h2>
+            
+            <div class="exercise">
+                <h3>Ejercicio 1: Clasificación de Imágenes con PCA</h3>
+                <p>Implementa un sistema de clasificación de imágenes utilizando PCA para reducción de dimensionalidad.</p>
+                <p>Tareas:</p>
+                <ol>
+                    <li>Carga un conjunto de datos de imágenes (por ejemplo, dígitos MNIST o flores).</li>
+                    <li>Aplica PCA para reducir la dimensionalidad de las imágenes.</li>
+                    <li>Entrena un clasificador (como SVM o Random Forest) en las características reducidas.</li>
+                    <li>Evalúa el rendimiento del clasificador con diferentes números de componentes principales.</li>
+                    <li>Visualiza las primeras componentes principales como imágenes.</li>
+                </ol>
+                
+                <button class="solution-btn" onclick="toggleSolution('sol1')">Mostrar Solución</button>
+                <div id="sol1" class="solution">
+                    <pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.decomposition import PCA
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score, classification_report
+
+# Cargar el conjunto de datos de dígitos
+digits = load_digits()
+X = digits.data
+y = digits.target
+
+# Mostrar algunas imágenes de ejemplo
+plt.figure(figsize=(10, 4))
+for i in range(10):
+    plt.subplot(2, 5, i + 1)
+    plt.imshow(X[i].reshape(8, 8), cmap='gray')
+    plt.title(f'Etiqueta: {y[i]}')
+    plt.axis('off')
+plt.tight_layout()
+plt.show()
+
+# Dividir los datos en conjuntos de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Aplicar PCA con diferentes números de componentes
+n_components_list = [2, 5, 10, 20, 30, 40, 50, 64]
+accuracies = []
+
+for n_components in n_components_list:
+    # Aplicar PCA
+    pca = PCA(n_components=n_components, random_state=42)
+    X_train_pca = pca.fit_transform(X_train)
+    X_test_pca = pca.transform(X_test)
+    
+    # Entrenar un clasificador SVM
+    clf = SVC(kernel='rbf', random_state=42)
+    clf.fit(X_train_pca, y_train)
+    
+    # Predecir en el conjunto de prueba
+    y_pred = clf.predict(X_test_pca)
+    
+    # Calcular precisión
+    accuracy = accuracy_score(y_test, y_pred)
+    accuracies.append(accuracy)
+    
+    print(f"Componentes: {n_components}, Precisión: {accuracy:.4f}")
+
+# Graficar precisión vs número de componentes
+plt.figure(figsize=(10, 5))
+plt.plot(n_components_list, accuracies, 'bo-')
+plt.xlabel('Número de Componentes Principales')
+plt.ylabel('Precisión')
+plt.title('Precisión vs Número de Componentes Principales')
+plt.grid(True, alpha=0.3)
+plt.xticks(n_components_list)
+plt.show()
+
+# Visualizar las primeras componentes principales
+pca = PCA(n_components=10, random_state=42)
+pca.fit(X_train)
+
+plt.figure(figsize=(15, 3))
+for i in range(10):
+    plt.subplot(2, 5, i + 1)
+    plt.imshow(pca.components_[i].reshape(8, 8), cmap='gray')
+    plt.title(f'PC {i+1}')
+    plt.axis('off')
+plt.suptitle('Primeras 10 Componentes Principales', y=1.05)
+plt.tight_layout()
+plt.show()
+
+# Visualización 2D de los datos en el espacio de las dos primeras componentes
+pca_2d = PCA(n_components=2, random_state=42)
+X_pca_2d = pca_2d.fit_transform(X_train)
+
+plt.figure(figsize=(10, 8))
+scatter = plt.scatter(X_pca_2d[:, 0], X_pca_2d[:, 1], c=y_train, cmap='tab10', alpha=0.6)
+plt.colorbar(scatter, label='Dígito')
+plt.xlabel('Primera Componente Principal')
+plt.ylabel('Segunda Componente Principal')
+plt.title('Visualización 2D de los Datos con PCA')
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# Entrenar un modelo final con el mejor número de componentes
+best_n_components = n_components_list[np.argmax(accuracies)]
+print(f"\nEntrenando modelo final con {best_n_components} componentes...")
+
+pca_final = PCA(n_components=best_n_components, random_state=42)
+X_train_pca_final = pca_final.fit_transform(X_train)
+X_test_pca_final = pca_final.transform(X_test)
+
+clf_final = SVC(kernel='rbf', random_state=42)
+clf_final.fit(X_train_pca_final, y_train)
+
+y_pred_final = clf_final.predict(X_test_pca_final)
+
+print("\nInforme de clasificación final:")
+print(classification_report(y_test, y_pred_final))</code></pre>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h3>Ejercicio 2: Sistema de Recomendación Basado en Contenido</h3>
+                <p>Desarrolla un sistema de recomendación que utilice similitud de coseno para recomendar artículos similares.</p>
+                <p>Tareas:</p>
+                <ol>
+                    <li>Prepara un conjunto de datos de artículos con características (etiquetas, categorías, etc.).</li>
+                    <li>Convierte las características en vectores numéricos (usando codificación one-hot o TF-IDF).</li>
+                    <li>Calcula la similitud del coseno entre los artículos.</li>
+                    <li>Implementa una función que, dado un artículo, devuelva los artículos más similares.</li>
+                    <li>Evalúa el sistema con métricas como precisión@k.</li>
+                </ol>
+                
+                <button class="solution-btn" onclick="toggleSolution('sol2')">Mostrar Solución</button>
+                <div id="sol2" class="solution">
+                    <pre><code class="python">import numpy as np
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Crear un conjunto de datos de ejemplo: películas con géneros
+movies = [
+    {'id': 1, 'title': 'El Padrino', 'genres': ['crimen', 'drama']},
+    {'id': 2, 'title': 'El Padrino: Parte II', 'genres': ['crimen', 'drama']},
+    {'id': 3, 'title': 'El Caballero de la Noche', 'genres': ['acción', 'crimen', 'drama']},
+    {'id': 4, 'title': 'Pulp Fiction', 'genres': ['crimen', 'drama']},
+    {'id': 5, 'title': 'El Señor de los Anillos: El Retorno del Rey', 'genres': ['aventura', 'fantasía']},
+    {'id': 6, 'title': 'La La Land', 'genres': ['comedia', 'drama', 'musical']},
+    {'id': 7, 'title': 'Interestelar', 'genres': ['aventura', 'ciencia ficción', 'drama']},
+    {'id': 8, 'title': 'El Origen', 'genres': ['acción', 'ciencia ficción', 'suspenso']},
+    {'id': 9, 'title': 'Forrest Gump', 'genres': ['comedia', 'drama', 'romance']},
+    {'id': 10, 'title': 'Matrix', 'genres': ['acción', 'ciencia ficción']}
+]
+
+# Convertir a DataFrame
+df_movies = pd.DataFrame(movies)
+
+# Convertir géneros a texto para el vectorizador
+df_movies['genres_text'] = df_movies['genres'].apply(lambda x: ' '.join(x))
+
+# Crear matriz TF-IDF
+tfidf = TfidfVectorizer(stop_words='english')
+tfidf_matrix = tfidf.fit_transform(df_movies['genres_text'])
+
+# Calcular similitud del coseno
+cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
+
+# Función para obtener recomendaciones
+def get_recommendations(title, cosine_sim=cosine_sim, df=df_movies, top_n=5):
+    # Obtener el índice de la película
+    idx = df[df['title'] == title].index[0]
+    
+    # Obtener las puntuaciones de similitud
+    sim_scores = list(enumerate(cosine_sim[idx]))
+    
+    # Ordenar las películas por puntuación de similitud
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+    
+    # Obtener los índices de las películas más similares (excluyendo la película misma)
+    sim_scores = sim_scores[1:top_n+1]
+    
+    # Obtener los índices de las películas
+    movie_indices = [i[0] for i in sim_scores]
+    
+    # Devolver las películas recomendadas
+    return df['title'].iloc[movie_indices].tolist()
+
+# Ejemplo de recomendación
+print("Recomendaciones para 'El Padrino':")
+recommendations = get_recommendations('El Padrino')
+for i, movie in enumerate(recommendations, 1):
+    print(f"{i}. {movie}")
+
+# Visualizar la matriz de similitud
+plt.figure(figsize=(10, 8))
+sns.heatmap(cosine_sim, 
+            annot=True, 
+            cmap='YlOrRd',
+            xticklabels=df_movies['title'],
+            yticklabels=df_movies['title'])
+plt.title('Matriz de Similitud entre Películas')
+plt.xticks(rotation=90)
+plt.tight_layout()
+plt.show()
+
+# Función para evaluar el sistema de recomendación
+def evaluate_recommendation_system(cosine_sim, df=df_movies, k=3):
+    ""
+    Evalúa el sistema de recomendación usando precisión@k.
+    
+    Parámetros:
+    - cosine_sim: Matriz de similitud del coseno
+    - df: DataFrame con las películas
+    - k: Número de recomendaciones a considerar
+    
+    Retorna:
+    - Precisión promedio@k
+    """
+    precision_scores = []
+    
+    for i in range(len(df)):
+        # Obtener recomendaciones para la película i
+        sim_scores = list(enumerate(cosine_sim[i]))
+        sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)[1:k+1]
+        recommended_indices = [idx for idx, _ in sim_scores]
+        
+        # Obtener los géneros de la película actual
+        current_genres = set(df.iloc[i]['genres'])
+        
+        # Contar cuántas de las películas recomendadas comparten al menos un género
+        relevant_count = 0
+        for idx in recommended_indices:
+            recommended_genres = set(df.iloc[idx]['genres'])
+            if current_genres.intersection(recommended_genres):
+                relevant_count += 1
+        
+        # Calcular precisión@k para esta película
+        precision_at_k = relevant_count / k
+        precision_scores.append(precision_at_k)
+    
+    # Calcular precisión promedio
+    return np.mean(precision_scores)
+
+# Evaluar el sistema
+precision_at_3 = evaluate_recommendation_system(cosine_sim, k=3)
+precision_at_5 = evaluate_recommendation_system(cosine_sim, k=5)
+
+print(f"\nPrecisión@3: {precision_at_3:.4f}")
+print(f"Precisión@5: {precision_at_5:.4f}")
+
+# Visualizar la distribución de géneros
+genre_counts = {}
+for genres in df_movies['genres']:
+    for genre in genres:
+        if genre in genre_counts:
+            genre_counts[genre] += 1
+        else:
+            genre_counts[genre] = 1
+
+# Ordenar géneros por frecuencia
+genre_counts = dict(sorted(genre_counts.items(), key=lambda item: item[1], reverse=True))
+
+# Gráfico de barras de frecuencia de géneros
+plt.figure(figsize=(10, 5))
+plt.bar(genre_counts.keys(), genre_counts.values(), color='skyblue')
+plt.title('Distribución de Géneros en el Conjunto de Datos')
+plt.xlabel('Género')
+plt.ylabel('Frecuencia')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h2><i class="fas fa-clipboard-list"></i> Resumen</h2>
+            <ul>
+                <li>Hemos aplicado conceptos matemáticos fundamentales a problemas prácticos en inteligencia artificial.</li>
+                <li>El <strong>procesamiento de imágenes</strong> se basa en operaciones matriciales como la convolución, que permite aplicar filtros y extraer características.</li>
+                <li>Los <strong>word embeddings</strong> representan palabras como vectores en un espacio semántico, permitiendo medir similitudes y realizar operaciones interesantes.</li>
+                <li>El <strong>PCA</strong> es una técnica poderosa para la reducción de dimensionalidad que puede mejorar la eficiencia de los algoritmos de aprendizaje automático.</li>
+                <li>Los <strong>sistemas de recomendación</strong> utilizan medidas de similitud como el coseno para sugerir elementos similares a los usuarios.</li>
+                <li>La integración de múltiples conceptos matemáticos permite desarrollar soluciones completas y efectivas para problemas del mundo real.</li>
+            </ul>
+        </section>
+
+        <section class="resources">
+            <h2><i class="fas fa-book"></i> Recursos Adicionales</h2>
+            <ul>
+                <li><a href="https://www.coursera.org/learn/machine-learning" target="_blank" rel="noopener noreferrer">Machine Learning Course</a> - Andrew Ng (Contenido sobre PCA y Aplicaciones)</li>
+                <li><a href="https://web.stanford.edu/~hastie/ElemStatLearn/" target="_blank" rel="noopener noreferrer">The Elements of Statistical Learning</a> - Libro de referencia para métodos estadísticos en aprendizaje automático</li>
+                <li><a href="https://www.tensorflow.org/tutorials" target="_blank" rel="noopener noreferrer">TensorFlow Tutorials</a> - Tutoriales prácticos de IA y aprendizaje profundo</li>
+                <li><a href="https://scikit-learn.org/stable/modules/classes.html" target="_blank" rel="noopener noreferrer">scikit-learn Documentation</a> - Documentación de la biblioteca de aprendizaje automático</li>
+                <li><a href="https://www.kaggle.com/learn/intro-to-deep-learning" target="_blank" rel="noopener noreferrer">Kaggle Learn - Intro to Deep Learning</a> - Curso interactivo sobre redes neuronales</li>
+            </ul>
+        </section>
+
+        <section class="homework">
+            <h2><i class="fas fa-home"></i> Tarea</h2>
+            <ol>
+                <li><strong>Implementación:</strong> Crea un clasificador de imágenes utilizando una red neuronal convolucional (CNN) y compáralo con el enfoque basado en PCA del ejercicio 1.</li>
+                <li><strong>Análisis:</strong> Investiga sobre diferentes métricas de similitud (distancia euclidiana, correlación de Pearson, etc.) y compara su rendimiento en el sistema de recomendación.</li>
+                <li><strong>Aplicación:</strong> Aplica las técnicas aprendidas a un conjunto de datos de tu elección y documenta los resultados.</li>
+                <li><strong>Investigación:</strong> Explora cómo se utilizan los conceptos matemáticos vistos en esta sesión en aplicaciones avanzadas como visión por computadora, procesamiento de lenguaje natural o robótica.</li>
+            </ol>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION2-13.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 2.13 Optimización (II)</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION2-15.html" class="btn">Siguiente Sesión: 2.15 Ejercicios Integradores <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Función para copiar código al portapapeles
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling.querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Cambiar el ícono temporalmente para mostrar que se copió
+            const icon = button.querySelector('i');
+            const originalClass = icon.className;
+            icon.className = 'fas fa-check';
+            
+            setTimeout(() => {
+                icon.className = originalClass;
+            }, 2000);
+        }
+        
+        // Función para mostrar/ocultar soluciones
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            if (solution.style.display === 'block') {
+                solution.style.display = 'none';
+                event.target.textContent = 'Mostrar Solución';
+            } else {
+                solution.style.display = 'block';
+                event.target.textContent = 'Ocultar Solución';
+            }
+        }
+    </script>
+</body>
+</html>

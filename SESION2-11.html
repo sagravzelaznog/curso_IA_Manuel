@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.11: Teorema de Bayes - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>2.11: Teorema de Bayes</h1>
+            <p>Módulo 2: Matemáticas para IA</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender los fundamentos de la probabilidad condicional</li>
+                <li>Entender y aplicar el Teorema de Bayes</li>
+                <li>Analizar problemas de probabilidad inversa</li>
+                <li>Aplicar el Teorema de Bayes en problemas de clasificación</li>
+                <li>Implementar el clasificador Naive Bayes en Python</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
+            
+            <h3>1. Repaso de Probabilidad Condicional</h3>
+            <p>La probabilidad condicional es la probabilidad de que ocurra un evento A dado que ya ocurrió un evento B.</p>
+            <div class="formula">
+                <h4>Fórmula de Probabilidad Condicional</h4>
+                <p>\[P(A|B) = \frac{P(A \cap B)}{P(B)}\]</p>
+                <p>Donde:</p>
+                <ul>
+                    <li>\(P(A|B)\): Probabilidad de A dado B</li>
+                    <li>\(P(A \cap B)\): Probabilidad de A y B ocurriendo juntos</li>
+                    <li>\(P(B)\): Probabilidad de B</li>
+                </ul>
+            </div>
+
+            <h3>2. Teorema de Bayes</h3>
+            <div class="formula">
+                <h4>Fórmula del Teorema de Bayes</h4>
+                <p>\[P(A|B) = \frac{P(B|A) \cdot P(A)}{P(B)}\]</p>
+                <p>Donde:</p>
+                <ul>
+                    <li>\(P(A|B)\): Probabilidad a posteriori (nuestra hipótesis después de ver la evidencia)</li>
+                    <li>\(P(B|A)\): Verosimilitud (probabilidad de la evidencia dada la hipótesis)</li>
+                    <li>\(P(A)\): Probabilidad a priori (nuestra creencia inicial)</li>
+                    <li>\(P(B)\): Evidencia (probabilidad total de la evidencia)</li>
+                </ul>
+            </div>
+
+            <h3>3. Aplicaciones del Teorema de Bayes</h3>
+            <div class="application">
+                <h4>Diagnóstico Médico</h4>
+                <p>Calcular la probabilidad de que un paciente tenga una enfermedad dado un resultado positivo en una prueba.</p>
+                
+                <h4>Filtros de Spam</h4>
+                <p>Clasificar correos electrónicos como spam o no spam basado en la presencia de ciertas palabras.</p>
+                
+                <h4>Reconocimiento de Voz</h4>
+                <p>Determinar las palabras más probables dadas las señales de audio.</p>
+            </div>
+
+            <h3>4. Naive Bayes</h3>
+            <p>El clasificador Naive Bayes es un algoritmo de aprendizaje automático basado en el Teorema de Bayes con el supuesto de independencia entre predictores.</p>
+            <div class="formula">
+                <h4>Clasificador Naive Bayes</h4>
+                <p>\[P(y|X) = \frac{P(X|y) \cdot P(y)}{P(X)}\]</p>
+                <p>Donde:</p>
+                <ul>
+                    <li>\(y\): Clase de la variable objetivo</li>
+                    <li>\(X\): Conjunto de características</li>
+                    <li>Bajo el supuesto de independencia: \(P(X|y) = P(x_1|y) \cdot P(x_2|y) \cdot ... \cdot P(x_n|y)\)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="practical">
+            <h2><i class="fas fa-laptop-code"></i> Actividad Práctica</h2>
+            
+            <div class="activity">
+                <h3>1. Implementación del Teorema de Bayes desde Cero</h3>
+                <p>Vamos a implementar el Teorema de Bayes para resolver problemas de probabilidad condicional.</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copiar</button>
+                    <pre><code class="python">def teorema_bayes(p_a, p_b_dado_a, p_b_dado_no_a=None):
+    """
+    Calcula P(A|B) usando el Teorema de Bayes
+    
+    Parámetros:
+    p_a: Probabilidad a priori P(A)
+    p_b_dado_a: Probabilidad de B dado A, P(B|A)
+    p_b_dado_no_a: Probabilidad de B dado no A, P(B|¬A)
+    
+    Retorna:
+    Probabilidad a posteriori P(A|B)
+    """
+    if p_b_dado_no_a is None:
+        # Si no se proporciona P(B|¬A), asumir que P(B) = P(B|A)P(A) + P(B|¬A)P(¬A) = 1
+        p_b = p_b_dado_a * p_a + (1 - p_a) * 0.5  # Asumir 0.5 como valor por defecto
+    else:
+        p_b = p_b_dado_a * p_a + p_b_dado_no_a * (1 - p_a)
+    
+    p_a_dado_b = (p_b_dado_a * p_a) / p_b
+    return p_a_dado_b
+
+# Ejemplo 1: Prueba médica
+# Sensibilidad (verdaderos positivos) = 99%
+# Especificidad (verdaderos negativos) = 95%
+# Prevalencia de la enfermedad = 1%
+
+p_enfermedad = 0.01
+p_positivo_dado_enfermo = 0.99
+p_positivo_dado_sano = 1 - 0.95  # Falsos positivos
+
+p_enfermo_dado_positivo = teorema_bayes(
+    p_a=p_enfermedad,
+    p_b_dado_a=p_positivo_dado_enfermo,
+    p_b_dado_no_a=p_positivo_dado_sano
+)
+
+print(f"Ejemplo 1: Prueba médica")
+print(f"Probabilidad de tener la enfermedad dado positivo: {p_enfermo_dado_positivo*100:.2f}%")
+
+# Ejemplo 2: Filtro de spam
+# Probabilidad de que un correo sea spam: 20%
+# Palabra "oferta" aparece en el 50% de los spams
+# Palabra "oferta" aparece en el 10% de los correos buenos
+
+p_spam = 0.2
+p_oferta_dado_spam = 0.5
+p_oferta_dado_no_spam = 0.1
+
+p_spam_dado_oferta = teorema_bayes(
+    p_a=p_spam,
+    p_b_dado_a=p_oferta_dado_spam,
+    p_b_dado_no_a=p_oferta_dado_no_spam
+)
+
+print(f"\nEjemplo 2: Filtro de spam")
+print(f"Probabilidad de que sea spam si contiene 'oferta': {p_spam_dado_oferta*100:.2f}%")
+
+# Visualización de cómo cambia la probabilidad con diferentes valores
+def plot_bayes_curve(p_a, p_b_dado_a, p_b_dado_no_a_range):
+    import matplotlib.pyplot as plt
+    import numpy as np
+    
+    p_a_dado_b_list = []
+    
+    for p_b_dado_no_a in p_b_dado_no_a_range:
+        p_b = p_b_dado_a * p_a + p_b_dado_no_a * (1 - p_a)
+        p_a_dado_b = (p_b_dado_a * p_a) / p_b
+        p_a_dado_b_list.append(p_a_dado_b)
+    
+    plt.figure(figsize=(10, 6))
+    plt.plot(p_b_dado_no_a_range, p_a_dado_b_list, 'b-', linewidth=2)
+    plt.title('Probabilidad a posteriori vs P(B|¬A)')
+    plt.xlabel('P(B|¬A) - Tasa de falsos positivos')
+    plt.ylabel('P(A|B) - Probabilidad a posteriori')
+    plt.grid(True, alpha=0.3)
+    plt.axvline(x=p_b_dado_a, color='r', linestyle='--', label=f'P(B|A) = {p_b_dado_a}')
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+# Visualización para el ejemplo de la prueba médica
+print("\nGenerando gráfico de sensibilidad vs probabilidad a posteriori...")
+p_b_dado_no_a_range = np.linspace(0, 1, 100)
+plot_bayes_curve(p_enfermedad, p_positivo_dado_enfermo, p_b_dado_no_a_range)</code></pre>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3>2. Implementación del Clasificador Naive Bayes</h3>
+                <p>Vamos a implementar un clasificador Naive Bayes desde cero y compararlo con la implementación de scikit-learn.</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copiar</button>
+                    <pre><code class="python">import numpy as np
+from collections import defaultdict
+
+class NaiveBayes:
+    def __init__(self, alpha=1.0):
+        self.alpha = alpha  # Parámetro de suavizado de Laplace
+        self.classes = None
+        self.class_priors = {}
+        self.feature_probs = {}
+    
+    def fit(self, X, y):
+        """
+        Entrena el clasificador Naive Bayes
+        
+        Parámetros:
+        X: array-like de forma (n_muestras, n_caracteristicas)
+        y: array-like de forma (n_muestras,)
+        """
+        self.classes = np.unique(y)
+        n_samples, n_features = X.shape
+        
+        # Calcular las probabilidades a priori de cada clase
+        for c in self.classes:
+            self.class_priors[c] = np.sum(y == c) / n_samples
+        
+        # Calcular las probabilidades condicionales P(x_i|y)
+        for c in self.classes:
+            # Filtrar muestras de la clase actual
+            X_c = X[y == c]
+            self.feature_probs[c] = {}
+            
+            # Para cada característica
+            for i in range(n_features):
+                # Contar ocurrencias de cada valor
+                values, counts = np.unique(X_c[:, i], return_counts=True)
+                total = np.sum(counts)
+                
+                # Calcular probabilidades con suavizado de Laplace
+                self.feature_probs[c][i] = {}
+                for v, cnt in zip(values, counts):
+                    self.feature_probs[c][i][v] = (cnt + self.alpha) / (total + self.alpha * len(np.unique(X[:, i])))
+    
+    def predict_proba(self, X):
+        """
+        Predice las probabilidades para cada clase
+        
+        Retorna:
+        array de forma (n_muestras, n_clases) con las probabilidades
+        """
+        n_samples = X.shape[0]
+        n_classes = len(self.classes)
+        probs = np.zeros((n_samples, n_classes))
+        
+        for i in range(n_samples):
+            for j, c in enumerate(self.classes):
+                # Inicializar con el logaritmo de la probabilidad a priori
+                log_prob = np.log(self.class_priors[c])
+                
+                # Multiplicar por las probabilidades condicionales (sumar en escala logarítmica)
+                for k, x in enumerate(X[i]):
+                    # Si el valor se ha visto en el entrenamiento, usar su probabilidad
+                    if x in self.feature_probs[c][k]:
+                        log_prob += np.log(self.feature_probs[c][k][x])
+                    else:
+                        # Manejar valores no vistos (usar una probabilidad pequeña)
+                        log_prob += np.log(self.alpha / (sum([len(self.feature_probs[cls][k]) for cls in self.classes]) * self.alpha))
+                
+                # Convertir de vuelta a probabilidad (exponenciar)
+                probs[i, j] = np.exp(log_prob)
+            
+            # Normalizar las probabilidades
+            probs[i] = probs[i] / np.sum(probs[i])
+        
+        return probs
+    
+    def predict(self, X):
+        """
+        Predice la clase para cada muestra
+        
+        Retorna:
+        array de forma (n_muestras,) con las clases predichas
+        """
+        probs = self.predict_proba(X)
+        return self.classes[np.argmax(probs, axis=1)]
+
+# Ejemplo de uso con un conjunto de datos de juguete
+def ejemplo_clasificacion():
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import accuracy_score, classification_report
+    from sklearn.naive_bayes import GaussianNB
+    
+    # Cargar el conjunto de datos Iris
+    data = load_iris()
+    X, y = data.data, data.target
+    
+    # Discretizar características (para nuestro Naive Bayes simple)
+    X_discreto = np.digitize(X, bins=np.linspace(X.min(), X.max(), 5))
+    
+    # Dividir en conjuntos de entrenamiento y prueba
+    X_train, X_test, y_train, y_test = train_test_split(
+        X_discreto, y, test_size=0.3, random_state=42, stratify=y
+    )
+    
+    # Entrenar nuestro clasificador
+    nb_custom = NaiveBayes(alpha=1.0)
+    nb_custom.fit(X_train, y_train)
+    
+    # Predecir en el conjunto de prueba
+    y_pred_custom = nb_custom.predict(X_test)
+    
+    # Entrenar el clasificador de scikit-learn para comparar
+    # Nota: Usamos GaussianNB ya que nuestro conjunto de datos tiene características continuas
+    nb_sklearn = GaussianNB()
+    nb_sklearn.fit(X, y)  # Usamos los datos originales (sin discretizar)
+    y_pred_sklearn = nb_sklearn.predict(X_test)
+    
+    # Calcular y mostrar métricas
+    print("=== Nuestro Clasificador Naive Bayes ===")
+    print(f"Precisión: {accuracy_score(y_test, y_pred_custom):.4f}")
+    print("\nReporte de clasificación:")
+    print(classification_report(y_test, y_pred_custom, target_names=data.target_names))
+    
+    print("\n=== Comparación con scikit-learn GaussianNB ===")
+    print(f"Precisión: {accuracy_score(y_test, y_pred_sklearn):.4f}")
+    print("\nReporte de clasificación:")
+    print(classification_report(y_test, y_pred_sklearn, target_names=data.target_names))
+
+# Ejecutar el ejemplo
+print("Ejecutando ejemplo de clasificación con Naive Bayes...")
+ejemplo_clasificacion()</code></pre>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3>3. Aplicación: Filtro de Spam con Naive Bayes</h3>
+                <p>Vamos a implementar un filtro de spam simple utilizando el clasificador Naive Bayes.</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copiar</button>
+                    <pre><code class="python">import numpy as np
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+def cargar_datos_ejemplo():
+    """
+    Crea un conjunto de datos de ejemplo de correos electrónicos
+    """
+    # Correos de ejemplo (en un caso real, se cargarían de archivos o una base de datos)
+    correos = [
+        # Correos normales (ham)
+        "Hola, ¿cómo estás? Espero que todo bien contigo.",
+        "Nos vemos mañana en la reunión de trabajo.",
+        "¿Has terminado el informe que te pedí? Lo necesito para el viernes.",
+        "Recordatorio: La presentación es a las 3 PM en la sala de juntas.",
+        "¿Te gustaría ir a almorzar mañana?",
+        "Por favor, revisa los documentos adjuntos y házmelo saber.",
+        "Gracias por tu correo. Estaré encantado de ayudarte.",
+        "La reunión de equipo se ha pospuesto para el próximo lunes.",
+        "¿Podrías enviarme la información que hablamos ayer?",
+        "Te envío los archivos que me pediste.",
+        
+        # Correos de spam
+        "¡Gana dinero rápido y fácil desde casa! ¡Haz clic aquí!",
+        "Oferta exclusiva: 50% de descuento en productos seleccionados.",
+        "¡Felicidades! Has ganado un iPhone gratis. Reclama tu premio ahora.",
+        "Inversión segura con retornos garantizados del 20% mensual.",
+        "¡Tu cuenta ha sido seleccionada para una oferta especial!",
+        "Préstamos aprobados al instante sin verificación de crédito.",
+        "¡Aumenta el tamaño de tu pene en solo 2 semanas!",
+        "Trabaja desde casa y gana $5000 al mes sin experiencia.",
+        "Oferta por tiempo limitado: ¡No dejes pasar esta oportunidad!",
+        "¡Tu suscripción ha expirado! Renueva ahora para evitar la interrupción del servicio."
+    ]
+    
+    # Etiquetas (0 = ham, 1 = spam)
+    etiquetas = [0] * 10 + [1] * 10
+    
+    return correos, etiquetas
+
+def preprocesar_texto(correos):
+    """
+    Preprocesa el texto para el análisis
+    """
+    # En un caso real, aquí se haría limpieza más avanzada
+    # (eliminación de stopwords, stemming, lematización, etc.)
+    return [texto.lower() for texto in correos]
+
+def entrenar_filtro_spam():
+    """
+    Entrena y evalúa un filtro de spam usando Naive Bayes
+    """
+    # Cargar datos de ejemplo
+    correos, y = cargar_datos_ejemplo()
+    
+    # Preprocesar texto
+    correos_limpios = preprocesar_texto(correos)
+    
+    # Convertir texto a vectores de conteo de palabras
+    vectorizador = CountVectorizer(binary=True)
+    X = vectorizador.fit_transform(correos_limpios)
+    
+    # Dividir en conjuntos de entrenamiento y prueba (usando validación simple)
+    # En un caso real, se usaría train_test_split de scikit-learn
+    X_train, X_test = X[:15], X[15:]
+    y_train, y_test = y[:15], y[15:]
+    
+    # Entrenar el clasificador Naive Bayes
+    clasificador = MultinomialNB()
+    clasificador.fit(X_train, y_train)
+    
+    # Hacer predicciones
+    y_pred = clasificador.predict(X_test)
+    
+    # Evaluar el rendimiento
+    print("=== Evaluación del Filtro de Spam ===")
+    print(f"Precisión: {accuracy_score(y_test, y_pred):.2f}")
+    print("\nReporte de clasificación:")
+    print(classification_report(y_test, y_pred, target_names=['Ham', 'Spam']))
+    
+    # Mostrar matriz de confusión
+    cm = confusion_matrix(y_test, y_pred)
+    plt.figure(figsize=(6, 4))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
+                xticklabels=['Ham', 'Spam'],
+                yticklabels=['Ham', 'Spam'])
+    plt.xlabel('Predicho')
+    plt.ylabel('Real')
+    plt.title('Matriz de Confusión')
+    plt.tight_layout()
+    plt.show()
+    
+    # Función para probar con nuevos correos
+    def predecir_spam(nuevo_correo):
+        correo_limpio = preprocesar_texto([nuevo_correo])
+        X_nuevo = vectorizador.transform(correo_limpio)
+        proba = clasificador.predict_proba(X_nuevo)[0]
+        
+        print(f"\nCorreo: {nuevo_correo}")
+        print(f"Probabilidad de ser spam: {proba[1]*100:.2f}%")
+        print(f"Clasificación: {'Spam' if proba[1] > 0.5 else 'Ham'}")
+    
+    # Probar con algunos ejemplos
+    print("\n=== Probando el Filtro de Spam ===")
+    predecir_spam("Hola, ¿cómo estás? ¿Podemos vernos mañana?")
+    predecir_spam("¡Gana dinero fácil desde casa!")
+    predecir_spam("Reunión de equipo mañana a las 10 AM")
+    predecir_spam("¡Oferta exclusiva solo por hoy!")
+
+# Ejecutar el ejemplo
+print("Entrenando filtro de spam con Naive Bayes...")
+entrenar_filtro_spam()</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="exercises">
+            <h2><i class="fas fa-tasks"></i> Ejercicios</h2>
+            
+            <div class="exercise">
+                <h3>Ejercicio 1: Aplicación del Teorema de Bayes</h3>
+                <p>Resuelve los siguientes problemas utilizando el Teorema de Bayes:</p>
+                <ol>
+                    <li>En una fábrica, las máquinas A, B y C producen el 45%, 30% y 25% de los artículos respectivamente. 
+                        Los porcentajes de artículos defectuosos producidos por cada máquina son 3%, 4% y 5% respectivamente. 
+                        Si se selecciona un artículo al azar y resulta defectuoso, ¿cuál es la probabilidad de que haya sido producido por la máquina B?</li>
+                    
+                    <li>Una prueba de detección de una enfermedad tiene una sensibilidad del 95% (probabilidad de dar positivo si tiene la enfermedad) 
+                        y una especificidad del 90% (probabilidad de dar negativo si no tiene la enfermedad). 
+                        Si la prevalencia de la enfermedad en la población es del 2%, ¿cuál es la probabilidad de que una persona 
+                        que dio positivo en la prueba realmente tenga la enfermedad?</li>
+                </ol>
+                
+                <button class="solution-btn" onclick="toggleSolution('sol1')">Mostrar Solución</button>
+                <div id="sol1" class="solution">
+                    <pre><code class="python">def ejercicio1():
+    """
+    Solución al ejercicio 1
+    """
+    # Datos del problema 1
+    # Probabilidades a priori
+    p_a = 0.45  # Máquina A
+    p_b = 0.30  # Máquina B
+    p_c = 0.25  # Máquina C
+    
+    # Probabilidades de defectuosos
+    p_dado_a = 0.03  # P(Defectuoso|A)
+    p_dado_b = 0.04  # P(Defectuoso|B)
+    p_dado_c = 0.05  # P(Defectuoso|C)
+    
+    # Probabilidad total de que un artículo sea defectuoso
+    p_d = p_a * p_dado_a + p_b * p_dado_b + p_c * p_dado_c
+    
+    # Aplicar Teorema de Bayes para P(B|Defectuoso)
+    p_b_dado_d = (p_dado_b * p_b) / p_d
+    
+    print("=== Solución al Problema 1 ===")
+    print(f"Probabilidad de que un artículo defectuoso sea de la máquina B: {p_b_dado_d*100:.2f}%")
+    
+    # Datos del problema 2
+    sensibilidad = 0.95  # P(Prueba+|Enfermo)
+    especificidad = 0.90  # P(Prueba-|Sano)
+    prevalencia = 0.02    # P(Enfermo)
+    
+    # P(Enfermo|Prueba+) = P(Prueba+|Enfermo) * P(Enfermo) / P(Prueba+)
+    p_prueba_positivo = sensibilidad * prevalencia + (1 - especificidad) * (1 - prevalencia)
+    p_enfermo_dado_positivo = (sensibilidad * prevalencia) / p_prueba_positivo
+    
+    print("\n=== Solución al Problema 2 ===")
+    print(f"Probabilidad de tener la enfermedad dado positivo: {p_enfermo_dado_positivo*100:.2f}%")
+
+# Ejecutar la solución
+ejercicio1()</code></pre>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h3>Ejercicio 2: Implementación de Naive Bayes para Clasificación de Texto</h3>
+                <p>Amplía el ejemplo del filtro de spam para que:</p>
+                <ol>
+                    <li>Utilice un conjunto de datos real de mensajes de spam/ham (puedes usar el dataset de SMS Spam Collection).</li>
+                    <li>Implementa un preprocesamiento de texto más avanzado (eliminación de stopwords, stemming, etc.).</li>
+                    <li>Incorpora TF-IDF en lugar de solo conteo de palabras.</li>
+                    <li>Evalúa el rendimiento con métricas adicionales (precisión, recall, F1-score, matriz de confusión).</li>
+                    <li>Crea una interfaz simple para que los usuarios puedan ingresar mensajes y ver si son clasificados como spam o ham.</li>
+                </ol>
+                
+                <button class="solution-btn" onclick="toggleSolution('sol2')">Mostrar Solución</button>
+                <div id="sol2" class="solution">
+                    <pre><code class="python">import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import classification_report, confusion_matrix
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
+import string
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Descargar recursos de NLTK (solo la primera vez)
+try:
+    nltk.data.find('tokenizers/punkt')
+    nltk.data.find('corpora/stopwords')
+except LookupError:
+    nltk.download('punkt')
+    nltk.download('stopwords')
+
+def cargar_datos(ruta):
+    """
+    Carga el conjunto de datos de spam/ham
+    """
+    # Cargar el dataset (asumiendo que está en formato CSV con columnas 'label' y 'text')
+    # Ejemplo de formato:
+    # label,text
+    # ham,Hello, how are you?
+    # spam,Win a free iPhone now!
+    try:
+        df = pd.read_csv(ruta, encoding='latin-1')
+        # Si el dataset tiene columnas sin nombre, ajustar según sea necesario
+        if len(df.columns) > 2:
+            df = df.iloc[:, [0, 1]]  # Tomar solo las dos primeras columnas
+            df.columns = ['label', 'text']
+        elif len(df.columns) == 2:
+            df.columns = ['label', 'text']
+        
+        return df
+    except Exception as e:
+        print(f"Error al cargar el archivo: {e}")
+        # Si hay un error, usar un conjunto de datos de ejemplo
+        print("Usando conjunto de datos de ejemplo...")
+        return pd.DataFrame({
+            'label': ['ham', 'spam', 'ham', 'spam'],
+            'text': [
+                'Hello, how are you?',
+                'Win a free iPhone now!',
+                'Meeting at 3 PM tomorrow',
+                'Special offer just for you!'
+            ]
+        })
+
+def preprocesar_texto(texto):
+    """
+    Preprocesa el texto para el análisis
+    """
+    # Convertir a minúsculas
+    texto = texto.lower()
+    
+    # Eliminar puntuación
+    texto = texto.translate(str.maketrans('', '', string.punctuation))
+    
+    # Tokenización
+    tokens = nltk.word_tokenize(texto)
+    
+    # Eliminar stopwords
+    stop_words = set(stopwords.words('english'))
+    tokens = [word for word in tokens if word not in stop_words]
+    
+    # Aplicar stemming
+    stemmer = PorterStemmer()
+    tokens = [stemmer.stem(word) for word in tokens]
+    
+    # Unir tokens de nuevo en texto
+    return ' '.join(tokens)
+
+def entrenar_modelo(df):
+    """
+    Entrena un modelo de clasificación de texto
+    """
+    # Preprocesar texto
+    df['texto_limpio'] = df['text'].apply(preprocesar_texto)
+    
+    # Dividir en conjuntos de entrenamiento y prueba
+    X_train, X_test, y_train, y_test = train_test_split(
+        df['texto_limpio'], 
+        df['label'], 
+        test_size=0.3, 
+        random_state=42,
+        stratify=df['label']
+    )
+    
+    # Vectorizar texto con TF-IDF
+    vectorizador = TfidfVectorizer(max_features=5000)
+    X_train_vec = vectorizador.fit_transform(X_train)
+    X_test_vec = vectorizador.transform(X_test)
+    
+    # Entrenar modelo Naive Bayes
+    modelo = MultinomialNB()
+    modelo.fit(X_train_vec, y_train)
+    
+    return modelo, vectorizador, X_test_vec, y_test
+
+def evaluar_modelo(modelo, X_test, y_test):
+    """
+    Evalúa el rendimiento del modelo
+    """
+    # Hacer predicciones
+    y_pred = modelo.predict(X_test)
+    
+    # Mostrar métricas
+    print("\n=== Métricas de Evaluación ===")
+    print(classification_report(y_test, y_pred))
+    
+    # Mostrar matriz de confusión
+    cm = confusion_matrix(y_test, y_pred)
+    plt.figure(figsize=(6, 4))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
+                xticklabels=modelo.classes_,
+                yticklabels=modelo.classes_)
+    plt.xlabel('Predicho')
+    plt.ylabel('Real')
+    plt.title('Matriz de Confusión')
+    plt.tight_layout()
+    plt.show()
+
+def interfaz_usuario(modelo, vectorizador):
+    """
+    Interfaz simple para probar el modelo
+    """
+    print("\n=== Filtro de Spam - Prueba el Modelo ===")
+    print("Escribe 'salir' para terminar")
+    
+    while True:
+        mensaje = input("\nIngresa un mensaje para clasificar: ")
+        
+        if mensaje.lower() == 'salir':
+            break
+        
+        # Preprocesar mensaje
+        mensaje_limpio = preprocesar_texto(mensaje)
+        
+        # Vectorizar
+        X = vectorizador.transform([mensaje_limpio])
+        
+        # Predecir
+        probabilidad = modelo.predict_proba(X)[0]
+        prediccion = modelo.predict(X)[0]
+        
+        # Mostrar resultados
+        print(f"\nMensaje: {mensaje}")
+        print(f"Probabilidades: {dict(zip(modelo.classes_, probabilidad.round(4)))}")
+        print(f"Clasificación: {prediccion}")
+
+def main():
+    # Ruta al archivo de datos (ajustar según sea necesario)
+    ruta_datos = "spam_ham_dataset.csv"  # Reemplazar con la ruta correcta
+    
+    # Cargar datos
+    print("Cargando datos...")
+    df = cargar_datos(ruta_datos)
+    
+    # Verificar que tenemos datos
+    if df is None or df.empty:
+        print("No se pudieron cargar los datos. Saliendo...")
+        return
+    
+    print(f"\n=== Estadísticas del Conjunto de Datos ===")
+    print(f"Número de mensajes: {len(df)}")
+    print(f"Distribución de clases:\n{df['label'].value_counts()}")
+    
+    # Entrenar modelo
+    print("\nEntrenando modelo...")
+    modelo, vectorizador, X_test, y_test = entrenar_modelo(df)
+    
+    # Evaluar modelo
+    print("\nEvaluando modelo...")
+    evaluar_modelo(modelo, X_test, y_test)
+    
+    # Ejecutar interfaz de usuario
+    interfaz_usuario(modelo, vectorizador)
+
+if __name__ == "__main__":
+    main()</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h2><i class="fas fa-clipboard-list"></i> Resumen</h2>
+            <ul>
+                <li>El <strong>Teorema de Bayes</strong> es una herramienta fundamental para actualizar probabilidades a medida que se obtiene nueva información.</li>
+                <li>La <strong>probabilidad a priori</strong> representa nuestro conocimiento inicial sobre un evento, mientras que la <strong>probabilidad a posteriori</strong> es la probabilidad actualizada después de observar la evidencia.</li>
+                <li>El <strong>clasificador Naive Bayes</strong> es un algoritmo de aprendizaje automático basado en el Teorema de Bayes que asume independencia entre las características.</li>
+                <li>Naive Bayes es especialmente útil para <strong>clasificación de texto</strong>, como filtros de spam, análisis de sentimientos y categorización de documentos.</li>
+                <li>Aunque la suposición de independencia es raramente cierta en la práctica, Naive Bayes a menudo funciona sorprendentemente bien en muchos escenarios del mundo real.</li>
+                <li>La implementación de Naive Bayes es computacionalmente eficiente y requiere relativamente pocos datos de entrenamiento en comparación con otros algoritmos.</li>
+            </ul>
+        </section>
+
+        <section class="resources">
+            <h2><i class="fas fa-book"></i> Recursos Adicionales</h2>
+            <ul>
+                <li><a href="https://scikit-learn.org/stable/modules/naive_bayes.html" target="_blank" rel="noopener noreferrer">Documentación de Naive Bayes en scikit-learn</a> - Guía oficial de implementación</li>
+                <li><a href="https://www.udacity.com/course/intro-to-artificial-intelligence--cs271" target="_blank" rel="noopener noreferrer">Curso de IA de Udacity</a> - Excelente explicación del Teorema de Bayes</li>
+                <li><a href="https://www.kaggle.com/datasets/uciml/sms-spam-collection-dataset" target="_blank" rel="noopener noreferrer">Dataset de SMS Spam Collection</a> - Para practicar clasificación de spam</li>
+                <li><a href="https://nlp.stanford.edu/IR-book/html/htmledition/naive-bayes-text-classification-1.html" target="_blank" rel="noopener noreferrer">Naive Bayes Text Classification</a> - Libro de texto sobre procesamiento de lenguaje natural</li>
+                <li><a href="https://www.youtube.com/watch?v=HZGCoVF3YVw" target="_blank" rel="noopener noreferrer">Video explicativo del Teorema de Bayes</a> - Explicación visual intuitiva</li>
+            </ul>
+        </section>
+
+        <section class="homework">
+            <h2><i class="fas fa-home"></i> Tarea</h2>
+            <ol>
+                <li><strong>Investigación:</strong> Investiga y explica la diferencia entre los diferentes tipos de clasificadores Naive Bayes (Gaussian, Multinomial, Bernoulli) y en qué situaciones es más apropiado usar cada uno.</li>
+                <li><strong>Análisis de Datos:</strong> Descarga un conjunto de datos de clasificación de texto (por ejemplo, reseñas de películas, tweets, noticias) y aplica el clasificador Naive Bayes. Compara su rendimiento con al menos otro algoritmo de clasificación.</li>
+                <li><strong>Optimización:</strong> Investiga y aplica técnicas de optimización de hiperparámetros (como GridSearchCV) al modelo Naive Bayes para mejorar su rendimiento.</li>
+                <li><strong>Aplicación Práctica:</strong> Desarrolla una aplicación web simple que permita a los usuarios ingresar texto y clasificarlo como spam/ham o cualquier otra categoría de tu elección usando el modelo entrenado.</li>
+            </ol>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION2-10.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 2.10 Estadística Descriptiva</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION2-12.html" class="btn">Siguiente Sesión: 2.12 Optimización (I) <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Función para copiar código al portapapeles
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling.querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Cambiar el ícono temporalmente para mostrar que se copió
+            const icon = button.querySelector('i');
+            const originalClass = icon.className;
+            icon.className = 'fas fa-check';
+            
+            setTimeout(() => {
+                icon.className = originalClass;
+            }, 2000);
+        }
+        
+        // Función para mostrar/ocultar soluciones
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            if (solution.style.display === 'block') {
+                solution.style.display = 'none';
+                event.target.textContent = 'Mostrar Solución';
+            } else {
+                solution.style.display = 'block';
+                event.target.textContent = 'Ocultar Solución';
+            }
+        }
+    </script>
+</body>
+</html>

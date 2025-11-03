@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.9: Distribuciones de Probabilidad - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>2.9: Distribuciones de Probabilidad</h1>
+            <p>Módulo 2: Matemáticas para IA</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender el concepto de variable aleatoria y distribución de probabilidad</li>
+                <li>Identificar y aplicar las principales distribuciones discretas y continuas</li>
+                <li>Calcular probabilidades y estadísticos descriptivos para diferentes distribuciones</li>
+                <li>Implementar distribuciones de probabilidad en Python</li>
+                <li>Aplicar distribuciones de probabilidad en problemas de IA y ciencia de datos</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
+            
+            <h3>1. Variables Aleatorias</h3>
+            <p>Una variable aleatoria es una función que asigna un valor numérico a cada resultado posible de un experimento aleatorio.</p>
+            
+            <div class="definition">
+                <h4>Variable Aleatoria Discreta:</h4>
+                <p>Puede tomar un número contable de valores. Su distribución de probabilidad se define por la función de masa de probabilidad (PMF):</p>
+                <p>\[P(X = x_i) = p_i\]</p>
+            </div>
+            
+            <div class="definition">
+                <h4>Variable Aleatoria Continua:</h4>
+                <p>Puede tomar cualquier valor en un intervalo. Su distribución se describe mediante la función de densidad de probabilidad (PDF):</p>
+                <p>\[P(a \leq X \leq b) = \int_{a}^{b} f(x) dx\]</p>
+            </div>
+
+            <h3>2. Distribuciones Discretas Importantes</h3>
+            
+            <div class="distribution">
+                <h4>Distribución de Bernoulli</h4>
+                <p>Modela experimentos con exactamente dos resultados posibles (éxito/fracaso).</p>
+                <p>\[P(X = 1) = p, \quad P(X = 0) = 1 - p\]</p>
+                <p><strong>Media:</strong> \(\mu = p\)</p>
+                <p><strong>Varianza:</strong> \(\sigma^2 = p(1-p)\)</p>
+            </div>
+
+            <div class="distribution">
+                <h4>Distribución Binomial</h4>
+                <p>Número de éxitos en n ensayos independientes de Bernoulli.</p>
+                <p>\[P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}\]</p>
+                <p><strong>Media:</strong> \(\mu = np\)</p>
+                <p><strong>Varianza:</strong> \(\sigma^2 = np(1-p)\)</p>
+            </div>
+
+            <div class="distribution">
+                <h4>Distribución de Poisson</h4>
+                <p>Número de eventos que ocurren en un intervalo fijo de tiempo o espacio.</p>
+                <p>\[P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}\]</p>
+                <p><strong>Media y Varianza:</strong> \(\mu = \sigma^2 = \lambda\)</p>
+            </div>
+
+            <h3>3. Distribuciones Continuas Importantes</h3>
+            
+            <div class="distribution">
+                <h4>Distribución Uniforme</h4>
+                <p>Todos los resultados en un intervalo tienen la misma probabilidad.</p>
+                <p>\[f(x) = \begin{cases} 
+                \frac{1}{b-a} & \text{para } a \leq x \leq b \\
+                0 & \text{en otro caso}
+                \end{cases}\]</p>
+                <p><strong>Media:</strong> \(\mu = \frac{a+b}{2}\)</p>
+                <p><strong>Varianza:</strong> \(\sigma^2 = \frac{(b-a)^2}{12}\)</p>
+            </div>
+
+            <div class="distribution">
+                <h4>Distribución Normal (Gaussiana)</h4>
+                <p>Distribución en forma de campana, fundamental en estadística.</p>
+                <p>\[f(x) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}\]</p>
+                <p><strong>Media:</strong> \(\mu\)</p>
+                <p><strong>Varianza:</strong> \(\sigma^2\)</p>
+            </div>
+
+            <div class="distribution">
+                <h4>Distribución Exponencial</h4>
+                <p>Modela el tiempo entre eventos en un proceso de Poisson.</p>
+                <p>\[f(x) = \lambda e^{-\lambda x}, \quad x \geq 0\]</p>
+                <p><strong>Media:</strong> \(\mu = \frac{1}{\lambda}\)</p>
+                <p><strong>Varianza:</strong> \(\sigma^2 = \frac{1}{\lambda^2}\)</p>
+            </div>
+
+            <h3>4. Teorema del Límite Central</h3>
+            <p>Cuando el tamaño de la muestra es suficientemente grande, la distribución de la media muestral se aproxima a una distribución normal, independientemente de la forma de la distribución de la población.</p>
+            <p>\[\bar{X} \sim N\left(\mu, \frac{\sigma}{\sqrt{n}}\right)\]</p>
+        </section>
+
+        <section class="practical">
+            <h2><i class="fas fa-laptop-code"></i> Actividad Práctica</h2>
+            
+            <div class="activity">
+                <h3>1. Visualización de Distribuciones con Python</h3>
+                <p>Vamos a utilizar NumPy, SciPy y Matplotlib para visualizar diferentes distribuciones de probabilidad.</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copiar</button>
+                    <pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+# Configuración de estilo
+plt.style.use('seaborn')
+plt.figure(figsize=(12, 8))
+
+# 1. Distribución Binomial
+n, p = 10, 0.5
+x = np.arange(0, n+1)
+binomial = stats.binom.pmf(x, n, p)
+plt.subplot(2, 2, 1)
+plt.bar(x, binomial, color='skyblue')
+plt.title(f'Distribución Binomial (n={n}, p={p})')
+plt.xlabel('Número de éxitos')
+plt.ylabel('Probabilidad')
+
+# 2. Distribución de Poisson
+lmbda = 3
+x = np.arange(0, 15)
+poisson = stats.poisson.pmf(x, lmbda)
+plt.subplot(2, 2, 2)
+plt.bar(x, poisson, color='lightgreen')
+plt.title(f'Distribución de Poisson (λ={lmbda})')
+plt.xlabel('Número de eventos')
+plt.ylabel('Probabilidad')
+
+# 3. Distribución Normal
+mu, sigma = 0, 1
+x = np.linspace(-4, 4, 1000)
+normal = stats.norm.pdf(x, mu, sigma)
+plt.subplot(2, 2, 3)
+plt.plot(x, normal, 'r-', lw=2)
+plt.title(f'Distribución Normal (μ={mu}, σ={sigma})')
+plt.xlabel('Valor')
+plt.ylabel('Densidad de probabilidad')
+plt.grid(True)
+
+# 4. Distribución Exponencial
+lmbda = 0.5
+x = np.linspace(0, 10, 1000)
+exponential = stats.expon.pdf(x, scale=1/lmbda)
+plt.subplot(2, 2, 4)
+plt.plot(x, exponential, 'm-', lw=2)
+plt.title(f'Distribución Exponencial (λ={lmbda})')
+plt.xlabel('Tiempo')
+plt.ylabel('Densidad de probabilidad')
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3>2. Simulación del Teorema del Límite Central</h3>
+                <p>Vamos a simular el teorema del límite central tomando muestras de una distribución exponencial.</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copiar</button>
+                    <pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+# Parámetros
+distribucion = 'exponencial'  # Puedes probar con 'uniforme' o 'binomial'
+muestra_tamano = 1000
+num_muestras = 1000
+
+# Generar muestras
+if distribucion == 'exponencial':
+    datos = np.random.exponential(scale=2, size=(num_muestras, muestra_tamano))
+elif distribucion == 'uniforme':
+    datos = np.random.uniform(0, 10, (num_muestras, muestra_tamano))
+else:  # binomial
+    datos = np.random.binomial(n=10, p=0.5, size=(num_muestras, muestra_tamano))
+
+# Calcular medias muestrales
+medias_muestrales = np.mean(datos, axis=1)
+
+# Visualizar distribución original y distribución de medias muestrales
+plt.figure(figsize=(12, 5))
+
+# Distribución original
+plt.subplot(1, 2, 1)
+if distribucion == 'exponencial':
+    plt.hist(datos.flatten(), bins=30, density=True, alpha=0.7, color='skyblue')
+    x = np.linspace(0, 10, 100)
+    plt.plot(x, stats.expon(scale=2).pdf(x), 'r-', lw=2)
+    plt.title('Distribución Exponencial Original')
+elif distribucion == 'uniforme':
+    plt.hist(datos.flatten(), bins=30, density=True, alpha=0.7, color='lightgreen')
+    plt.axhline(y=0.1, color='r', linestyle='-', lw=2)
+    plt.title('Distribución Uniforme Original')
+else:
+    plt.hist(datos.flatten(), bins=range(0, 12), density=True, alpha=0.7, color='lightcoral', align='left')
+    x = np.arange(0, 11)
+    plt.plot(x, stats.binom.pmf(x, n=10, p=0.5), 'ro', ms=5, linestyle='None')
+    plt.vlines(x, 0, stats.binom.pmf(x, n=10, p=0.5), colors='r', lw=2)
+    plt.title('Distribución Binomial Original')
+
+plt.xlabel('Valor')
+plt.ylabel('Densidad')
+
+# Distribución de medias muestrales
+plt.subplot(1, 2, 2)
+plt.hist(medias_muestrales, bins=30, density=True, alpha=0.7, color='purple')
+
+# Ajustar curva normal a las medias muestrales
+mu, std = np.mean(medias_muestrales), np.std(medias_muestrales)
+x = np.linspace(mu - 4*std, mu + 4*std, 100)
+plt.plot(x, stats.norm.pdf(x, mu, std), 'r-', lw=2)
+
+plt.title(f'Distribución de Medias Muestrales\n(n={muestra_tamano}, muestras={num_muestras})')
+plt.xlabel('Media Muestral')
+plt.ylabel('Densidad')
+
+plt.tight_layout()
+plt.show()</code></pre>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3>3. Aplicación: Simulación de Colas con Distribuciones de Probabilidad</h3>
+                <p>Vamos a simular un sistema de colas simple utilizando distribuciones de probabilidad para modelar los tiempos de llegada y servicio.</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copiar</button>
+                    <pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from collections import deque
+
+# Parámetros de la simulación
+num_clientes = 100  # Número de clientes a simular
+lambda_llegada = 2  # Tasa media de llegadas por minuto (para distribución exponencial)
+mu_servicio = 3     # Tasa media de servicio por minuto (para distribución exponencial)
+
+# Inicialización de variables
+tiempo_actual = 0
+cola = deque()
+tiempos_llegada = np.random.exponential(scale=1/lambda_llegada, size=num_clientes)
+tiempos_servicio = np.random.exponential(scale=1/mu_servicio, size=num_clientes)
+
+tiempos_inicio_servicio = np.zeros(num_clientes)
+tiempos_fin_servicio = np.zeros(num_clientes)
+
+# Simulación del sistema de colas
+for i in range(num_clientes):
+    # Actualizar el tiempo actual al momento de llegada del cliente
+    tiempo_actual += tiempos_llegada[i]
+    
+    # Si el servidor está libre cuando llega el cliente
+    if i == 0 or tiempo_actual >= tiempos_fin_servicio[i-1]:
+        tiempos_inicio_servicio[i] = tiempo_actual
+    else:
+        # El cliente debe esperar a que termine el cliente anterior
+        tiempos_inicio_servicio[i] = tiempos_fin_servicio[i-1]
+    
+    # Calcular el tiempo de finalización del servicio
+    tiempos_fin_servicio[i] = tiempos_inicio_servicio[i] + tiempos_servicio[i]
+
+# Calcular métricas
+tiempo_espera = tiempos_inicio_servicio - np.cumsum(tiempos_llegada)
+tiempo_sistema = tiempos_fin_servicio - np.cumsum(tiempos_llegada)
+
+# Crear un DataFrame con los resultados
+resultados = pd.DataFrame({
+    'Cliente': range(1, num_clientes + 1),
+    'Tiempo_Llegada': np.cumsum(tiempos_llegada),
+    'Tiempo_Servicio': tiempos_servicio,
+    'Tiempo_Inicio_Servicio': tiempos_inicio_servicio,
+    'Tiempo_Fin_Servicio': tiempos_fin_servicio,
+    'Tiempo_Espera': tiempo_espera,
+    'Tiempo_Sistema': tiempo_sistema
+})
+
+# Calcular métricas resumen
+tiempo_promedio_espera = np.mean(tiempo_espera)
+tiempo_promedio_sistema = np.mean(tiempo_sistema)
+utilizacion_servidor = np.sum(tiempos_servicio) / np.max(tiempos_fin_servicio)
+
+# Visualización de resultados
+plt.figure(figsize=(14, 6))
+
+# Gráfico de líneas para la longitud de la cola a lo largo del tiempo
+tiempos_eventos = np.sort(np.concatenate([
+    resultados['Tiempo_Llegada'], 
+    resultados['Tiempo_Fin_Servicio']
+]))
+
+longitud_cola = []
+for t in tiempos_eventos:
+    # Número de llegadas hasta el tiempo t
+    llegadas = np.sum(resultados['Tiempo_Llegada'] <= t)
+    # Número de salidas hasta el tiempo t
+    salidas = np.sum(resultados['Tiempo_Fin_Servicio'] <= t)
+    # Longitud de la cola en el tiempo t
+    longitud_cola.append(max(0, llegadas - salidas - 1))  # -1 porque el que está siendo atendido no está en cola
+
+plt.subplot(1, 2, 1)
+plt.step(tiempos_eventos, longitud_cola, where='post')
+plt.title('Longitud de la cola a lo largo del tiempo')
+plt.xlabel('Tiempo (minutos)')
+plt.ylabel('Número de clientes en cola')
+plt.grid(True, alpha=0.3)
+
+# Histograma de tiempos de espera
+plt.subplot(1, 2, 2)
+plt.hist(tiempo_espera, bins=20, color='skyblue', edgecolor='black')
+plt.title('Distribución de Tiempos de Espera')
+plt.xlabel('Tiempo de espera (minutos)')
+plt.ylabel('Frecuencia')
+plt.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Mostrar métricas resumen
+print(f"=== Métricas del Sistema de Colas ===")
+print(f"Tiempo promedio de espera: {tiempo_promedio_espera:.2f} minutos")
+print(f"Tiempo promedio en el sistema: {tiempo_promedio_sistema:.2f} minutos")
+print(f"Utilización del servidor: {utilizacion_servidor*100:.1f}%")
+print(f"Número total de clientes atendidos: {num_clientes}")
+print("\nPrimeras 5 filas de resultados:")
+print(resultados.head().to_string(index=False))</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="exercises">
+            <h2><i class="fas fa-tasks"></i> Ejercicios</h2>
+            
+            <div class="exercise">
+                <h3>Ejercicio 1: Cálculo de Probabilidades</h3>
+                <p>Dada una variable aleatoria X que sigue una distribución normal con media 100 y desviación estándar 15, calcula:</p>
+                <ol>
+                    <li>P(X ≤ 120)</li>
+                    <li>P(X > 130)</li>
+                    <li>P(90 ≤ X ≤ 110)</li>
+                    <li>El valor de x tal que P(X ≤ x) = 0.95</li>
+                </ol>
+                <button class="solution-btn" onclick="toggleSolution('sol1')">Mostrar Solución</button>
+                <div id="sol1" class="solution">
+                    <pre><code class="python">from scipy import stats
+
+# Parámetros
+mu, sigma = 100, 15
+
+# 1. P(X ≤ 120)
+p1 = stats.norm.cdf(120, mu, sigma)
+print(f"1. P(X ≤ 120) = {p1:.4f}")
+
+# 2. P(X > 130)
+p2 = 1 - stats.norm.cdf(130, mu, sigma)
+print(f"2. P(X > 130) = {p2:.4f}")
+
+# 3. P(90 ≤ X ≤ 110)
+p3 = stats.norm.cdf(110, mu, sigma) - stats.norm.cdf(90, mu, sigma)
+print(f"3. P(90 ≤ X ≤ 110) = {p3:.4f}")
+
+# 4. x tal que P(X ≤ x) = 0.95
+x = stats.norm.ppf(0.95, mu, sigma)
+print(f"4. x tal que P(X ≤ x) = 0.95 → x ≈ {x:.2f}")</code></pre>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h3>Ejercicio 2: Ajuste de Distribuciones</h3>
+                <p>Dado el siguiente conjunto de datos de tiempos entre llegadas (en minutos) a un servidor web:</p>
+                <pre>tiempos = [0.8, 1.2, 0.5, 1.8, 0.9, 0.3, 1.1, 0.7, 1.5, 0.6]</pre>
+                <p>Realiza lo siguiente:</p>
+                <ol>
+                    <li>Grafica un histograma de los datos</li>
+                    <li>Ajusta una distribución exponencial a los datos</li>
+                    <li>Calcula la tasa de llegada (λ) estimada</li>
+                    <li>Grafica el histograma junto con la PDF de la distribución ajustada</li>
+                </ol>
+                <button class="solution-btn" onclick="toggleSolution('sol2')">Mostrar Solución</button>
+                <div id="sol2" class="solution">
+                    <pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+# Datos
+tiempos = np.array([0.8, 1.2, 0.5, 1.8, 0.9, 0.3, 1.1, 0.7, 1.5, 0.6])
+
+# 1. Histograma
+plt.figure(figsize=(10, 5))
+count, bins, _ = plt.hist(tiempos, bins=5, density=True, alpha=0.6, color='lightblue', edgecolor='black')
+
+# 2. Ajuste de distribución exponencial
+lambda_hat = 1 / np.mean(tiempos)  # Estimador de máxima verosimilitud para λ
+print(f"Tasa de llegada estimada (λ): {lambda_hat:.4f} llegadas por minuto")
+
+# 3. PDF de la distribución ajustada
+x = np.linspace(0, 2.5, 1000)
+pdf = stats.expon.pdf(x, scale=1/lambda_hat)
+
+# 4. Graficar histograma y PDF ajustada
+plt.plot(x, pdf, 'r-', lw=2, label=f'Exponencial (λ={lambda_hat:.2f})')
+plt.title('Ajuste de Distribución Exponencial')
+plt.xlabel('Tiempo entre llegadas (minutos)')
+plt.ylabel('Densidad de probabilidad')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h2><i class="fas fa-clipboard-list"></i> Resumen</h2>
+            <ul>
+                <li>Las <strong>variables aleatorias</strong> pueden ser discretas o continuas, y se describen mediante sus distribuciones de probabilidad.</li>
+                <li>Las <strong>distribuciones discretas</strong> incluyen Bernoulli, Binomial y Poisson, cada una con aplicaciones específicas en modelado de conteos y eventos discretos.</li>
+                <li>Las <strong>distribuciones continuas</strong> como la Normal, Exponencial y Uniforme son fundamentales en estadística y modelado de fenómenos continuos.</li>
+                <li>El <strong>Teorema del Límite Central</strong> establece que la distribución de las medias muestrales se aproxima a una normal a medida que el tamaño de la muestra aumenta.</li>
+                <li>En Python, podemos utilizar <code>numpy.random</code> para generar muestras aleatorias y <code>scipy.stats</code> para trabajar con distribuciones de probabilidad.</li>
+                <li>Las distribuciones de probabilidad tienen aplicaciones en simulación de sistemas, teoría de colas, control de calidad y muchos otros campos de la IA y la ciencia de datos.</li>
+            </ul>
+        </section>
+
+        <section class="resources">
+            <h2><i class="fas fa-book"></i> Recursos Adicionales</h2>
+            <ul>
+                <li><a href="https://docs.scipy.org/doc/scipy/reference/stats.html" target="_blank" rel="noopener noreferrer">Documentación de SciPy Stats</a> - Referencia completa de distribuciones de probabilidad en SciPy</li>
+                <li><a href="https://numpy.org/doc/stable/reference/random/generator.html" target="_blank" rel="noopener noreferrer">Documentación de NumPy Random</a> - Generación de números aleatorios en NumPy</li>
+                <li><a href="https://seeing-theory.brown.edu/probability-distributions/index.html" target="_blank" rel="noopener noreferrer">Seeing Theory: Probability Distributions</a> - Visualizaciones interactivas de distribuciones</li>
+                <li><a href="https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library" target="_blank" rel="noopener noreferrer">Khan Academy: Variables Aleatorias</a> - Lecciones sobre distribuciones de probabilidad</li>
+                <li><a href="https://www.probabilitycourse.com/" target="_blank" rel="noopener noreferrer">Probability Course</a> - Curso en línea gratuito sobre probabilidad y estadística</li>
+            </ul>
+        </section>
+
+        <section class="homework">
+            <h2><i class="fas fa-home"></i> Tarea</h2>
+            <ol>
+                <li><strong>Ejercicio Teórico:</strong> Demuestra que la media de una distribución exponencial con parámetro λ es 1/λ.</li>
+                <li><strong>Análisis de Datos:</strong> Descarga un conjunto de datos real (por ejemplo, tiempos entre terremotos, duración de llamadas telefónicas) y ajusta una distribución de probabilidad adecuada. Justifica tu elección.</li>
+                <li><strong>Simulación:</strong> Modifica el código de simulación de colas para incluir múltiples servidores y analiza cómo cambian las métricas del sistema.</li>
+                <li><strong>Investigación:</strong> Investiga y explica brevemente cómo se utilizan las distribuciones de probabilidad en algoritmos de aprendizaje automático como Naive Bayes o en modelos ocultos de Markov.</li>
+            </ol>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION2-8.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 2.8 Probabilidad Básica</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION2-10.html" class="btn">Siguiente Sesión: 2.10 estadística descriptiva <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Función para copiar código al portapapeles
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling.querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Cambiar el ícono temporalmente para mostrar que se copió
+            const icon = button.querySelector('i');
+            const originalClass = icon.className;
+            icon.className = 'fas fa-check';
+            
+            setTimeout(() => {
+                icon.className = originalClass;
+            }, 2000);
+        }
+        
+        // Función para mostrar/ocultar soluciones
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            if (solution.style.display === 'block') {
+                solution.style.display = 'none';
+                event.target.textContent = 'Mostrar Solución';
+            } else {
+                solution.style.display = 'block';
+                event.target.textContent = 'Ocultar Solución';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.12: Optimización (I) - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>2.12: Optimización (I) - Fundamentos</h1>
+            <p>Módulo 2: Matemáticas para IA</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender los conceptos fundamentales de la optimización matemática</li>
+                <li>Conocer los diferentes tipos de problemas de optimización</li>
+                <li>Aprender sobre métodos de optimización convexa</li>
+                <li>Implementar algoritmos de descenso de gradiente</li>
+                <li>Aplicar técnicas de optimización en problemas de machine learning</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
+            
+            <h3>1. Introducción a la Optimización</h3>
+            <p>La optimización es el proceso de encontrar la mejor solución (óptima) dentro de un conjunto de soluciones factibles. En el contexto de IA y machine learning, la optimización es fundamental para entrenar modelos y ajustar parámetros.</p>
+            
+            <div class="definition">
+                <h4>Problema General de Optimización</h4>
+                <p>Dada una función objetivo \( f(x) \) y un conjunto de restricciones \( g_i(x) \leq 0 \), \( h_j(x) = 0 \), encontrar:</p>
+                <p>\[ \min_{x \in \mathbb{R}^n} f(x) \]
+                \[ \text{sujeto a:} \]
+                \[ g_i(x) \leq 0, \quad i = 1, \ldots, m \]
+                \[ h_j(x) = 0, \quad j = 1, \ldots, p \]</p>
+            </div>
+
+            <h3>2. Tipos de Problemas de Optimización</h3>
+            <div class="types">
+                <h4>2.1 Optimización Lineal</h4>
+                <p>La función objetivo y las restricciones son lineales.</p>
+                <p>\[ \min_{x} c^T x \]
+                \[ \text{s.a.} \quad Ax \leq b \]
+                \[ \quad \quad \; x \geq 0 \]</p>
+                
+                <h4>2.2 Optimización No Lineal</h4>
+                <p>Al menos una de las funciones (objetivo o restricciones) no es lineal.</p>
+                
+                <h4>2.3 Optimización Convexa</h4>
+                <p>La función objetivo es convexa y el conjunto factible es un conjunto convexo.</p>
+                
+                <h4>2.4 Optimización Entera</h4>
+                <p>Las variables de decisión deben tomar valores enteros.</p>
+            </div>
+
+            <h3>3. Conceptos Clave en Optimización</h3>
+            <div class="concepts">
+                <h4>3.1 Conjuntos Convexos</h4>
+                <p>Un conjunto \( C \) es convexo si para todo \( x, y \in C \) y \( \theta \in [0,1] \), se cumple que \( \theta x + (1-\theta)y \in C \).</p>
+                
+                <h4>3.2 Funciones Convexas</h4>
+                <p>Una función \( f: \mathbb{R}^n \rightarrow \mathbb{R} \) es convexa si su dominio es un conjunto convexo y para todo \( x, y \) en el dominio y \( \theta \in [0,1] \):</p>
+                <p>\[ f(\theta x + (1-\theta)y) \leq \theta f(x) + (1-\theta)f(y) \]</p>
+                
+                <h4>3.3 Condiciones de Optimalidad</h4>
+                <p>Para una función diferenciable \( f \), un punto \( x^* \) es un mínimo local si:</p>
+                <p>\[ \nabla f(x^*) = 0 \]
+                \[ \nabla^2 f(x^*) \succeq 0 \; \text{(matriz hessiana semidefinida positiva)}\]</p>
+            </div>
+
+            <h3>4. Métodos de Optimización</h3>
+            <div class="methods">
+                <h4>4.1 Método del Gradiente Descendente</h4>
+                <p>Algoritmo iterativo para encontrar un mínimo local de una función diferenciable.</p>
+                <p>\[ x_{k+1} = x_k - \alpha \nabla f(x_k) \]</p>
+                <p>Donde \( \alpha \) es la tasa de aprendizaje.</p>
+                
+                <h4>4.2 Método de Newton</h4>
+                <p>Utiliza información de segundo orden (Hessiana) para converger más rápido.</p>
+                <p>\[ x_{k+1} = x_k - [\nabla^2 f(x_k)]^{-1} \nabla f(x_k) \]</p>
+                
+                <h4>4.3 Descenso de Gradiente Estocástico (SGD)</h4>
+                <p>Variante que usa un subconjunto aleatorio de datos en cada iteración, muy usado en aprendizaje profundo.</p>
+            </div>
+        </section>
+
+        <section class="practical">
+            <h2><i class="fas fa-laptop-code"></i> Actividad Práctica</h2>
+            
+            <div class="activity">
+                <h3>1. Implementación del Gradiente Descendente</h3>
+                <p>Vamos a implementar el método del gradiente descendente para minimizar una función cuadrática.</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copiar</button>
+                    <pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm
+
+def gradiente_descendente(f, grad_f, x0, alpha=0.1, max_iter=100, tol=1e-6):
+    """
+    Implementación del método del gradiente descendente.
+    
+    Parámetros:
+    f: función objetivo
+    grad_f: gradiente de la función objetivo
+    x0: punto inicial
+    alpha: tasa de aprendizaje
+    max_iter: número máximo de iteraciones
+    tol: tolerancia para la convergencia
+    
+    Retorna:
+    x: punto óptimo
+    history: historial de puntos visitados
+    """
+    x = np.array(x0, dtype=float)
+    history = [x.copy()]
+    
+    for i in range(max_iter):
+        # Calcular el gradiente
+        grad = grad_f(x)
+        
+        # Actualizar los parámetros
+        x_new = x - alpha * grad
+        history.append(x_new.copy())
+        
+        # Verificar convergencia
+        if np.linalg.norm(x_new - x) < tol:
+            print(f"Convergencia alcanzada en la iteración {i+1}")
+            break
+            
+        x = x_new
+    else:
+        print("Se alcanzó el número máximo de iteraciones")
+    
+    return x, np.array(history)
+
+# Función cuadrática de ejemplo: f(x, y) = x^2 + 2y^2
+def f_quad(x):
+    return x[0]**2 + 2 * x[1]**2
+
+def grad_f_quad(x):
+    return np.array([2 * x[0], 4 * x[1]])
+
+# Punto inicial
+x0 = [5.0, 5.0]
+
+# Ejecutar gradiente descendente
+x_opt, history = gradiente_descendente(f_quad, grad_f_quad, x0, alpha=0.1, max_iter=100)
+
+# Visualización en 3D
+fig = plt.figure(figsize=(12, 5))
+
+# Gráfico 3D
+ax1 = fig.add_subplot(121, projection='3d')
+
+# Crear malla para la superficie
+x = np.linspace(-6, 6, 100)
+y = np.linspace(-6, 6, 100)
+X, Y = np.meshgrid(x, y)
+Z = f_quad([X, Y])
+
+# Graficar superficie
+surf = ax1.plot_surface(X, Y, Z, cmap=cm.viridis, alpha=0.8, linewidth=0, antialiased=True)
+
+# Graficar trayectoria del gradiente descendente
+history_z = [f_quad(p) for p in history]
+ax1.plot(history[:, 0], history[:, 1], history_z, 'r.-', markersize=10, linewidth=2, label='Gradiente Descendente')
+ax1.scatter(history[0, 0], history[0, 1], history_z[0], c='g', s=100, label='Inicio')
+ax1.scatter(history[-1, 0], history[-1, 1], history_z[-1], c='r', s=100, label='Óptimo')
+
+ax1.set_xlabel('x')
+ax1.set_ylabel('y')
+ax1.set_zlabel('f(x, y)')
+ax1.set_title('Gradiente Descendente en 3D')
+ax1.legend()
+
+# Gráfico de contorno
+ax2 = fig.add_subplot(122)
+
+# Graficar contornos
+contour = ax2.contour(X, Y, Z, 20, cmap=cm.viridis)
+plt.colorbar(contour, ax=ax2)
+
+# Graficar trayectoria
+ax2.plot(history[:, 0], history[:, 1], 'r.-', markersize=10, linewidth=2, label='Trayectoria')
+ax2.scatter(history[0, 0], history[0, 1], c='g', s=100, label='Inicio')
+ax2.scatter(history[-1, 0], history[-1, 1], c='r', s=100, label='Óptimo')
+
+# Añadir vectores gradiente (opcional, cada 5 pasos)
+for i in range(0, len(history)-1, 5):
+    dx = history[i+1, 0] - history[i, 0]
+    dy = history[i+1, 1] - history[i, 1]
+    ax2.arrow(history[i, 0], history[i, 1], dx, dy, 
+              head_width=0.3, head_length=0.2, fc='blue', ec='blue', alpha=0.5)
+
+ax2.set_xlabel('x')
+ax2.set_ylabel('y')
+ax2.set_title('Curvas de Nivel y Trayectoria')
+ax2.legend()
+ax2.axis('equal')
+
+plt.tight_layout()
+plt.show()
+
+# Mostrar resultados
+print(f"Punto inicial: {history[0]}, f(x) = {f_quad(history[0]):.6f}")
+print(f"Punto óptimo: {x_opt}, f(x) = {f_quad(x_opt):.6f}")
+print(f"Número de iteraciones: {len(history)-1}")</code></pre>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3>2. Optimización con Restricciones: Método del Lagrangiano Aumentado</h3>
+                <p>Implementación del método del Lagrangiano Aumentado para resolver problemas con restricciones de igualdad.</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copiar</button>
+                    <pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+
+def lagrangiano_aumentado(f, grad_f, h, grad_h, x0, rho=1.0, mu=10.0, max_iter=100, tol=1e-6):
+    """
+    Método del Lagrangiano Aumentado para optimización con restricciones de igualdad.
+    
+    Parámetros:
+    f: función objetivo
+    grad_f: gradiente de la función objetivo
+    h: función de restricción (debe devolver un vector)
+    grad_h: gradiente de la restricción (debe devolver una matriz jacobiana)
+    x0: punto inicial
+    rho: parámetro de penalización inicial
+    mu: factor de aumento de la penalización
+    max_iter: número máximo de iteraciones
+    tol: tolerancia para la convergencia
+    
+    Retorna:
+    x: punto óptimo
+    history: historial de puntos visitados
+    """
+    x = np.array(x0, dtype=float)
+    lambda_ = np.zeros_like(h(x))  # Multiplicadores de Lagrange
+    history = [x.copy()]
+    
+    for k in range(max_iter):
+        # Definir la función aumentada
+        def lagrangiano_aum(x):
+            h_val = h(x)
+            return f(x) + np.dot(lambda_, h_val) + (rho/2) * np.sum(h_val**2)
+        
+        # Gradiente del lagrangiano aumentado
+        def grad_lagrangiano_aum(x):
+            h_val = h(x)
+            return grad_f(x) + grad_h(x).T @ (lambda_ + rho * h_val)
+        
+        # Minimizar el lagrangiano aumentado (usamos gradiente descendente)
+        x_new, _ = gradiente_descendente(
+            lagrangiano_aum, 
+            grad_lagrangiano_aum, 
+            x, 
+            alpha=0.01, 
+            max_iter=1000, 
+            tol=1e-6
+        )
+        
+        history.append(x_new.copy())
+        
+        # Verificar convergencia
+        if np.linalg.norm(x_new - x) < tol and np.linalg.norm(h(x_new)) < tol:
+            print(f"Convergencia alcanzada en la iteración {k+1}")
+            break
+        
+        # Actualizar multiplicadores de Lagrange y parámetro de penalización
+        h_new = h(x_new)
+        lambda_ = lambda_ + rho * h_new
+        rho = mu * rho
+        
+        x = x_new
+    else:
+        print("Se alcanzó el número máximo de iteraciones")
+    
+    return x, np.array(history)
+
+# Ejemplo: Minimizar f(x,y) = x^2 + y^2 sujeto a x + y = 1
+def f_ejemplo(x):
+    return x[0]**2 + x[1]**2
+
+def grad_f_ejemplo(x):
+    return np.array([2*x[0], 2*x[1]])
+
+def h_ejemplo(x):
+    return np.array([x[0] + x[1] - 1])
+
+def grad_h_ejemplo(x):
+    return np.array([[1, 1]])
+
+# Punto inicial
+x0 = [4.0, -3.0]
+
+# Resolver con el método del Lagrangiano Aumentado
+x_opt, history = lagrangiano_aumentado(
+    f_ejemplo, grad_f_ejemplo, 
+    h_ejemplo, grad_h_ejemplo, 
+    x0, rho=1.0, mu=1.5, max_iter=50
+)
+
+# Visualización
+x = np.linspace(-5, 5, 100)
+y = np.linspace(-5, 5, 100)
+X, Y = np.meshgrid(x, y)
+Z = f_ejemplo([X, Y])
+
+plt.figure(figsize=(10, 8))
+
+# Graficar contornos de la función objetivo
+contour = plt.contour(X, Y, Z, 20, cmap='viridis')
+plt.colorbar(contour, label='f(x,y)')
+
+# Graficar la restricción h(x) = 0
+plt.plot(x, 1 - x, 'r-', linewidth=2, label='Restricción: x + y = 1')
+
+# Graficar la trayectoria de optimización
+plt.plot(history[:, 0], history[:, 1], 'b.-', markersize=10, linewidth=1, label='Trayectoria')
+plt.scatter(history[0, 0], history[0, 1], c='g', s=100, label='Inicio')
+plt.scatter(history[-1, 0], history[-1, 1], c='r', s=100, label='Óptimo')
+
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Optimización con Restricciones: Método del Lagrangiano Aumentado')
+plt.legend()
+plt.axis('equal')
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
+
+# Mostrar resultados
+print(f"Solución óptima: x = {x_opt[0]:.6f}, y = {x_opt[1]:.6f}")
+print(f"Valor de la función objetivo: {f_ejemplo(x_opt):.6f}")
+print(f"Restricción evaluada en el óptimo: {h_ejemplo(x_opt)[0]:.6f} (debería ser cercano a 0)")</code></pre>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3>3. Aplicación: Regresión Lineal con Gradiente Descendente</h3>
+                <p>Implementación de regresión lineal utilizando gradiente descendente.</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copiar</button>
+                    <pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_regression
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+
+class RegresionLinealGD:
+    def __init__(self, learning_rate=0.01, n_iter=1000, tol=1e-6):
+        self.learning_rate = learning_rate
+        self.n_iter = n_iter
+        self.tol = tol
+        self.theta = None
+        self.loss_history = []
+    
+    def compute_loss(self, X, y):
+        """Función de pérdida (Error Cuadrático Medio)"""
+        m = len(y)
+        predictions = X @ self.theta
+        error = predictions - y
+        return (1/(2*m)) * np.sum(error**2)
+    
+    def fit(self, X, y):
+        """Entrenar el modelo con gradiente descendente"""
+        # Añadir término de sesgo (columna de unos)
+        X_b = np.c_[np.ones((X.shape[0], 1)), X]
+        m = len(y)
+        
+        # Inicializar parámetros
+        self.theta = np.random.randn(X_b.shape[1], 1)
+        
+        for i in range(self.n_iter):
+            # Calcular predicciones
+            predictions = X_b @ self.theta
+            
+            # Calcular gradiente
+            gradients = (1/m) * X_b.T @ (predictions - y)
+            
+            # Actualizar parámetros
+            self.theta = self.theta - self.learning_rate * gradients
+            
+            # Calcular y guardar la pérdida
+            loss = self.compute_loss(X_b, y)
+            self.loss_history.append(loss)
+            
+            # Verificar convergencia
+            if i > 0 and abs(self.loss_history[-2] - self.loss_history[-1]) < self.tol:
+                print(f"Convergencia alcanzada en la iteración {i+1}")
+                break
+        
+        return self
+    
+    def predict(self, X):
+        """Realizar predicciones"""
+        X_b = np.c_[np.ones((X.shape[0], 1)), X]
+        return X_b @ self.theta
+
+# Generar datos de ejemplo
+np.random.seed(42)
+X, y = make_regression(n_samples=100, n_features=1, noise=20, random_state=42)
+y = y.reshape(-1, 1)  # Convertir a vector columna
+
+# Estandarizar características
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Dividir en conjuntos de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+
+# Crear y entrenar el modelo
+modelo = RegresionLinealGD(learning_rate=0.1, n_iter=1000)
+modelo.fit(X_train, y_train)
+
+# Hacer predicciones
+y_pred = modelo.predict(X_test)
+
+# Calcular error cuadrático medio en el conjunto de prueba
+mse = np.mean((y_pred - y_test)**2)
+print(f"Error Cuadrático Medio (MSE) en prueba: {mse:.4f}")
+
+# Visualización de resultados
+plt.figure(figsize=(15, 5))
+
+# Gráfico 1: Datos y línea de regresión
+plt.subplot(1, 2, 1)
+plt.scatter(X_train, y_train, color='blue', alpha=0.5, label='Datos de entrenamiento')
+plt.scatter(X_test, y_test, color='green', alpha=0.5, label='Datos de prueba')
+
+# Crear puntos para la línea de regresión
+X_line = np.linspace(X_scaled.min(), X_scaled.max(), 100).reshape(-1, 1)
+X_line_b = np.c_[np.ones((100, 1)), X_line]
+y_line = X_line_b @ modelo.theta
+
+plt.plot(X_line, y_line, 'r-', linewidth=2, label='Línea de regresión')
+plt.xlabel('Característica estandarizada')
+plt.ylabel('Objetivo')
+plt.title('Regresión Lineal con Gradiente Descendente')
+plt.legend()
+
+# Gráfico 2: Curva de aprendizaje
+plt.subplot(1, 2, 2)
+plt.plot(range(1, len(modelo.loss_history) + 1), modelo.loss_history, 'b-')
+plt.xlabel('Iteraciones')
+plt.ylabel('Pérdida (MSE/2)')
+plt.title('Curva de Aprendizaje')
+plt.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Mostrar parámetros del modelo
+print(f"Parámetros del modelo (theta):")
+print(f"Término de sesgo (theta_0): {modelo.theta[0][0]:.4f}")
+print(f"Coeficiente (theta_1): {modelo.theta[1][0]:.4f}")
+
+# Comparar con la solución analítica (ecuación normal)
+X_b = np.c_[np.ones((len(X_train), 1)), X_train]
+theta_best = np.linalg.inv(X_b.T @ X_b) @ X_b.T @ y_train
+print("\nSolución analítica (ecuación normal):")
+print(f"Término de sesgo (theta_0): {theta_best[0][0]:.4f}")
+print(f"Coeficiente (theta_1): {theta_best[1][0]:.4f}")</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="exercises">
+            <h2><i class="fas fa-tasks"></i> Ejercicios</h2>
+            
+            <div class="exercise">
+                <h3>Ejercicio 1: Optimización de Función No Convexa</h3>
+                <p>Implementa el método del gradiente descendente para encontrar el mínimo de la siguiente función no convexa:</p>
+                <p>\[ f(x, y) = (x^2 + y - 11)^2 + (x + y^2 - 7)^2 \]</p>
+                <p>Esta es la función Himmelblau, que tiene cuatro mínimos locales iguales.</p>
+                <p>Tareas:</p>
+                <ol>
+                    <li>Implementa el gradiente de la función Himmelblau.</li>
+                    <li>Aplica el gradiente descendente desde diferentes puntos iniciales.</li>
+                    <li>Visualiza la superficie y las curvas de nivel de la función.</li>
+                    <li>¿A qué mínimo converge desde cada punto inicial?</li>
+                </ol>
+                
+                <button class="solution-btn" onclick="toggleSolution('sol1')">Mostrar Solución</button>
+                <div id="sol1" class="solution">
+                    <pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+def himmelblau(x, y):
+    """Función de Himmelblau"""
+    return (x**2 + y - 11)**2 + (x + y**2 - 7)**2
+
+def grad_himmelblau(x, y):
+    """Gradiente de la función de Himmelblau"""
+    df_dx = 4 * x * (x**2 + y - 11) + 2 * (x + y**2 - 7)
+    df_dy = 2 * (x**2 + y - 11) + 4 * y * (x + y**2 - 7)
+    return np.array([df_dx, df_dy])
+
+def gradiente_descendente_himmelblau(x0, y0, alpha=0.01, max_iter=1000, tol=1e-6):
+    """Gradiente descendente para la función de Himmelblau"""
+    x, y = x0, y0
+    history = [(x, y)]
+    
+    for i in range(max_iter):
+        # Calcular gradiente
+        grad = grad_himmelblau(x, y)
+        
+        # Actualizar parámetros
+        x_new = x - alpha * grad[0]
+        y_new = y - alpha * grad[1]
+        
+        history.append((x_new, y_new))
+        
+        # Verificar convergencia
+        if np.sqrt((x_new - x)**2 + (y_new - y)**2) < tol:
+            print(f"Convergencia alcanzada en la iteración {i+1}")
+            break
+            
+        x, y = x_new, y_new
+    else:
+        print("Se alcanzó el número máximo de iteraciones")
+    
+    return np.array(history)
+
+# Puntos iniciales (cerca de los diferentes mínimos)
+puntos_iniciales = [
+    (0.0, 0.0),
+    (-3.0, 3.0),
+    (-3.0, -3.0),
+    (3.0, -3.0)
+]
+
+# Visualización
+x = np.linspace(-5, 5, 100)
+y = np.linspace(-5, 5, 100)
+X, Y = np.meshgrid(x, y)
+Z = himmelblau(X, Y)
+
+# Mínimos verdaderos (solución analítica)
+minimos_verdaderos = [
+    (3.0, 2.0),
+    (-2.805118, 3.131312),
+    (-3.779310, -3.283186),
+    (3.584428, -1.848126)
+]
+
+plt.figure(figsize=(15, 10))
+
+# Gráfico de contorno
+plt.contour(X, Y, Z, 50, cmap='viridis', alpha=0.6)
+plt.colorbar(label='f(x,y)')
+
+# Graficar trayectorias desde diferentes puntos iniciales
+colors = ['r', 'g', 'b', 'm']
+for i, (x0, y0) in enumerate(puntos_iniciales):
+    # Ejecutar gradiente descendente
+    history = gradiente_descendente_himmelblau(x0, y0, alpha=0.01, max_iter=1000)
+    
+    # Graficar trayectoria
+    plt.plot(history[:, 0], history[:, 1], f'{colors[i]}-', linewidth=1, alpha=0.7)
+    plt.scatter(history[0, 0], history[0, 1], c=colors[i], s=100, 
+                label=f'Inicio: ({x0}, {y0})')
+    plt.scatter(history[-1, 0], history[-1, 1], c=colors[i], s=200, 
+                marker='*', edgecolor='black')
+
+# Marcar mínimos verdaderos
+for i, (x, y) in enumerate(minimos_verdaderos):
+    plt.scatter(x, y, c='black', s=100, marker='X', 
+               label=f'Mínimo {i+1}' if i == 0 else None)
+
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Gradiente Descendente en la Función de Himmelblau')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()</code></pre>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h3>Ejercicio 2: Optimización con Restricciones de Desigualdad</h3>
+                <p>Implementa el método de Barrera Logarítmica (Interior Point) para resolver el siguiente problema de optimización:</p>
+                <p>\[ \min_{x, y} (x - 4)^2 + (y - 4)^2 \]
+                \[ \text{sujeto a:} \]
+                \[ x + y \leq 5 \]
+                \[ x \geq 0, y \geq 0 \]</p>
+                
+                <p>Tareas:</p>
+                <ol>
+                    <li>Implementa la función de barrera logarítmica.</li>
+                    <li>Desarrolla el algoritmo de punto interior.</li>
+                    <li>Visualiza la región factible, las curvas de nivel de la función objetivo y la trayectoria de optimización.</li>
+                    <li>Compara la solución con el método del Lagrangiano Aumentado.</li>
+                </ol>
+                
+                <button class="solution-btn" onclick="toggleSolution('sol2')">Mostrar Solución</button>
+                <div id="sol2" class="solution">
+                    <pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.patches import Polygon
+
+def funcion_objetivo(x, y):
+    """Función objetivo: (x-4)² + (y-4)²"""
+    return (x - 4)**2 + (y - 4)**2
+
+def restriccion(x, y):
+    """Restricción: x + y <= 5"""
+    return x + y - 5  # <= 0
+
+def barrera_logaritmica(x, y, t=1.0):
+    """Función de barrera logarítmica"""
+    # Restricciones: x + y <= 5, x >= 0, y >= 0
+    if x <= 0 or y <= 0 or (x + y) >= 5 + 1e-6:  # Evitar log(0) o log(negativo)
+        return np.inf
+    
+    # Término de barrera para x + y <= 5
+    barrera = -np.log(5 - x - y)
+    
+    # Términos de barrera para x >= 0, y >= 0
+    barrera -= np.log(x)
+    barrera -= np.log(y)
+    
+    return barrera
+
+def funcion_aumentada(x, y, t=1.0):
+    """Función objetivo aumentada con barrera logarítmica"""
+    return t * funcion_objetivo(x, y) + barrera_logaritmica(x, y, t)
+
+def gradiente_funcion_aumentada(x, y, t=1.0):
+    """Gradiente de la función aumentada"""
+    # Gradiente de la función objetivo
+    df_dx = 2 * (x - 4)
+    df_dy = 2 * (y - 4)
+    
+    # Gradiente de la barrera logarítmica
+    if x <= 0 or y <= 0 or (x + y) >= 5:
+        return np.array([np.inf, np.inf])
+    
+    # Términos de la barrera
+    dbarrier_dx = 1/(5 - x - y) - 1/x
+    dbarrier_dy = 1/(5 - x - y) - 1/y
+    
+    # Gradiente total
+    grad_x = t * df_dx + dbarrier_dx
+    grad_y = t * df_dy + dbarrier_dy
+    
+    return np.array([grad_x, grad_y])
+
+def metodo_punto_interior(x0, y0, t0=1.0, mu=10, max_iter_outer=10, max_iter_inner=1000, tol=1e-6):
+    """Método de punto interior con barrera logarítmica"""
+    x, y = x0, y0
+    t = t0
+    
+    history = [(x, y)]
+    
+    for k in range(max_iter_outer):
+        print(f"\nIteración exterior {k+1}, t = {t:.4f}")
+        
+        # Minimizar la función aumentada con el valor actual de t
+        x_prev, y_prev = x, y
+        
+        for i in range(max_iter_inner):
+            # Calcular gradiente
+            grad = gradiente_funcion_aumentada(x, y, t)
+            
+            if np.any(np.isinf(grad)):
+                print("Advertencia: Punto fuera del dominio de la barrera")
+                break
+            
+            # Tasa de aprendizaje (puede ser adaptativa)
+            alpha = 0.1 / np.sqrt(k+1)
+            
+            # Actualizar parámetros
+            x_new = x - alpha * grad[0]
+            y_new = y - alpha * grad[1]
+            
+            # Proyectar al conjunto factible si es necesario
+            if x_new <= 0 or y_new <= 0 or (x_new + y_new) >= 5:
+                # Si nos salimos del dominio, reducimos el paso
+                alpha *= 0.5
+                x_new = x - alpha * grad[0]
+                y_new = y - alpha * grad[1]
+            
+            # Verificar convergencia
+            if np.sqrt((x_new - x)**2 + (y_new - y)**2) < tol:
+                print(f"  Convergencia alcanzada en la iteración {i+1}")
+                break
+                
+            x, y = x_new, y_new
+            
+            # Guardar solo algunas iteraciones para visualización
+            if i % 10 == 0:
+                history.append((x, y))
+        else:
+            print(f"  Se alcanzó el número máximo de iteraciones internas")
+        
+        # Verificar convergencia del método exterior
+        if np.sqrt((x - x_prev)**2 + (y - y_prev)**2) < tol and k > 0:
+            print("Convergencia del método de punto interior alcanzada")
+            break
+        
+        # Actualizar parámetro de barrera
+        t = mu * t
+    
+    return np.array(history)
+
+# Punto inicial factible
+x0, y0 = 1.0, 1.0
+
+# Ejecutar método de punto interior
+history = metodo_punto_interior(x0, y0, t0=1.0, mu=2, max_iter_outer=10)
+
+# Visualización
+x = np.linspace(0, 5, 100)
+y = np.linspace(0, 5, 100)
+X, Y = np.meshgrid(x, y)
+Z = funcion_objetivo(X, Y)
+
+# Crear máscara para la región factible
+factible = (X + Y <= 5) & (X >= 0) & (Y >= 0)
+Z[~factible] = np.nan  # Ocultar región no factible
+
+plt.figure(figsize=(12, 10))
+
+# Graficar contornos de la función objetivo
+contour = plt.contour(X, Y, Z, 20, cmap='viridis', alpha=0.7)
+plt.colorbar(contour, label='f(x,y)')
+
+# Dibujar región factible
+feasible_region = np.array([[0, 0], [5, 0], [0, 5]])
+plt.fill(feasible_region[:, 0], feasible_region[:, 1], 'lightgray', alpha=0.3, label='Región factible')
+
+# Graficar la trayectoria de optimización
+plt.plot(history[:, 0], history[:, 1], 'r.-', markersize=10, linewidth=1, label='Trayectoria')
+plt.scatter(history[0, 0], history[0, 1], c='g', s=100, label='Inicio')
+plt.scatter(history[-1, 0], history[-1, 1], c='r', s=100, label='Solución')
+
+# Marcar la solución óptima (solución analítica)
+plt.scatter(2.5, 2.5, c='black', s=100, marker='*', label='Óptimo (2.5, 2.5)')
+
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Método de Punto Interior con Barrera Logarítmica')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.axis('equal')
+plt.tight_layout()
+plt.show()
+
+# Mostrar resultados
+print("\n=== Resultados ===")
+print(f"Punto inicial: ({x0}, {y0})")
+print(f"Solución encontrada: ({history[-1, 0]:.6f}, {history[-1, 1]:.6f})")
+print(f"Valor de la función objetivo: {funcion_objetivo(history[-1, 0], history[-1, 1]):.6f}")
+print(f"Valor de la restricción (x + y - 5): {restriccion(history[-1, 0], history[-1, 1]):.6f}")
+print("\nNota: La solución debería converger a (2.5, 2.5) con f(x,y) = 4.5")</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h2><i class="fas fa-clipboard-list"></i> Resumen</h2>
+            <ul>
+                <li>La <strong>optimización matemática</strong> es fundamental en IA y machine learning para entrenar modelos y ajustar parámetros.</li>
+                <li>Los <strong>problemas de optimización</strong> pueden clasificarse en lineales, no lineales, convexos, enteros, etc., según las propiedades de la función objetivo y las restricciones.</li>
+                <li>El <strong>gradiente descendente</strong> es un algoritmo iterativo que se mueve en la dirección opuesta al gradiente para encontrar mínimos locales.</li>
+                <li>El <strong>método de Newton</strong> utiliza información de segundo orden (Hessiana) para una convergencia más rápida, pero puede ser costoso computacionalmente.</li>
+                <li>Para problemas con restricciones, métodos como el <strong>Lagrangiano Aumentado</strong> y <strong>Barrera Logarítmica</strong> permiten transformar el problema en uno sin restricciones.</li>
+                <li>La <strong>optimización convexa</strong> es particularmente importante porque cualquier mínimo local es también global, y existen algoritmos eficientes para resolver estos problemas.</li>
+            </ul>
+        </section>
+
+        <section class="resources">
+            <h2><i class="fas fa-book"></i> Recursos Adicionales</h2>
+            <ul>
+                <li><a href="https://web.stanford.edu/~boyd/cvxbook/" target="_blank" rel="noopener noreferrer">Convex Optimization</a> - Libro de Stephen Boyd y Lieven Vandenberghe</li>
+                <li><a href="https://www.coursera.org/learn/machine-learning" target="_blank" rel="noopener noreferrer">Machine Learning Course</a> - Curso de Andrew Ng con explicaciones sobre gradiente descendente</li>
+                <li><a href="https://www.youtube.com/playlist?list=PLXsmhnDvpjORzPelSDs0LSDrfJcqyLlZc" target="_blank" rel="noopener noreferrer">Optimization for Machine Learning</a> - Serie de videos sobre optimización</li>
+                <li><a href="https://scipy-lectures.org/advanced/mathematical_optimization/" target="_blank" rel="noopener noreferrer">Mathematical Optimization</a> - Tutorial de SciPy sobre optimización</li>
+                <li><a href="https://www.cvxpy.org/" target="_blank" rel="noopener noreferrer">CVXPY</a> - Herramienta para optimización convexa en Python</li>
+            </ul>
+        </section>
+
+        <section class="homework">
+            <h2><i class="fas fa-home"></i> Tarea</h2>
+            <ol>
+                <li><strong>Implementación:</strong> Extiende la implementación del gradiente descendente para que incluya diferentes variantes: momento, Nesterov, Adagrad, RMSprop y Adam. Compara su rendimiento en la función de Himmelblau.</li>
+                <li><strong>Análisis:</strong> Investiga y explica la diferencia entre condiciones de optimalidad de primer y segundo orden. ¿Cuándo es necesario usar condiciones de segundo orden?</li>
+                <li><strong>Aplicación:</strong> Elige un conjunto de datos de regresión y compara el rendimiento de la regresión lineal implementada con gradiente descendente versus la solución analítica (ecuación normal) en términos de precisión y tiempo de cómputo.</li>
+                <li><strong>Investigación:</strong> Investiga sobre programación lineal entera y su aplicación en problemas de optimización combinatoria. Implementa un ejemplo usando la biblioteca PuLP o Pyomo.</li>
+            </ol>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION2-11.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 2.11 Teorema de Bayes</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION2-13.html" class="btn">Siguiente Sesión: 2.13 Optimización (II) <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Función para copiar código al portapapeles
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling.querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Cambiar el ícono temporalmente para mostrar que se copió
+            const icon = button.querySelector('i');
+            const originalClass = icon.className;
+            icon.className = 'fas fa-check';
+            
+            setTimeout(() => {
+                icon.className = originalClass;
+            }, 2000);
+        }
+        
+        // Función para mostrar/ocultar soluciones
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            if (solution.style.display === 'block') {
+                solution.style.display = 'none';
+                event.target.textContent = 'Mostrar Solución';
+            } else {
+                solution.style.display = 'block';
+                event.target.textContent = 'Ocultar Solución';
+            }
+        }
+    </script>
+</body>
+</html>

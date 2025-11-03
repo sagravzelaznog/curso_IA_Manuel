@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesión 2.8: Probabilidad Básica - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+    <header class="session-header">
+        <div class="container">
+            <h1>Sesión 2.8: Probabilidad Básica</h1>
+            <p class="session-meta">Módulo 2: Matemáticas para IA | Duración: 60 minutos</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="learning-objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender los conceptos fundamentales de probabilidad</li>
+                <li>Aprender a calcular probabilidades de eventos simples y compuestos</li>
+                <li>Entender la probabilidad condicional y el teorema de Bayes</li>
+                <li>Explorar aplicaciones de la probabilidad en IA</li>
+                <li>Implementar cálculos de probabilidad en Python</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
+            
+            <article class="concept">
+                <h3>Conceptos Básicos de Probabilidad</h3>
+                <p>La probabilidad es una medida de la posibilidad de que ocurra un evento. Se expresa como un número entre 0 (imposible) y 1 (seguro).</p>
+                
+                <div class="math-equation">
+                    \[ P(A) = \frac{\text{Número de resultados favorables}}{\text{Número total de resultados posibles}} \]
+                </div>
+                
+                <h4>Ejemplo:</h4>
+                <p>Al lanzar un dado justo de 6 caras, la probabilidad de obtener un 3 es:</p>
+                <div class="math-equation">
+                    \[ P(3) = \frac{1}{6} \approx 0.1667 \text{ o } 16.67\% \]
+                </div>
+                
+                <div class="info-box">
+                    <i class="fas fa-lightbulb"></i>
+                    <p><strong>En IA:</strong> La probabilidad es fundamental para algoritmos como Naive Bayes, redes bayesianas y modelos generativos.</p>
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>Reglas de Probabilidad</h3>
+                
+                <h4>1. Regla de la Suma (Eventos Mutuamente Excluyentes)</h4>
+                <div class="math-equation">
+                    \[ P(A \cup B) = P(A) + P(B) - P(A \cap B) \]
+                </div>
+                
+                <h4>2. Regla del Producto (Eventos Independientes)</h4>
+                <div class="math-equation">
+                    \[ P(A \cap B) = P(A) \times P(B) \quad \text{(si A y B son independientes)} \]
+                </div>
+                
+                <h4>3. Probabilidad Condicional</h4>
+                <div class="math-equation">
+                    \[ P(A|B) = \frac{P(A \cap B)}{P(B)} \quad \text{si } P(B) > 0 \]
+                </div>
+                
+                <h4>4. Teorema de Bayes</h4>
+                <div class="math-equation">
+                    \[ P(A|B) = \frac{P(B|A) \times P(A)}{P(B)} \]
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>Variables Aleatorias</h3>
+                <p>Una variable aleatoria es una variable cuyos valores posibles son resultados numéricos de un fenómeno aleatorio.</p>
+                
+                <h4>Tipos de variables aleatorias:</h4>
+                <ul>
+                    <li><strong>Discretas:</strong> Toman valores contables (ej: número de caras en lanzamientos de moneda)</li>
+                    <li><strong>Continuas:</strong> Toman valores en un intervalo (ej: altura, peso, tiempo)</li>
+                </ul>
+                
+                <h4>Valor Esperado (Esperanza Matemática)</h4>
+                <div class="math-equation">
+                    \[ E[X] = \sum_{i} x_i \cdot P(x_i) \quad \text{(discreto)} \]
+                    \[ E[X] = \int_{-\infty}^{\infty} x \cdot f(x) \, dx \quad \text{(continuo)} \]
+                </div>
+            </article>
+
+            <article class="concept">
+                <h3>Teorema del Límite Central</h3>
+                <p>Cuando el tamaño de la muestra es suficientemente grande, la distribución de la media muestral se aproxima a una distribución normal, independientemente de la forma de la distribución de la población.</p>
+                
+                <div class="math-equation">
+                    \[ \bar{X} \sim N\left(\mu, \frac{\sigma^2}{n}\right) \]
+                </div>
+                
+                <div class="info-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p><strong>Importante:</strong> Este teorema es fundamental en estadística inferencial y justifica el uso de la distribución normal en muchos contextos.</p>
+                </div>
+            </article>
+        </section>
+
+        <section class="practical-activity">
+            <h2><i class="fas fa-laptop-code"></i> Actividad Práctica</h2>
+            
+            <div class="step">
+                <h3>1. Cálculo de Probabilidades con Python</h3>
+                <p>Vamos a calcular probabilidades usando la biblioteca NumPy y SciPy.</p>
+                
+                <h4>Código en Python:</h4>
+                <pre><code class="language-python">import numpy as np
+from scipy import stats
+import matplotlib.pyplot as plt
+
+# 1. Probabilidad de eventos simples
+# Lanzamiento de una moneda justa
+p_cara = 0.5
+p_sello = 1 - p_cara
+print(f"Probabilidad de cara: {p_cara}")
+print(f"Probabilidad de sello: {p_sello}")
+
+# 2. Probabilidad de eventos compuestos
+# Probabilidad de obtener al menos un 6 en 4 lanzamientos de un dado
+dado = np.arange(1, 7)  # Caras del dado
+p_no_seis = (5/6) ** 4  # Probabilidad de no obtener 6 en 4 lanzamientos
+p_al_menos_un_seis = 1 - p_no_seis
+print(f"\nProbabilidad de al menos un 6 en 4 lanzamientos: {p_al_menos_un_seis:.4f}")
+
+# 3. Distribución binomial
+# Probabilidad de obtener exactamente 3 caras en 5 lanzamientos de moneda
+n = 5  # Número de ensayos
+k = 3  # Número de éxitos
+p = 0.5  # Probabilidad de éxito
+prob_binomial = stats.binom.pmf(k, n, p)
+print(f"\nProbabilidad binomial (3 caras en 5 lanzamientos): {prob_binomial:.4f}")
+
+# 4. Distribución normal
+# Probabilidad de que una variable normal estándar sea menor que 1.5
+prob_normal = stats.norm.cdf(1.5)  # Función de distribución acumulativa
+print(f"\nP(Z < 1.5) = {prob_normal:.4f}")
+
+# 5. Teorema de Bayes - Ejemplo de diagnóstico médico
+# Sensibilidad (verdaderos positivos)
+p_positivo_dado_enfermo = 0.99
+# Especificidad (verdaderos negativos)
+p_negativo_dado_sano = 0.98
+# Prevalencia de la enfermedad
+p_enfermo = 0.001
+
+# Calcular P(Enfermo|Positivo) usando el Teorema de Bayes
+p_positivo = (p_positivo_dado_enfermo * p_enfermo) + \
+             ((1 - p_negativo_dado_sano) * (1 - p_enfermo))
+             
+p_enfermo_dado_positivo = (p_positivo_dado_enfermo * p_enfermo) / p_positivo
+
+print(f"\nTeorema de Bayes - Ejemplo de diagnóstico médico:")
+print(f"P(Enfermo|Positivo) = {p_enfermo_dado_positivo:.4f} o {p_enfermo_dado_positivo*100:.2f}%")
+</code></pre>
+
+                <div class="hint">
+                    <span class="hint-button" onclick="toggleHint('hint1')">
+                        <i class="fas fa-lightbulb"></i> Explicación del código
+                    </span>
+                    <div id="hint1" class="hint-content">
+                        <p>Este código muestra varios conceptos de probabilidad:</p>
+                        <ul>
+                            <li>Cálculo de probabilidades simples y compuestas</li>
+                            <li>Uso de la distribución binomial para eventos discretos</li>
+                            <li>Cálculo de probabilidades con la distribución normal</li>
+                            <li>Aplicación del teorema de Bayes para actualizar creencias</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>2. Simulación del Teorema del Límite Central</h3>
+                <p>Vamos a simular el teorema del límite central lanzando dados.</p>
+                
+                <pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+
+# Configuración
+np.random.seed(42)  # Para reproducibilidad
+n_simulaciones = 10000  # Número de muestras
+n_lanzamientos = 30  # Tamaño de cada muestra
+
+# Simular lanzamientos de dados (valores del 1 al 6)
+lanzamientos = np.random.randint(1, 7, size=(n_simulaciones, n_lanzamientos))
+
+# Calcular la media de cada muestra
+medias_muestrales = np.mean(lanzamientos, axis=1)
+
+# Parámetros teóricos
+mu_teorico = 3.5  # Media de un dado justo
+sigma_teorico = np.sqrt(35/12)  # Desviación estándar de un dado justo
+sigma_medias_teorico = sigma_teorico / np.sqrt(n_lanzamientos)
+
+# Crear la figura
+plt.figure(figsize=(12, 6))
+
+# Histograma de las medias muestrales
+n, bins, patches = plt.hist(medias_muestrales, bins=30, density=True, 
+                           alpha=0.7, color='skyblue', edgecolor='black')
+
+# Dibujar la distribución normal teórica
+from scipy.stats import norm
+x = np.linspace(mu_teorico - 4*sigma_medias_teorico, 
+                mu_teorico + 4*sigma_medias_teorico, 100)
+plt.plot(x, norm.pdf(x, mu_teorico, sigma_medias_teorico), 
+         'r-', lw=2, label='Distribución normal teórica')
+
+# Línea vertical en la media
+plt.axvline(mu_teorico, color='k', linestyle='dashed', linewidth=1)
+plt.text(mu_teorico+0.1, 0.1, f'Media = {mu_teorico}', rotation=90, verticalalignment='bottom')
+
+# Configuración de la gráfica
+plt.title(f'Teorema del Límite Central\nDistribución de las medias de {n_lanzamientos} lanzamientos de dado')
+plt.xlabel('Media muestral')
+plt.ylabel('Densidad de probabilidad')
+plt.legend()
+plt.grid(True, linestyle='--', alpha=0.7)
+
+# Mostrar estadísticas muestrales
+media_muestral = np.mean(medias_muestrales)
+desv_est_muestral = np.std(medias_muestrales, ddof=1)
+
+plt.figtext(0.5, -0.1, 
+            f'Media muestral = {media_muestral:.4f} | ' +
+            f'Desv. estándar muestral = {desv_est_muestral:.4f}\n' +
+            f'Media teórica = {mu_teorico} | ' +
+            f'Error estándar teórico = {sigma_medias_teorico:.4f}',
+            ha='center', fontsize=10, bbox={"facecolor":"white", "alpha":0.8, "pad":5})
+
+plt.tight_layout()
+plt.show()
+</code></pre>
+                
+                <div class="solution">
+                    <button class="btn" onclick="toggleSolution('sol1')">Explicación de la simulación</button>
+                    <div id="sol1" class="solution-content">
+                        <p>Esta simulación demuestra el Teorema del Límite Central:</p>
+                        <ul>
+                            <li>Generamos múltiples muestras de lanzamientos de dados.</li>
+                            <li>Calculamos la media de cada muestra.</li>
+                            <li>Observamos que la distribución de estas medias se aproxima a una distribución normal.</li>
+                            <li>La media de la distribución de medias se acerca a la media poblacional (3.5 para un dado justo).</li>
+                            <li>La desviación estándar de las medias (error estándar) disminuye a medida que aumenta el tamaño de la muestra.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>3. Aplicación: Filtro de Spam con Naive Bayes</h3>
+                <p>Vamos a implementar un clasificador de spam simple usando el teorema de Bayes.</p>
+                
+                <pre><code class="language-python">import numpy as np
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score, confusion_matrix
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Conjunto de datos de ejemplo (en la práctica, usaríamos un conjunto más grande)
+correos = [
+    "oferta especial solo hoy",
+    "reunión importante mañana a las 3pm",
+    "gana dinero rápido y fácil",
+    "recordatorio: entrega del proyecto",
+    "trabajo desde casa sin inversión",
+    "revisión de código pendiente",
+    "millonario en una semana",
+    "actualización del sistema programada"
+]
+
+# Etiquetas: 1 para spam, 0 para no spam
+y = np.array([1, 0, 1, 0, 1, 0, 1, 0])
+
+# Convertir texto a vectores de conteo
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(correos)
+
+# Entrenar el clasificador Naive Bayes
+modelo = MultinomialNB()
+modelo.fit(X, y)
+
+# Hacer predicciones
+predicciones = modelo.predict(X)
+
+# Evaluar el modelo
+precision = accuracy_score(y, predicciones)
+print(f"Precisión del modelo: {precision*100:.2f}%")
+
+# Matriz de confusión
+matriz_confusion = confusion_matrix(y, predicciones)
+plt.figure(figsize=(6, 4))
+sns.heatmap(matriz_confusion, annot=True, fmt='d', cmap='Blues', 
+            xticklabels=['No Spam', 'Spam'],
+            yticklabels=['No Spam', 'Spam'])
+plt.xlabel('Predicción')
+plt.ylabel('Real')
+plt.title('Matriz de Confusión')
+plt.show()
+
+# Probar con nuevos correos
+nuevos_correos = [
+    "oferta de trabajo desde casa",
+    "reunión de equipo mañana",
+    "gane dinero fácil con criptomonedas"
+]
+
+X_nuevos = vectorizer.transform(nuevos_correos)
+predicciones_nuevas = modelo.predict(X_nuevos)
+
+print("\nPredicciones para nuevos correos:")
+for correo, pred in zip(nuevos_correos, predicciones_nuevas):
+    print(f"\nCorreo: {correo}")
+    print(f"Predicción: {'Spam' if pred == 1 else 'No Spam'}")
+    # Probabilidades para cada clase
+    probas = modelo.predict_proba(vectorizer.transform([correo]))[0]
+    print(f"Probabilidades: [No Spam: {probas[0]:.4f}, Spam: {probas[1]:.4f}]")
+</code></pre>
+                
+                <div class="hint">
+                    <span class="hint-button" onclick="toggleHint('hint2')">
+                        <i class="fas fa-lightbulb"></i> Explicación del clasificador
+                    </span>
+                    <div id="hint2" class="hint-content">
+                        <p>Este código implementa un clasificador Naive Bayes para detectar correos spam:</p>
+                        <ul>
+                            <li>Usa el teorema de Bayes para calcular la probabilidad de que un correo sea spam.</li>
+                            <li>La suposición "ingenua" es que las palabras son independientes entre sí.</li>
+                            <li>El modelo aprende las probabilidades de cada palabra en correos spam y no spam.</li>
+                            <li>Para nuevos correos, calcula la probabilidad de que sea spam basándose en las palabras que contiene.</li>
+                            <li>En la práctica, se usaría un conjunto de datos mucho más grande para entrenar el modelo.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h2><i class="fas fa-clipboard-check"></i> Resumen</h2>
+            <ul>
+                <li>La probabilidad mide la posibilidad de que ocurra un evento, con valores entre 0 (imposible) y 1 (seguro).</li>
+                <li>Las reglas de probabilidad (suma, producto, probabilidad condicional) son fundamentales para calcular probabilidades de eventos complejos.</li>
+                <li>El teorema de Bayes permite actualizar creencias a medida que obtenemos nueva evidencia.</li>
+                <li>El teorema del límite central explica por qué muchas mediciones siguen una distribución normal.</li>
+                <li>Los algoritmos de IA como Naive Bayes utilizan conceptos de probabilidad para hacer predicciones.</li>
+            </ul>
+        </section>
+
+        <section class="additional-resources">
+            <h2><i class="fas fa-book-open"></i> Recursos Adicionales</h2>
+            <ul>
+                <li><a href="https://es.khanacademy.org/math/statistics-probability/probability-library" target="_blank" rel="noopener">Curso de probabilidad en Khan Academy</a></li>
+                <li><a href="https://seeing-theory.brown.edu/es.html" target="_blank" rel="noopener">Visualizaciones interactivas de probabilidad</a></li>
+                <li><a href="https://www.youtube.com/watch?v=HZGCoVF3YvM" target="_blank" rel="noopener">Teorema de Bayes explicado visualmente</a></li>
+            </ul>
+        </section>
+
+        <section class="homework">
+            <h2><i class="fas fa-tasks"></i> Tarea</h2>
+            <ol>
+                <li>Resuelve los siguientes problemas de probabilidad:
+                    <ol type="a">
+                        <li>Se lanzan dos dados justos. ¿Cuál es la probabilidad de que la suma sea 7?</li>
+                        <li>En una baraja estándar de 52 cartas, ¿cuál es la probabilidad de sacar un as o un corazón?</li>
+                        <li>Si el 5% de los artículos producidos por una máquina son defectuosos, ¿cuál es la probabilidad de que en una muestra de 20 artículos haya exactamente 2 defectuosos?</li>
+                    </ol>
+                </li>
+                <li>Implementa en Python una función que calcule la probabilidad condicional P(A|B) dados P(A), P(B) y P(B|A).</li>
+                <li>Investiga y explica la paradoja del falso positivo en pruebas médicas usando el teorema de Bayes.</li>
+                <li>Amplía el ejemplo del clasificador de spam para usar un conjunto de datos real como el "SMS Spam Collection Dataset".</li>
+                <li>Explica cómo se relaciona el teorema de Bayes con los modelos generativos en inteligencia artificial.</li>
+            </ol>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION2-7.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 2.7 Gradientes y Derivadas Parciales</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION2-9.html" class="btn">Siguiente Sesión: 2.9 Distribuciones de Probabilidad <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Configuración de MathJax para renderizar ecuaciones
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true,
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+                TeX: { equationNumbers: { autoNumber: "AMS" } }
+            }
+        });
+    </script>
+</body>
+</html>

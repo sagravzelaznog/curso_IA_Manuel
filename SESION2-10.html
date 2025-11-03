@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.10: Estadística Descriptiva - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>2.10: Estadística Descriptiva</h1>
+            <p>Módulo 2: Matemáticas para IA</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender los conceptos fundamentales de la estadística descriptiva</li>
+                <li>Aprender a calcular e interpretar medidas de tendencia central y dispersión</li>
+                <li>Visualizar datos utilizando diferentes tipos de gráficos estadísticos</li>
+                <li>Analizar la relación entre variables mediante correlación y covarianza</li>
+                <li>Aplicar técnicas de estadística descriptiva con Python</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
+            
+            <h3>1. Introducción a la Estadística Descriptiva</h3>
+            <p>La estadística descriptiva es una rama de la estadística que se encarga de recolectar, organizar, analizar y presentar conjuntos de datos de manera significativa para facilitar su interpretación.</p>
+            
+            <h3>2. Tipos de Datos</h3>
+            <div class="definition">
+                <h4>Datos Cualitativos (Categóricos)</h4>
+                <ul>
+                    <li><strong>Nominales:</strong> Sin orden intrínseco (ej. colores, género)</li>
+                    <li><strong>Ordinales:</strong> Con orden intrínseco (ej. nivel educativo, calificaciones)</li>
+                </ul>
+                
+                <h4>Datos Cuantitativos (Numéricos)</h4>
+                <ul>
+                    <li><strong>Discretos:</strong> Toman valores enteros (ej. número de hijos)</li>
+                    <li><strong>Continuos:</strong> Pueden tomar cualquier valor real en un intervalo (ej. peso, altura)</li>
+                </ul>
+            </div>
+
+            <h3>3. Medidas de Tendencia Central</h3>
+            <div class="definition">
+                <h4>Media Aritmética</h4>
+                <p>\[\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i\]</p>
+                
+                <h4>Mediana</h4>
+                <p>Valor que divide al conjunto de datos ordenados en dos partes iguales.</p>
+                
+                <h4>Moda</h4>
+                <p>Valor que aparece con mayor frecuencia en el conjunto de datos.</p>
+            </div>
+
+            <h3>4. Medidas de Dispersión</h3>
+            <div class="definition">
+                <h4>Rango</h4>
+                <p>\[Rango = x_{max} - x_{min}\]</p>
+                
+                <h4>Varianza</h4>
+                <p>\[s^2 = \frac{1}{n-1}\sum_{i=1}^{n} (x_i - \bar{x})^2\]</p>
+                
+                <h4>Desviación Estándar</h4>
+                <p>\[s = \sqrt{s^2}\]</p>
+                
+                <h4>Rango Intercuartílico (IQR)</h4>
+                <p>\[IQR = Q_3 - Q_1\]</p>
+            </div>
+
+            <h3>5. Medidas de Forma</h3>
+            <div class="definition">
+                <h4>Sesgo (Asimetría)</h4>
+                <p>Mide la asimetría de la distribución de los datos.</p>
+                
+                <h4>Curtosis</h4>
+                <p>Mide el grado de concentración de los datos alrededor de la media.</p>
+            </div>
+
+            <h3>6. Relación entre Variables</h3>
+            <div class="definition">
+                <h4>Covarianza</h4>
+                <p>\[Cov(X,Y) = \frac{1}{n-1}\sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})\]</p>
+                
+                <h4>Coeficiente de Correlación de Pearson</h4>
+                <p>\[r = \frac{Cov(X,Y)}{s_x s_y}\]</p>
+                <p>Donde \(s_x\) y \(s_y\) son las desviaciones estándar de X e Y respectivamente.</p>
+            </div>
+        </section>
+
+        <section class="practical">
+            <h2><i class="fas fa-laptop-code"></i> Actividad Práctica</h2>
+            
+            <div class="activity">
+                <h3>1. Análisis Descriptivo con Python</h3>
+                <p>Vamos a utilizar Pandas y Matplotlib para analizar un conjunto de datos de ejemplo.</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copiar</button>
+                    <pre><code class="python">import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
+
+# Configuración de estilo
+plt.style.use('seaborn')
+sns.set_palette("viridis")
+
+# Generar datos de ejemplo
+np.random.seed(42)
+edades = np.random.normal(25, 5, 1000).astype(int)
+salarios = 25000 + (edades * 1000) + np.random.normal(0, 3000, 1000)
+
+df = pd.DataFrame({
+    'Edad': np.clip(edades, 18, 60),
+    'Salario': np.clip(salarios, 20000, 60000).astype(int),
+    'Experiencia': np.random.poisson(5, 1000).clip(0, 15),
+    'Satisfaccion': np.random.randint(1, 11, 1000)
+})
+
+# Añadir una columna categórica
+df['Departamento'] = np.random.choice(['Ventas', 'TI', 'RRHH', 'Marketing', 'Finanzas'], size=1000)
+
+# 1. Mostrar información básica del DataFrame
+print("\n=== Información del DataFrame ===")
+print(df.info())
+
+# 2. Estadísticas descriptivas
+print("\n=== Estadísticas Descriptivas ===")
+print(df.describe())
+
+# 3. Análisis por departamento
+print("\n=== Resumen por Departamento ===")
+print(df.groupby('Departamento').agg({
+    'Edad': ['mean', 'median', 'std'],
+    'Salario': ['mean', 'median', 'std'],
+    'Satisfaccion': 'mean'
+}).round(2))
+
+# 4. Visualizaciones
+plt.figure(figsize=(15, 10))
+
+# Histograma de edades
+plt.subplot(2, 2, 1)
+sns.histplot(data=df, x='Edad', bins=20, kde=True)
+plt.title('Distribución de Edades')
+plt.xlabel('Edad')
+plt.ylabel('Frecuencia')
+
+# Diagrama de caja de salarios por departamento
+plt.subplot(2, 2, 2)
+sns.boxplot(data=df, x='Departamento', y='Salario')
+plt.title('Distribución de Salarios por Departamento')
+plt.xticks(rotation=45)
+
+# Diagrama de dispersión Edad vs. Salario
+plt.subplot(2, 2, 3)
+sns.scatterplot(data=df, x='Edad', y='Salario', hue='Departamento', alpha=0.6)
+plt.title('Relación entre Edad y Salario')
+
+# Matriz de correlación
+plt.subplot(2, 2, 4)
+corr = df.select_dtypes(include=['int64', 'float64']).corr()
+sns.heatmap(corr, annot=True, cmap='coolwarm', center=0)
+plt.title('Matriz de Correlación')
+
+plt.tight_layout()
+plt.show()
+
+# 5. Análisis de correlación
+print("\n=== Coeficiente de Correlación de Pearson ==="
+print(f"Correlación Edad-Salario: {df['Edad'].corr(df['Salario']):.3f}")
+print(f"Correlación Experiencia-Salario: {df['Experiencia'].corr(df['Salario']):.3f}")
+print(f"Correlación Edad-Satisfacción: {df['Edad'].corr(df['Satisfaccion']):.3f}")
+
+# 6. Análisis de valores atípicos
+Q1 = df['Salario'].quantile(0.25)
+Q3 = df['Salario'].quantile(0.75)
+IQR = Q3 - Q1
+limite_inferior = Q1 - 1.5 * IQR
+limite_superior = Q3 + 1.5 * IQR
+
+outliers = df[(df['Salario'] < limite_inferior) | (df['Salario'] > limite_superior)]
+print(f"\n=== Valores Atípicos en Salarios ===")
+print(f"Límite inferior: {limite_inferior:.2f}")
+print(f"Límite superior: {limite_superior:.2f}")
+print(f"Número de valores atípicos: {len(outliers)} ({len(outliers)/len(df)*100:.1f}%)")</code></pre>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3>2. Análisis de Datos con Pandas Profiling</h3>
+                <p>Vamos a utilizar la biblioteca pandas-profiling para generar un informe detallado de análisis exploratorio de datos.</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copiar</button>
+                    <pre><code class="python"># Instalar pandas-profiling si no está instalado
+!pip install pandas-profiling
+
+from pandas_profiling import ProfileReport
+
+# Crear un informe de perfil
+profile = ProfileReport(df, title="Análisis Exploratorio de Datos")
+
+# Generar un archivo HTML con el informe
+profile.to_file("analisis_exploratorio.html")
+
+# Mostrar el informe en el notebook (si se está usando Jupyter)
+# profile.to_notebook_iframe()
+
+print("Se ha generado el informe 'analisis_exploratorio.html'")
+
+# Mostrar un resumen del informe
+print("\n=== Resumen del Análisis ===")
+print(f"Número de variables: {len(df.columns)}")
+print(f"Número de observaciones: {len(df)}")
+print(f"Variables numéricas: {len(df.select_dtypes(include=['int64', 'float64']).columns)}")
+print(f"Variables categóricas: {len(df.select_dtypes(include=['object']).columns)}")
+
+# Mostrar las primeras filas del DataFrame
+print("\n=== Muestra de los Datos ===")
+print(df.head())</code></pre>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3>3. Visualizaciones Avanzadas con Seaborn</h3>
+                <p>Exploraremos diferentes tipos de visualizaciones para el análisis exploratorio de datos.</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copiar</button>
+                    <pre><code class="python">import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Configuración de estilo
+plt.style.use('seaborn')
+plt.figure(figsize=(15, 12))
+
+# 1. Gráfico de violín para comparar salarios por departamento
+plt.subplot(2, 2, 1)
+sns.violinplot(data=df, x='Departamento', y='Salario', inner='quartile')
+plt.title('Distribución de Salarios por Departamento')
+plt.xticks(rotation=45)
+
+# 2. Gráfico de barras de satisfacción promedio por departamento
+plt.subplot(2, 2, 2)
+sns.barplot(data=df, x='Departamento', y='Satisfaccion', ci=None)
+plt.title('Satisfacción Promedio por Departamento')
+plt.xticks(rotation=45)
+
+# 3. Mapa de calor de correlación con anotaciones
+plt.subplot(2, 2, 3)
+corr = df.select_dtypes(include=['int64', 'float64']).corr()
+sns.heatmap(corr, annot=True, cmap='coolwarm', center=0, fmt=".2f")
+plt.title('Matriz de Correlación con Anotaciones')
+
+# 4. Gráfico de dispersión con regresión
+plt.subplot(2, 2, 4)
+sns.regplot(data=df, x='Edad', y='Salario', scatter_kws={'alpha':0.3}, line_kws={'color':'red'})
+plt.title('Relación entre Edad y Salario con Línea de Regresión')
+
+plt.tight_layout()
+plt.show()
+
+# 5. Pairplot para visualizar relaciones entre variables numéricas
+print("Generando pairplot (esto puede tomar unos segundos)...")
+sns.pairplot(df, hue='Departamento', diag_kind='kde', height=2)
+plt.suptitle('Análisis de Relaciones entre Variables', y=1.02)
+plt.show()
+
+# 6. Gráfico de distribución acumulativa (CDF)
+plt.figure(figsize=(10, 6))
+sns.ecdfplot(data=df, x='Salario', hue='Departamento')
+plt.title('Distribución Acumulativa de Salarios por Departamento')
+plt.xlabel('Salario')
+plt.ylabel('Proporción Acumulada')
+plt.grid(True, alpha=0.3)
+plt.show()</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="exercises">
+            <h2><i class="fas fa-tasks"></i> Ejercicios</h2>
+            
+            <div class="exercise">
+                <h3>Ejercicio 1: Análisis de Datos de Viviendas</h3>
+                <p>Dado el siguiente conjunto de datos de precios de viviendas:</p>
+                <pre>import pandas as pd
+import numpy as np
+
+np.random.seed(42)
+data = {
+    'area': np.random.normal(120, 40, 1000).astype(int),
+    'habitaciones': np.random.poisson(3, 1000).clip(1, 6),
+    'banos': np.random.poisson(2, 1000).clip(1, 4),
+    'antiguedad': np.random.poisson(15, 1000).clip(0, 50),
+    'precio': 150000 + (np.random.normal(120, 40, 1000) * 1000).astype(int)
+}
+
+df_viviendas = pd.DataFrame(data)
+df_viviendas['precio_m2'] = df_viviendas['precio'] / df_viviendas['area']
+# Añadir algunos valores atípicos
+df_viviendas.loc[df_viviendas.sample(20).index, 'precio'] *= 3</pre>
+                
+                <p>Realiza las siguientes tareas:</p>
+                <ol>
+                    <li>Calcula las medidas de tendencia central y dispersión para todas las variables numéricas.</li>
+                    <li>Identifica y cuenta los valores atípicos en la variable 'precio' usando el método del rango intercuartílico.</li>
+                    <li>Crea una nueva categoría 'tamano' que clasifique las viviendas como 'Pequeña' (área < 100), 'Mediana' (100-150) o 'Grande' (>150).</li>
+                    <li>Calcula el precio promedio por metro cuadrado para cada categoría de tamaño.</li>
+                    <li>Crea visualizaciones que muestren la distribución de precios por categoría de tamaño.</li>
+                </ol>
+                
+                <button class="solution-btn" onclick="toggleSolution('sol1')">Mostrar Solución</button>
+                <div id="sol1" class="solution">
+                    <pre><code class="python">import matplotlib.pyplot as plt
+import seaborn as sns
+
+# 1. Medidas de tendencia central y dispersión
+print("=== Estadísticas Descriptivas ===")
+print(df_viviendas.describe())
+
+# 2. Identificación de valores atípicos en 'precio'
+Q1 = df_viviendas['precio'].quantile(0.25)
+Q3 = df_viviendas['precio'].quantile(0.75)
+IQR = Q3 - Q1
+limite_inferior = Q1 - 1.5 * IQR
+limite_superior = Q3 + 1.5 * IQR
+
+outliers = df_viviendas[(df_viviendas['precio'] < limite_inferior) | (df_viviendas['precio'] > limite_superior)]
+print(f"\n=== Valores Atípicos en Precios ===")
+print(f"Límite inferior: {limite_inferior:.2f}")
+print(f"Límite superior: {limite_superior:.2f}")
+print(f"Número de valores atípicos: {len(outliers)} ({len(outliers)/len(df_viviendas)*100:.1f}%)")
+
+# 3. Crear categoría de tamaño
+def clasificar_tamano(area):
+    if area < 100:
+        return 'Pequeña'
+    elif area <= 150:
+        return 'Mediana'
+    else:
+        return 'Grande'
+
+df_viviendas['tamano'] = df_viviendas['area'].apply(clasificar_tamano)
+
+# 4. Precio promedio por metro cuadrado por categoría
+print("\n=== Precio Promedio por m² por Tamaño ===")
+print(df_viviendas.groupby('tamano')['precio_m2'].mean().round(2))
+
+# 5. Visualizaciones
+plt.figure(figsize=(15, 10))
+
+# Boxplot de precios por tamaño
+plt.subplot(2, 2, 1)
+sns.boxplot(data=df_viviendas, x='tamano', y='precio', order=['Pequeña', 'Mediana', 'Grande'])
+plt.title('Distribución de Precios por Tamaño')
+plt.xticks(rotation=45)
+
+# Gráfico de barras de precios promedio
+plt.subplot(2, 2, 2)
+sns.barplot(data=df_viviendas, x='tamano', y='precio', ci=None, order=['Pequeña', 'Mediana', 'Grande'])
+plt.title('Precio Promedio por Tamaño')
+plt.xticks(rotation=45)
+
+# Gráfico de dispersión área vs precio con tamaño
+plt.subplot(2, 2, 3)
+sns.scatterplot(data=df_viviendas, x='area', y='precio', hue='tamano', alpha=0.6)
+plt.title('Relación entre Área y Precio')
+
+# Histograma de precios por tamaño
+plt.subplot(2, 2, 4)
+sns.histplot(data=df_viviendas, x='precio', hue='tamano', element='step', stat='density', common_norm=False)
+plt.title('Distribución de Precios por Tamaño')
+plt.tight_layout()
+plt.show()</code></pre>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h3>Ejercicio 2: Análisis de Series Temporales</h3>
+                <p>Dado el siguiente conjunto de datos de ventas mensuales:</p>
+                <pre>import pandas as pd
+import numpy as np
+
+# Crear fechas mensuales para 3 años
+fechas = pd.date_range(start='2020-01-01', periods=36, freq='M')
+
+# Generar datos de ventas con tendencia y estacionalidad
+np.random.seed(42)
+ventas_base = np.linspace(100, 300, 36)  # Tendencia creciente
+estacionalidad = 50 * np.sin(np.linspace(0, 6*np.pi, 36))  # Estacionalidad anual
+ruido = np.random.normal(0, 20, 36)  # Ruido aleatorio
+
+# Crear DataFrame
+df_ventas = pd.DataFrame({
+    'fecha': fechas,
+    'ventas': ventas_base + estacionalidad + ruido
+})
+
+# Asegurar que no haya valores negativos
+df_ventas['ventas'] = df_ventas['ventas'].clip(lower=0).round(2)
+
+# Añadir columnas de año y mes
+df_ventas['año'] = df_ventas['fecha'].dt.year
+df_ventas['mes'] = df_ventas['fecha'].dt.month_name()
+df_ventas['trimestre'] = df_ventas['fecha'].dt.quarter</pre>
+                
+                <p>Realiza las siguientes tareas:</p>
+                <ol>
+                    <li>Visualiza la serie temporal de ventas a lo largo del tiempo.</li>
+                    <li>Calcula y visualiza la media móvil de 3 meses.</li>
+                    <li>Agrupa los datos por año y mes para ver patrones estacionales.</li>
+                    <li>Calcula el crecimiento interanual de ventas para cada mes.</li>
+                    <li>Identifica el mes con mayor y menor ventas para cada año.</li>
+                </ol>
+                
+                <button class="solution-btn" onclick="toggleSolution('sol2')">Mostrar Solución</button>
+                <div id="sol2" class="solution">
+                    <pre><code class="python">import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Configuración de estilo
+plt.style.use('seaborn')
+
+# 1. Visualización de la serie temporal
+plt.figure(figsize=(14, 8))
+plt.plot(df_ventas['fecha'], df_ventas['ventas'], marker='o', linestyle='-', linewidth=2)
+plt.title('Ventas Mensuales (2020-2022)')
+plt.xlabel('Fecha')
+plt.ylabel('Ventas')
+plt.grid(True, alpha=0.3)
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# 2. Media móvil de 3 meses
+df_ventas['media_movil_3m'] = df_ventas['ventas'].rolling(window=3).mean()
+
+plt.figure(figsize=(14, 6))
+plt.plot(df_ventas['fecha'], df_ventas['ventas'], label='Ventas', alpha=0.7)
+plt.plot(df_ventas['fecha'], df_ventas['media_movil_3m'], label='Media Móvil (3 meses)', color='red', linewidth=2)
+plt.title('Ventas Mensuales con Media Móvil de 3 Meses')
+plt.xlabel('Fecha')
+plt.ylabel('Ventas')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# 3. Patrones estacionales por año y mes
+# Crear una tabla pivote para el heatmap
+pivot_ventas = df_ventas.pivot_table(
+    index='mes', 
+    columns='año', 
+    values='ventas',
+    aggfunc='mean',
+    sort=False
+)
+
+# Ordenar los meses cronológicamente
+meses_orden = [
+    'January', 'February', 'March', 'April', 'May', 'June', 
+    'July', 'August', 'September', 'October', 'November', 'December'
+]
+pivot_ventas = pivot_ventas.reindex(meses_orden)
+
+plt.figure(figsize=(12, 6))
+sns.heatmap(pivot_ventas, annot=True, fmt=".1f", cmap='YlGnBu', linewidths=0.5)
+plt.title('Ventas Promedio por Mes y Año')
+plt.xlabel('Año')
+plt.ylabel('Mes')
+plt.tight_layout()
+plt.show()
+
+# 4. Crecimiento interanual por mes
+df_ventas_pivot = df_ventas.pivot(index='mes', columns='año', values='ventas')
+df_ventas_pivot = df_ventas_pivot.reindex(meses_orden)
+
+# Calcular crecimiento interanual
+df_crecimiento = pd.DataFrame()
+df_crecimiento['2020-2021'] = ((df_ventas_pivot[2021] - df_ventas_pivot[2020]) / df_ventas_pivot[2020] * 100).round(1)
+df_crecimiento['2021-2022'] = ((df_ventas_pivot[2022] - df_ventas_pivot[2021]) / df_ventas_pivot[2021] * 100).round(1)
+
+print("=== Crecimiento Interanual por Mes (%)")
+print(df_crecimiento)
+
+# 5. Mejor y peor mes por año
+print("\n=== Mejor y Peor Mes por Año ===")
+for año in df_ventas['año'].unique():
+    df_año = df_ventas[df_ventas['año'] == año]
+    mejor_mes = df_año.loc[df_año['ventas'].idxmax()]
+    peor_mes = df_año.loc[df_año['ventas'].idxmin()]
+    
+    print(f"\nAño {año}:")
+    print(f"  Mejor mes: {mejor_mes['mes']} - {mejor_mes['ventas']:.2f} ventas")
+    print(f"  Peor mes: {peor_mes['mes']} - {peor_mes['ventas']:.2f} ventas")</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h2><i class="fas fa-clipboard-list"></i> Resumen</h2>
+            <ul>
+                <li>La <strong>estadística descriptiva</strong> nos permite resumir y describir las características principales de un conjunto de datos.</li>
+                <li>Las <strong>medidas de tendencia central</strong> (media, mediana, moda) nos dan una idea de los valores típicos en los datos.</li>
+                <li>Las <strong>medidas de dispersión</strong> (rango, varianza, desviación estándar, IQR) nos indican cuánto varían los datos.</li>
+                <li>Los <strong>gráficos</strong> son herramientas poderosas para visualizar distribuciones, tendencias y relaciones en los datos.</li>
+                <li>El <strong>análisis exploratorio de datos (EDA)</strong> es fundamental para comprender los datos antes de realizar análisis más avanzados.</li>
+                <li>Herramientas como <strong>Pandas, Matplotlib y Seaborn</strong> en Python facilitan enormemente el análisis y visualización de datos.</li>
+            </ul>
+        </section>
+
+        <section class="resources">
+            <h2><i class="fas fa-book"></i> Recursos Adicionales</h2>
+            <ul>
+                <li><a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/10min.html" target="_blank" rel="noopener noreferrer">Guía de inicio rápido de Pandas</a> - Tutorial oficial de Pandas</li>
+                <li><a href="https://seaborn.pydata.org/tutorial.html" target="_blank" rel="noopener noreferrer">Tutorial de Seaborn</a> - Documentación oficial de Seaborn</li>
+                <li><a href="https://matplotlib.org/stable/tutorials/index.html" target="_blank" rel="noopener noreferrer">Tutoriales de Matplotlib</a> - Recursos de aprendizaje de Matplotlib</li>
+                <li><a href="https://www.kaggle.com/learn/intro-to-data-analysis" target="_blank" rel="noopener noreferrer">Curso de Introducción al Análisis de Datos</a> - Curso gratuito en Kaggle</li>
+                <li><a href="https://www.data-to-viz.com/" target="_blank" rel="noopener noreferrer">From Data to Viz</a> - Guía para elegir el gráfico adecuado</li>
+            </ul>
+        </section>
+
+        <section class="homework">
+            <h2><i class="fas fa-home"></i> Tarea</h2>
+            <ol>
+                <li><strong>Análisis de Datos:</strong> Descarga un conjunto de datos de tu interés (puedes usar <a href="https://www.kaggle.com/datasets" target="_blank" rel="noopener noreferrer">Kaggle Datasets</a> o <a href="https://github.com/awesomedata/awesome-public-datasets" target="_blank" rel="noopener noreferrer">Awesome Public Datasets</a>) y realiza un análisis exploratorio completo siguiendo los pasos vistos en clase.</li>
+                <li><strong>Visualizaciones:</strong> Crea al menos 5 visualizaciones diferentes que muestren diferentes aspectos de los datos y escribe un breve párrafo explicando lo que revela cada una.</li>
+                <li><strong>Informe:</strong> Prepara un informe ejecutivo (máximo 2 páginas) con los hallazgos más importantes de tu análisis, incluyendo tablas y gráficos relevantes.</li>
+                <li><strong>Presentación:</strong> Prepara una presentación corta (5-7 minutos) donde expliques tus hallazgos a la clase.</li>
+            </ol>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION2-9.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 2.9 Distribuciones de probabilidad</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION2-11.html" class="btn">Siguiente Sesión: 2.11 Teorema de Bayes <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Función para copiar código al portapapeles
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling.querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Cambiar el ícono temporalmente para mostrar que se copió
+            const icon = button.querySelector('i');
+            const originalClass = icon.className;
+            icon.className = 'fas fa-check';
+            
+            setTimeout(() => {
+                icon.className = originalClass;
+            }, 2000);
+        }
+        
+        // Función para mostrar/ocultar soluciones
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            if (solution.style.display === 'block') {
+                solution.style.display = 'none';
+                event.target.textContent = 'Mostrar Solución';
+            } else {
+                solution.style.display = 'block';
+                event.target.textContent = 'Ocultar Solución';
+            }
+        }
+    </script>
+</body>
+</html>

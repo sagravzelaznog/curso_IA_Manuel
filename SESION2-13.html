@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.13: Optimización (II) - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>2.13: Optimización (II) - Avanzada</h1>
+            <p>Módulo 2: Matemáticas para IA</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender los métodos de optimización estocástica y sus variantes</li>
+                <li>Aprender sobre optimización basada en gradiente en aprendizaje profundo</li>
+                <li>Explorar algoritmos de optimización de primer y segundo orden</li>
+                <li>Implementar técnicas avanzadas de optimización en Python</li>
+                <li>Analizar el impacto de diferentes optimizadores en el entrenamiento de redes neuronales</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
+            
+            <h3>1. Optimización Estocástica</h3>
+            <p>La optimización estocástica se utiliza cuando la función objetivo es una expectativa sobre una distribución de datos, lo que es común en aprendizaje automático.</p>
+            
+            <div class="definition">
+                <h4>1.1 Gradiente Descendente Estocástico (SGD)</h4>
+                <p>En lugar de usar todo el conjunto de datos para calcular el gradiente, SGD utiliza un subconjunto aleatorio (minilote) en cada iteración:</p>
+                <p>\[ \theta_{t+1} = \theta_t - \eta_t \nabla_\theta L(\theta_t; x_i, y_i) \]</p>
+                <p>Donde \( (x_i, y_i) \) es un ejemplo de entrenamiento o un minilote.</p>
+            </div>
+
+            <h3>2. Variantes de Optimización en Aprendizaje Profundo</h3>
+            <div class="methods">
+                <h4>2.1 Momentum</h4>
+                <p>Ayuda a acelerar el gradiente descendente en la dirección relevante, reduciendo la oscilación.</p>
+                <p>\[ v_{t+1} = \gamma v_t + \eta \nabla_\theta L(\theta_t) \]
+                \[ \theta_{t+1} = \theta_t - v_{t+1} \]</p>
+                
+                <h4>2.2 RMSprop</h4>
+                <p>Adapta la tasa de aprendizaje para cada parámetro basándose en los gradientes recientes.</p>
+                \[ E[g^2]_t = \beta E[g^2]_{t-1} + (1-\beta) g_t^2 \]
+                \[ \theta_{t+1} = \theta_t - \frac{\eta}{\sqrt{E[g^2]_t + \epsilon}} g_t \]
+                
+                <h4>2.3 Adam (Adaptive Moment Estimation)</h4>
+                <p>Combina las ideas de Momentum y RMSprop, calculando tasas de aprendizaje adaptativas para cada parámetro.</p>
+                \[ m_t = \beta_1 m_{t-1} + (1-\beta_1) g_t \]
+                \[ v_t = \beta_2 v_{t-1} + (1-\beta_2) g_t^2 \]
+                \[ \hat{m}_t = \frac{m_t}{1-\beta_1^t}, \quad \hat{v}_t = \frac{v_t}{1-\beta_2^t} \]
+                \[ \theta_{t+1} = \theta_t - \frac{\eta}{\sqrt{\hat{v}_t} + \epsilon} \hat{m}_t \]
+            </div>
+
+            <h3>3. Optimización de Segundo Orden</h3>
+            <div class="second-order">
+                <h4>3.1 Método de Newton</h4>
+                <p>Utiliza la matriz Hessiana para una convergencia más rápida:</p>
+                <p>\[ \theta_{t+1} = \theta_t - H^{-1}(\theta_t) \nabla_\theta L(\theta_t) \]</p>
+                
+                <h4>3.2 Métodos Cuasi-Newton (BFGS, L-BFGS)</h4>
+                <p>Aproximan la inversa de la matriz Hessiana sin calcularla explícitamente, lo que es más eficiente computacionalmente.</p>
+            </div>
+
+            <h3>4. Técnicas Avanzadas de Optimización</h3>
+            <div class="advanced">
+                <h4>4.1 Programación Matemática</h4>
+                <p>Formulación y resolución de problemas de optimización con restricciones lineales y no lineales.</p>
+                
+                <h4>4.2 Optimización Multiobjetivo</h4>
+                <p>Optimización cuando hay múltiples objetivos que pueden estar en conflicto.</p>
+                
+                <h4>4.3 Optimización Bayesiana</h4>
+                <p>Enfoque probabilístico para la optimización de funciones costosas de evaluar.</p>
+            </div>
+        </section>
+
+        <section class="practical">
+            <h2><i class="fas fa-laptop-code"></i> Actividad Práctica</h2>
+            
+            <div class="activity">
+                <h3>1. Comparación de Optimizadores en Redes Neuronales</h3>
+                <p>Vamos a comparar diferentes optimizadores en el entrenamiento de una red neuronal para clasificación de dígitos MNIST.</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copiar</button>
+                    <pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+import tensorflow as tf
+from tensorflow.keras.datasets import mnist
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Flatten
+from tensorflow.keras.optimizers import SGD, RMSprop, Adam, Adagrad, Adadelta, Adamax, Nadam
+
+# Cargar y preparar los datos
+(X_train, y_train), (X_test, y_test) = mnist.load_data()
+X_train = X_train / 255.0
+X_test = X_test / 255.0
+
+# Convertir etiquetas a one-hot encoding
+y_train = tf.keras.utils.to_categorical(y_train, 10)
+y_test = tf.keras.utils.to_categorical(y_test, 10)
+
+def create_model():
+    """Crea un modelo de red neuronal simple"""
+    model = Sequential([
+        Flatten(input_shape=(28, 28)),
+        Dense(128, activation='relu'),
+        Dense(64, activation='relu'),
+        Dense(10, activation='softmax')
+    ])
+    return model
+
+# Lista de optimizadores a comparar
+optimizers = {
+    'SGD': SGD(learning_rate=0.01),
+    'Momentum': SGD(learning_rate=0.01, momentum=0.9),
+    'Nesterov': SGD(learning_rate=0.01, momentum=0.9, nesterov=True),
+    'RMSprop': RMSprop(learning_rate=0.001),
+    'Adam': Adam(learning_rate=0.001),
+    'Adagrad': Adagrad(learning_rate=0.01),
+    'Adadelta': Adadelta(learning_rate=1.0),
+    'Adamax': Adamax(learning_rate=0.002),
+    'Nadam': Nadam(learning_rate=0.002)
+}
+
+# Entrenar con cada optimizador
+history_dict = {}
+epochs = 10
+batch_size = 32
+
+for name, optimizer in optimizers.items():
+    print(f"\nEntrenando con {name}...")
+    model = create_model()
+    model.compile(optimizer=optimizer,
+                 loss='categorical_crossentropy',
+                 metrics=['accuracy'])
+    
+    # Entrenar el modelo
+    history = model.fit(X_train, y_train,
+                       batch_size=batch_size,
+                       epochs=epochs,
+                       validation_split=0.2,
+                       verbose=0)  # No mostrar progreso
+    
+    # Guardar el historial
+    history_dict[name] = history.history
+    
+    # Evaluar en el conjunto de prueba
+    test_loss, test_acc = model.evaluate(X_test, y_test, verbose=0)
+    print(f"{name} - Precisión en prueba: {test_acc:.4f}")
+
+# Visualizar resultados
+plt.figure(figsize=(14, 10))
+
+# Gráfico de precisión
+plt.subplot(2, 1, 1)
+for name in optimizers.keys():
+    plt.plot(history_dict[name]['accuracy'], '--', label=f'{name} (entrenamiento)')
+    plt.plot(history_dict[name]['val_accuracy'], '-', label=f'{name} (validación)')
+
+plt.title('Precisión del modelo por optimizador')
+plt.ylabel('Precisión')
+plt.xlabel('Época')
+plt.ylim(0.85, 1.0)
+plt.legend(loc='lower right', ncol=2)
+plt.grid(True, alpha=0.3)
+
+# Gráfico de pérdida
+plt.subplot(2, 1, 2)
+for name in optimizers.keys():
+    plt.plot(history_dict[name]['loss'], '--', label=f'{name} (entrenamiento)')
+    plt.plot(history_dict[name]['val_loss'], '-', label=f'{name} (validación)')
+
+plt.title('Pérdida del modelo por optimizador')
+plt.ylabel('Pérdida')
+plt.xlabel('Época')
+plt.legend(loc='upper right', ncol=2)
+plt.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Comparación de rendimiento final
+final_val_acc = {name: history_dict[name]['val_accuracy'][-1] for name in optimizers}
+sorted_optimizers = sorted(final_val_acc.items(), key=lambda x: x[1], reverse=True)
+
+print("\nRanking de optimizadores por precisión en validación:")
+for i, (name, acc) in enumerate(sorted_optimizers, 1):
+    print(f"{i}. {name}: {acc:.4f}")
+
+# Análisis de resultados
+print("\nAnálisis de resultados:")
+print("- Los optimizadores adaptativos (Adam, Nadam, Adamax) tienden a converger más rápido.")
+print("- SGD con momentum y Nesterov pueden alcanzar un buen rendimiento con una tasa de aprendizaje adecuada.")
+print("- Adagrad y Adadelta pueden requerir ajuste de hiperparámetros para este problema.")
+print("- RMSprop es una buena opción intermedia entre SGD y Adam.")</code></pre>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3>2. Implementación de Adam desde Cero</h3>
+                <p>Implementaremos el optimizador Adam desde cero para entender su funcionamiento interno.</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copiar</button>
+                    <pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+
+class AdamOptimizer:
+    def __init__(self, learning_rate=0.001, beta1=0.9, beta2=0.999, epsilon=1e-8):
+        """
+        Inicializa el optimizador Adam.
+        
+        Parámetros:
+        -----------
+        learning_rate : float
+            Tasa de aprendizaje.
+        beta1 : float
+            Factor de decaimiento para la estimación del primer momento (media).
+        beta2 : float
+            Factor de decaimiento para la estimación del segundo momento (varianza).
+        epsilon : float
+            Término de estabilidad numérica.
+        """
+        self.learning_rate = learning_rate
+        self.beta1 = beta1
+        self.beta2 = beta2
+        self.epsilon = epsilon
+        self.t = 0  # Contador de iteraciones
+        self.m = None  # Primer momento (media)
+        self.v = None  # Segundo momento (varianza)
+    
+    def initialize_parameters(self, params):
+        """Inicializa los momentos para los parámetros."""
+        self.m = {k: np.zeros_like(v) for k, v in params.items()}
+        self.v = {k: np.zeros_like(v) for k, v in params.items()}
+    
+    def update(self, params, grads):
+        """
+        Actualiza los parámetros usando el algoritmo Adam.
+        
+        Parámetros:
+        -----------
+        params : dict
+            Diccionario con los parámetros actuales del modelo.
+        grads : dict
+            Diccionario con los gradientes de la función de pérdida respecto a los parámetros.
+            
+        Retorna:
+        --------
+        params : dict
+            Parámetros actualizados.
+        """
+        # Inicializar momentos si es la primera iteración
+        if self.m is None or self.v is None:
+            self.initialize_parameters(params)
+        
+        self.t += 1
+        lr_t = self.learning_rate * np.sqrt(1 - self.beta2**self.t) / (1 - self.beta1**self.t)
+        
+        updated_params = {}
+        
+        for key in params.keys():
+            # Actualizar estimaciones de primer y segundo momento
+            self.m[key] = self.beta1 * self.m[key] + (1 - self.beta1) * grads[key]
+            self.v[key] = self.beta2 * self.v[key] + (1 - self.beta2) * (grads[key] ** 2)
+            
+            # Calcular corrección de sesgo
+            m_hat = self.m[key] / (1 - self.beta1**self.t)
+            v_hat = self.v[key] / (1 - self.beta2**self.t)
+            
+            # Actualizar parámetros
+            updated_params[key] = params[key] - lr_t * m_hat / (np.sqrt(v_hat) + self.epsilon)
+        
+        return updated_params
+
+# Función de ejemplo para probar el optimizador Adam
+def test_adam_optimizer():
+    # Función de prueba: f(x, y) = (x-3)² + (y-2)²
+    def f(x, y):
+        return (x - 3)**2 + (y - 2)**2
+    
+    # Gradiente de la función
+    def grad_f(x, y):
+        return {'x': 2*(x-3), 'y': 2*(y-2)}
+    
+    # Punto inicial
+    params = {'x': 5.0, 'y': -3.0}
+    
+    # Crear optimizador
+    optimizer = AdamOptimizer(learning_rate=0.1)
+    
+    # Almacenar la trayectoria para visualización
+    path = [params.copy()]
+    
+    # Optimizar
+    for i in range(100):
+        # Calcular gradientes
+        grads = grad_f(params['x'], params['y'])
+        
+        # Actualizar parámetros
+        params = optimizer.update(params, grads)
+        
+        # Guardar la trayectoria
+        path.append(params.copy())
+        
+        # Imprimir progreso
+        if (i + 1) % 10 == 0:
+            print(f"Iteración {i+1}: x = {params['x']:.6f}, y = {params['y']:.6f}, f(x,y) = {f(params['x'], params['y']):.6f}")
+    
+    # Visualización
+    x = np.linspace(-1, 6, 100)
+    y = np.linspace(-2, 5, 100)
+    X, Y = np.meshgrid(x, y)
+    Z = f(X, Y)
+    
+    path_x = [p['x'] for p in path]
+    path_y = [p['y'] for p in path]
+    
+    plt.figure(figsize=(10, 8))
+    
+    # Graficar contornos de la función
+    contour = plt.contour(X, Y, Z, 20, cmap='viridis', alpha=0.6)
+    plt.colorbar(contour, label='f(x,y)')
+    
+    # Graficar la trayectoria de optimización
+    plt.plot(path_x, path_y, 'r.-', markersize=8, linewidth=1, label='Trayectoria')
+    plt.scatter(path_x[0], path_y[0], c='g', s=100, label='Inicio')
+    plt.scatter(path_x[-1], path_y[-1], c='r', s=100, label='Final')
+    plt.scatter(3, 2, c='black', marker='*', s=200, label='Mínimo (3, 2)')
+    
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.title('Optimización con Adam')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.show()
+
+# Ejecutar la prueba
+if __name__ == "__main__":
+    test_adam_optimizer()</code></pre>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3>3. Optimización Bayesiana con Optuna</h3>
+                <p>Aplicación de optimización bayesiana para ajustar hiperparámetros de un modelo de machine learning.</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copiar</button>
+                    <pre><code class="python">import optuna
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, f1_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+
+def objective(trial):
+    ""
+    Función objetivo para la optimización bayesiana.
+    
+    Parámetros:
+    -----------
+    trial : optuna.trial.Trial
+        Objeto de prueba que sugiere valores para los hiperparámetros.
+        
+    Retorna:
+    --------
+    score : float
+        Puntuación a maximizar (precisión en validación cruzada).
+    """
+    # Espacio de búsqueda de hiperparámetros
+    n_estimators = trial.suggest_int('n_estimators', 10, 200)
+    max_depth = trial.suggest_int('max_depth', 2, 32, log=True)
+    min_samples_split = trial.suggest_float('min_samples_split', 0.01, 1.0)
+    min_samples_leaf = trial.suggest_float('min_samples_leaf', 0.01, 0.5)
+    max_features = trial.suggest_categorical('max_features', ['sqrt', 'log2', None])
+    bootstrap = trial.suggest_categorical('bootstrap', [True, False])
+    
+    # Crear modelo con los hiperparámetros sugeridos
+    model = RandomForestClassifier(
+        n_estimators=n_estimators,
+        max_depth=max_depth,
+        min_samples_split=min_samples_split,
+        min_samples_leaf=min_samples_leaf,
+        max_features=max_features,
+        bootstrap=bootstrap,
+        random_state=42,
+        n_jobs=-1
+    )
+    
+    # Crear pipeline con escalado y el modelo
+    pipeline = Pipeline([
+        ('scaler', StandardScaler()),
+        ('classifier', model)
+    ])
+    
+    # Validación cruzada con 5 folds
+    score = cross_val_score(pipeline, X_train, y_train, cv=5, scoring='accuracy', n_jobs=-1)
+    
+    # Devolver la precisión media
+    return np.mean(score)
+
+def optimize_hyperparameters():
+    """
+    Optimiza los hiperparámetros del modelo usando Optuna.
+    
+    Retorna:
+    --------
+    best_params : dict
+        Mejores hiperparámetros encontrados.
+    """
+    # Crear estudio de optimización
+    study = optuna.create_study(direction='maximize')
+    
+    # Ejecutar la optimización
+    study.optimize(objective, n_trials=100, n_jobs=-1)
+    
+    # Mostrar resultados
+    print("Número de pruebas terminadas: ", len(study.trials))
+    print("Mejor prueba:")
+    trial = study.best_trial
+    
+    print("  Valor (precisión): ", trial.value)
+    print("  Parámetros: ")
+    for key, value in trial.params.items():
+        print(f"    {key}: {value}")
+    
+    return study.best_params
+
+# Cargar datos
+data = load_breast_cancer()
+X = data.data
+y = data.target
+
+# Dividir en conjuntos de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y
+)
+
+# Optimizar hiperparámetros
+print("Iniciando optimización de hiperparámetros...")
+best_params = optimize_hyperparameters()
+
+# Entrenar modelo final con los mejores parámetros
+print("\nEntrenando modelo final con los mejores parámetros...")
+final_model = Pipeline([
+    ('scaler', StandardScaler()),
+    ('classifier', RandomForestClassifier(
+        n_estimators=best_params['n_estimators'],
+        max_depth=best_params['max_depth'],
+        min_samples_split=best_params['min_samples_split'],
+        min_samples_leaf=best_params['min_samples_leaf'],
+        max_features=best_params['max_features'],
+        bootstrap=best_params['bootstrap'],
+        random_state=42,
+        n_jobs=-1
+    ))
+])
+
+# Entrenar en todo el conjunto de entrenamiento
+final_model.fit(X_train, y_train)
+
+# Evaluar en el conjunto de prueba
+y_pred = final_model.predict(X_test)
+test_accuracy = accuracy_score(y_test, y_pred)
+test_f1 = f1_score(y_test, y_pred, average='weighted')
+
+print("\nResultados en el conjunto de prueba:")
+print(f"Precisión: {test_accuracy:.4f}")
+print(f"F1-score: {test_f1:.4f}")
+
+# Visualización de la importancia de características
+if hasattr(final_model.named_steps['classifier'], 'feature_importances_'):
+    importances = final_model.named_steps['classifier'].feature_importances_
+    indices = np.argsort(importances)[::-1]
+    
+    plt.figure(figsize=(12, 8))
+    plt.title("Importancia de las características")
+    plt.bar(range(X_train.shape[1]), importances[indices], align="center")
+    plt.xticks(range(X_train.shape[1]), data.feature_names[indices], rotation=90)
+    plt.tight_layout()
+    plt.show()
+
+# Visualización del proceso de optimización
+if 'optuna' in locals():
+    # Obtener el estudio (si se ejecutó la optimización)
+    study = optuna.study.Study(study_name=study.study_name, storage=study._storage)
+    
+    # Gráfico de evolución de la precisión
+    fig = optuna.visualization.plot_optimization_history(study)
+    fig.update_layout(title='Historial de optimización', xaxis_title='Número de prueba', yaxis_title='Precisión')
+    fig.show()
+    
+    # Gráfico de importancia de hiperparámetros
+    fig = optuna.visualization.plot_param_importances(study)
+    fig.update_layout(title='Importancia de los hiperparámetros')
+    fig.show()
+    
+    # Gráfico de paralelas
+    fig = optuna.visualization.plot_parallel_coordinate(study, params=[
+        'n_estimators', 'max_depth', 'min_samples_split', 'min_samples_leaf', 'max_features'
+    ])
+    fig.update_layout(title='Coordenadas paralelas de los hiperparámetros')
+    fig.show()</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="exercises">
+            <h2><i class="fas fa-tasks"></i> Ejercicios</h2>
+            
+            <div class="exercise">
+                <h3>Ejercicio 1: Implementación de RMSprop</h3>
+                <p>Implementa el algoritmo RMSprop desde cero y compáralo con Adam y SGD en un problema de regresión lineal.</p>
+                <p>Tareas:</p>
+                <ol>
+                    <li>Implementa la función de pérdida del error cuadrático medio y su gradiente.</li>
+                    <li>Desarrolla el algoritmo RMSprop para optimizar los parámetros del modelo.</li>
+                    <li>Compara el rendimiento de RMSprop con Adam y SGD en términos de velocidad de convergencia y precisión final.</li>
+                    <li>Visualiza las trayectorias de optimización en el espacio de parámetros.</li>
+                </ol>
+                
+                <button class="solution-btn" onclick="toggleSolution('sol1')">Mostrar Solución</button>
+                <div id="sol1" class="solution">
+                    <pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_regression
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+
+class RMSpropOptimizer:
+    def __init__(self, learning_rate=0.01, rho=0.9, epsilon=1e-8):
+        """
+        Inicializa el optimizador RMSprop.
+        
+        Parámetros:
+        -----------
+        learning_rate : float
+            Tasa de aprendizaje.
+        rho : float
+            Factor de decaimiento para el promedio móvil del cuadrado del gradiente.
+        epsilon : float
+            Término de estabilidad numérica.
+        """
+        self.learning_rate = learning_rate
+        self.rho = rho
+        self.epsilon = epsilon
+        self.squared_grad_avg = None
+    
+    def initialize_parameters(self, params):
+        """Inicializa los promedios móviles de los gradientes al cuadrado."""
+        self.squared_grad_avg = {k: np.zeros_like(v) for k, v in params.items()}
+    
+    def update(self, params, grads):
+        """
+        Actualiza los parámetros usando el algoritmo RMSprop.
+        
+        Parámetros:
+        -----------
+        params : dict
+            Diccionario con los parámetros actuales del modelo.
+        grads : dict
+            Diccionario con los gradientes de la función de pérdida respecto a los parámetros.
+            
+        Retorna:
+        --------
+        params : dict
+            Parámetros actualizados.
+        """
+        # Inicializar promedios si es la primera iteración
+        if self.squared_grad_avg is None:
+            self.initialize_parameters(params)
+        
+        updated_params = {}
+        
+        for key in params.keys():
+            # Actualizar el promedio móvil del cuadrado del gradiente
+            self.squared_grad_avg[key] = (self.rho * self.squared_grad_avg[key] + 
+                                         (1 - self.rho) * grads[key]**2)
+            
+            # Actualizar parámetros
+            updated_params[key] = (params[key] - 
+                                 self.learning_rate * grads[key] / 
+                                 (np.sqrt(self.squared_grad_avg[key]) + self.epsilon))
+        
+        return updated_params
+
+# Generar datos de ejemplo
+np.random.seed(42)
+X, y = make_regression(n_samples=1000, n_features=1, noise=10, random_state=42)
+y = y.reshape(-1, 1)  # Convertir a vector columna
+
+# Estandarizar características
+y_scaler = StandardScaler()
+y = y_scaler.fit_transform(y)
+
+# Añadir término de sesgo
+X_b = np.c_[np.ones((X.shape[0], 1)), X]
+
+# Inicializar parámetros
+theta = np.random.randn(2, 1)
+
+# Hiperparámetros
+learning_rate = 0.1
+n_iterations = 100
+
+# Optimizadores
+optimizers = {
+    'SGD': None,  # Se implementará en el bucle
+    'RMSprop': RMSpropOptimizer(learning_rate=0.01, rho=0.9, epsilon=1e-8),
+    'Adam': None  # Usaremos la implementación de la actividad anterior
+}
+
+# Función de pérdida (MSE)
+def compute_loss(X, y, theta):
+    m = len(y)
+    predictions = X.dot(theta)
+    return (1/(2*m)) * np.sum((predictions - y)**2)
+
+# Gradiente de la función de pérdida
+def compute_gradients(X, y, theta):
+    m = len(y)
+    predictions = X.dot(theta)
+    errors = predictions - y
+    return {'theta': (1/m) * X.T.dot(errors)}
+
+# Entrenar con cada optimizador
+results = {}
+
+for name in optimizers:
+    print(f"\nEntrenando con {name}...")
+    
+    # Reinicializar parámetros
+    theta = np.random.randn(2, 1)
+    
+    # Almacenar pérdida en cada iteración
+    losses = []
+    thetas = [theta.copy()]
+    
+    # Bucle de entrenamiento
+    for iteration in range(n_iterations):
+        # Calcular gradientes
+        grads = compute_gradients(X_b, y, theta)
+        
+        # Actualizar parámetros según el optimizador
+        if name == 'SGD':
+            # SGD simple
+            theta = theta - learning_rate * grads['theta']
+        elif name == 'RMSprop':
+            # Usar nuestra implementación de RMSprop
+            params = {'theta': theta}
+            updated_params = optimizers[name].update(params, grads)
+            theta = updated_params['theta']
+        elif name == 'Adam':
+            # Usar Adam (se asume que está implementado)
+            params = {'theta': theta}
+            updated_params = adam_optimizer.update(params, grads)
+            theta = updated_params['theta']
+        
+        # Guardar pérdida y parámetros
+        loss = compute_loss(X_b, y, theta)
+        losses.append(loss)
+        thetas.append(theta.copy())
+        
+        # Imprimir progreso
+        if (iteration + 1) % 10 == 0:
+            print(f"  Iteración {iteration + 1}/{n_iterations}, Pérdida: {loss:.6f}")
+    
+    # Guardar resultados
+    results[name] = {
+        'losses': losses,
+        'thetas': thetas,
+        'final_theta': theta
+    }
+
+# Visualizar curvas de aprendizaje
+plt.figure(figsize=(12, 5))
+
+# Gráfico de curvas de aprendizaje
+plt.subplot(1, 2, 1)
+for name in results:
+    plt.plot(results[name]['losses'], label=name)
+
+plt.xlabel('Iteraciones')
+plt.ylabel('Pérdida (MSE/2)')
+plt.title('Curvas de Aprendizaje')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Gráfico de trayectorias en el espacio de parámetros
+plt.subplot(1, 2, 2)
+
+# Crear malla para las curvas de nivel
+theta0_vals = np.linspace(-3, 3, 100)
+theta1_vals = np.linspace(-3, 3, 100)
+Theta0, Theta1 = np.meshgrid(theta0_vals, theta1_vals)
+J_vals = np.zeros_like(Theta0)
+
+# Calcular pérdida para cada combinación de parámetros
+for i in range(Theta0.shape[0]):
+    for j in range(Theta0.shape[1]):
+        theta_ij = np.array([Theta0[i, j], Theta1[i, j]]).reshape(-1, 1)
+        J_vals[i, j] = compute_loss(X_b, y, theta_ij)
+
+# Graficar contornos de la función de pérdida
+plt.contour(Theta0, Theta1, J_vals, levels=np.logspace(-1, 3, 20), cmap='viridis', alpha=0.6)
+
+# Graficar trayectorias de optimización
+for name in results:
+    thetas = results[name]['thetas']
+    theta0 = [t[0] for t in thetas]
+    theta1 = [t[1] for t in thetas]
+    plt.plot(theta0, theta1, '.-', markersize=8, linewidth=1, label=name)
+    plt.scatter(theta0[0], theta1[0], c='g', s=100, marker='o')
+    plt.scatter(theta0[-1], theta1[-1], c='r', s=100, marker='*')
+
+plt.xlabel('θ₀ (sesgo)')
+plt.ylabel('θ₁ (pendiente)')
+plt.title('Trayectorias de Optimización')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
+
+# Mostrar resultados finales
+print("\nResultados finales:")
+for name in results:
+    theta = results[name]['final_theta']
+    final_loss = results[name]['losses'][-1]
+    print(f"{name}: θ₀ = {theta[0][0]:.6f}, θ₁ = {theta[1][0]:.6f}, Pérdida = {final_loss:.6f}")</code></pre>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h3>Ejercicio 2: Optimización de Redes Neuronales con Diferentes Optimizadores</h3>
+                <p>Compara el rendimiento de diferentes optimizadores en el entrenamiento de una red neuronal profunda para clasificación de imágenes (usando CIFAR-10 o MNIST).</p>
+                <p>Tareas:</p>
+                <ol>
+                    <li>Implementa una red neuronal convolucional (CNN) usando TensorFlow/Keras o PyTorch.</li>
+                    <li>Entrena la red con diferentes optimizadores (SGD, Momentum, RMSprop, Adam, etc.).</li>
+                    <li>Compara las curvas de aprendizaje, tiempo de entrenamiento y precisión en el conjunto de prueba.</li>
+                    <li>Experimenta con diferentes tasas de aprendizaje y programación de tasas de aprendizaje.</li>
+                    <li>Visualiza el proceso de entrenamiento y los resultados.</li>
+                </ol>
+                
+                <button class="solution-btn" onclick="toggleSolution('sol2')">Mostrar Solución</button>
+                <div id="sol2" class="solution">
+                    <pre><code class="python">import tensorflow as tf
+from tensorflow.keras.datasets import cifar10
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, BatchNormalization
+from tensorflow.keras.optimizers import SGD, RMSprop, Adam, Adagrad, Adadelta, Adamax, Nadam
+from tensorflow.keras.callbacks import LearningRateScheduler, EarlyStopping
+import matplotlib.pyplot as plt
+import numpy as np
+import time
+
+# Cargar y preparar los datos
+print("Cargando datos CIFAR-10...")
+(X_train, y_train), (X_test, y_test) = cifar10.load_data()
+
+# Normalizar los píxeles al rango [0, 1]
+X_train = X_train.astype('float32') / 255.0
+X_test = X_test.astype('float32') / 255.0
+
+# Convertir etiquetas a one-hot encoding
+y_train = tf.keras.utils.to_categorical(y_train, 10)
+y_test = tf.keras.utils.to_categorical(y_test, 10)
+
+# Función para crear el modelo
+def create_model(input_shape=(32, 32, 3)):
+    """Crea un modelo de red neuronal convolucional."""
+    model = Sequential([
+        # Bloque 1
+        Conv2D(32, (3, 3), activation='relu', padding='same', input_shape=input_shape),
+        BatchNormalization(),
+        Conv2D(32, (3, 3), activation='relu', padding='same'),
+        BatchNormalization(),
+        MaxPooling2D((2, 2)),
+        Dropout(0.2),
+        
+        # Bloque 2
+        Conv2D(64, (3, 3), activation='relu', padding='same'),
+        BatchNormalization(),
+        Conv2D(64, (3, 3), activation='relu', padding='same'),
+        BatchNormalization(),
+        MaxPooling2D((2, 2)),
+        Dropout(0.3),
+        
+        # Bloque 3
+        Conv2D(128, (3, 3), activation='relu', padding='same'),
+        BatchNormalization(),
+        Conv2D(128, (3, 3), activation='relu', padding='same'),
+        BatchNormalization(),
+        MaxPooling2D((2, 2)),
+        Dropout(0.4),
+        
+        # Clasificador
+        Flatten(),
+        Dense(128, activation='relu'),
+        BatchNormalization(),
+        Dropout(0.5),
+        Dense(10, activation='softmax')
+    ])
+    
+    return model
+
+# Programación de la tasa de aprendizaje
+def lr_schedule(epoch):
+    """Disminuye la tasa de aprendizaje por un factor de 0.1 cada 30 épocas."""
+    initial_lr = 0.001
+    drop = 0.1
+    epochs_drop = 30
+    lr = initial_lr * (drop ** (epoch // epochs_drop))
+    return lr
+
+# Callbacks
+early_stopping = EarlyStopping(monitor='val_accuracy', patience=15, restore_best_weights=True, verbose=1)
+lr_scheduler = LearningRateScheduler(lr_schedule)
+
+# Optimizadores a comparar
+optimizers = {
+    'SGD': SGD(learning_rate=0.01, momentum=0.9, nesterov=True),
+    'RMSprop': RMSprop(learning_rate=0.001, rho=0.9),
+    'Adam': Adam(learning_rate=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-7),
+    'Nadam': Nadam(learning_rate=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-7),
+    'Adamax': Adamax(learning_rate=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-7)
+}
+
+# Entrenar con cada optimizador
+results = {}
+epochs = 50
+batch_size = 128
+
+for name, optimizer in optimizers.items():
+    print(f"\n{'='*50}")
+    print(f"Entrenando con {name}...")
+    print(f"{'-'*50}")
+    
+    # Crear y compilar el modelo
+    model = create_model()
+    model.compile(optimizer=optimizer,
+                 loss='categorical_crossentropy',
+                 metrics=['accuracy'])
+    
+    # Entrenar el modelo
+    start_time = time.time()
+    
+    history = model.fit(
+        X_train, y_train,
+        batch_size=batch_size,
+        epochs=epochs,
+        validation_split=0.2,
+        callbacks=[early_stopping, lr_scheduler],
+        verbose=1
+    )
+    
+    training_time = time.time() - start_time
+    
+    # Evaluar en el conjunto de prueba
+    test_loss, test_accuracy = model.evaluate(X_test, y_test, verbose=0)
+    
+    # Guardar resultados
+    results[name] = {
+        'history': history.history,
+        'training_time': training_time,
+        'test_accuracy': test_accuracy,
+        'test_loss': test_loss
+    }
+    
+    print(f"\n{name} - Tiempo de entrenamiento: {training_time:.2f} segundos")
+    print(f"{name} - Precisión en prueba: {test_accuracy:.4f}")
+    print(f"{name} - Pérdida en prueba: {test_loss:.4f}")
+
+# Visualizar resultados
+plt.figure(figsize=(15, 10))
+
+# Gráfico de precisión
+plt.subplot(2, 2, 1)
+for name in results:
+    plt.plot(results[name]['history']['accuracy'], '--', label=f'{name} (entrenamiento)')
+    plt.plot(results[name]['history']['val_accuracy'], '-', label=f'{name} (validación)')
+
+plt.title('Precisión del modelo por optimizador')
+plt.ylabel('Precisión')
+plt.xlabel('Época')
+plt.legend(loc='lower right', ncol=2)
+plt.grid(True, alpha=0.3)
+
+# Gráfico de pérdida
+plt.subplot(2, 2, 2)
+for name in results:
+    plt.plot(results[name]['history']['loss'], '--', label=f'{name} (entrenamiento)')
+    plt.plot(results[name]['history']['val_loss'], '-', label=f'{name} (validación)')
+
+plt.title('Pérdida del modelo por optimizador')
+plt.ylabel('Pérdida')
+plt.xlabel('Época')
+plt.legend(loc='upper right', ncol=2)
+plt.grid(True, alpha=0.3)
+
+# Gráfico de barras de precisión final
+plt.subplot(2, 2, 3)
+names = list(results.keys())
+test_accs = [results[name]['test_accuracy'] for name in names]
+training_times = [results[name]['training_time'] for name in names]
+
+plt.bar(names, test_accs, color='skyblue')
+plt.title('Precisión en el conjunto de prueba')
+plt.ylabel('Precisión')
+plt.xticks(rotation=45)
+plt.grid(True, axis='y', alpha=0.3)
+
+# Gráfico de barras de tiempo de entrenamiento
+plt.subplot(2, 2, 4)
+plt.bar(names, training_times, color='lightgreen')
+plt.title('Tiempo de entrenamiento (segundos)')
+plt.ylabel('Segundos')
+plt.xticks(rotation=45)
+plt.grid(True, axis='y', alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Mostrar resumen de resultados
+print("\nResumen de resultados:")
+print("-" * 50)
+print(f"{'Optimizador':<10} {'Precisión':>10} {'Pérdida':>10} {'Tiempo (s)':>12}")
+print("-" * 50)
+
+for name in results:
+    print(f"{name:<10} {results[name]['test_accuracy']:>10.4f} {results[name]['test_loss']:>10.4f} {results[name]['training_time']:>10.2f}")
+
+print("-" * 50)
+
+# Análisis de resultados
+print("\nAnálisis de resultados:")
+print("1. Adam y sus variantes (Adamax, Nadam) tienden a converger más rápido y alcanzar un buen rendimiento.")
+print("2. RMSprop también muestra un buen rendimiento, especialmente en términos de estabilidad.")
+print("3. SGD con momentum puede alcanzar un rendimiento similar pero requiere más tiempo de entrenamiento y ajuste de hiperparámetros.")
+print("4. La elección del optimizador puede depender del problema específico y los recursos computacionales disponibles.")</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h2><i class="fas fa-clipboard-list"></i> Resumen</h2>
+            <ul>
+                <li>Los <strong>métodos de optimización estocástica</strong> como SGD, RMSprop y Adam son fundamentales para el entrenamiento eficiente de modelos de aprendizaje profundo.</li>
+                <li>Los <strong>optimizadores adaptativos</strong> (Adam, RMSprop, etc.) ajustan automáticamente las tasas de aprendizaje por parámetro, lo que puede llevar a una convergencia más rápida y estable.</li>
+                <li>La <strong>optimización bayesiana</strong> es una técnica poderosa para el ajuste de hiperparámetros, especialmente cuando la evaluación de la función objetivo es costosa.</li>
+                <li>La <strong>programación de la tasa de aprendizaje</strong> puede mejorar significativamente el rendimiento del entrenamiento, especialmente para optimizadores como SGD.</li>
+                <li>La elección del optimizador puede tener un impacto significativo en el rendimiento del modelo, el tiempo de entrenamiento y la facilidad de ajuste de hiperparámetros.</li>
+                <li>Las técnicas avanzadas de optimización, como la optimización de segundo orden y los métodos de gradiente estocástico, permiten abordar problemas de optimización complejos en aprendizaje automático.</li>
+            </ul>
+        </section>
+
+        <section class="resources">
+            <h2><i class="fas fa-book"></i> Recursos Adicionales</h2>
+            <ul>
+                <li><a href="https://ruder.io/optimizing-gradient-descent/" target="_blank" rel="noopener noreferrer">An overview of gradient descent optimization algorithms</a> - Artículo de Sebastian Ruder</li>
+                <li><a href="https://www.deeplearningbook.org/" target="_blank" rel="noopener noreferrer">Deep Learning Book</a> - Capítulo sobre optimización</li>
+                <li><a href="https://www.tensorflow.org/api_docs/python/tf/keras/optimizers" target="_blank" rel="noopener noreferrer">Documentación de optimizadores en TensorFlow/Keras</a></li>
+                <li><a href="https://optuna.org/" target="_blank" rel="noopener noreferrer">Optuna</a> - Herramienta para optimización de hiperparámetros</li>
+                <li><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU" target="_blank" rel="noopener noreferrer">Stanford CS330: Multi-Task and Meta-Learning</a> - Incluye contenido avanzado sobre optimización</li>
+            </ul>
+        </section>
+
+        <section class="homework">
+            <h2><i class="fas fa-home"></i> Tarea</h2>
+            <ol>
+                <li><strong>Implementación:</strong> Extiende la implementación del optimizador Adam para incluir corrección de sesgo (bias correction) y compara su rendimiento con y sin esta corrección.</li>
+                <li><strong>Análisis:</strong> Investiga y explica la diferencia entre optimizadores de primer orden (SGD, Momentum) y de segundo orden (método de Newton, BFGS). ¿Cuáles son las ventajas y desventajas de cada uno?</li>
+                <li><strong>Aplicación:</strong> Aplica la optimización bayesiana para ajustar los hiperparámetros de un modelo de aprendizaje automático en un conjunto de datos de tu elección. Compara los resultados con una búsqueda aleatoria o en cuadrícula.</li>
+                <li><strong>Investigación:</strong> Investiga sobre optimización distribuida en aprendizaje profundo. ¿Cómo se pueden paralelizar los algoritmos de optimización para acelerar el entrenamiento en múltiples GPUs o nodos de cómputo?</li>
+            </ol>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION2-12.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 2.12 Optimización (I)</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION2-14.html" class="btn">Siguiente Sesión: 2.14 Aplicaciones prácticas<i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Función para copiar código al portapapeles
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling.querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Cambiar el ícono temporalmente para mostrar que se copió
+            const icon = button.querySelector('i');
+            const originalClass = icon.className;
+            icon.className = 'fas fa-check';
+            
+            setTimeout(() => {
+                icon.className = originalClass;
+            }, 2000);
+        }
+        
+        // Función para mostrar/ocultar soluciones
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            if (solution.style.display === 'block') {
+                solution.style.display = 'none';
+                event.target.textContent = 'Mostrar Solución';
+            } else {
+                solution.style.display = 'block';
+                event.target.textContent = 'Ocultar Solución';
+            }
+        }
+    </script>
+</body>
+</html>
