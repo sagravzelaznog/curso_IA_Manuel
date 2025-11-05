@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.4: Regresión Logística - Curso de Inteligencia Artificial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos específicos para la sesión 3.4 */
+        .sigmoid-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        #sigmoid-plot {
+            width: 100%;
+            height: 400px;
+            margin: 20px 0;
+        }
+        
+        .interactive-demo {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .slider-container {
+            margin: 15px 0;
+        }
+        
+        .slider-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .coefficient-slider {
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .confusion-matrix {
+            display: inline-block;
+            margin: 20px 0;
+            border-collapse: collapse;
+        }
+        
+        .confusion-matrix th, .confusion-matrix td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .confusion-matrix th {
+            background-color: #f8f9fa;
+        }
+        
+        .true-positive {
+            background-color: rgba(40, 167, 69, 0.2);
+        }
+        
+        .false-positive {
+            background-color: rgba(255, 193, 7, 0.2);
+        }
+        
+        .false-negative {
+            background-color: rgba(23, 162, 184, 0.2);
+        }
+        
+        .true-negative {
+            background-color: rgba(220, 53, 69, 0.2);
+        }
+        
+        .decision-boundary {
+            width: 100%;
+            height: 400px;
+            margin: 20px 0;
+        }
+        
+        .exercise {
+            background-color: #e8f4fc;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .exercise h4 {
+            margin-top: 0;
+            color: #2980b9;
+        }
+        
+        .hint-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin: 5px 0;
+        }
+        
+        .hint {
+            display: none;
+            background-color: #f0f8ff;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 3px solid #3498db;
+        }
+        
+        .hint.visible {
+            display: block;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .comparison-table th {
+            background-color: #f8f9fa;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>3.4: Regresión Logística</h1>
+            <p>Curso de Inteligencia Artificial - Módulo 3: Machine Learning</p>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section id="introduccion">
+            <h2>Introducción a la Regresión Logística</h2>
+            <p>La regresión logística es un algoritmo de aprendizaje supervisado utilizado para problemas de clasificación, especialmente para clasificación binaria. A pesar de su nombre, es un algoritmo de clasificación en lugar de regresión. Su nombre proviene de la función logística (también llamada función sigmoide) que utiliza en su núcleo.</p>
+            
+            <div class="sigmoid-container">
+                <h3>Función Sigmoide</h3>
+                <p>La función sigmoide mapea cualquier valor real al rango (0, 1), lo que la hace útil para predecir probabilidades:</p>
+                <p>σ(z) = 1 / (1 + e<sup>-z</sup>)</p>
+                <div id="sigmoid-plot"></div>
+                <p>Donde z = β₀ + β₁x₁ + β₂x₂ + ... + βₙxₙ</p>
+            </div>
+            
+            <p>La regresión logística modela la probabilidad de que una instancia pertenezca a una clase particular. Si la probabilidad estimada es mayor que 0.5, el modelo predice que la instancia pertenece a la clase positiva (etiqueta 1), de lo contrario, predice que pertenece a la clase negativa (etiqueta 0).</p>
+        </section>
+        
+        <section id="aplicaciones">
+            <h2>Aplicaciones de la Regresión Logística</h2>
+            <p>La regresión logística se utiliza ampliamente en diversas áreas debido a su simplicidad y facilidad de interpretación:</p>
+            
+            <div class="example-container">
+                <div class="example-box">
+                    <h4>1. Diagnóstico Médico</h4>
+                    <p>Predecir si un paciente tiene una enfermedad (sí/no) basándose en síntomas y pruebas médicas.</p>
+                    <p><strong>Ejemplo:</strong> Predecir si un tumor es maligno o benigno basado en características como tamaño, forma, etc.</p>
+                </div>
+                
+                <div class="example-box">
+                    <h4>2. Marketing Digital</h4>
+                    <p>Predecir si un usuario hará clic en un anuncio o realizará una compra.</p>
+                    <p><strong>Ejemplo:</strong> Predecir la probabilidad de que un usuario compre un producto basado en su historial de navegación.</p>
+                </div>
+                
+                <div class="example-box">
+                    <h4>3. Análisis de Riesgo Crediticio</h4>
+                    <p>Evaluar la probabilidad de que un solicitante de préstamo incumpla con los pagos.</p>
+                    <p><strong>Ejemplo:</strong> Clasificar a los solicitantes en "bajo riesgo" o "alto riesgo".</p>
+                </div>
+                
+                <div class="example-box">
+                    <h4>4. Detección de Spam</h4>
+                    <p>Clasificar correos electrónicos como spam o no spam.</p>
+                    <p><strong>Ejemplo:</strong> Analizar el contenido del correo electrónico para determinar si es probable que sea spam.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="implementacion">
+            <h2>Implementación en Python</h2>
+            <p>A continuación, veremos cómo implementar la regresión logística en Python utilizando las bibliotecas más comunes como NumPy, Pandas, Matplotlib y Scikit-learn.</p>
+            
+            <h3>1. Regresión Logística con Scikit-learn</h3>
+            <pre><code class="language-python">import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+from sklearn.preprocessing import StandardScaler
+
+# Cargar el conjunto de datos de ejemplo (cáncer de seno de Wisconsin)
+from sklearn.datasets import load_breast_cancer
+data = load_breast_cancer()
+X = pd.DataFrame(data.data, columns=data.feature_names)
+y = data.target
+
+# Dividir los datos en conjuntos de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Estandarizar las características (importante para la regresión logística)
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Crear y entrenar el modelo de regresión logística
+model = LogisticRegression(random_state=42, max_iter=1000)
+model.fit(X_train_scaled, y_train)
+
+# Hacer predicciones
+y_pred = model.predict(X_test_scaled)
+y_pred_proba = model.predict_proba(X_test_scaled)[:, 1]  # Probabilidades para la clase positiva
+
+# Evaluar el modelo
+accuracy = accuracy_score(y_test, y_pred)
+conf_matrix = confusion_matrix(y_test, y_pred)
+class_report = classification_report(y_test, y_pred)
+
+print(f"Precisión del modelo: {accuracy:.4f}")
+print("\nMatriz de confusión:")
+print(conf_matrix)
+print("\nReporte de clasificación:")
+print(class_report)
+
+# Visualizar la importancia de las características
+feature_importance = pd.DataFrame({
+    'Característica': X.columns,
+    'Importancia': np.abs(model.coef_[0])
+}).sort_values('Importancia', ascending=False)
+
+plt.figure(figsize=(12, 6))
+plt.barh(feature_importance['Característica'][:10], feature_importance['Importancia'][:10])
+plt.xlabel('Importancia')
+plt.title('Top 10 Características más Importantes')
+plt.tight_layout()
+plt.show()</code></pre>
+            
+            <h3>2. Visualización de la Frontera de Decisión</h3>
+            <p>Para visualizar la frontera de decisión, usaremos un conjunto de datos con dos características:</p>
+            
+            <pre><code class="language-python">from sklearn.datasets import make_classification
+from mlxtend.plotting import plot_decision_regions
+
+# Generar datos de ejemplo con 2 características
+X, y = make_classification(
+    n_samples=300, 
+    n_features=2, 
+    n_redundant=0,
+    n_informative=2,
+    random_state=42,
+    n_clusters_per_class=1
+)
+
+# Dividir los datos
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Estandarizar
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Entrenar el modelo
+model = LogisticRegression()
+model.fit(X_train_scaled, y_train)
+
+# Visualizar la frontera de decisión
+plt.figure(figsize=(10, 6))
+plot_decision_regions(X_train_scaled, y_train, clf=model, legend=2)
+plt.xlabel('Característica 1 (Estandarizada)')
+plt.ylabel('Característica 2 (Estandarizada)')
+plt.title('Frontera de Decisión - Regresión Logística')
+plt.show()</code></pre>
+        </section>
+        
+        <section id="evaluacion">
+            <h2>Evaluación del Modelo de Clasificación</h2>
+            <p>La evaluación de un modelo de clasificación es diferente a la de un modelo de regresión. Aquí están las métricas más importantes:</p>
+            
+            <h3>1. Matriz de Confusión</h3>
+            <div class="confusion-matrix">
+                <table>
+                    <tr>
+                        <th></th>
+                        <th colspan="2">Predicho</th>
+                    </tr>
+                    <tr>
+                        <th>Real</th>
+                        <th class="true-positive">Positivo</th>
+                        <th class="false-negative">Negativo</th>
+                    </tr>
+                    <tr>
+                        <td class="true-positive">Positivo</td>
+                        <td class="true-positive">Verdaderos Positivos (VP)</td>
+                        <td class="false-negative">Falsos Negativos (FN)</td>
+                    </tr>
+                    <tr>
+                        <td class="false-positive">Negativo</td>
+                        <td class="false-positive">Falsos Positivos (FP)</td>
+                        <td class="true-negative">Verdaderos Negativos (VN)</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <h3>2. Métricas Principales</h3>
+            <table class="comparison-table">
+                <tr>
+                    <th>Métrica</th>
+                    <th>Fórmula</th>
+                    <th>Interpretación</th>
+                </tr>
+                <tr>
+                    <td>Exactitud (Accuracy)</td>
+                    <td>(VP + VN) / (VP + VN + FP + FN)</td>
+                    <td>Proporción de predicciones correctas sobre el total</td>
+                </tr>
+                <tr>
+                    <td>Precisión</td>
+                    <td>VP / (VP + FP)</td>
+                    <td>De los predichos como positivos, cuántos lo son realmente</td>
+                </tr>
+                <tr>
+                    <td>Sensibilidad (Recall)</td>
+                    <td>VP / (VP + FN)</td>
+                    <td>De los positivos reales, cuántos detectó el modelo</td>
+                </tr>
+                <tr>
+                    <td>F1-Score</td>
+                    <td>2 * (Precisión * Recall) / (Precisión + Recall)</td>
+                    <td>Media armónica entre precisión y sensibilidad</td>
+                </tr>
+                <tr>
+                    <td>ROC-AUC</td>
+                    <td>Área bajo la curva ROC</td>
+                    <td>Capacidad del modelo para distinguir entre clases (1 = perfecto, 0.5 = aleatorio)</td>
+                </tr>
+            </table>
+            
+            <h3>3. Curva ROC y Área Bajo la Curva (AUC)</h3>
+            <pre><code class="language-python">from sklearn.metrics import roc_curve, roc_auc_score
+import matplotlib.pyplot as plt
+
+# Calcular las tasas de falsos positivos y verdaderos positivos
+fpr, tpr, thresholds = roc_curve(y_test, y_pred_proba)
+roc_auc = roc_auc_score(y_test, y_pred_proba)
+
+# Graficar la curva ROC
+plt.figure(figsize=(10, 6))
+plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('Tasa de Falsos Positivos (1 - Especificidad)')
+plt.ylabel('Tasa de Verdaderos Positivos (Sensibilidad)')
+plt.title('Curva ROC - Regresión Logística')
+plt.legend(loc="lower right")
+plt.grid(True)
+plt.show()</code></pre>
+        </section>
+        
+        <section id="regularizacion">
+            <h2>Regularización en Regresión Logística</h2>
+            <p>La regularización es crucial para evitar el sobreajuste en la regresión logística. Los tipos más comunes son:</p>
+            
+            <h3>1. Regularización L1 (Lasso)</h3>
+            <ul>
+                <li>Agrega una penalización igual al valor absoluto de la magnitud de los coeficientes</li>
+                <li>Puede reducir algunos coeficientes a exactamente cero, lo que efectivamente realiza selección de características</li>
+                <li>Útil cuando hay muchas características y se sospecha que solo algunas son importantes</li>
+            </ul>
+            
+            <h3>2. Regularización L2 (Ridge)</h3>
+            <ul>
+                <li>Agrega una penalización igual al cuadrado de la magnitud de los coeficientes</li>
+                <li>Tiende a reducir el tamaño de todos los coeficientes pero rara vez los reduce exactamente a cero</li>
+                <li>Funciona bien cuando hay multicolinealidad en los datos</li>
+            </ul>
+            
+            <h3>3. Elastic Net</h3>
+            <p>Combina las penalizaciones L1 y L2, lo que puede dar lugar a un modelo con las ventajas de ambas.</p>
+            
+            <h3>Ejemplo de Uso en Scikit-learn</h3>
+            <pre><code class="language-python">from sklearn.linear_model import LogisticRegressionCV
+
+# Regularización L1 (Lasso)
+l1_model = LogisticRegressionCV(
+    penalty='l1',
+    solver='saga',  # 'saga' es necesario para L1
+    cv=5,
+    max_iter=1000,
+    random_state=42
+)
+l1_model.fit(X_train_scaled, y_train)
+
+# Regularización L2 (Ridge) - este es el valor por defecto
+l2_model = LogisticRegressionCV(
+    penalty='l2',
+    cv=5,
+    max_iter=1000,
+    random_state=42
+)
+l2_model.fit(X_train_scaled, y_train)
+
+# Elastic Net (combinación de L1 y L2)
+elastic_net_model = LogisticressionCV(
+    penalty='elasticnet',
+    solver='saga',
+    l1_ratios=[0.1, 0.5, 0.7, 0.9, 0.95, 1],
+    cv=5,
+    max_iter=1000,
+    random_state=42
+)
+elastic_net_model.fit(X_train_scaled, y_train)
+
+# Comparar los resultados
+print(f"Precisión L1: {l1_model.score(X_test_scaled, y_test):.4f}")
+print(f"Precisión L2: {l2_model.score(X_test_scaled, y_test):.4f}")
+print(f"Precisión Elastic Net: {elastic_net_model.score(X_test_scaled, y_test):.4f}")
+
+# Ver número de características seleccionadas (coeficientes no cero)
+print(f"\nNúmero de características seleccionadas (L1): {np.sum(l1_model.coef_ != 0)}")
+print(f"Número de características seleccionadas (L2): {np.sum(l2_model.coef_ != 0)}")
+print(f"Número de características seleccionadas (Elastic Net): {np.sum(elastic_net_model.coef_ != 0)}")</code></pre>
+        </section>
+        
+        <section id="ejercicios">
+            <h2>Ejercicios Prácticos</h2>
+            
+            <div class="exercise">
+                <h4>Ejercicio 1: Clasificación Binaria con Regresión Logística</h4>
+                <p>Utiliza el conjunto de datos de cáncer de seno de Wisconsin (disponible en scikit-learn) para:</p>
+                <ol>
+                    <li>Cargar y explorar los datos</li>
+                    <li>Dividir en conjuntos de entrenamiento y prueba</li>
+                    <li>Estandarizar las características</li>
+                    <li>Entrenar un modelo de regresión logística</li>
+                    <li>Evaluar el modelo usando exactitud, matriz de confusión y reporte de clasificación</li>
+                    <li>Identificar las características más importantes</li>
+                </ol>
+                
+                <button class="hint-button" onclick="toggleHint('hint1')">Mostrar pista</button>
+                <div id="hint1" class="hint">
+                    <p>Puedes cargar el conjunto de datos usando <code>from sklearn.datasets import load_breast_cancer</code> y acceder a las características con <code>data.data</code> y las etiquetas con <code>data.target</code>.</p>
+                </div>
+                
+                <button class="hint-button" onclick="toggleHint('solution1')">Mostrar solución</button>
+                <div id="solution1" class="hint">
+                    <pre><code class="language-python">from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+import pandas as pd
+import numpy as np
+
+# 1. Cargar y explorar los datos
+data = load_breast_cancer()
+X = pd.DataFrame(data.data, columns=data.feature_names)
+y = data.target
+
+print("Forma de X:", X.shape)
+print("Forma de y:", y.shape)
+print("\nPrimeras filas de X:")
+print(X.head())
+print("\nDistribución de clases:", np.bincount(y))
+
+# 2. Dividir en conjuntos de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
+# 3. Estandarizar las características
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# 4. Crear y entrenar el modelo
+model = LogisticRegression(random_state=42, max_iter=1000)
+model.fit(X_train_scaled, y_train)
+
+# 5. Hacer predicciones y evaluar el modelo
+y_pred = model.predict(X_test_scaled)
+y_pred_proba = model.predict_proba(X_test_scaled)[:, 1]
+
+print("\nExactitud:", accuracy_score(y_test, y_pred))
+print("\nMatriz de confusión:")
+print(confusion_matrix(y_test, y_pred))
+print("\nReporte de clasificación:")
+print(classification_report(y_test, y_pred))
+
+# 6. Identificar características importantes
+feature_importance = pd.DataFrame({
+    'Característica': X.columns,
+    'Coeficiente': model.coef_[0],
+    'Importancia_Absoluta': np.abs(model.coef_[0])
+}).sort_values('Importancia_Absoluta', ascending=False)
+
+print("\nTop 10 características más importantes:")
+print(feature_importance.head(10))</code></pre>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4>Ejercicio 2: Ajuste de Hiperparámetros</h4>
+                <p>Utiliza GridSearchCV para encontrar los mejores hiperparámetros para un modelo de regresión logística en el mismo conjunto de datos. Considera:</p>
+                <ul>
+                    <li>Diferentes valores de C (inverso de la fuerza de regularización)</li>
+                    <li>Diferentes tipos de regularización (L1, L2, Elastic-Net)</li>
+                    <li>Diferentes solvers (liblinear, saga, etc.)</li>
+                </ul>
+                
+                <button class="hint-button" onclick="toggleHint('hint2')">Mostrar pista</button>
+                <div id="hint2" class="hint">
+                    <p>Recuerda que no todos los solvers son compatibles con todos los tipos de regularización. Por ejemplo, 'newton-cg', 'lbfgs' y 'sag' solo admiten regularización L2.</p>
+                </div>
+                
+                <button class="hint-button" onclick="toggleHint('solution2')">Mostrar solución</button>
+                <div id="solution2" class="hint">
+                    <pre><code class="language-python">from sklearn.model_selection import GridSearchCV
+from sklearn.pipeline import Pipeline
+
+# Crear un pipeline que primero escala los datos y luego aplica la regresión logística
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),
+    ('classifier', LogisticRegression(random_state=42, max_iter=1000))
+])
+
+# Definir la cuadrícula de parámetros para la búsqueda
+param_grid = [
+    {
+        'classifier__penalty': ['l1', 'l2'],
+        'classifier__C': [0.001, 0.01, 0.1, 1, 10, 100],
+        'classifier__solver': ['liblinear', 'saga']
+    },
+    {
+        'classifier__penalty': ['l2'],
+        'classifier__C': [0.001, 0.01, 0.1, 1, 10, 100],
+        'classifier__solver': ['newton-cg', 'lbfgs', 'sag']
+    },
+    {
+        'classifier__penalty': ['elasticnet'],
+        'classifier__C': [0.1, 1, 10],
+        'classifier__l1_ratio': [0.3, 0.5, 0.7],
+        'classifier__solver': ['saga']
+    }
+]
+
+# Configurar la búsqueda en cuadrícula con validación cruzada
+grid_search = GridSearchCV(
+    estimator=pipeline,
+    param_grid=param_grid,
+    cv=5,
+    scoring='accuracy',
+    n_jobs=-1,
+    verbose=1
+)
+
+# Realizar la búsqueda en la cuadrícula
+grid_search.fit(X_train, y_train)
+
+# Mostrar los mejores parámetros
+print("Mejores parámetros:", grid_search.best_params_)
+print("Mejor puntuación de validación cruzada: {:.4f}".format(grid_search.best_score_))
+
+# Evaluar el mejor modelo en el conjunto de prueba
+best_model = grid_search.best_estimator_
+test_accuracy = best_model.score(X_test, y_test)
+print("\nExactitud en el conjunto de prueba: {:.4f}".format(test_accuracy))
+
+# Hacer predicciones con el mejor modelo
+y_pred = best_model.predict(X_test)
+print("\nReporte de clasificación en el conjunto de prueba:")
+print(classification_report(y_test, y_pred))
+
+# Si el mejor modelo tiene coeficientes, mostrarlos
+if hasattr(best_model.named_steps['classifier'], 'coef_'):
+    feature_importance = pd.DataFrame({
+        'Característica': X.columns,
+        'Coeficiente': best_model.named_steps['classifier'].coef_[0],
+        'Importancia_Absoluta': np.abs(best_model.named_steps['classifier'].coef_[0])
+    }).sort_values('Importancia_Absoluta', ascending=False)
+    
+    print("\nTop 10 características más importantes:")
+    print(feature_importance.head(10))</code></pre>
+                </div>
+            </div>
+        </section>
+        
+        <section id="conclusion">
+            <h2>Conclusión</h2>
+            <p>La regresión logística es un algoritmo fundamental en el aprendizaje automático para problemas de clasificación binaria. A lo largo de esta sesión, hemos cubierto:</p>
+            <ul>
+                <li>Los conceptos básicos de la regresión logística y la función sigmoide</li>
+                <li>Casos de uso comunes en diversas industrias</li>
+                <li>Implementación práctica en Python usando Scikit-learn</li>
+                <li>Métricas para evaluar modelos de clasificación</li>
+                <li>Técnicas de regularización para mejorar el rendimiento</li>
+                <li>Ajuste de hiperparámetros usando GridSearchCV</li>
+            </ul>
+            
+            <p>La regresión logística es un modelo poderoso y versátil que, a pesar de su relativa simplicidad, puede ofrecer un excelente rendimiento en una amplia gama de problemas de clasificación binaria. Su interpretabilidad la hace particularmente valiosa en dominios donde entender las predicciones del modelo es tan importante como su precisión.</p>
+            
+            <div class="alert alert-info">
+                <h4>Próximos pasos</h4>
+                <p>En la próxima sesión, exploraremos los <strong>K-vecinos más cercanos (K-NN)</strong>, un algoritmo de aprendizaje basado en instancias que puede utilizarse tanto para clasificación como para regresión. Aprenderemos cómo funciona este algoritmo, sus ventajas y desventajas, y cómo implementarlo de manera efectiva.</p>
+            </div>
+        </section>
+        
+        <section id="recursos">
+            <h2>Recursos Adicionales</h2>
+            <ul>
+                <li><a href="https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression" target="_blank" rel="noopener noreferrer">Documentación de Scikit-learn sobre Regresión Logística</a></li>
+                <li><a href="https://towardsdatascience.com/understanding-logistic-regression-9b02c6501bd0" target="_blank" rel="noopener noreferrer">Artículo detallado sobre regresión logística</a></li>
+                <li><a href="https://www.kaggle.com/code/rtatman/regression-challenge-day-6" target="_blank" rel="noopener noreferrer">Tutorial práctico de regresión logística en Kaggle</a></li>
+                <li><a href="https://www.youtube.com/watch?v=yIYKR4sgzI8" target="_blank" rel="noopener noreferrer">Video tutorial de StatQuest sobre regresión logística</a></li>
+            </ul>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION3-3.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 3.3 Regresión Lineal</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION3-5.html" class="btn">Siguiente Sesión: 3.5 K-vecinos más cercanos <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Código para la visualización interactiva de la función sigmoide
+        document.addEventListener('DOMContentLoaded', function() {
+            // Datos para la función sigmoide
+            const xValues = [];
+            const yValues = [];
+            
+            // Generar puntos para la curva sigmoide
+            for (let x = -10; x <= 10; x += 0.1) {
+                xValues.push(x);
+                yValues.push(1 / (1 + Math.exp(-x)));
+            }
+            
+            // Configuración del gráfico
+            const trace = {
+                x: xValues,
+                y: yValues,
+                type: 'scatter',
+                mode: 'lines',
+                name: 'σ(z) = 1 / (1 + e⁻ᶻ)',
+                line: {color: '#3498db', width: 3}
+            };
+            
+            const layout = {
+                title: 'Función Sigmoide',
+                xaxis: {title: 'z'},
+                yaxis: {title: 'σ(z)', range: [-0.1, 1.1]},
+                showlegend: true,
+                shapes: [
+                    // Línea horizontal en y=0.5 (umbral de decisión)
+                    {
+                        type: 'line',
+                        x0: -10,
+                        y0: 0.5,
+                        x1: 10,
+                        y1: 0.5,
+                        line: {
+                            color: 'red',
+                            width: 1,
+                            dash: 'dash'
+                        }
+                    },
+                    // Línea vertical en x=0
+                    {
+                        type: 'line',
+                        x0: 0,
+                        y0: -0.1,
+                        x1: 0,
+                        y1: 1.1,
+                        line: {
+                            color: 'gray',
+                            width: 1,
+                            dash: 'dot'
+                        }
+                    }
+                ],
+                annotations: [
+                    {
+                        x: 0,
+                        y: 1.05,
+                        xref: 'x',
+                        yref: 'paper',
+                        text: 'Umbral de decisión (0.5)',
+                        showarrow: false,
+                        font: {color: 'red'}
+                    },
+                    {
+                        x: 0.5,
+                        y: 0.55,
+                        xref: 'paper',
+                        yref: 'y',
+                        text: 'Clase 1 (y=1)',
+                        showarrow: false,
+                        font: {color: 'green'}
+                    },
+                    {
+                        x: 0.5,
+                        y: 0.45,
+                        xref: 'paper',
+                        yref: 'y',
+                        text: 'Clase 0 (y=0)',
+                        showarrow: false,
+                        font: {color: 'blue'}
+                    }
+                ]
+            };
+            
+            // Crear el gráfico
+            Plotly.newPlot('sigmoid-plot', [trace], layout);
+            
+            // Código para la visualización interactiva de la frontera de decisión
+            // Este es un ejemplo simplificado; en la práctica, podrías usar una biblioteca como ml.js
+            // o implementar la lógica de regresión logística en JavaScript para actualizaciones en tiempo real
+        });
+        
+        // Función para mostrar/ocultar pistas y soluciones
+        function toggleHint(elementId) {
+            const element = document.getElementById(elementId);
+            element.classList.toggle('visible');
+            
+            // Desplazarse suavemente al elemento
+            element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+</body>
+</html>

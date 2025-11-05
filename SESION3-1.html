@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.1: Introducción a ML - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="script.js"></script>
+    <style>
+        .ml-types {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .ml-card {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            min-width: 300px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .ml-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .ml-card h3 {
+            color: #2c5282;
+            border-bottom: 2px solid #4299e1;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .ml-card ul {
+            padding-left: 20px;
+        }
+        .ml-card li {
+            margin-bottom: 8px;
+        }
+        .ml-workflow {
+            background: #f8fafc;
+            border-left: 4px solid #4299e1;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .ml-workflow h4 {
+            margin-top: 0;
+            color: #2c5282;
+        }
+        .ml-workflow ol {
+            padding-left: 20px;
+        }
+        .ml-workflow li {
+            margin-bottom: 10px;
+        }
+        .example-applications {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .app-card {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        .app-card:hover {
+            transform: translateY(-3px);
+        }
+        .app-card i {
+            font-size: 24px;
+            color: #4299e1;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .app-card h4 {
+            margin: 0 0 10px 0;
+            color: #2c5282;
+        }
+        .app-card p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #4a5568;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>3.1: Introducción a Machine Learning</h1>
+            <p>Módulo 3: Fundamentos de Machine Learning</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender los conceptos fundamentales del Machine Learning</li>
+                <li>Identificar los diferentes tipos de aprendizaje automático</li>
+                <li>Familiarizarse con el flujo de trabajo típico en ML</li>
+                <li>Conocer las aplicaciones prácticas del Machine Learning</li>
+                <li>Preparar el entorno de desarrollo para las próximas sesiones</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
+            
+            <h3>1. ¿Qué es Machine Learning?</h3>
+            <p>El <strong>Machine Learning</strong> (Aprendizaje Automático) es una rama de la inteligencia artificial que se enfoca en desarrollar sistemas que pueden aprender de los datos y mejorar su rendimiento en tareas específicas sin ser programados explícitamente.</p>
+            
+            <div class="definition">
+                <p>Según Arthur Samuel (1959), el aprendizaje automático es el "campo de estudio que le da a las computadoras la capacidad de aprender sin estar explícitamente programadas".</p>
+            </div>
+            
+            <p>El aprendizaje automático se diferencia de la programación tradicional en que, en lugar de escribir reglas explícitas para resolver un problema, el algoritmo aprende patrones a partir de los datos de ejemplo.</p>
+            
+            <h3>2. Tipos de Aprendizaje Automático</h3>
+            
+            <div class="ml-types">
+                <div class="ml-card">
+                    <h3><i class="fas fa-chart-line"></i> Aprendizaje Supervisado</h3>
+                    <p>El algoritmo aprende a partir de datos etiquetados, donde cada ejemplo de entrenamiento incluye tanto las características de entrada como la salida deseada.</p>
+                    <p><strong>Ejemplos:</strong></p>
+                    <ul>
+                        <li>Clasificación de correos electrónicos (spam/no spam)</li>
+                        <li>Reconocimiento de dígitos escritos a mano</li>
+                        <li>Predicción de precios de viviendas</li>
+                    </ul>
+                </div>
+                
+                <div class="ml-card">
+                    <h3><i class="fas fa-project-diagram"></i> Aprendizaje No Supervisado</h3>
+                    <p>El algoritmo trabaja con datos sin etiquetar y debe encontrar patrones o estructuras ocultas en los datos.</p>
+                    <p><strong>Ejemplos:</strong></p>
+                    <ul>
+                        <li>Segmentación de clientes</li>
+                        <li>Detección de anomalías</li>
+                        <li>Reducción de dimensionalidad</li>
+                    </ul>
+                </div>
+                
+                <div class="ml-card">
+                    <h3><i class="fas fa-robot"></i> Aprendizaje por Refuerzo</h3>
+                    <p>Un agente aprende a realizar tareas mediante la interacción con un entorno, recibiendo recompensas o castigos por sus acciones.</p>
+                    <p><strong>Ejemplos:</strong></p>
+                    <ul>
+                        <li>Juegos (AlphaGo, Dota 2 bots)</li>
+                        <li>Robótica</li>
+                        <li>Sistemas de recomendación</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3>3. Flujo de Trabajo en Machine Learning</h3>
+            
+            <div class="ml-workflow">
+                <h4>Proceso típico en un proyecto de ML:</h4>
+                <ol>
+                    <li><strong>Recopilación de datos</strong>: Obtener datos relevantes para el problema.</li>
+                    <li><strong>Preprocesamiento</strong>: Limpiar, normalizar y transformar los datos.</li>
+                    <li><strong>Análisis exploratorio</strong>: Entender los datos mediante visualizaciones y estadísticas.</li>
+                    <li><strong>Selección de características</strong>: Identificar las variables más relevantes.</li>
+                    <li><strong>Selección del modelo</strong>: Elegir el algoritmo de ML apropiado.</li>
+                    <li><strong>Entrenamiento</strong>: Ajustar el modelo a los datos de entrenamiento.</li>
+                    <li><strong>Evaluación</strong>: Medir el rendimiento del modelo con datos no vistos.</li>
+                    <li><strong>Optimización</strong>: Ajustar hiperparámetros para mejorar el rendimiento.</li>
+                    <li><strong>Despliegue</strong>: Implementar el modelo en producción.</li>
+                    <li><strong>Monitoreo y mantenimiento</strong>: Asegurar que el modelo siga funcionando correctamente.</li>
+                </ol>
+            </div>
+            
+            <h3>4. Aplicaciones del Machine Learning</h3>
+            
+            <div class="example-applications">
+                <div class="app-card">
+                    <i class="fas fa-comment-medical"></i>
+                    <h4>Diagnóstico Médico</h4>
+                    <p>Ayuda a los médicos a diagnosticar enfermedades mediante el análisis de imágenes médicas y registros de pacientes.</p>
+                </div>
+                
+                <div class="app-card">
+                    <i class="fas fa-robot"></i>
+                    <h4>Vehículos Autónomos</h4>
+                    <p>Permite a los coches percibir su entorno y tomar decisiones de conducción de forma autónoma.</p>
+                </div>
+                
+                <div class="app-card">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h4>Recomendaciones</h4>
+                    <p>Sistemas de recomendación en plataformas como Netflix, Amazon y Spotify.</p>
+                </div>
+                
+                <div class="app-card">
+                    <i class="fas fa-comments"></i>
+                    <h4>Procesamiento de Lenguaje Natural</h4>
+                    <p>Asistentes virtuales, traducción automática y análisis de sentimientos.</p>
+                </div>
+                
+                <div class="app-card">
+                    <i class="fas fa-chart-bar"></i>
+                    <h4>Análisis Financiero</h4>
+                    <p>Detección de fraudes, evaluación de riesgos y trading algorítmico.</p>
+                </div>
+                
+                <div class="app-card">
+                    <i class="fas fa-image"></i>
+                    <h4>Visión por Computadora</h4>
+                    <p>Reconocimiento facial, detección de objetos y clasificación de imágenes.</p>
+                </div>
+            </div>
+            
+            <h3>5. Bibliotecas Populares de Machine Learning</h3>
+            
+            <ul>
+                <li><strong>scikit-learn</strong>: Biblioteca de referencia para aprendizaje automático tradicional en Python.</li>
+                <li><strong>TensorFlow</strong>: Biblioteca de código abierto desarrollada por Google para aprendizaje profundo.</li>
+                <li><strong>PyTorch</strong>: Desarrollada por Facebook, muy popular en investigación por su facilidad de uso.</li>
+                <li><strong>Keras</strong>: API de alto nivel para construir y entrenar modelos de aprendizaje profundo.</li>
+                <li><strong>Pandas</strong>: Para manipulación y análisis de datos.</li>
+                <li><strong>NumPy</strong>: Para operaciones numéricas eficientes.</li>
+                <li><strong>Matplotlib/Seaborn</strong>: Para visualización de datos.</li>
+            </ul>
+        </section>
+
+        <section class="practical">
+            <h2><i class="fas fa-laptop-code"></i> Actividad Práctica</h2>
+            
+            <div class="activity">
+                <h3>1. Configuración del Entorno de Desarrollo</h3>
+                <p>Antes de comenzar con el código, necesitamos configurar nuestro entorno de desarrollo. Vamos a instalar las bibliotecas esenciales para Machine Learning en Python.</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copiar</button>
+                    <pre><code class="bash"># Crear un entorno virtual (recomendado)
+python -m venv ml-env
+
+# Activar el entorno virtual
+# En Windows:
+.\ml-env\Scripts\activate
+# En macOS/Linux:
+source ml-env/bin/activate
+
+# Instalar las bibliotecas esenciales
+pip install numpy pandas matplotlib seaborn scikit-learn jupyter notebook
+
+# Instalar bibliotecas de deep learning (opcional para esta sesión)
+pip install tensorflow torch torchvision
+
+# Verificar la instalación
+python -c "import numpy as np; import pandas as pd; import sklearn; print('¡Todas las bibliotecas se han instalado correctamente!')"</code></pre>
+                </div>
+                
+                <h3>2. Primer Ejemplo: Clasificación con el Conjunto de Datos Iris</h3>
+                <p>Vamos a implementar nuestro primer modelo de Machine Learning utilizando el conjunto de datos Iris, que es un conjunto clásico en la comunidad de ML.</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copiar</button>
+                    <pre><code class="python"># Importar bibliotecas necesarias
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+
+# Cargar el conjunto de datos Iris
+iris = load_iris()
+X = iris.data  # Características
+y = iris.target  # Etiquetas
+feature_names = iris.feature_names
+target_names = iris.target_names
+
+# Crear un DataFrame para visualización
+df = pd.DataFrame(X, columns=feature_names)
+df['target'] = y
+df['species'] = df['target'].map({i: name for i, name in enumerate(target_names)})
+
+# Visualizar los primeros registros
+print("\nPrimeras filas del conjunto de datos:")
+print(df.head())
+
+# Estadísticas descriptivas
+print("\nEstadísticas descriptivas:")
+print(df.describe())
+
+# Visualización de los datos
+plt.figure(figsize=(12, 6))
+
+# Gráfico de dispersión de las características
+plt.subplot(1, 2, 1)
+sns.scatterplot(x='sepal length (cm)', y='sepal width (cm)', hue='species', data=df, palette='viridis')
+plt.title('Longitud vs Ancho del Sépalo')
+
+plt.subplot(1, 2, 2)
+sns.scatterplot(x='petal length (cm)', y='petal width (cm)', hue='species', data=df, palette='viridis')
+plt.title('Longitud vs Ancho del Pétalo')
+
+plt.tight_layout()
+plt.show()
+
+# Dividir los datos en conjuntos de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42, stratify=y)
+
+# Estandarizar las características
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Crear y entrenar el modelo K-Vecinos más Cercanos
+knn = KNeighborsClassifier(n_neighbors=3)
+knn.fit(X_train_scaled, y_train)
+
+# Realizar predicciones
+y_pred = knn.predict(X_test_scaled)
+
+# Evaluar el modelo
+accuracy = accuracy_score(y_test, y_pred)
+print(f"\nPrecisión del modelo: {accuracy:.2f}")
+
+# Mostrar el informe de clasificación
+print("\nInforme de Clasificación:")
+print(classification_report(y_test, y_pred, target_names=target_names))
+
+# Matriz de confusión
+plt.figure(figsize=(8, 6))
+cm = confusion_matrix(y_test, y_pred)
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
+            xticklabels=target_names, 
+            yticklabels=target_names)
+plt.title('Matriz de Confusión')
+plt.xlabel('Predicción')
+plt.ylabel('Verdadero')
+plt.show()</code></pre>
+                </div>
+                
+                <h3>3. Análisis de los Resultados</h3>
+                <p>Después de ejecutar el código anterior, analiza los resultados:</p>
+                <ol>
+                    <li>¿Qué precisión obtuvo el modelo en el conjunto de prueba?</li>
+                    <li>¿Hay alguna clase que sea más difícil de predecir que las demás?</li>
+                    <li>¿Qué patrones puedes observar en la matriz de confusión?</li>
+                    <li>¿Cómo podrías mejorar el rendimiento del modelo?</li>
+                </ol>
+                
+                <button class="solution-btn" onclick="toggleSolution('sol1')">Mostrar Análisis de Solución</button>
+                <div id="sol1" class="solution">
+                    <h4>Análisis de la Solución:</h4>
+                    <ol>
+                        <li><strong>Precisión del modelo</strong>: El modelo debería tener una precisión de alrededor del 98% en el conjunto de prueba, lo que significa que clasifica correctamente el 98% de las muestras.</li>
+                        <li><strong>Dificultad por clase</strong>: Generalmente, la clase 'setosa' es la más fácil de predecir, mientras que 'versicolor' y 'virginica' pueden confundirse entre sí debido a la superposición en sus características.</li>
+                        <li><strong>Matriz de confusión</strong>: Deberías ver una matriz diagonal fuerte, lo que indica que la mayoría de las predicciones son correctas. Puede haber alguna confusión entre 'versicolor' y 'virginica'.</li>
+                        <li><strong>Mejoras posibles</strong>:
+                            <ul>
+                                <li>Probar diferentes valores de k en KNN (usamos k=3, pero podríamos probar otros valores)</li>
+                                <li>Utilizar validación cruzada para una evaluación más robusta</li>
+                                <li>Probar otros algoritmos de clasificación como Árboles de Decisión o SVM</li>
+                                <li>Realizar ingeniería de características o selección de características</li>
+                                <li>Ajustar los hiperparámetros del modelo</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <section class="exercises">
+            <h2><i class="fas fa-tasks"></i> Ejercicios</h2>
+            
+            <div class="exercise">
+                <h3>Ejercicio 1: Exploración de Hiperparámetros</h3>
+                <p>Modifica el código anterior para probar diferentes valores de k (1, 3, 5, 7, 9, 11) en el clasificador KNN. Crea una gráfica que muestre la precisión del modelo en el conjunto de entrenamiento y prueba para cada valor de k. ¿Qué observas?</p>
+                
+                <button class="solution-btn" onclick="toggleSolution('sol2')">Mostrar Solución</button>
+                <div id="sol2" class="solution">
+                    <pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+
+# Probar diferentes valores de k
+k_values = list(range(1, 21, 2))
+train_scores = []
+test_scores = []
+
+for k in k_values:
+    # Crear y entrenar el modelo
+    knn = KNeighborsClassifier(n_neighbors=k)
+    knn.fit(X_train_scaled, y_train)
+    
+    # Calcular precisión en entrenamiento y prueba
+    train_pred = knn.predict(X_train_scaled)
+    test_pred = knn.predict(X_test_scaled)
+    
+    train_scores.append(accuracy_score(y_train, train_pred))
+    test_scores.append(accuracy_score(y_test, test_pred))
+
+# Graficar los resultados
+plt.figure(figsize=(10, 6))
+plt.plot(k_values, train_scores, 'o-', label='Precisión en Entrenamiento')
+plt.plot(k_values, test_scores, 'o-', label='Precisión en Prueba')
+plt.title('Precisión vs. Valor de k en KNN')
+plt.xlabel('Valor de k')
+plt.ylabel('Precisión')
+plt.xticks(k_values)
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# Encontrar el mejor valor de k
+best_k = k_values[np.argmax(test_scores)]
+print(f"\nMejor valor de k: {best_k} con precisión de prueba: {max(test_scores):.4f}")</code></pre>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h3>Ejercicio 2: Comparación de Algoritmos</h3>
+                <p>Compara el rendimiento de al menos tres algoritmos de clasificación diferentes (por ejemplo, KNN, Árbol de Decisión y Regresión Logística) en el conjunto de datos Iris. Crea una tabla que muestre la precisión, precisión, recuperación y puntuación F1 para cada modelo.</p>
+                
+                <button class="solution-btn" onclick="toggleSolution('sol3')">Mostrar Solución</button>
+                <div id="sol3" class="solution">
+                    <pre><code class="python">from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import precision_recall_fscore_support
+
+# Inicializar los modelos
+models = {
+    'K-Vecinos más Cercanos': KNeighborsClassifier(n_neighbors=3),
+    'Árbol de Decisión': DecisionTreeClassifier(random_state=42),
+    'Regresión Logística': LogisticRegression(max_iter=1000, random_state=42)
+}
+
+# Entrenar y evaluar cada modelo
+results = []
+
+for name, model in models.items():
+    # Entrenar el modelo
+    model.fit(X_train_scaled, y_train)
+    
+    # Realizar predicciones
+    y_pred = model.predict(X_test_scaled)
+    
+    # Calcular métricas
+    accuracy = accuracy_score(y_test, y_pred)
+    precision, recall, f1, _ = precision_recall_fscore_support(y_test, y_pred, average='weighted')
+    
+    results.append({
+        'Modelo': name,
+        'Precisión': accuracy,
+        'Precisión (weighted)': precision,
+        'Recuperación (weighted)': recall,
+        'F1 (weighted)': f1
+    })
+
+# Mostrar resultados en una tabla
+df_results = pd.DataFrame(results)
+print("\nComparación de Modelos:")
+print(df_results.to_string(index=False))
+
+# Visualizar comparación
+plt.figure(figsize=(12, 6))
+metrics = ['Precisión', 'Precisión (weighted)', 'Recuperación (weighted)', 'F1 (weighted)']
+x = np.arange(len(metrics))
+width = 0.2
+
+for i, (model_name, _) in enumerate(models.items()):
+    values = [results[i][m] for m in metrics]
+    plt.bar(x + i*width, values, width, label=model_name)
+
+plt.xlabel('Métricas')
+plt.ylabel('Puntuación')
+plt.title('Comparación de Modelos de Clasificación')
+plt.xticks(x + width, metrics, rotation=45, ha='right')
+plt.legend()
+plt.tight_layout()
+plt.show()</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h2><i class="fas fa-clipboard-list"></i> Resumen</h2>
+            <ul>
+                <li>Hemos introducido los conceptos fundamentales del <strong>Machine Learning</strong>, incluyendo sus tipos principales: supervisado, no supervisado y por refuerzo.</li>
+                <li>Hemos explorado el flujo de trabajo típico en un proyecto de ML, desde la recopilación de datos hasta el despliegue del modelo.</li>
+                <li>Hemos visto numerosas aplicaciones prácticas del Machine Learning en diversos campos como la medicina, los vehículos autónomos, los sistemas de recomendación y más.</li>
+                <li>Hemos configurado nuestro entorno de desarrollo con las bibliotecas esenciales de Python para Machine Learning.</li>
+                <li>Hemos implementado nuestro primer modelo de Machine Learning utilizando el conjunto de datos Iris, logrando una alta precisión en la clasificación de flores.</li>
+                <li>Hemos aprendido a evaluar el rendimiento de los modelos utilizando métricas como precisión, recuperación y puntuación F1.</li>
+                <li>Hemos comparado diferentes algoritmos de clasificación y analizado cómo elegir el mejor modelo para un problema dado.</li>
+            </ul>
+            
+            <div class="key-concepts">
+                <h3>Conceptos Clave:</h3>
+                <div class="concept-cards">
+                    <div class="concept-card">
+                        <h4>Aprendizaje Supervisado</h4>
+                        <p>Modelos que aprenden a partir de ejemplos etiquetados para hacer predicciones sobre datos no vistos.</p>
+                    </div>
+                    <div class="concept-card">
+                        <h4>K-Vecinos más Cercanos (KNN)</h4>
+                        <p>Algoritmo de clasificación que asigna a cada punto la clase más común entre sus k vecinos más cercanos.</p>
+                    </div>
+                    <div class="concept-card">
+                        <h4>Conjunto de Entrenamiento/Prueba</h4>
+                        <p>División de los datos para entrenar el modelo y evaluar su rendimiento en datos no vistos.</p>
+                    </div>
+                    <div class="concept-card">
+                        <h4>Estandarización</h4>
+                        <p>Proceso de escalar las características para que tengan media 0 y desviación estándar 1.</p>
+                    </div>
+                    <div class="concept-card">
+                        <h4>Matriz de Confusión</h4>
+                        <p>Tabla que muestra el rendimiento de un modelo de clasificación comparando las predicciones con los valores reales.</p>
+                    </div>
+                    <div class="concept-card">
+                        <h4>Métricas de Evaluación</h4>
+                        <p>Métricas como precisión, recuperación y F1 que nos permiten medir el rendimiento de un modelo.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="resources">
+            <h2><i class="fas fa-book"></i> Recursos Adicionales</h2>
+            <ul>
+                <li><a href="https://scikit-learn.org/stable/tutorial/machine_learning_map/index.html" target="_blank" rel="noopener noreferrer">Mapa de Algoritmos de scikit-learn</a> - Guía visual para elegir el estimador adecuado</li>
+                <li><a href="https://www.kaggle.com/learn/intro-to-machine-learning" target="_blank" rel="noopener noreferrer">Curso de Introducción al Machine Learning</a> - Kaggle Learn</li>
+                <li><a href="https://developers.google.com/machine-learning/crash-course" target="_blank" rel="noopener noreferrer">Curso Intensivo de Machine Learning</a> - Google Developers</li>
+                <li><a href="https://www.coursera.org/learn/machine-learning" target="_blank" rel="noopener noreferrer">Machine Learning Course</a> - Andrew Ng (Coursera)</li>
+                <li><a href="https://www.kaggle.com/" target="_blank" rel="noopener noreferrer">Kaggle</a> - Plataforma para practicar Machine Learning con competencias y conjuntos de datos</li>
+            </ul>
+        </section>
+
+        <section class="homework">
+            <h2><i class="fas fa-home"></i> Tarea</h2>
+            <ol>
+                <li><strong>Exploración de Datos</strong>: Descarga el conjunto de datos de vinos de scikit-learn (sklearn.datasets.load_wine) y realiza un análisis exploratorio similar al que hicimos con el conjunto de datos Iris. Incluye visualizaciones y estadísticas descriptivas.</li>
+                <li><strong>Clasificación Multiclase</strong>: Aplica los mismos algoritmos de clasificación que usamos (KNN, Árbol de Decisión, Regresión Logística) al conjunto de datos de vinos. Compara su rendimiento y analiza los resultados.</li>
+                <li><strong>Feature Engineering</strong>: Investiga sobre técnicas de ingeniería de características y aplícalas a los conjuntos de datos que hemos utilizado. ¿Mejora el rendimiento de los modelos?</li>
+                <li><strong>Validación Cruzada</strong>: Implementa validación cruzada de k-pliegues (k-fold cross-validation) para evaluar de manera más robusta el rendimiento de los modelos.</li>
+                <li><strong>Investigación</strong>: Investiga sobre el sesgo en los modelos de Machine Learning. ¿Qué es el sesgo algorítmico y cómo puede afectar los resultados de los modelos? Prepara una breve presentación o informe con tus hallazgos.</li>
+            </ol>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION2-15.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 2.15 Ejercicios Integradores</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION3-2.html" class="btn">Siguiente Sesión: 3.2 Preprocesamiento de Datos <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Función para copiar código al portapapeles
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling.querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Cambiar el ícono temporalmente para mostrar que se copió
+            const icon = button.querySelector('i');
+            const originalClass = icon.className;
+            icon.className = 'fas fa-check';
+            
+            setTimeout(() => {
+                icon.className = originalClass;
+            }, 2000);
+        }
+        
+        // Función para mostrar/ocultar soluciones
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            if (solution.style.display === 'block') {
+                solution.style.display = 'none';
+                event.target.textContent = 'Mostrar Solución';
+            } else {
+                solution.style.display = 'block';
+                event.target.textContent = 'Ocultar Solución';
+            }
+        }
+    </script>
+</body>
+</html>

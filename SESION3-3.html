@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.3: Regresión Lineal - Curso de Inteligencia Artificial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos específicos para la sesión 3.3 */
+        .regression-formula {
+            background-color: #f0f8ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 1.2em;
+            border-left: 4px solid #3498db;
+        }
+        
+        .interactive-plot {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .slider-container {
+            margin: 15px 0;
+        }
+        
+        .slider-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .coefficient-slider {
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .data-point {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .data-point:hover {
+            transform: scale(1.5);
+        }
+        
+        .assumption-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #2ecc71;
+        }
+        
+        .assumption-card h4 {
+            margin-top: 0;
+            color: #27ae60;
+        }
+        
+        .exercise {
+            background-color: #e8f4fc;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .exercise h4 {
+            margin-top: 0;
+            color: #2980b9;
+        }
+        
+        .hint-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin: 5px 0;
+        }
+        
+        .hint {
+            display: none;
+            background-color: #f0f8ff;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 3px solid #3498db;
+        }
+        
+        .hint.visible {
+            display: block;
+        }
+        
+        /* Estilos para la visualización de regresión */
+        #regression-plot {
+            width: 100%;
+            height: 400px;
+            margin: 20px 0;
+        }
+        
+        /* Estilos para los ejemplos prácticos */
+        .example-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .example-box {
+            flex: 1;
+            min-width: 300px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .example-box h4 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>3.3: Regresión Lineal</h1>
+            <p>Curso de Inteligencia Artificial - Módulo 3: Machine Learning</p>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section id="introduccion">
+            <h2>Introducción a la Regresión Lineal</h2>
+            <p>La regresión lineal es uno de los algoritmos de aprendizaje supervisado más fundamentales y ampliamente utilizados en el campo del Machine Learning. Es un método estadístico que modela la relación entre una variable dependiente (objetivo) y una o más variables independientes (características) asumiendo una relación lineal entre ellas.</p>
+            
+            <div class="regression-formula">
+                <p>Fórmula general de la regresión lineal simple:</p>
+                <p><strong>y = β₀ + β₁x + ε</strong></p>
+                <p>Donde:</p>
+                <ul>
+                    <li><strong>y</strong>: Variable dependiente (objetivo)</li>
+                    <li><strong>x</strong>: Variable independiente (característica)</li>
+                    <li><strong>β₀</strong>: Ordenada al origen (intercepto)</li>
+                    <li><strong>β₁</strong>: Pendiente de la recta</li>
+                    <li><strong>ε</strong>: Término de error</li>
+                </ul>
+            </div>
+            
+            <p>En el contexto de aprendizaje automático, nuestro objetivo es encontrar los valores de β₀ y β₁ que minimicen la diferencia entre los valores predichos y los valores reales en nuestros datos de entrenamiento.</p>
+        </section>
+        
+        <section id="tipos-regresion">
+            <h2>Tipos de Regresión Lineal</h2>
+            
+            <div class="example-container">
+                <div class="example-box">
+                    <h4>1. Regresión Lineal Simple</h4>
+                    <p>Modela la relación entre una única variable independiente (x) y una variable dependiente (y).</p>
+                    <p>Fórmula: <strong>y = β₀ + β₁x + ε</strong></p>
+                    <p><strong>Ejemplo:</strong> Predecir el precio de una casa basado únicamente en su tamaño en metros cuadrados.</p>
+                </div>
+                
+                <div class="example-box">
+                    <h4>2. Regresión Lineal Múltiple</h4>
+                    <p>Modela la relación entre múltiples variables independientes (x₁, x₂, ..., xₙ) y una variable dependiente (y).</p>
+                    <p>Fórmula: <strong>y = β₀ + β₁x₁ + β₂x₂ + ... + βₙxₙ + ε</strong></p>
+                    <p><strong>Ejemplo:</strong> Predecir el precio de una casa basado en su tamaño, número de habitaciones, antigüedad, ubicación, etc.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="minimos-cuadrados">
+            <h2>Método de Mínimos Cuadrados</h2>
+            <p>El método de mínimos cuadrados es la técnica más común para encontrar la línea de mejor ajuste en un conjunto de datos. El objetivo es minimizar la suma de los cuadrados de las diferencias (residuos) entre los valores observados y los valores predichos.</p>
+            
+            <div class="interactive-plot">
+                <h3>Visualización de Mínimos Cuadrados</h3>
+                <div id="regression-plot">
+                    <!-- El gráfico se generará con Plotly.js -->
+                    <p>Cargando visualización interactiva...</p>
+                </div>
+                <div class="slider-container">
+                    <label for="slope-slider">Pendiente (β₁): <span id="slope-value">1.0</span></label>
+                    <input type="range" id="slope-slider" class="coefficient-slider" min="-2" max="4" step="0.1" value="1.0">
+                </div>
+                <div class="slider-container">
+                    <label for="intercept-slider">Intercepto (β₀): <span id="intercept-value">0.0</span></label>
+                    <input type="range" id="intercept-slider" class="coefficient-slider" min="-2" max="4" step="0.1" value="0.0">
+                </div>
+                <div>
+                    <p>Error cuadrático medio (MSE): <span id="mse-value">0</span></p>
+                    <button id="best-fit-btn" class="btn btn-primary">Encontrar mejor ajuste</button>
+                    <button id="add-point-btn" class="btn btn-secondary">Agregar punto de datos</button>
+                </div>
+            </div>
+            
+            <p>Matemáticamente, buscamos minimizar la siguiente función de pérdida (función de costo):</p>
+            
+            <div class="math-formula">
+                <p>Función de costo (MSE - Error Cuadrático Medio):</p>
+                <p>MSE = (1/n) * Σ(yᵢ - ŷᵢ)²</p>
+                <p>Donde:</p>
+                <ul>
+                    <li>n: Número de observaciones</li>
+                    <li>yᵢ: Valor real de la i-ésima observación</li>
+                    <li>ŷᵢ: Valor predicho para la i-ésima observación</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section id="implementacion">
+            <h2>Implementación en Python</h2>
+            <p>A continuación, veremos cómo implementar la regresión lineal en Python utilizando las bibliotecas más comunes como NumPy, Pandas, Matplotlib y Scikit-learn.</p>
+            
+            <h3>1. Regresión Lineal Simple con NumPy</h3>
+            <pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+
+# Datos de ejemplo
+X = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])  # Variable independiente
+y = np.array([2, 4, 5, 7, 8, 10, 11, 13, 14, 16])  # Variable dependiente
+
+# Calcular los coeficientes de regresión manualmente
+n = len(X)
+X_mean = np.mean(X)
+y_mean = np.mean(y)
+
+# Calcular la pendiente (β₁)
+numerator = np.sum((X - X_mean) * (y - y_mean))
+denominator = np.sum((X - X_mean) ** 2)
+beta_1 = numerator / denominator
+
+# Calcular el intercepto (β₀)
+beta_0 = y_mean - (beta_1 * X_mean)
+
+# Hacer predicciones
+y_pred = beta_0 + beta_1 * X
+
+# Visualizar los resultados
+plt.figure(figsize=(10, 6))
+plt.scatter(X, y, color='blue', label='Datos reales')
+plt.plot(X, y_pred, color='red', label=f'Línea de regresión: y = {beta_0:.2f} + {beta_1:.2f}x')
+plt.xlabel('X (Variable Independiente)')
+plt.ylabel('y (Variable Dependiente)')
+plt.title('Regresión Lineal Simple')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+print(f"Ecuación de la recta: y = {beta_0:.2f} + {beta_1:.2f}x")
+print(f"Pendiente (β₁): {beta_1:.4f}")
+print(f"Intercepto (β₀): {beta_0:.4f}")</code></pre>
+            
+            <h3>2. Regresión Lineal Múltiple con Scikit-learn</h3>
+            <pre><code class="language-python">import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Crear un conjunto de datos de ejemplo con múltiples características
+np.random.seed(42)
+size = np.random.normal(1500, 200, 100)  # Tamaño en pies cuadrados
+bedrooms = np.random.randint(1, 6, 100)  # Número de habitaciones
+age = np.random.randint(1, 31, 100)  # Edad de la propiedad en años
+
+# Crear el precio como una combinación lineal de las características más ruido
+price = 100000 + 200 * size + 50000 * bedrooms - 2000 * age + np.random.normal(0, 30000, 100)
+
+# Crear un DataFrame de pandas
+data = pd.DataFrame({
+    'Tamaño (pies²)': size,
+    'Habitaciones': bedrooms,
+    'Edad (años)': age,
+    'Precio (USD)': price
+})
+
+# Visualizar las relaciones entre variables
+sns.pairplot(data)
+plt.suptitle('Relaciones entre variables', y=1.02)
+plt.show()
+
+# Preparar los datos para el modelo
+X = data[['Tamaño (pies²)', 'Habitaciones', 'Edad (años)']]
+y = data['Precio (USD)']
+
+# Dividir los datos en conjuntos de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Crear y entrenar el modelo de regresión lineal
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Hacer predicciones en el conjunto de prueba
+y_pred = model.predict(X_test)
+
+# Evaluar el modelo
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+# Mostrar los resultados
+print("\nResultados del modelo de regresión lineal múltiple:")
+print(f"Coeficientes: {model.coef_}")
+print(f"Intercepto: {model.intercept_:.2f}")
+print(f"Error Cuadrático Medio (MSE): {mse:.2f}")
+print(f"Coeficiente de Determinación (R²): {r2:.4f}")
+
+# Visualizar las predicciones vs valores reales
+plt.figure(figsize=(10, 6))
+plt.scatter(y_test, y_pred, alpha=0.7)
+plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2)
+plt.xlabel('Precios reales (USD)')
+plt.ylabel('Precios predichos (USD)')
+plt.title('Precios reales vs. predichos')
+plt.grid(True)
+plt.show()
+
+# Mostrar la importancia de las características
+feature_importance = pd.DataFrame({
+    'Característica': X.columns,
+    'Importancia': model.coef_
+}).sort_values('Importancia', ascending=False)
+
+plt.figure(figsize=(10, 6))
+sns.barplot(x='Importancia', y='Característica', data=feature_importance)
+plt.title('Importancia de las características en la predicción de precios')
+plt.tight_layout()
+plt.show()</code></pre>
+        </section>
+        
+        <section id="evaluacion">
+            <h2>Evaluación del Modelo de Regresión</h2>
+            <p>Es fundamental evaluar qué tan bien se ajusta nuestro modelo a los datos. Aquí están algunas métricas comunes para evaluar modelos de regresión:</p>
+            
+            <div class="example-container">
+                <div class="example-box">
+                    <h4>1. Error Cuadrático Medio (MSE)</h4>
+                    <p>Promedio de los cuadrados de las diferencias entre los valores predichos y reales.</p>
+                    <p>MSE = (1/n) * Σ(yᵢ - ŷᵢ)²</p>
+                    <p><strong>Ventaja:</strong> Penaliza más los errores grandes.</p>
+                    <p><strong>Desventaja:</strong> Las unidades están al cuadrado de la variable objetivo.</p>
+                </div>
+                
+                <div class="example-box">
+                    <h4>2. Raíz del Error Cuadrático Medio (RMSE)</h4>
+                    <p>Raíz cuadrada del MSE, lo que devuelve las unidades a las originales.</p>
+                    <p>RMSE = √MSE</p>
+                    <p><strong>Ventaja:</strong> Misma unidad que la variable objetivo.</p>
+                    <p><strong>Desventaja:</strong> Aún sensible a valores atípicos.</p>
+                </div>
+                
+                <div class="example-box">
+                    <h4>3. Error Absoluto Medio (MAE)</h4>
+                    <p>Promedio de las diferencias absolutas entre los valores predichos y reales.</p>
+                    <p>MAE = (1/n) * Σ|yᵢ - ŷᵢ|</p>
+                    <p><strong>Ventaja:</strong> Fácil de interpretar, menos sensible a valores atípicos.</p>
+                    <p><strong>Desventaja:</strong> No penaliza tanto los errores grandes como el MSE.</p>
+                </div>
+                
+                <div class="example-box">
+                    <h4>4. Coeficiente de Determinación (R²)</h4>
+                    <p>Proporción de la varianza de la variable dependiente que es predecible a partir de las variables independientes.</p>
+                    <p>R² = 1 - (SS_res / SS_tot)</p>
+                    <p><strong>Ventaja:</strong> Proporciona una medida de ajuste entre 0 y 1.</p>
+                    <p><strong>Desventaja:</strong> Puede ser engañoso con múltiples variables predictoras.</p>
+                </div>
+            </div>
+            
+            <h3>Ejemplo de Cálculo de Métricas</h3>
+            <pre><code class="language-python">from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+import numpy as np
+
+# Valores reales y predichos de ejemplo
+y_true = np.array([3, -0.5, 2, 7])
+y_pred = np.array([2.5, 0.0, 2, 8])
+
+# Calcular métricas
+mse = mean_squared_error(y_true, y_pred)
+rmse = np.sqrt(mse)
+mae = mean_absolute_error(y_true, y_pred)
+r2 = r2_score(y_true, y_pred)
+
+print(f"Error Cuadrático Medio (MSE): {mse:.4f}")
+print(f"Raíz del Error Cuadrático Medio (RMSE): {rmse:.4f}")
+print(f"Error Absoluto Medio (MAE): {mae:.4f}")
+print(f"Coeficiente de Determinación (R²): {r2:.4f}")</code></pre>
+        </section>
+        
+        <section id="supuestos">
+            <h2>Supuestos de la Regresión Lineal</h2>
+            <p>La regresión lineal se basa en varios supuestos importantes. Si estos supuestos no se cumplen, los resultados pueden ser engañosos o poco confiables.</p>
+            
+            <div class="assumption-card">
+                <h4>1. Linealidad</h4>
+                <p>La relación entre las variables independientes y la variable dependiente es lineal.</p>
+                <p><strong>Cómo verificarlo:</strong> Gráficos de dispersión de las variables independientes vs. la variable dependiente.</p>
+                <p><strong>Solución si no se cumple:</strong> Transformaciones no lineales de las variables (log, raíz cuadrada, etc.) o modelos no lineales.</p>
+            </div>
+            
+            <div class="assumption-card">
+                <h4>2. Independencia de los Errores</h4>
+                <p>Los errores (residuos) no deben estar correlacionados entre sí.</p>
+                <p><strong>Cómo verificarlo:</strong> Gráfico de autocorrelación o prueba de Durbin-Watson.</p>
+                <p><strong>Solución si no se cumple:</strong> Modelos de series temporales como ARIMA o modelos de efectos mixtos.</p>
+            </div>
+            
+            <div class="assumption-card">
+                <h4>3. Homocedasticidad</h4>
+                <p>La varianza de los errores es constante a través de todos los niveles de las variables independientes.</p>
+                <p><strong>Cómo verificarlo:</strong> Gráfico de residuos vs. valores predichos (debe verse como una nube aleatoria).</p>
+                <p><strong>Solución si no se cumple:</strong> Transformaciones de la variable dependiente o modelos de varianza ponderada.</p>
+            </div>
+            
+            <div class="assumption-card">
+                <h4>4. Normalidad de los Errores</h4>
+                <p>Los errores se distribuyen normalmente con media cero.</p>
+                <p><strong>Cómo verificarlo:</strong> Histograma de residuos o gráfico Q-Q.</p>
+                <p><strong>Solución si no se cumple:</strong> Transformaciones de la variable dependiente o métodos no paramétricos.</p>
+            </div>
+            
+            <div class="assumption-card">
+                <h4>5. Ausencia de Multicolinealidad</h4>
+                <p>Las variables independientes no están altamente correlacionadas entre sí.</p>
+                <p><strong>Cómo verificarlo:</strong> Matriz de correlación o Factor de Inflación de la Varianza (VIF).</p>
+                <p><strong>Solución si no se cumple:</strong> Eliminar variables redundantes, usar técnicas de reducción de dimensionalidad como PCA o regresión de crestas.</p>
+            </div>
+            
+            <h3>Ejemplo de Verificación de Supuestos</h3>
+            <pre><code class="language-python">import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+from statsmodels.stats.stattools import durbin_watson
+from scipy import stats
+
+# Después de ajustar el modelo (usando el ejemplo anterior)
+# Asumimos que ya tenemos X_train, X_test, y_train, y_test, y_pred
+
+# 1. Gráfico de residuos vs valores predichos (para homocedasticidad)
+residuals = y_test - y_pred
+plt.figure(figsize=(10, 6))
+plt.scatter(y_pred, residuals, alpha=0.7)
+plt.axhline(y=0, color='r', linestyle='--')
+plt.xlabel('Valores Predichos')
+plt.ylabel('Residuos')
+plt.title('Residuos vs Valores Predichos')
+plt.grid(True)
+plt.show()
+
+# 2. Histograma de residuos (para normalidad)
+plt.figure(figsize=(10, 6))
+sns.histplot(residuals, kde=True)
+plt.title('Distribución de los Residuos')
+plt.xlabel('Residuos')
+plt.ylabel('Frecuencia')
+plt.grid(True)
+plt.show()
+
+# 3. Gráfico Q-Q (para normalidad)
+plt.figure(figsize=(10, 6))
+stats.probplot(residuals, dist="norm", plot=plt)
+plt.title('Gráfico Q-Q de los Residuos')
+plt.grid(True)
+plt.show()
+
+# 4. Matriz de correlación (para multicolinealidad)
+correlation_matrix = X_train.corr()
+plt.figure(figsize=(10, 8))
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', center=0)
+plt.title('Matriz de Correlación')
+plt.show()
+
+# 5. Factor de Inflación de la Varianza (VIF) - para multicolinealidad
+vif_data = pd.DataFrame()
+vif_data["Característica"] = X_train.columns
+vif_data["VIF"] = [variance_inflation_factor(X_train.values, i) 
+                    for i in range(len(X_train.columns))]
+print("\nFactores de Inflación de la Varianza (VIF):")
+print(vif_data)
+
+# 6. Prueba de Durbin-Watson (para autocorrelación de errores)
+dw = durbin_watson(residuals)
+print(f"\nEstadístico de Durbin-Watson: {dw:.4f}")
+print("Valores cercanos a 2 indican poca autocorrelación (1.5-2.5 es generalmente aceptable).")
+
+# 7. Prueba de normalidad de Shapiro-Wilk
+shapiro_test = stats.shapiro(residuals)
+print(f"\nPrueba de normalidad de Shapiro-Wilk:")
+print(f"Estadístico de prueba: {shapiro_test[0]:.4f}")
+print(f"Valor p: {shapiro_test[1]:.4f}")
+if shapiro_test[1] > 0.05:
+    print("No se rechaza la hipótesis nula: los datos parecen seguir una distribución normal.")
+else:
+    print("Se rechaza la hipótesis nula: los datos no siguen una distribución normal.")</code></pre>
+        </section>
+        
+        <section id="ejercicios">
+            <h2>Ejercicios Prácticos</h2>
+            
+            <div class="exercise">
+                <h4>Ejercicio 1: Regresión Lineal Simple</h4>
+                <p>Utiliza el siguiente conjunto de datos que relaciona los años de experiencia con el salario de los empleados:</p>
+                <pre><code class="language-python">import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+import matplotlib.pyplot as plt
+
+# Datos: Años de experiencia y salario (en miles de dólares)
+data = {
+    'Experiencia': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    'Salario': [30, 35, 40, 45, 50, 55, 60, 65, 70, 75]
+}
+df = pd.DataFrame(data)
+
+# Tu código aquí:
+# 1. Crea las variables X (independiente) e y (dependiente)
+# 2. Divide los datos en conjuntos de entrenamiento y prueba (80-20%)
+# 3. Crea y entrena un modelo de regresión lineal
+# 4. Haz predicciones en el conjunto de prueba
+# 5. Evalúa el modelo usando MSE y R²
+# 6. Visualiza la línea de regresión junto con los datos
+# 7. Predice el salario para 12 años de experiencia</code></pre>
+                
+                <button class="hint-button" onclick="toggleHint('hint1')">Mostrar pista</button>
+                <div id="hint1" class="hint">
+                    <p>Recuerda que en la regresión lineal simple, X debe ser una matriz 2D incluso si solo tiene una característica. Puedes usar <code>X = df[['Experiencia']]</code> para asegurarte de que sea 2D.</p>
+                </div>
+                
+                <button class="hint-button" onclick="toggleHint('solution1')">Mostrar solución</button>
+                <div id="solution1" class="hint">
+                    <pre><code class="language-python"># 1. Crear X e y
+X = df[['Experiencia']]  # Usar doble corchete para mantener la estructura 2D
+y = df['Salario']
+
+# 2. Dividir los datos
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 3. Crear y entrenar el modelo
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# 4. Hacer predicciones
+y_pred = model.predict(X_test)
+
+# 5. Evaluar el modelo
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+print(f"Pendiente (coeficiente): {model.coef_[0]:.2f}")
+print(f"Intercepto: {model.intercept_:.2f}")
+print(f"Error Cuadrático Medio (MSE): {mse:.2f}")
+print(f"Coeficiente de Determinación (R²): {r2:.4f}")
+
+# 6. Visualizar
+plt.figure(figsize=(10, 6))
+plt.scatter(X, y, color='blue', label='Datos reales')
+plt.plot(X, model.predict(X), color='red', label='Línea de regresión')
+plt.scatter(X_test, y_test, color='green', label='Datos de prueba', marker='x', s=100)
+plt.xlabel('Años de Experiencia')
+plt.ylabel('Salario (miles de $)')
+plt.title('Regresión Lineal: Experiencia vs Salario')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# 7. Predecir para 12 años de experiencia
+nuevo_dato = pd.DataFrame({'Experiencia': [12]})
+salario_predicho = model.predict(nuevo_dato)
+print(f"\nPredicción para 12 años de experiencia: ${salario_predicho[0]:.2f} mil")</code></pre>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4>Ejercicio 2: Regresión Lineal Múltiple</h4>
+                <p>Utiliza el conjunto de datos de Boston Housing para predecir el valor mediano de las viviendas en miles de dólares (columna 'MEDV') basándote en las demás características.</p>
+                <pre><code class="language-python">from sklearn.datasets import load_boston
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Cargar el conjunto de datos de Boston Housing
+boston = load_boston()
+df = pd.DataFrame(boston.data, columns=boston.feature_names)
+df['MEDV'] = boston.target  # Variable objetivo: valor mediano de las viviendas
+
+# Tu código aquí:
+# 1. Explora los datos (primeras filas, estadísticas descriptivas, valores faltantes)
+# 2. Visualiza la correlación entre características
+# 3. Selecciona las características más relevantes
+# 4. Divide los datos en conjuntos de entrenamiento y prueba
+# 5. Crea y entrena un modelo de regresión lineal múltiple
+# 6. Evalúa el modelo en el conjunto de prueba
+# 7. Interpreta los coeficientes del modelo
+# 8. Realiza predicciones para nuevos datos</code></pre>
+                
+                <button class="hint-button" onclick="toggleHint('hint2')">Mostrar pista</button>
+                <div id="hint2" class="hint">
+                    <p>Puedes usar <code>df.corr()</code> para ver la correlación entre características y la variable objetivo. Las características con mayor correlación absoluta con 'MEDV' suelen ser buenas candidatas para el modelo.</p>
+                </div>
+                
+                <button class="hint-button" onclick="toggleHint('solution2')">Mostrar solución</button>
+                <div id="solution2" class="hint">
+                    <pre><code class="language-python"># 1. Explorar los datos
+print("Primeras filas del conjunto de datos:")
+print(df.head())
+
+print("\nEstadísticas descriptivas:")
+print(df.describe())
+
+print("\nValores faltantes por columna:")
+print(df.isnull().sum())
+
+# 2. Visualizar correlaciones
+plt.figure(figsize=(12, 8))
+sns.heatmap(df.corr(), annot=True, cmap='coolwarm', fmt='.2f')
+plt.title('Matriz de Correlación')
+plt.tight_layout()
+plt.show()
+
+# 3. Seleccionar características basadas en correlación con MEDV
+correlation_with_target = df.corr()['MEDV'].abs().sort_values(ascending=False)
+print("\nCorrelación con MEDV:")
+print(correlation_with_target)
+
+# Seleccionar las 5 características más correlacionadas (excluyendo MEDV)
+top_features = correlation_with_target[1:6].index.tolist()
+print(f"\nCaracterísticas seleccionadas: {top_features}")
+
+# 4. Dividir los datos
+X = df[top_features]
+y = df['MEDV']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 5. Crear y entrenar el modelo
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# 6. Evaluar el modelo
+y_pred = model.predict(X_test)
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+print("\nResultados del modelo:")
+print(f"Error Cuadrático Medio (MSE): {mse:.2f}")
+print(f"Coeficiente de Determinación (R²): {r2:.4f}")
+
+# 7. Interpretar los coeficientes
+coef_df = pd.DataFrame({
+    'Característica': X.columns,
+    'Coeficiente': model.coef_
+}).sort_values('Coeficiente', ascending=False)
+
+print("\nCoeficientes del modelo:")
+print(coef_df)
+
+# Visualizar la importancia de las características
+plt.figure(figsize=(10, 6))
+sns.barplot(x='Coeficiente', y='Característica', data=coef_df)
+plt.title('Importancia de las Características')
+plt.tight_layout()
+plt.show()
+
+# 8. Hacer predicciones para nuevos datos
+# Ejemplo con valores medios de las características
+nuevo_dato = pd.DataFrame({
+    'LSTAT': [df['LSTAT'].mean()],
+    'RM': [df['RM'].mean()],
+    'PTRATIO': [df['PTRATIO'].mean()],
+    'INDUS': [df['INDUS'].mean()],
+    'TAX': [df['TAX'].mean()]
+})
+
+prediccion = model.predict(nuevo_dato)
+print(f"\nPredicción para valores medios de las características: ${prediccion[0]:.2f} mil")</code></pre>
+                </div>
+            </div>
+        </section>
+        
+        <section id="conclusion">
+            <h2>Conclusión</h2>
+            <p>La regresión lineal es una técnica fundamental en el aprendizaje automático que proporciona una base sólida para comprender relaciones lineales entre variables. A lo largo de esta sesión, hemos cubierto:</p>
+            <ul>
+                <li>Los conceptos básicos de la regresión lineal simple y múltiple</li>
+                <li>El método de mínimos cuadrados para encontrar la línea de mejor ajuste</li>
+                <li>La implementación práctica en Python usando NumPy y Scikit-learn</li>
+                <li>Métricas para evaluar el rendimiento de los modelos de regresión</li>
+                <li>Los supuestos clave de la regresión lineal y cómo verificarlos</li>
+                <li>Ejercicios prácticos para aplicar los conceptos aprendidos</li>
+            </ul>
+            
+            <p>La regresión lineal, aunque aparentemente simple, es una herramienta poderosa que sigue siendo ampliamente utilizada en la industria debido a su interpretabilidad y facilidad de implementación. Sin embargo, es importante recordar que su efectividad depende en gran medida del cumplimiento de sus supuestos subyacentes.</p>
+            
+            <div class="alert alert-info">
+                <h4>Próximos pasos</h4>
+                <p>En la próxima sesión, exploraremos la <strong>Regresión Logística</strong>, una extensión de la regresión lineal utilizada para problemas de clasificación binaria. Aprenderemos cómo adaptar los conceptos lineales a escenarios donde la variable objetivo es categórica.</p>
+            </div>
+        </section>
+        
+        <section id="recursos">
+            <h2>Recursos Adicionales</h2>
+            <ul>
+                <li><a href="https://scikit-learn.org/stable/modules/linear_model.html" target="_blank" rel="noopener noreferrer">Documentación de Scikit-learn sobre modelos lineales</a></li>
+                <li><a href="https://towardsdatascience.com/linear-regression-detailed-view-ea73175f6e86" target="_blank" rel="noopener noreferrer">Artículo detallado sobre regresión lineal</a></li>
+                <li><a href="https://www.kaggle.com/code/rtatman/regression-challenge-day-5" target="_blank" rel="noopener noreferrer">Tutorial práctico de regresión en Kaggle</a></li>
+                <li><a href="https://www.youtube.com/watch?v=NUXdtN1W1FE" target="_blank" rel="noopener noreferrer">Video tutorial de StatQuest sobre regresión lineal</a></li>
+            </ul>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION3-2.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 3.2 Preprocesamiento de Datos</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION3-4.html" class="btn">Siguiente Sesión: 3.4 Regresión Lineal <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Código para la visualización interactiva de regresión lineal
+        document.addEventListener('DOMContentLoaded', function() {
+            // Datos de ejemplo
+            const xValues = [1, 2, 3, 4, 5, 6, 7, 8];
+            const yValues = [1, 3, 2, 5, 4, 6, 7, 8];
+            
+            // Inicializar pendiente e intercepto
+            let slope = 1.0;
+            let intercept = 0.0;
+            
+            // Función para calcular la línea de regresión
+            function calculateRegressionLine(x, slope, intercept) {
+                return x.map(val => slope * val + intercept);
+            }
+            
+            // Función para calcular el MSE
+            function calculateMSE(yTrue, yPred) {
+                let sum = 0;
+                for (let i = 0; i < yTrue.length; i++) {
+                    sum += Math.pow(yTrue[i] - yPred[i], 2);
+                }
+                return sum / yTrue.length;
+            }
+            
+            // Crear el gráfico inicial
+            const trace1 = {
+                x: xValues,
+                y: yValues,
+                mode: 'markers',
+                type: 'scatter',
+                name: 'Datos',
+                marker: { size: 12 }
+            };
+            
+            const initialLine = calculateRegressionLine(xValues, slope, intercept);
+            
+            const trace2 = {
+                x: xValues,
+                y: initialLine,
+                mode: 'lines',
+                type: 'scatter',
+                name: 'Línea de regresión',
+                line: { color: 'red' }
+            };
+            
+            const layout = {
+                title: 'Regresión Lineal Interactiva',
+                xaxis: { title: 'X' },
+                yaxis: { title: 'Y', range: [0, 10] },
+                showlegend: true
+            };
+            
+            const data = [trace1, trace2];
+            
+            Plotly.newPlot('regression-plot', data, layout);
+            
+            // Actualizar el gráfico cuando se deslizan los controles
+            document.getElementById('slope-slider').addEventListener('input', function() {
+                slope = parseFloat(this.value);
+                document.getElementById('slope-value').textContent = slope.toFixed(2);
+                updatePlot();
+            });
+            
+            document.getElementById('intercept-slider').addEventListener('input', function() {
+                intercept = parseFloat(this.value);
+                document.getElementById('intercept-value').textContent = intercept.toFixed(2);
+                updatePlot();
+            });
+            
+            // Función para actualizar el gráfico
+            function updatePlot() {
+                const newLine = calculateRegressionLine(xValues, slope, intercept);
+                const mse = calculateMSE(yValues, newLine);
+                
+                // Actualizar MSE
+                document.getElementById('mse-value').textContent = mse.toFixed(4);
+                
+                // Actualizar gráfico
+                Plotly.animate('regression-plot', {
+                    data: [{ y: newLine }],
+                    traces: [1],
+                    layout: {}
+                }, {
+                    transition: {
+                        duration: 300,
+                        easing: 'cubic-in-out'
+                    },
+                    frame: {
+                        duration: 300
+                    }
+                });
+            }
+            
+            // Función para encontrar la línea de mejor ajuste (mínimos cuadrados)
+            document.getElementById('best-fit-btn').addEventListener('click', function() {
+                // Cálculo de la pendiente (β₁) y el intercepto (β₀) por mínimos cuadrados
+                const n = xValues.length;
+                const xMean = xValues.reduce((a, b) => a + b, 0) / n;
+                const yMean = yValues.reduce((a, b) => a + b, 0) / n;
+                
+                let numerator = 0;
+                let denominator = 0;
+                
+                for (let i = 0; i < n; i++) {
+                    numerator += (xValues[i] - xMean) * (yValues[i] - yMean);
+                    denominator += Math.pow(xValues[i] - xMean, 2);
+                }
+                
+                const bestSlope = numerator / denominator;
+                const bestIntercept = yMean - bestSlope * xMean;
+                
+                // Actualizar controles deslizantes
+                document.getElementById('slope-slider').value = bestSlope;
+                document.getElementById('intercept-slider').value = bestIntercept;
+                document.getElementById('slope-value').textContent = bestSlope.toFixed(2);
+                document.getElementById('intercept-value').textContent = bestIntercept.toFixed(2);
+                
+                // Actualizar pendiente e intercepto
+                slope = bestSlope;
+                intercept = bestIntercept;
+                
+                // Actualizar gráfico
+                updatePlot();
+                
+                // Mostrar ecuación
+                alert(`Línea de mejor ajuste:\ny = ${bestSlope.toFixed(2)}x + ${bestIntercept.toFixed(2)}`);
+            });
+            
+            // Función para agregar puntos de datos
+            document.getElementById('add-point-btn').addEventListener('click', function() {
+                const newX = Math.floor(Math.random() * 8) + 1; // Número aleatorio entre 1 y 8
+                const newY = Math.floor(Math.random() * 8) + 1; // Número aleatorio entre 1 y 8
+                
+                xValues.push(newX);
+                yValues.push(newY);
+                
+                // Actualizar gráfico con nuevos datos
+                Plotly.animate('regression-plot', {
+                    data: [{
+                        x: [newX],
+                        y: [newY],
+                        mode: 'markers',
+                        type: 'scatter',
+                        marker: { size: 12 }
+                    }],
+                    traces: [0],
+                    layout: {}
+                }, {
+                    transition: {
+                        duration: 300,
+                        easing: 'cubic-in-out'
+                    },
+                    frame: {
+                        duration: 300
+                    }
+                });
+                
+                // Actualizar la línea de regresión
+                updatePlot();
+            });
+            
+            // Inicializar el gráfico
+            updatePlot();
+        });
+        
+        // Función para mostrar/ocultar pistas y soluciones
+        function toggleHint(elementId) {
+            const element = document.getElementById(elementId);
+            element.classList.toggle('visible');
+            
+            // Desplazarse suavemente al elemento
+            element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+</body>
+</html>

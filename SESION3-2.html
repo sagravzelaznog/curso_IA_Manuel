@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.2: Preprocesamiento de Datos - Curso de IA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="script.js"></script>
+    <style>
+        .preprocessing-step {
+            background: #f8fafc;
+            border-left: 4px solid #4299e1;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .preprocessing-step h3 {
+            margin-top: 0;
+            color: #2c5282;
+        }
+        .comparison {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .comparison-box {
+            flex: 1;
+            min-width: 300px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            background: white;
+        }
+        .comparison-box h4 {
+            margin-top: 0;
+            color: #2c5282;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .code-comparison {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .code-box {
+            flex: 1;
+            min-width: 300px;
+        }
+        .code-box h4 {
+            margin-top: 0;
+            color: #2c5282;
+        }
+        .dataframe {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .dataframe th, .dataframe td {
+            border: 1px solid #e2e8f0;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        .dataframe th {
+            background-color: #f7fafc;
+            font-weight: 600;
+        }
+        .dataframe tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        .dataframe tr:hover {
+            background-color: #ebf8ff;
+        }
+        .pipeline-step {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+        .pipeline-step i {
+            font-size: 24px;
+            margin-right: 15px;
+            color: #4299e1;
+        }
+        .pipeline-step-content {
+            flex: 1;
+        }
+        .pipeline-step h4 {
+            margin: 0 0 5px 0;
+            color: #2c5282;
+        }
+        .pipeline-step p {
+            margin: 0;
+            color: #4a5568;
+        }
+        .pipeline-arrow {
+            text-align: center;
+            margin: 5px 0;
+            color: #a0aec0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>3.2: Preprocesamiento de Datos</h1>
+            <p>Módulo 3: Fundamentos de Machine Learning</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="objectives">
+            <h2><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h2>
+            <ul>
+                <li>Comprender la importancia del preprocesamiento de datos en Machine Learning</li>
+                <li>Aprender técnicas para manejar datos faltantes y valores atípicos</li>
+                <li>Dominar técnicas de escalado y normalización de características</li>
+                <li>Entender cómo codificar variables categóricas</li>
+                <li>Construir un pipeline de preprocesamiento completo</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h2><i class="fas fa-book"></i> Contenido Teórico</h2>
+            
+            <div class="preprocessing-step">
+                <h3>1. Introducción al Preprocesamiento de Datos</h3>
+                <p>El preprocesamiento de datos es un paso fundamental en cualquier proyecto de Machine Learning. Los datos del mundo real suelen ser ruidosos, inconsistentes y contener valores faltantes. Un buen preprocesamiento puede mejorar significativamente el rendimiento de los modelos de ML.</p>
+                
+                <p>Según un estudio de CrowdFlower, los científicos de datos pasan aproximadamente el <strong>60% de su tiempo limpiando y organizando datos</strong>, mientras que solo el 9% en minería de datos, 4% en ajuste de modelos y 3% en entrenamiento de modelos.</p>
+                
+                <h4>¿Por qué es importante el preprocesamiento?</h4>
+                <ul>
+                    <li>Los algoritmos de ML requieren datos limpios y consistentes</li>
+                    <li>Mejora la precisión y eficiencia de los modelos</li>
+                    <li>Ayuda a manejar valores faltantes y ruido en los datos</li>
+                    <li>Permite que los algoritmos converjan más rápido</li>
+                    <li>Ayuda a evitar el sobreajuste (overfitting)</li>
+                </ul>
+            </div>
+            
+            <div class="preprocessing-step">
+                <h3>2. Manejo de Datos Faltantes</h3>
+                
+                <p>Los valores faltantes son comunes en conjuntos de datos del mundo real. Es importante manejarlos adecuadamente para no introducir sesgos en los modelos.</p>
+                
+                <h4>Estrategias comunes:</h4>
+                
+                <div class="comparison">
+                    <div class="comparison-box">
+                        <h4>1. Eliminación</h4>
+                        <ul>
+                            <li>Eliminar filas con valores faltantes</li>
+                            <li>Eliminar columnas con muchos valores faltantes</li>
+                            <li><strong>Ventaja:</strong> Simple de implementar</li>
+                            <li><strong>Desventaja:</strong> Puede llevar a pérdida de información</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="comparison-box">
+                        <h4>2. Imputación</h4>
+                        <ul>
+                            <li>Media/Mediana para características numéricas</li>
+                            <li>Moda para características categóricas</li>
+                            <li>Valor constante (ej: "Desconocido")</li>
+                            <li><strong>Ventaja:</strong> Conserva el tamaño del conjunto de datos</li>
+                            <li><strong>Desventaja:</strong> Puede introducir sesgo</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="comparison-box">
+                        <h4>3. Predicción</h4>
+                        <ul>
+                            <li>Usar algoritmos de ML para predecir valores faltantes</li>
+                            <li>K-Nearest Neighbors para imputación</li>
+                            <li><strong>Ventaja:</strong> Puede ser más preciso</li>
+                            <li><strong>Desventaja:</strong> Computacionalmente costoso</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="code-comparison">
+                    <div class="code-box">
+                        <h4>Antes de la limpieza:</h4>
+                        <pre><code class="python">import pandas as pd
+import numpy as np
+
+# Crear un DataFrame de ejemplo con valores faltantes
+data = {
+    'edad': [25, 30, np.nan, 35, 40, np.nan, 45],
+    'ingreso': [50000, 60000, 70000, np.nan, 90000, 100000, 110000],
+    'genero': ['M', 'F', 'M', 'F', 'M', np.nan, 'F']
+}
+df = pd.DataFrame(data)
+print("Datos originales:")
+print(df)</code></pre>
+                    </div>
+                    
+                    <div class="code-box">
+                        <h4>Después de la limpieza:</h4>
+                        <pre><code class="python"># Llenar valores faltantes
+df['edad'].fillna(df['edad'].median(), inplace=True)
+df['ingreso'].fillna(df['ingreso'].mean(), inplace=True)
+df['genero'].fillna('Desconocido', inplace=True)
+
+print("\nDatos después de la limpieza:")
+print(df)</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="preprocessing-step">
+                <h3>3. Manejo de Valores Atípicos (Outliers)</h3>
+                
+                <p>Los valores atípicos son observaciones que se alejan significativamente de otras observaciones en el conjunto de datos. Pueden afectar negativamente el rendimiento de los modelos.</p>
+                
+                <h4>Detección de outliers:</h4>
+                <ul>
+                    <li><strong>Método del rango intercuartílico (IQR):</strong> Q1 - 1.5*IQR y Q3 + 1.5*IQR</li>
+                    <li><strong>Puntuación Z:</strong> Valores con |Z| > 3</li>
+                    <li><strong>Visualización:</strong> Diagramas de caja, histogramas, gráficos de dispersión</li>
+                </ul>
+                
+                <h4>Tratamiento de outliers:</h4>
+                <ul>
+                    <li><strong>Eliminación:</strong> Si son errores de medición o recolección</li>
+                    <li><strong>Transformación:</strong> Aplicar logaritmo o raíz cuadrada</li>
+                    <li><strong>Discretización:</strong> Convertir a categorías</li>
+                    <li><strong>Imputación:</strong> Reemplazar con la mediana o la media</li>
+                </ul>
+                
+                <div class="code-comparison">
+                    <div class="code-box">
+                        <h4>Detección con IQR:</h4>
+                        <pre><code class="python"># Detección de outliers usando IQR
+Q1 = df['ingreso'].quantile(0.25)
+Q3 = df['ingreso'].quantile(0.75)
+IQR = Q3 - Q1
+
+# Definir límites
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+
+# Identificar outliers
+outliers = df[(df['ingreso'] < lower_bound) | (df['ingreso'] > upper_bound)]
+print("Valores atípicos:")
+print(outliers)</code></pre>
+                    </div>
+                    
+                    <div class="code-box">
+                        <h4>Tratamiento de outliers:</h4>
+                        <pre><code class="python"># Opción 1: Eliminar outliers
+df_cleaned = df[(df['ingreso'] >= lower_bound) & (df['ingreso'] <= upper_bound)]
+
+# Opción 2: Winsorizar (reemplazar con los valores límite)
+df['ingreso_winsorized'] = df['ingreso'].clip(lower_bound, upper_bound)
+
+print("\nDatos después de manejar outliers:")
+print(df[['ingreso', 'ingreso_winsorized']])</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="preprocessing-step">
+                <h3>4. Escalado y Normalización</h3>
+                
+                <p>Muchos algoritmos de ML funcionan mejor cuando las características están en escalas similares. El escalado es especialmente importante para:</p>
+                <ul>
+                    <li>Algoritmos basados en distancias (KNN, SVM, K-means)</li>
+                    <li>Redes neuronales</li>
+                    <li>Algoritmos de regularización (Ridge, Lasso)</li>
+                    <li>Algoritmos que usan descenso de gradiente</li>
+                </ul>
+                
+                <div class="comparison">
+                    <div class="comparison-box">
+                        <h4>Estandarización (StandardScaler)</h4>
+                        <p>Transforma los datos para que tengan media 0 y desviación estándar 1:</p>
+                        <p>\[ z = \frac{x - \mu}{\sigma} \]</p>
+                        <p><strong>Usar cuando:</strong> La distribución es aproximadamente normal.</p>
+                    </div>
+                    
+                    <div class="comparison-box">
+                        <h4>Normalización (MinMaxScaler)</h4>
+                        <p>Escala los datos a un rango específico (por defecto [0, 1]):</p>
+                        <p>\[ X_{\text{scaled}} = \frac{X - X_{\min}}{X_{\max} - X_{\min}} \]</p>
+                        <p><strong>Usar cuando:</strong> Los límites de los datos son conocidos.</p>
+                    </div>
+                    
+                    <div class="comparison-box">
+                        <h4>Robust Scaler</h4>
+                        <p>Usa la mediana y el rango intercuartílico, es robusto a outliers:</p>
+                        <p>\[ X_{\text{scaled}} = \frac{X - \text{mediana}}{\text{IQR}} \]</p>
+                        <p><strong>Usar cuando:</strong> Hay valores atípicos en los datos.</p>
+                    </div>
+                </div>
+                
+                <div class="code-comparison">
+                    <div class="code-box">
+                        <h4>Implementación:</h4>
+                        <pre><code class="python">from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
+
+# Crear datos de ejemplo
+data = {'edad': [25, 30, 35, 40, 45, 50],
+        'ingreso': [50000, 60000, 70000, 80000, 90000, 100000]}
+df = pd.DataFrame(data)
+
+# Estandarización
+scaler_std = StandardScaler()
+df_std = pd.DataFrame(scaler_std.fit_transform(df), 
+                     columns=['edad_std', 'ingreso_std'])
+
+# Normalización
+scaler_minmax = MinMaxScaler()
+df_minmax = pd.DataFrame(scaler_minmax.fit_transform(df), 
+                        columns=['edad_minmax', 'ingreso_minmax'])
+
+# Robust Scaler
+scaler_robust = RobustScaler()
+df_robust = pd.DataFrame(scaler_robust.fit_transform(df), 
+                        columns=['edad_robust', 'ingreso_robust'])
+
+# Combinar resultados
+df_scaled = pd.concat([df, df_std, df_minmax, df_robust], axis=1)
+print(df_scaled)</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="preprocessing-step">
+                <h3>5. Codificación de Variables Categóricas</h3>
+                
+                <p>La mayoría de los algoritmos de ML requieren que las características sean numéricas. Las variables categóricas deben convertirse a formato numérico.</p>
+                
+                <div class="comparison">
+                    <div class="comparison-box">
+                        <h4>Label Encoding</h4>
+                        <p>Asigna un valor numérico único a cada categoría.</p>
+                        <p><strong>Ejemplo:</strong> ['bajo', 'medio', 'alto'] → [0, 1, 2]</p>
+                        <p><strong>Ventaja:</strong> Simple y no aumenta la dimensionalidad.</p>
+                        <p><strong>Inconveniente:</strong> Puede introducir un orden artificial.</p>
+                    </div>
+                    
+                    <div class="comparison-box">
+                        <h4>One-Hot Encoding</h4>
+                        <p>Crea una columna binaria para cada categoría.</p>
+                        <p><strong>Ejemplo:</strong> 'color' → 'color_rojo', 'color_verde', 'color_azul'</p>
+                        <p><strong>Ventaja:</strong> No asume orden entre categorías.</p>
+                        <p><strong>Inconveniente:</strong> Aumenta la dimensionalidad.</p>
+                    </div>
+                    
+                    <div class="comparison-box">
+                        <h4>Target Encoding</h4>
+                        <p>Reemplaza cada categoría con la media del target.</p>
+                        <p><strong>Ventaja:</strong> Captura información del target.</p>
+                        <p><strong>Inconveniente:</strong> Puede causar sobreajuste.</p>
+                    </div>
+                </div>
+                
+                <div class="code-comparison">
+                    <div class="code-box">
+                        <h4>Implementación:</h4>
+                        <pre><code class="python">from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+
+# Datos de ejemplo
+data = {
+    'color': ['rojo', 'verde', 'azul', 'verde', 'rojo'],
+    'tamaño': ['S', 'M', 'L', 'XL', 'M'],
+    'precio': [10, 20, 30, 40, 50]
+}
+df = pd.DataFrame(data)
+
+# Label Encoding
+le = LabelEncoder()
+df['tamaño_encoded'] = le.fit_transform(df['tamaño'])
+
+# One-Hot Encoding
+ohe = OneHotEncoder(sparse=False, drop='first')
+ohe_features = ohe.fit_transform(df[['color']])
+ohe_columns = [f"color_{cat}" for cat in ohe.categories_[0][1:]]
+df_ohe = pd.DataFrame(ohe_features, columns=ohe_columns)
+
+# Combinar resultados
+df_encoded = pd.concat([df, df_ohe], axis=1)
+print("\nDatos después de la codificación:")
+print(df_encoded[['color', 'tamaño', 'tamaño_encoded'] + ohe_columns])</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="preprocessing-step">
+                <h3>6. División de Datos</h3>
+                
+                <p>Es fundamental dividir los datos en conjuntos de entrenamiento, validación y prueba para evaluar correctamente el rendimiento del modelo.</p>
+                
+                <div class="comparison">
+                    <div class="comparison-box">
+                        <h4>Conjunto de Entrenamiento (60-80%)</h4>
+                        <p>Datos utilizados para entrenar el modelo.</p>
+                        <p><strong>Propósito:</strong> Ajustar los parámetros del modelo.</p>
+                    </div>
+                    
+                    <div class="comparison-box">
+                        <h4>Conjunto de Validación (10-20%)</h4>
+                        <p>Datos utilizados para ajustar hiperparámetros.</p>
+                        <p><strong>Propósito:</strong> Seleccionar el mejor modelo.</p>
+                    </div>
+                    
+                    <div class="comparison-box">
+                        <h4>Conjunto de Prueba (10-20%)</h4>
+                        <p>Datos utilizados solo para la evaluación final.</p>
+                        <p><strong>Propósito:</strong> Proporcionar una estimación imparcial del rendimiento.</p>
+                    </div>
+                </div>
+                
+                <div class="code-comparison">
+                    <div class="code-box">
+                        <h4>División de datos:</h4>
+                        <pre><code class="python">from sklearn.model_selection import train_test_split
+
+# Cargar datos de ejemplo (usando el conjunto de datos Iris)
+from sklearn.datasets import load_iris
+iris = load_iris()
+X, y = iris.data, iris.target
+
+# Dividir en entrenamiento (60%), validación (20%) y prueba (20%)
+X_train, X_temp, y_train, y_temp = train_test_split(
+    X, y, test_size=0.4, random_state=42, stratify=y
+)
+X_val, X_test, y_val, y_test = train_test_split(
+    X_temp, y_temp, test_size=0.5, random_state=42, stratify=y_temp
+)
+
+print(f"Tamaño del conjunto de entrenamiento: {X_train.shape[0]} muestras")
+print(f"Tamaño del conjunto de validación: {X_val.shape[0]} muestras")
+print(f"Tamaño del conjunto de prueba: {X_test.shape[0]} muestras")</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="preprocessing-step">
+                <h3>7. Pipelines de Preprocesamiento</h3>
+                
+                <p>Los pipelines permiten encadenar múltiples pasos de preprocesamiento de manera ordenada y reproducible.</p>
+                
+                <div class="pipeline-step">
+                    <i class="fas fa-database"></i>
+                    <div class="pipeline-step-content">
+                        <h4>1. Carga de Datos</h4>
+                        <p>Cargar el conjunto de datos desde archivos CSV, bases de datos o APIs.</p>
+                    </div>
+                </div>
+                
+                <div class="pipeline-arrow">
+                    <i class="fas fa-arrow-down"></i>
+                </div>
+                
+                <div class="pipeline-step">
+                    <i class="fas fa-broom"></i>
+                    <div class="pipeline-step-content">
+                        <h4>2. Limpieza de Datos</h4>
+                        <p>Manejar valores faltantes, eliminar duplicados y corregir errores.</p>
+                    </div>
+                </div>
+                
+                <div class="pipeline-arrow">
+                    <i class="fas fa-arrow-down"></i>
+                </div>
+                
+                <div class="pipeline-step">
+                    <i class="fas fa-sliders-h"></i>
+                    <div class="pipeline-step-content">
+                        <h4>3. Transformación de Características</h4>
+                        <p>Escalar, normalizar y codificar variables según sea necesario.</p>
+                    </div>
+                </div>
+                
+                <div class="pipeline-arrow">
+                    <i class="fas fa-arrow-down"></i>
+                </div>
+                
+                <div class="pipeline-step">
+                    <i class="fas fa-project-diagram"></i>
+                    <div class="pipeline-step-content">
+                        <h4>4. Ingeniería de Características</h4>
+                        <p>Crear nuevas características a partir de las existentes.</p>
+                    </div>
+                </div>
+                
+                <div class="pipeline-arrow">
+                    <i class="fas fa-arrow-down"></i>
+                </div>
+                
+                <div class="pipeline-step">
+                    <i class="fas fa-cogs"></i>
+                    <div class="pipeline-step-content">
+                        <h4>5. Selección de Características</h4>
+                        <p>Seleccionar las características más relevantes para el modelo.</p>
+                    </div>
+                </div>
+                
+                <div class="code-comparison">
+                    <div class="code-box">
+                        <h4>Implementación de un Pipeline:</h4>
+                        <pre><code class="python">from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+
+# Cargar datos de ejemplo
+df = pd.DataFrame({
+    'edad': [25, 30, 35, np.nan, 45, 50, 55, 60],
+    'ingreso': [50000, 60000, np.nan, 80000, 90000, 100000, 110000, 120000],
+    'genero': ['M', 'F', 'M', 'F', 'M', 'F', 'M', 'F'],
+    'educacion': ['Bachiller', 'Licenciatura', 'Maestria', 'Doctorado', 
+                 'Licenciatura', 'Maestria', 'Bachiller', 'Doctorado'],
+    'objetivo': [0, 1, 1, 0, 1, 0, 1, 0]
+})
+
+# Definir transformaciones para características numéricas y categóricas
+numeric_features = ['edad', 'ingreso']
+numeric_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='median')),
+    ('scaler', StandardScaler())
+])
+
+categorical_features = ['genero', 'educacion']
+categorical_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+    ('onehot', OneHotEncoder(handle_unknown='ignore'))
+])
+
+# Combinar transformaciones en un ColumnTransformer
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', numeric_transformer, numeric_features),
+        ('cat', categorical_transformer, categorical_features)
+    ])
+
+# Crear y ajustar el pipeline
+pipeline = Pipeline(steps=[('preprocessor', preprocessor)])
+
+# Aplicar transformaciones
+X = df.drop('objetivo', axis=1)
+y = df['objetivo']
+X_processed = pipeline.fit_transform(X)
+
+print("\nDatos transformados:")
+print(X_processed.toarray()[:5])  # Mostrar solo las primeras 5 filas</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="practical">
+            <h2><i class="fas fa-laptop-code"></i> Actividad Práctica</h2>
+            
+            <div class="activity">
+                <h3>1. Análisis y Preprocesamiento del Conjunto de Datos de Viviendas</h3>
+                <p>En esta actividad, trabajaremos con un conjunto de datos de precios de viviendas para practicar las técnicas de preprocesamiento aprendidas.</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copiar</button>
+                    <pre><code class="python">import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.impute import SimpleImputer
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+
+# Cargar el conjunto de datos de viviendas
+# Nota: Reemplaza 'ruta/al/archivo.csv' con la ruta correcta a tus datos
+# df = pd.read_csv('ruta/al/archivo.csv')
+
+# Para este ejemplo, crearemos un conjunto de datos sintético
+data = {
+    'tamaño_m2': [70, 80, 90, 100, 110, 120, 130, 140, 150, 160],
+    'habitaciones': [2, 2, 3, 3, 3, 4, 4, 4, 5, 5],
+    'baños': [1, 1, 2, 2, 2, 2, 3, 3, 3, 4],
+    'ubicacion': ['Centro', 'Norte', 'Sur', 'Este', 'Oeste', 'Centro', 'Norte', 'Sur', 'Este', 'Oeste'],
+    'antiguedad': [5, 10, 15, 20, 25, 30, 35, 40, 45, 50],
+    'precio': [250000, 280000, 320000, 350000, 380000, 420000, 450000, 480000, 520000, 550000]
+}
+
+df = pd.DataFrame(data)
+
+# 1. Análisis exploratorio inicial
+print("\nInformación del conjunto de datos:")
+print(df.info())
+
+print("\nEstadísticas descriptivas:")
+print(df.describe())
+
+print("\nValores faltantes por columna:")
+print(df.isnull().sum())
+
+# 2. Visualización de datos
+plt.figure(figsize=(15, 10))
+
+# Histogramas para variables numéricas
+for i, col in enumerate(['tamaño_m2', 'habitaciones', 'baños', 'antiguedad', 'precio']):
+    plt.subplot(2, 3, i+1)
+    sns.histplot(df[col], kde=True)
+    plt.title(f'Distribución de {col}')
+
+plt.tight_layout()
+plt.show()
+
+# Gráfico de dispersión: Tamaño vs Precio
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x='tamaño_m2', y='precio', data=df, hue='ubicacion')
+plt.title('Relación entre Tamaño y Precio por Ubicación')
+plt.xlabel('Tamaño (m²)')
+plt.ylabel('Precio (USD)')
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# 3. Preprocesamiento de datos
+# Separar características y variable objetivo
+X = df.drop('precio', axis=1)
+y = df['precio']
+
+# Dividir en conjuntos de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Definir transformaciones para características numéricas y categóricas
+numeric_features = ['tamaño_m2', 'habitaciones', 'baños', 'antiguedad']
+numeric_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='median')),
+    ('scaler', StandardScaler())
+])
+
+categorical_features = ['ubicacion']
+categorical_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+    ('onehot', OneHotEncoder(handle_unknown='ignore'))
+])
+
+# Combinar transformaciones
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', numeric_transformer, numeric_features),
+        ('cat', categorical_transformer, categorical_features)
+    ])
+
+# Aplicar transformaciones
+X_train_processed = preprocessor.fit_transform(X_train)
+X_test_processed = preprocessor.transform(X_test)
+
+# Obtener nombres de características después de OneHotEncoding
+cat_encoder = preprocessor.named_transformers_['cat'].named_steps['onehot']
+cat_columns = list(cat_encoder.get_feature_names_out(categorical_features))
+feature_names = numeric_features + cat_columns
+
+# Convertir a DataFrame para mejor visualización
+train_df = pd.DataFrame(X_train_processed, columns=feature_names)
+train_df['precio'] = y_train.reset_index(drop=True)
+
+print("\nConjunto de entrenamiento después del preprocesamiento:")
+print(train_df.head())</code></pre>
+                </div>
+                
+                <h3>2. Ejercicio: Análisis de un Conjunto de Datos de Clientes</h3>
+                <p>En este ejercicio, trabajarás con un conjunto de datos de clientes de una tienda minorista. Tu tarea es realizar un análisis exhaustivo y aplicar las técnicas de preprocesamiento aprendidas.</p>
+                
+                <div class="problem">
+                    <h4>Instrucciones:</h4>
+                    <ol>
+                        <li>Crea un nuevo script de Python y carga el siguiente conjunto de datos:</li>
+                    </ol>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copiar</button>
+                        <pre><code class="python">import pandas as pd
+import numpy as np
+
+# Crear conjunto de datos de ejemplo de clientes
+data = {
+    'id_cliente': range(1, 101),
+    'edad': np.random.randint(18, 70, size=100),
+    'genero': np.random.choice(['M', 'F', 'Otro', np.nan], size=100, p=[0.45, 0.45, 0.05, 0.05]),
+    'ingreso_anual': np.random.normal(50000, 15000, 100).astype(int),
+    'puntuacion_gasto': np.random.uniform(0, 1000, 100).round(2),
+    'categoria_favorita': np.random.choice(
+        ['Electrónica', 'Ropa', 'Hogar', 'Deportes', 'Belleza', 'Alimentos', np.nan], 
+        size=100
+    ),
+    'compras_ultimos_6m': np.random.poisson(5, 100),
+    'es_cliente_frecuente': np.random.choice([0, 1], size=100, p=[0.7, 0.3]),
+    'ultima_visita': pd.date_range('2023-01-01', periods=100, freq='D').to_series().sample(100, replace=True).values,
+    'satisfaccion': np.random.choice([1, 2, 3, 4, 5, np.nan], size=100, p=[0.1, 0.15, 0.2, 0.25, 0.25, 0.05])
+}
+
+df_clientes = pd.DataFrame(data)
+
+# Introducir algunos valores atípicos
+df_clientes.loc[0:4, 'ingreso_anual'] = [200000, 250000, 300000, 180000, 220000]
+df_clientes.loc[5:9, 'puntuacion_gasto'] = [2000, 2500, 1800, 2200, 3000]
+
+# Guardar a CSV
+df_clientes.to_csv('datos_clientes.csv', index=False)
+print("Conjunto de datos de clientes creado exitosamente.")</code></pre>
+                    </div>
+                    
+                    <ol start="2">
+                        <li>Realiza un análisis exploratorio de datos (EDA) que incluya:
+                            <ul>
+                                <li>Resumen estadístico de las variables numéricas</li>
+                                <li>Conteo de valores únicos en variables categóricas</li>
+                                <li>Detección de valores faltantes</li>
+                                <li>Identificación de valores atípicos</li>
+                            </ul>
+                        </li>
+                        <li>Aplica las siguientes técnicas de preprocesamiento:
+                            <ul>
+                                <li>Manejo de valores faltantes</li>
+                                <li>Tratamiento de valores atípicos</li>
+                                <li>Codificación de variables categóricas</li>
+                                <li>Escalado de características numéricas</li>
+                            </ul>
+                        </li>
+                        <li>Divide los datos en conjuntos de entrenamiento y prueba (80-20)</li>
+                        <li>Crea un pipeline de preprocesamiento que incluya todas las transformaciones necesarias</li>
+                    </ol>
+                </div>
+                
+                <button class="solution-btn" onclick="toggleSolution('sol4')">Mostrar Solución</button>
+                <div id="sol4" class="solution">
+                    <h4>Solución Propuesta:</h4>
+                    <pre><code class="python"># 1. Cargar y explorar los datos
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, OneHotEncoder, RobustScaler
+from sklearn.impute import SimpleImputer, KNNImputer
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+
+# Cargar datos
+df = pd.read_csv('datos_clientes.csv')
+
+# 2. Análisis exploratorio de datos
+print("\n=== Análisis Exploratorio de Datos ===")
+print("\nPrimeras filas del conjunto de datos:")
+print(df.head())
+
+print("\nInformación del conjunto de datos:")
+print(df.info())
+
+print("\nEstadísticas descriptivas:")
+print(df.describe(include='all'))
+
+print("\nValores faltantes por columna:")
+print(df.isnull().sum())
+
+# Visualización de datos faltantes
+plt.figure(figsize=(10, 4))
+sns.heatmap(df.isnull(), cbar=False, cmap='viridis', yticklabels=False)
+plt.title('Mapa de Valores Faltantes')
+plt.show()
+
+# 3. Preprocesamiento de datos
+# Separar características y variable objetivo (si la hubiera)
+# En este caso, no hay una variable objetivo clara, así que procesaremos todas las características
+
+# Identificar tipos de características
+numeric_features = df.select_dtypes(include=['int64', 'float64']).columns.tolist()
+categorical_features = df.select_dtypes(include=['object', 'category']).columns.tolist()
+date_features = df.select_dtypes(include=['datetime64']).columns.tolist()
+
+# Eliminar 'id_cliente' ya que no es una característica útil
+if 'id_cliente' in numeric_features:
+    numeric_features.remove('id_cliente')
+
+# Extraer características de fecha si existen
+if date_features:
+    for date_col in date_features:
+        df[f'{date_col}_año'] = pd.to_datetime(df[date_col]).dt.year
+        df[f'{date_col}_mes'] = pd.to_datetime(df[date_col]).dt.month
+        df[f'{date_col}_dia'] = pd.to_datetime(df[date_col]).dt.day
+        
+    # Actualizar listas de características
+    numeric_features.extend([f'{col}_año' for col in date_features] + 
+                          [f'{col}_mes' for col in date_features] +
+                          [f'{col}_dia' for col in date_features])
+    
+    # Eliminar columnas de fecha originales
+    df = df.drop(columns=date_features)
+    categorical_features = [col for col in categorical_features if col not in date_features]
+
+# 4. Manejo de valores atípicos
+print("\n=== Detección de Valores Atípicos ===")
+# Usar IQR para detectar valores atípicos en variables numéricas
+Q1 = df[numeric_features].quantile(0.25)
+Q3 = df[numeric_features].quantile(0.75)
+IQR = Q3 - Q1
+
+# Identificar valores atípicos
+outliers = ((df[numeric_features] < (Q1 - 1.5 * IQR)) | 
+            (df[numeric_features] > (Q3 + 1.5 * IQR))).any(axis=1)
+
+print(f"\nNúmero de filas con al menos un valor atípico: {outliers.sum()}")
+
+# 5. Dividir datos (si tuviéramos una variable objetivo)
+# X_train, X_test, y_train, y_test = train_test_split(
+#     df.drop('variable_objetivo', axis=1),
+#     df['variable_objetivo'],
+#     test_size=0.2,
+#     random_state=42
+# )
+
+# Para este ejemplo, dividiremos los datos sin una variable objetivo
+X = df.drop(columns=['id_cliente'] + date_features, errors='ignore')
+train_idx, test_idx = train_test_split(df.index, test_size=0.2, random_state=42)
+X_train, X_test = df.loc[train_idx], df.loc[test_idx]
+
+# 6. Crear pipeline de preprocesamiento
+# Actualizar listas de características después de cualquier modificación
+numeric_features = X.select_dtypes(include=['int64', 'float64']).columns.tolist()
+categorical_features = X.select_dtypes(include=['object', 'category']).columns.tolist()
+
+# Eliminar 'id_cliente' si aún está presente
+if 'id_cliente' in numeric_features:
+    numeric_features.remove('id_cliente')
+
+# Definir transformaciones
+numeric_transformer = Pipeline(steps=[
+    ('imputer', KNNImputer(n_neighbors=5)),
+    ('scaler', RobustScaler())  # Usamos RobustScaler por los valores atípicos
+])
+
+categorical_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='most_frequent')),
+    ('onehot', OneHotEncoder(handle_unknown='ignore', sparse_output=False))
+])
+
+# Combinar transformaciones
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', numeric_transformer, numeric_features),
+        ('cat', categorical_transformer, categorical_features)
+    ],
+    remainder='drop'  # Eliminar columnas no especificadas
+)
+
+# Aplicar transformaciones
+print("\nAplicando transformaciones...")
+X_train_processed = preprocessor.fit_transform(X_train)
+X_test_processed = preprocessor.transform(X_test)
+
+# Obtener nombres de características después del preprocesamiento
+numeric_columns = numeric_features
+categorical_encoder = preprocessor.named_transformers_['cat'].named_steps['onehot']
+categorical_columns = categorical_encoder.get_feature_names_out(categorical_features).tolist()
+
+feature_names = numeric_columns + categorical_columns
+
+# Convertir a DataFrame para mejor visualización
+try:
+    X_train_processed_df = pd.DataFrame(X_train_processed, columns=feature_names)
+    print("\nPrimeras filas del conjunto de entrenamiento procesado:")
+    print(X_train_processed_df.head())
+    
+    print("\nForma del conjunto de entrenamiento procesado:", X_train_processed_df.shape)
+    
+except Exception as e:
+    print(f"\nError al crear el DataFrame: {e}")
+    print("Forma de los datos procesados:", X_train_processed.shape)
+
+print("\n¡Preprocesamiento completado exitosamente!")</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary">
+            <h2><i class="fas fa-clipboard-list"></i> Resumen</h2>
+            <p>En esta sesión, hemos cubierto los aspectos fundamentales del preprocesamiento de datos en Machine Learning, un paso crítico para construir modelos precisos y robustos. Hemos aprendido:</p>
+            
+            <ul>
+                <li><strong>Manejo de valores faltantes:</strong> Técnicas como eliminación, imputación y predicción para tratar con datos incompletos.</li>
+                <li><strong>Detección y tratamiento de valores atípicos:</strong> Uso de métodos estadísticos como el rango intercuartílico (IQR) para identificar y manejar valores extremos.</li>
+                <li><strong>Escalado y normalización:</strong> Diferentes técnicas como Estandarización (StandardScaler), Normalización (MinMaxScaler) y RobustScaler, y cuándo usar cada una.</li>
+                <li><strong>Codificación de variables categóricas:</strong> Métodos como Label Encoding, One-Hot Encoding y Target Encoding para convertir variables categóricas a formato numérico.</li>
+                <li><strong>División de datos:</strong> La importancia de dividir los datos en conjuntos de entrenamiento, validación y prueba para una evaluación justa del modelo.</li>
+                <li><strong>Pipelines de preprocesamiento:</strong> Cómo encadenar múltiples pasos de preprocesamiento de manera ordenada y reproducible.</li>
+            </ul>
+            
+            <p>El preprocesamiento de datos es un paso esencial en cualquier proyecto de Machine Learning. Un buen preprocesamiento puede mejorar significativamente el rendimiento de los modelos y reducir el tiempo de entrenamiento. Recuerda que no existe un enfoque único para todas las situaciones; las mejores técnicas dependen de la naturaleza de tus datos y del problema que estés resolviendo.</p>
+        </section>
+
+        <section class="resources">
+            <h2><i class="fas fa-book"></i> Recursos Adicionales</h2>
+            <ul>
+                <li><a href="https://scikit-learn.org/stable/modules/preprocessing.html" target="_blank" rel="noopener noreferrer">Documentación de scikit-learn: Preprocesamiento de datos</a> - Guía completa de técnicas de preprocesamiento</li>
+                <li><a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/missing_data.html" target="_blank" rel="noopener noreferrer">Guía de pandas para manejo de datos faltantes</a> - Técnicas avanzadas para trabajar con valores faltantes</li>
+                <li><a href="https://www.kaggle.com/learn/data-cleaning" target="_blank" rel="noopener noreferrer">Curso de Limpieza de Datos</a> - Kaggle Learn</li>
+                <li><a href="https://towardsdatascience.com/understanding-feature-engineering-part-1-continuous-numeric-data-da4e47099a7b" target="_blank" rel="noopener noreferrer">Understanding Feature Engineering</a> - Serie de artículos sobre ingeniería de características</li>
+                <li><a href="https://www.analyticsvidhya.com/blog/2016/07/practical-guide-data-preprocessing-python-scikit-learn/" target="_blank" rel="noopener noreferrer">Guía práctica de preprocesamiento de datos con Python</a> - Tutorial paso a paso</li>
+            </ul>
+        </section>
+
+        <section class="homework">
+            <h2><i class="fas fa-home"></i> Tarea</h2>
+            <ol>
+                <li><strong>Análisis de un Conjunto de Datos Real:</strong> Descarga un conjunto de datos de tu elección de plataformas como Kaggle, UCI Machine Learning Repository o Google Dataset Search. Realiza un análisis exploratorio completo y aplica las técnicas de preprocesamiento aprendidas en esta sesión.</li>
+                <li><strong>Comparación de Técnicas de Escalado:</strong> Elige un algoritmo de Machine Learning (por ejemplo, Regresión Lineal o K-Vecinos) y compara su rendimiento utilizando diferentes técnicas de escalado en el mismo conjunto de datos. Muestra los resultados en una tabla comparativa.</li>
+                <li><strong>Pipeline de Preprocesamiento Personalizado:</strong> Crea una clase personalizada que herede de las clases de scikit-learn para implementar una técnica de preprocesamiento específica que no esté incluida en la biblioteca estándar.</li>
+                <li><strong>Análisis de Impacto del Preprocesamiento:</strong> Toma un modelo de Machine Learning y entínalo con y sin preprocesamiento de datos. Compara el rendimiento, el tiempo de entrenamiento y la importancia de las características en ambos casos.</li>
+                <li><strong>Investigación:</strong> Investiga sobre técnicas avanzadas de preprocesamiento como Feature Engineering Automático (AutoML), métodos de selección de características basados en modelos o técnicas de aumento de datos (data augmentation) para datos estructurados. Prepara una breve presentación o informe con tus hallazgos.</li>
+            </ol>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION3-1.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 3.1 Introducción a ML</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION3-3.html" class="btn">Siguiente Sesión: 3.3 Regresión Lineal <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Función para copiar código al portapapeles
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling.querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Cambiar el ícono temporalmente para mostrar que se copió
+            const icon = button.querySelector('i');
+            const originalClass = icon.className;
+            icon.className = 'fas fa-check';
+            
+            setTimeout(() => {
+                icon.className = originalClass;
+            }, 2000);
+        }
+        
+        // Función para mostrar/ocultar soluciones
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            if (solution.style.display === 'block') {
+                solution.style.display = 'none';
+                event.target.textContent = 'Mostrar Solución';
+            } else {
+                solution.style.display = 'block';
+                event.target.textContent = 'Ocultar Solución';
+            }
+        }
+    </script>
+</body>
+</html>

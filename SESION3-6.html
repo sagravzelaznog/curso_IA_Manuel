@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.6: Árboles de Decisión - Curso de Inteligencia Artificial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos específicos para la sesión 3.6 */
+        .tree-visualization {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        #decision-tree-plot {
+            width: 100%;
+            height: 500px;
+            margin: 20px 0;
+        }
+        
+        .feature-importance-chart {
+            width: 100%;
+            height: 400px;
+            margin: 20px 0;
+        }
+        
+        .decision-boundary {
+            width: 100%;
+            height: 400px;
+            margin: 20px 0;
+        }
+        
+        .tree-node {
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin: 10px 0;
+            background-color: #f8f9fa;
+        }
+        
+        .tree-node.decision {
+            background-color: #e7f5ff;
+            border-left: 4px solid #339af0;
+        }
+        
+        .tree-node.leaf {
+            background-color: #ebfbee;
+            border-left: 4px solid #40c057;
+        }
+        
+        .tree-node .node-header {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .tree-node .node-content {
+            padding: 5px 0;
+        }
+        
+        .slider-container {
+            margin: 15px 0;
+        }
+        
+        .slider-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .parameter-slider {
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .exercise {
+            background-color: #e8f4fc;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .exercise h4 {
+            margin-top: 0;
+            color: #2980b9;
+        }
+        
+        .hint-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin: 5px 0;
+        }
+        
+        .hint {
+            display: none;
+            background-color: #f0f8ff;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 3px solid #3498db;
+        }
+        
+        .hint.visible {
+            display: block;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .comparison-table th {
+            background-color: #f8f9fa;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .parameter-card {
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .parameter-card h4 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 8px;
+        }
+        
+        .metric-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        .metric-gini {
+            background-color: #e9ecef;
+            color: #495057;
+        }
+        
+        .metric-entropy {
+            background-color: #e3fafc;
+            color: #0b7285;
+        }
+        
+        .split-criteria {
+            background-color: #fff3bf;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #ffd43b;
+        }
+        
+        .tree-path {
+            font-family: monospace;
+            background-color: #f1f3f5;
+            padding: 2px 5px;
+            border-radius: 3px;
+            color: #495057;
+        }
+        
+        .feature-importance {
+            margin: 20px 0;
+        }
+        
+        .importance-bar {
+            height: 25px;
+            background-color: #e9ecef;
+            border-radius: 3px;
+            margin: 5px 0;
+            overflow: hidden;
+        }
+        
+        .importance-level {
+            height: 100%;
+            background-color: #4dabf7;
+            text-align: right;
+            padding-right: 10px;
+            color: white;
+            font-weight: bold;
+            line-height: 25px;
+        }
+        
+        .interactive-demo {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .demo-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .control-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .tree-container {
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .demo-controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .control-group {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>3.6: Árboles de Decisión</h1>
+            <p>Curso de Inteligencia Artificial - Módulo 3: Machine Learning</p>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section id="introduccion">
+            <h2>Introducción a los Árboles de Decisión</h2>
+            <p>Los árboles de decisión son uno de los algoritmos de aprendizaje supervisado más intuitivos y ampliamente utilizados en el aprendizaje automático. Se pueden utilizar tanto para problemas de clasificación como de regresión, y son la base para algoritmos más avanzados como Random Forest y Gradient Boosting.</p>
+            
+            <div class="tree-visualization">
+                <h3>Estructura de un Árbol de Decisión</h3>
+                <p>Un árbol de decisión es una estructura jerárquica que consta de:</p>
+                <ul>
+                    <li><strong>Nodos raíz y nodos internos:</strong> Representan pruebas sobre las características</li>
+                    <li><strong>Ramas:</strong> Representan el resultado de las pruebas</li>
+                    <li><strong>Nodos hoja:</strong> Representan las predicciones o decisiones finales</li>
+                </ul>
+                <div id="decision-tree-plot"></div>
+            </div>
+            
+            <p>La principal ventaja de los árboles de decisión es que son fáciles de entender e interpretar, ya que pueden visualizarse como un diagrama de flujo donde cada nodo interno representa una "pregunta" sobre una característica, cada rama representa el resultado de la pregunta y cada nodo hoja representa una etiqueta de clase o un valor de regresión.</p>
+        </section>
+        
+        <section id="construccion">
+            <h2>Construcción de Árboles de Decisión</h2>
+            <p>La construcción de un árbol de decisión implica dividir recursivamente el espacio de características en regiones más pequeñas. Los algoritmos de árboles de decisión suelen utilizar un enfoque codicioso para dividir el espacio de características de manera que maximicen la homogeneidad de los nodos resultantes.</p>
+            
+            <h3>Métricas de División</h3>
+            
+            <div class="parameter-card">
+                <h4>1. Para Clasificación:</h4>
+                
+                <div class="split-criteria">
+                    <h5>Índice Gini</h5>
+                    <p>Mide la impureza de un nodo. Un nodo puro (todos los elementos son de la misma clase) tiene un índice de Gini de 0.</p>
+                    <p class="math-formula">Gini = 1 - Σ(pᵢ)²</p>
+                    <span class="metric-badge metric-gini">Gini</span>
+                    <p>Donde pᵢ es la proporción de elementos de la clase i en el nodo.</p>
+                </div>
+                
+                <div class="split-criteria">
+                    <h5>Entropía y Ganancia de Información</h5>
+                    <p>La entropía mide la incertidumbre en un conjunto de datos. La ganancia de información es la reducción en la entropía.</p>
+                    <p class="math-formula">Entropía = -Σ(pᵢ * log₂(pᵢ))</p>
+                    <p class="math-formula">Ganancia de Información = Entropía(padre) - Σ((nᵢ/n) * Entropía(hijoᵢ))</p>
+                    <span class="metric-badge metric-entropy">Entropía</span>
+                </div>
+                
+                <div class="split-criteria">
+                    <h5>Error de Clasificación</h5>
+                    <p>Proporción de ejemplos mal clasificados en un nodo.</p>
+                    <p class="math-formula">Error = 1 - max(pᵢ)</p>
+                </div>
+            </div>
+            
+            <div class="parameter-card">
+                <h4>2. Para Regresión:</h4>
+                
+                <div class="split-criteria">
+                    <h5>Error Cuadrático Medio (MSE)</h5>
+                    <p>Minimiza la varianza dentro de cada nodo hoja.</p>
+                    <p class="math-formula">MSE = (1/n) * Σ(yᵢ - ȳ)²</p>
+                </div>
+                
+                <div class="split-criteria">
+                    <h5>Error Absoluto Medio (MAE)</h5>
+                    <p>Menos sensible a valores atípicos que MSE.</p>
+                    <p class="math-formula">MAE = (1/n) * Σ|yᵢ - mediana(y)|</p>
+                </div>
+            </div>
+            
+            <h3>Algoritmo de Construcción</h3>
+            <p>El algoritmo básico para construir un árbol de decisión es el siguiente:</p>
+            
+            <ol>
+                <li>Comienza con todo el conjunto de entrenamiento en el nodo raíz.</li>
+                <li>Para cada característica, encuentra el mejor punto de división que maximice la métrica de división seleccionada.</li>
+                <li>Divide el nodo en subnodos utilizando la mejor división encontrada.</li>
+                <li>Repite los pasos 2-3 recursivamente para cada subnodo hasta que se cumpla un criterio de parada.</li>
+                <li>Asigna a cada nodo hoja la clase mayoritaria (clasificación) o el valor medio (regresión) de las muestras en ese nodo.</li>
+            </ol>
+        </section>
+        
+        <section id="hiperparametros">
+            <h2>Hiperparámetros de los Árboles de Decisión</h2>
+            <p>Los árboles de decisión tienen varios hiperparámetros que controlan su crecimiento y complejidad. La selección adecuada de estos parámetros es crucial para evitar el sobreajuste.</p>
+            
+            <div class="parameter-card">
+                <h4>1. Control de Profundidad</h4>
+                <ul>
+                    <li><strong>max_depth:</strong> Profundidad máxima del árbol. Árboles más profundos pueden capturar patrones más complejos pero son propensos a sobreajuste.</li>
+                    <li><strong>min_samples_split:</strong> Número mínimo de muestras requeridas para dividir un nodo interno.</li>
+                    <li><strong>min_samples_leaf:</strong> Número mínimo de muestras requeridas en un nodo hoja.</li>
+                </ul>
+            </div>
+            
+            <div class="parameter-card">
+                <h4>2. Criterios de División</h4>
+                <ul>
+                    <li><strong>criterion:</strong> Función para medir la calidad de una división ('gini', 'entropy' para clasificación; 'mse', 'mae' para regresión).</li>
+                    <li><strong>max_features:</strong> Número de características a considerar al buscar la mejor división.</li>
+                    <li><strong>splitter:</strong> Estrategia para elegir la división en cada nodo ('best' o 'random').</li>
+                </ul>
+            </div>
+            
+            <div class="parameter-card">
+                <h4>3. Control de Poda</h4>
+                <ul>
+                    <li><strong>min_impurity_decrease:</strong> Un nodo se dividirá si esta división induce una disminución de la impureza mayor o igual a este valor.</li>
+                    <li><strong>ccp_alpha:</strong> Parámetro de complejidad para la poda de coste-complejidad.</li>
+                </ul>
+            </div>
+            
+            <div class="interactive-demo">
+                <h3>Demostración Interactiva de Árboles de Decisión</h3>
+                <p>Explora cómo los diferentes hiperparámetros afectan a la estructura y rendimiento del árbol:</p>
+                
+                <div class="demo-controls">
+                    <div class="control-group">
+                        <label for="max-depth-slider">Profundidad máxima: <span id="max-depth-value">3</span></label>
+                        <input type="range" id="max-depth-slider" class="parameter-slider" min="1" max="10" value="3">
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="min-samples-split">Mínimo muestras para dividir: <span id="min-samples-split-value">2</span></label>
+                        <input type="range" id="min-samples-split" class="parameter-slider" min="2" max="50" value="2">
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="criterion">Criterio de división:</label>
+                        <select id="criterion" class="form-control">
+                            <option value="gini">Gini</option>
+                            <option value="entropy">Entropía</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="tree-container">
+                    <div id="interactive-tree-plot"></div>
+                </div>
+                
+                <div class="feature-importance">
+                    <h4>Importancia de las Características</h4>
+                    <div id="feature-importance-plot"></div>
+                </div>
+                
+                <div class="model-metrics">
+                    <h4>Métricas del Modelo</h4>
+                    <div id="metrics-display"></div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="implementacion">
+            <h2>Implementación en Python</h2>
+            <p>A continuación, veremos cómo implementar árboles de decisión en Python utilizando las bibliotecas más comunes como NumPy, Pandas, Matplotlib y Scikit-learn.</p>
+            
+            <h3>1. Clasificación con Árboles de Decisión</h3>
+            <pre><code class="language-python">import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.tree import DecisionTreeClassifier, plot_tree, export_text
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+import seaborn as sns
+
+# Cargar el conjunto de datos de Iris
+iris = load_iris()
+X = pd.DataFrame(iris.data, columns=iris.feature_names)
+y = iris.target
+
+# Dividir los datos en conjuntos de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42, stratify=y
+)
+
+# Crear y entrenar el modelo de árbol de decisión
+tree_clf = DecisionTreeClassifier(
+    max_depth=3,
+    criterion='gini',
+    min_samples_split=2,
+    min_samples_leaf=1,
+    random_state=42
+)
+tree_clf.fit(X_train, y_train)
+
+# Hacer predicciones
+y_pred = tree_clf.predict(X_test)
+y_pred_proba = tree_clf.predict_proba(X_test)
+
+# Evaluar el modelo
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Precisión del modelo: {accuracy:.4f}")
+
+# Mostrar matriz de confusión
+cm = confusion_matrix(y_test, y_pred)
+plt.figure(figsize=(8, 6))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
+            xticklabels=iris.target_names, 
+            yticklabels=iris.target_names)
+plt.xlabel('Predicho')
+plt.ylabel('Real')
+plt.title('Matriz de Confusión')
+plt.show()
+
+# Mostrar reporte de clasificación
+print("\nReporte de Clasificación:")
+print(classification_report(y_test, y_pred, target_names=iris.target_names))
+
+# Visualizar el árbol de decisión
+plt.figure(figsize=(20, 10))
+plot_tree(
+    tree_clf,
+    feature_names=iris.feature_names,
+    class_names=iris.target_names,
+    filled=True,
+    rounded=True,
+    fontsize=10
+)
+plt.title("Árbol de Decisión para Clasificación de Flores Iris")
+plt.show()
+
+# Mostrar las reglas del árbol
+tree_rules = export_text(
+    tree_clf,
+    feature_names=list(iris.feature_names),
+    show_weights=True
+)
+print("\nReglas del Árbol de Decisión:")
+print(tree_rules)
+
+# Importancia de las características
+feature_importance = pd.DataFrame({
+    'Característica': iris.feature_names,
+    'Importancia': tree_clf.feature_importances_
+}).sort_values('Importancia', ascending=False)
+
+plt.figure(figsize=(10, 6))
+plt.barh(feature_importance['Característica'], feature_importance['Importancia'])
+plt.xlabel('Importancia')
+plt.title('Importancia de las Características')
+plt.tight_layout()
+plt.show()</code></pre>
+            
+            <h3>2. Regresión con Árboles de Decisión</h3>
+            <pre><code class="language-python">from sklearn.tree import DecisionTreeRegressor
+from sklearn.datasets import load_diabetes
+from sklearn.metrics import mean_squared_error, r2_score
+
+# Cargar el conjunto de datos de diabetes
+diabetes = load_diabetes()
+X = pd.DataFrame(diabetes.data, columns=diabetes.feature_names)
+y = diabetes.target
+
+# Dividir los datos en conjuntos de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+# Crear y entrenar el modelo de árbol de regresión
+tree_reg = DecisionTreeRegressor(
+    max_depth=4,
+    min_samples_split=5,
+    min_samples_leaf=2,
+    random_state=42
+)
+tree_reg.fit(X_train, y_train)
+
+# Hacer predicciones
+y_pred = tree_reg.predict(X_test)
+
+# Evaluar el modelo
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+print(f"Error Cuadrático Medio: {mse:.2f}")
+print(f"R² Score: {r2:.4f}")
+
+# Visualizar el árbol de regresión
+plt.figure(figsize=(20, 10))
+plot_tree(
+    tree_reg,
+    feature_names=diabetes.feature_names,
+    filled=True,
+    rounded=True,
+    fontsize=10
+)
+plt.title("Árbol de Decisión para Regresión (Diabetes)")
+plt.show()
+
+# Importancia de las características
+feature_importance = pd.DataFrame({
+    'Característica': diabetes.feature_names,
+    'Importancia': tree_reg.feature_importances_
+}).sort_values('Importancia', ascending=False)
+
+plt.figure(figsize=(10, 6))
+plt.barh(feature_importance['Característica'], feature_importance['Importancia'])
+plt.xlabel('Importancia')
+plt.title('Importancia de las Características (Regresión)')
+plt.tight_layout()
+plt.show()</code></pre>
+        </section>
+        
+        <section id="ventajas-desventajas">
+            <h2>Ventajas y Desventajas</h2>
+            
+            <div class="parameter-card">
+                <h4>Ventajas</h4>
+                <ul>
+                    <li><strong>Fácil de entender e interpretar:</strong> Los árboles de decisión pueden visualizarse y son fáciles de explicar a personas sin conocimientos técnicos.</li>
+                    <li><strong>Poco preprocesamiento de datos:</strong> No requieren normalización de características y pueden manejar tanto características numéricas como categóricas.</li>
+                    <li><strong>Manejo de relaciones no lineales:</strong> Pueden capturar interacciones no lineales entre características.</li>
+                    <li><strong>Robustos a valores atípicos:</strong> Los valores atípicos tienen menos impacto en los árboles de decisión que en otros algoritmos.</li>
+                    <li><strong>Selección de características implícita:</strong> Los árboles de decisión realizan automáticamente selección de características.</li>
+                </ul>
+            </div>
+            
+            <div class="parameter-card">
+                <h4>Desventajas</h4>
+                <ul>
+                    <li><strong>Propensos al sobreajuste:</strong> Pueden crear árboles demasiado complejos que no generalizan bien a datos no vistos.</li>
+                    <li><strong>Inestables:</strong> Pequeños cambios en los datos pueden resultar en un árbol completamente diferente.</li>
+                    <li><strong>Sesgo hacia características con más niveles:</strong> Los atributos con más niveles tienen más probabilidades de ser seleccionados.</li>
+                    <li><strong>Dificultad para capturar relaciones aditivas:</strong> No son buenos para aprender relaciones aditivas entre características.</li>
+                    <li><strong>Óptimos locales:</strong> El algoritmo de construcción del árbol es codicioso y puede quedarse atascado en óptimos locales.</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section id="ejercicios">
+            <h2>Ejercicios Prácticos</h2>
+            
+            <div class="exercise">
+                <h4>Ejercicio 1: Clasificación con Árboles de Decisión</h4>
+                <p>Utiliza el conjunto de datos de vino de Scikit-learn para implementar un clasificador de árbol de decisión que prediga la clase de vino basándose en sus características químicas. Sigue estos pasos:</p>
+                <ol>
+                    <li>Carga el conjunto de datos de vino</li>
+                    <li>Explora y preprocesa los datos</li>
+                    <li>Divide los datos en conjuntos de entrenamiento y prueba</li>
+                    <li>Entrena un árbol de decisión con diferentes hiperparámetros</li>
+                    <li>Evalúa el rendimiento usando precisión, matriz de confusión y reporte de clasificación</li>
+                    <li>Visualiza el árbol de decisión y la importancia de las características</li>
+                    <li>Optimiza los hiperparámetros usando GridSearchCV</li>
+                </ol>
+                
+                <button class="hint-button" onclick="toggleHint('hint1')">Mostrar pista</button>
+                <div id="hint1" class="hint">
+                    <p>Puedes cargar el conjunto de datos de vino usando <code>from sklearn.datasets import load_wine</code>. Este conjunto de datos contiene 13 características químicas de vinos de tres cultivares diferentes en la región de Italia.</p>
+                </div>
+                
+                <button class="hint-button" onclick="toggleHint('solution1')">Mostrar solución</button>
+                <div id="solution1" class="hint">
+                    <pre><code class="language-python">import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_wine
+from sklearn.tree import DecisionTreeClassifier, plot_tree, export_text
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+
+# 1. Cargar el conjunto de datos de vino
+wine = load_wine()
+X = pd.DataFrame(wine.data, columns=wine.feature_names)
+y = wine.target
+
+# 2. Explorar los datos
+print("Forma de X:", X.shape)
+print("\nPrimeras filas de X:")
+print(X.head())
+
+# Visualizar la distribución de las clases
+plt.figure(figsize=(8, 5))
+sns.countplot(x=y)
+plt.xticks(ticks=[0, 1, 2], labels=wine.target_names)
+plt.xlabel('Clase de Vino')
+plt.ylabel('Cantidad')
+plt.title('Distribución de Clases')
+plt.show()
+
+# Visualizar la correlación entre características
+plt.figure(figsize=(12, 8))
+sns.heatmap(X.corr(), annot=True, cmap='coolwarm', fmt='.2f')
+plt.title('Matriz de Correlación')
+plt.tight_layout()
+plt.show()
+
+# 3. Dividir los datos en conjuntos de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42, stratify=y
+)
+
+# 4. Crear un pipeline con escalado y árbol de decisión
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),
+    ('tree', DecisionTreeClassifier(random_state=42))
+])
+
+# 5. Definir la cuadrícula de parámetros para la búsqueda
+param_grid = {
+    'tree__criterion': ['gini', 'entropy'],
+    'tree__max_depth': [None, 3, 5, 7, 10],
+    'tree__min_samples_split': [2, 5, 10],
+    'tree__min_samples_leaf': [1, 2, 4],
+    'tree__max_features': ['sqrt', 'log2', None]
+}
+
+# 6. Configurar la búsqueda en cuadrícula con validación cruzada
+grid_search = GridSearchCV(
+    estimator=pipeline,
+    param_grid=param_grid,
+    cv=5,
+    scoring='accuracy',
+    n_jobs=-1,
+    verbose=1
+)
+
+# 7. Realizar la búsqueda en la cuadrícula
+print("\nIniciando la búsqueda en cuadrícula...")
+grid_search.fit(X_train, y_train)
+
+# 8. Mostrar los mejores parámetros
+print("\nMejores parámetros:", grid_search.best_params_)
+print("Mejor puntuación de validación cruzada: {:.4f}".format(grid_search.best_score_))
+
+# 9. Evaluar el mejor modelo en el conjunto de prueba
+best_model = grid_search.best_estimator_
+y_pred = best_model.predict(X_test)
+y_pred_proba = best_model.predict_proba(X_test)
+
+test_accuracy = accuracy_score(y_test, y_pred)
+print("\nPrecisión en el conjunto de prueba: {:.4f}".format(test_accuracy))
+
+# 10. Mostrar matriz de confusión
+cm = confusion_matrix(y_test, y_pred)
+plt.figure(figsize=(8, 6))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
+            xticklabels=wine.target_names, 
+            yticklabels=wine.target_names)
+plt.xlabel('Predicho')
+plt.ylabel('Real')
+plt.title('Matriz de Confusión')
+plt.show()
+
+# 11. Mostrar reporte de clasificación
+print("\nReporte de Clasificación:")
+print(classification_report(y_test, y_pred, target_names=wine.target_names))
+
+# 12. Visualizar el árbol de decisión
+plt.figure(figsize=(20, 10))
+plot_tree(
+    best_model.named_steps['tree'],
+    feature_names=wine.feature_names,
+    class_names=wine.target_names,
+    filled=True,
+    rounded=True,
+    fontsize=10
+)
+plt.title("Mejor Árbol de Decisión para Clasificación de Vinos")
+plt.show()
+
+# 13. Mostrar las reglas del árbol
+tree_rules = export_text(
+    best_model.named_steps['tree'],
+    feature_names=list(wine.feature_names),
+    show_weights=True
+)
+print("\nReglas del Árbol de Decisión (primeras 20 líneas):")
+print('\n'.join(tree_rules.split('\n')[:20]))  # Mostrar solo las primeras 20 líneas
+
+# 14. Importancia de las características
+feature_importance = pd.DataFrame({
+    'Característica': wine.feature_names,
+    'Importancia': best_model.named_steps['tree'].feature_importances_
+}).sort_values('Importancia', ascending=False)
+
+plt.figure(figsize=(10, 6))
+plt.barh(feature_importance['Característica'], feature_importance['Importancia'])
+plt.xlabel('Importancia')
+plt.title('Importancia de las Características')
+plt.tight_layout()
+plt.show()</code></pre>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4>Ejercicio 2: Regresión con Árboles de Decisión</h4>
+                <p>Utiliza el conjunto de datos de precios de vino tinto para implementar un modelo de regresión con árboles de decisión que prediga la calidad del vino basándose en sus características químicas. Sigue estos pasos:</p>
+                <ol>
+                    <li>Cargar y explorar los datos de vino tinto</li>
+                    <li>Realizar análisis exploratorio de datos (EDA)</li>
+                    <li>Preprocesar los datos (escalado, manejo de valores atípicos)</li>
+                    <li>Dividir los datos en conjuntos de entrenamiento y prueba</li>
+                    <li>Entrenar un árbol de regresión con diferentes hiperparámetros</li>
+                    <li>Evaluar el rendimiento usando MSE, R² y visualizaciones</li>
+                    <li>Optimizar los hiperparámetros usando búsqueda en cuadrícula</li>
+                    <li>Analizar la importancia de las características</li>
+                </ol>
+                
+                <button class="hint-button" onclick="toggleHint('hint2')">Mostrar pista</button>
+                <div id="hint2" class="hint">
+                    <p>Puedes cargar el conjunto de datos de vino tinto desde el repositorio UCI Machine Learning usando pandas: <code>df = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv', sep=';')</code>. Este conjunto de datos contiene 11 características fisicoquímicas y una variable objetivo (quality) que varía de 0 a 10.</p>
+                </div>
+                
+                <button class="hint-button" onclick="toggleHint('solution2')">Mostrar solución</button>
+                <div id="solution2" class="hint">
+                    <pre><code class="language-python">import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.tree import DecisionTreeRegressor, plot_tree, export_text
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+
+# 1. Cargar el conjunto de datos de vino tinto
+url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv'
+df = pd.read_csv(url, sep=';')
+
+# 2. Explorar los datos
+print("Forma del conjunto de datos:", df.shape)
+print("\nPrimeras filas del conjunto de datos:")
+print(df.head())
+
+# Ver valores faltantes
+print("\nValores faltantes por columna:")
+print(df.isnull().sum())
+
+# Estadísticas descriptivas
+print("\nEstadísticas descriptivas:")
+print(df.describe())
+
+# 3. Análisis exploratorio de datos (EDA)
+# Distribución de la variable objetivo (calidad)
+plt.figure(figsize=(10, 5))
+sns.countplot(x='quality', data=df)
+plt.title('Distribución de la Calidad del Vino')
+plt.xlabel('Calidad (0-10)')
+plt.ylabel('Cantidad')
+plt.show()
+
+# Matriz de correlación
+plt.figure(figsize=(12, 8))
+correlation_matrix = df.corr()
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f', linewidths=0.5)
+plt.title('Matriz de Correlación')
+plt.tight_layout()
+plt.show()
+
+# 4. Preparar los datos para el modelo
+X = df.drop('quality', axis=1)
+y = df['quality']
+
+# 5. Dividir los datos en conjuntos de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+# 6. Crear un pipeline con escalado y árbol de regresión
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),
+    ('tree', DecisionTreeRegressor(random_state=42))
+])
+
+# 7. Definir la cuadrícula de parámetros para la búsqueda
+param_grid = {
+    'tree__criterion': ['mse', 'friedman_mse', 'mae'],
+    'tree__max_depth': [None, 3, 5, 7, 10],
+    'tree__min_samples_split': [2, 5, 10],
+    'tree__min_samples_leaf': [1, 2, 4],
+    'tree__max_features': ['auto', 'sqrt', 'log2', None],
+    'tree__min_impurity_decrease': [0.0, 0.01, 0.05, 0.1]
+}
+
+# 8. Configurar la búsqueda en cuadrícula con validación cruzada
+grid_search = GridSearchCV(
+    estimator=pipeline,
+    param_grid=param_grid,
+    cv=5,
+    scoring='neg_mean_squared_error',
+    n_jobs=-1,
+    verbose=1
+)
+
+# 9. Realizar la búsqueda en la cuadrícula
+print("\nIniciando la búsqueda en cuadrícula...")
+grid_search.fit(X_train, y_train)
+
+# 10. Mostrar los mejores parámetros
+print("\nMejores parámetros:", grid_search.best_params_)
+print("Mejor puntuación de validación cruzada (MSE negativo): {:.4f}".format(grid_search.best_score_))
+
+# 11. Evaluar el mejor modelo en el conjunto de prueba
+best_model = grid_search.best_estimator_
+y_pred = best_model.predict(X_test)
+
+# Calcular métricas de rendimiento
+mse = mean_squared_error(y_test, y_pred)
+mae = mean_absolute_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+print("\nMétricas de rendimiento en el conjunto de prueba:")
+print(f"Error Cuadrático Medio (MSE): {mse:.4f}")
+print(f"Error Absoluto Medio (MAE): {mae:.4f}")
+print(f"Coeficiente de Determinación (R²): {r2:.4f}")
+
+# 12. Visualizar predicciones vs valores reales
+plt.figure(figsize=(10, 6))
+plt.scatter(y_test, y_pred, alpha=0.5)
+plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2)
+plt.xlabel('Valores Reales')
+plt.ylabel('Predicciones')
+plt.title('Valores Reales vs Predicciones')
+plt.grid(True)
+plt.show()
+
+# 13. Visualizar el árbol de decisión (solo si la profundidad no es muy grande)
+if grid_search.best_params_['tree__max_depth'] is not None and grid_search.best_params_['tree__max_depth'] <= 5:
+    plt.figure(figsize=(20, 10))
+    plot_tree(
+        best_model.named_steps['tree'],
+        feature_names=X.columns,
+        filled=True,
+        rounded=True,
+        fontsize=10
+    )
+    plt.title("Árbol de Decisión para Regresión de Calidad de Vino")
+    plt.show()
+else:
+    print("\nEl árbol es demasiado grande para visualizarlo. La profundidad máxima es:", 
+          grid_search.best_params_['tree__max_depth'])
+
+# 14. Importancia de las características
+feature_importance = pd.DataFrame({
+    'Característica': X.columns,
+    'Importancia': best_model.named_steps['tree'].feature_importances_
+}).sort_values('Importancia', ascending=False)
+
+plt.figure(figsize=(10, 6))
+plt.barh(feature_importance['Característica'], feature_importance['Importancia'])
+plt.xlabel('Importancia')
+plt.title('Importancia de las Características')
+plt.tight_layout()
+plt.show()
+
+# 15. Visualizar la importancia de las características en orden descendente
+plt.figure(figsize=(10, 6))
+sns.barplot(x='Importancia', y='Característica', data=feature_importance.sort_values('Importancia', ascending=False))
+plt.title('Importancia de las Características')
+plt.tight_layout()
+plt.show()
+
+# 16. Visualizar la relación entre las características más importantes y la calidad
+if not feature_importance.empty:
+    top_features = feature_importance.head(3)['Característica'].values
+    
+    plt.figure(figsize=(15, 5))
+    for i, feature in enumerate(top_features, 1):
+        plt.subplot(1, 3, i)
+        sns.regplot(x=df[feature], y=df['quality'], scatter_kws={'alpha':0.3})
+        plt.title(f'Relación entre {feature} y Calidad')
+        plt.xlabel(feature)
+        plt.ylabel('Calidad')
+    
+    plt.tight_layout()
+    plt.show()</code></pre>
+                </div>
+            </div>
+        </section>
+        
+        <section id="conclusion">
+            <h2>Conclusión</h2>
+            <p>Los árboles de decisión son una herramienta poderosa y versátil en el aprendizaje automático, adecuada tanto para problemas de clasificación como de regresión. A lo largo de esta sesión, hemos cubierto:</p>
+            <ul>
+                <li>Los conceptos fundamentales de los árboles de decisión y su estructura</li>
+                <li>Diferentes métricas de división (Gini, Entropía, MSE, MAE)</li>
+                <li>Hiperparámetros clave y su impacto en el rendimiento del modelo</li>
+                <li>Implementación práctica en Python usando Scikit-learn</li>
+                <li>Evaluación del rendimiento y optimización de hiperparámetros</li>
+                <li>Ventajas y limitaciones de los árboles de decisión</li>
+            </ul>
+            
+            <p>Los árboles de decisión son especialmente útiles cuando se necesita un modelo interpretable que pueda manejar tanto características numéricas como categóricas. Sin embargo, es importante recordar sus limitaciones, especialmente su tendencia al sobreajuste, que puede mitigarse mediante técnicas de poda o utilizando métodos de conjunto como Random Forest o Gradient Boosting.</p>
+            
+            <div class="alert alert-info">
+                <h4>Próximos pasos</h4>
+                <p>En la próxima sesión, exploraremos los <strong>Métodos de Ensamble</strong>, que combinan múltiples modelos para mejorar el rendimiento predictivo. Aprenderemos sobre técnicas como Bagging, Boosting y Stacking, y cómo pueden superar las limitaciones de los modelos individuales como los árboles de decisión.</p>
+            </div>
+        </section>
+        
+        <section id="recursos">
+            <h2>Recursos Adicionales</h2>
+            <ul>
+                <li><a href="https://scikit-learn.org/stable/modules/tree.html" target="_blank" rel="noopener noreferrer">Documentación de Scikit-learn sobre Árboles de Decisión</a></li>
+                <li><a href="https://towardsdatascience.com/decision-trees-in-machine-learning-641b9c4e8052" target="_blank" rel="noopener noreferrer">Artículo detallado sobre árboles de decisión</a></li>
+                <li><a href="https://www.kaggle.com/code/dansbecker/exercise-decision-trees/notebook" target="_blank" rel="noopener noreferrer">Ejercicio práctico en Kaggle</a></li>
+                <li><a href="https://www.youtube.com/watch?v=7VeUPuFGJHk" target="_blank" rel="noopener noreferrer">Video tutorial de StatQuest sobre árboles de decisión</a></li>
+            </ul>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="navigation">
+                <a href="SESION3-5.html" class="btn"><i class="fas fa-arrow-left"></i> Sesión Anterior: 3.5 K-vecinos más cercanos</a>
+                <a href="index.html" class="btn"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION3-7.html" class="btn">Siguiente Sesión: 3.7 Métodos de Ensamble <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Código para la visualización interactiva del árbol de decisión
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configuración inicial del árbol de decisión interactivo
+            const treeData = {
+                name: '¿Es la longitud del sépalo < 5.45 cm?',
+                children: [
+                    {
+                        name: '¿Es el ancho del pétalo < 2.8 cm?',
+                        children: [
+                            {
+                                name: 'Clase: setosa',
+                                value: 50
+                            },
+                            {
+                                name: 'Clase: versicolor',
+                                value: 45
+                            }
+                        ]
+                    },
+                    {
+                        name: '¿Es la longitud del pétalo < 4.85 cm?',
+                        children: [
+                            {
+                                name: 'Clase: versicolor',
+                                value: 40
+                            },
+                            {
+                                name: 'Clase: virginica',
+                                value: 45
+                            }
+                        ]
+                    }
+                ]
+            };
+            
+            // Función para actualizar la visualización del árbol
+            function updateTreeVisualization() {
+                const maxDepth = parseInt(document.getElementById('max-depth-slider').value);
+                document.getElementById('max-depth-value').textContent = maxDepth;
+                
+                const minSamplesSplit = parseInt(document.getElementById('min-samples-split').value);
+                document.getElementById('min-samples-split-value').textContent = minSamplesSplit;
+                
+                const criterion = document.getElementById('criterion').value;
+                
+                // Aquí iría el código para actualizar la visualización del árbol
+                // basado en los parámetros seleccionados
+                
+                // Por ahora, solo actualizamos el texto de ejemplo
+                const treeContainer = document.getElementById('interactive-tree-plot');
+                treeContainer.innerHTML = `
+                    <div style="text-align: center; padding: 20px; background-color: #f8f9fa; border-radius: 5px;">
+                        <h4>Visualización del Árbol de Decisión</h4>
+                        <p>Parámetros actuales:</p>
+                        <ul style="text-align: left; display: inline-block;">
+                            <li>Profundidad máxima: ${maxDepth}</li>
+                            <li>Mínimo muestras para dividir: ${minSamplesSplit}</li>
+                            <li>Criterio: ${criterion === 'gini' ? 'Índice Gini' : 'Entropía'}</li>
+                        </ul>
+                        <p><em>Esta es una representación simplificada. En una implementación real, se mostraría el árbol de decisión.</em></p>
+                    </div>
+                `;
+                
+                // Actualizar la importancia de las características (ejemplo)
+                updateFeatureImportance();
+                
+                // Actualizar las métricas del modelo (ejemplo)
+                updateModelMetrics();
+            }
+            
+            // Función para actualizar la importancia de las características (ejemplo)
+            function updateFeatureImportance() {
+                const featureData = [
+                    {feature: 'petal length (cm)', importance: 0.92},
+                    {feature: 'petal width (cm)', importance: 0.05},
+                    {feature: 'sepal length (cm)', importance: 0.02},
+                    {feature: 'sepal width (cm)', importance: 0.01}
+                ];
+                
+                const trace = {
+                    x: featureData.map(d => d.importance),
+                    y: featureData.map(d => d.feature),
+                    type: 'bar',
+                    orientation: 'h',
+                    marker: {
+                        color: 'rgba(55, 128, 191, 0.7)'
+                    }
+                };
+                
+                const layout = {
+                    title: 'Importancia de las Características',
+                    xaxis: {title: 'Importancia'},
+                    yaxis: {title: 'Característica'},
+                    margin: {l: 150, r: 20, t: 40, b: 40},
+                    height: 300
+                };
+                
+                Plotly.newPlot('feature-importance-plot', [trace], layout);
+            }
+            
+            // Función para actualizar las métricas del modelo (ejemplo)
+            function updateModelMetrics() {
+                const metrics = [
+                    {name: 'Precisión', value: '0.95'},
+                    {name: 'Recall', value: '0.94'},
+                    {name: 'F1-Score', value: '0.945'},
+                    {name: 'Exactitud', value: '0.96'}
+                ];
+                
+                let metricsHtml = '<div class="metrics-container">';
+                metrics.forEach(metric => {
+                    metricsHtml += `
+                        <div class="metric-item">
+                            <span class="metric-name">${metric.name}:</span>
+                            <span class="metric-value">${metric.value}</span>
+                        </div>
+                    `;
+                });
+                metricsHtml += '</div>';
+                
+                document.getElementById('metrics-display').innerHTML = metricsHtml;
+                
+                // Añadir estilos en línea para las métricas
+                const style = document.createElement('style');
+                style.textContent = `
+                    .metrics-container {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 15px;
+                        margin: 15px 0;
+                    }
+                    .metric-item {
+                        background-color: #f8f9fa;
+                        border-radius: 5px;
+                        padding: 10px 15px;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                        min-width: 120px;
+                        text-align: center;
+                    }
+                    .metric-name {
+                        display: block;
+                        font-weight: bold;
+                        margin-bottom: 5px;
+                        color: #495057;
+                    }
+                    .metric-value {
+                        font-size: 1.2em;
+                        color: #228be6;
+                        font-weight: bold;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            // Inicializar la visualización
+            updateTreeVisualization();
+            
+            // Agregar manejadores de eventos para los controles
+            document.getElementById('max-depth-slider').addEventListener('input', updateTreeVisualization);
+            document.getElementById('min-samples-split').addEventListener('input', updateTreeVisualization);
+            document.getElementById('criterion').addEventListener('change', updateTreeVisualization);
+        });
+        
+        // Función para mostrar/ocultar pistas y soluciones
+        function toggleHint(elementId) {
+            const element = document.getElementById(elementId);
+            element.classList.toggle('visible');
+            
+            // Desplazarse suavemente al elemento
+            element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+</body>
+</html>
