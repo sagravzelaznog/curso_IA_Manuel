@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.10: Reducción de Dimensionalidad - Curso de Inteligencia Artificial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos específicos para la sesión 3.10 */
+        .visualization-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .visualization-box {
+            flex: 1;
+            min-width: 300px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            background-color: #f8f9fa;
+        }
+        
+        .pca-plot {
+            width: 100%;
+            height: 400px;
+            margin: 20px 0;
+        }
+        
+        .feature-importance-chart {
+            width: 100%;
+            height: 300px;
+            margin: 20px 0;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #dee2e6;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        .comparison-table th {
+            background-color: #e9ecef;
+        }
+        
+        .method-card {
+            border-left: 4px solid #4e73df;
+            padding: 15px;
+            margin: 15px 0;
+            background-color: #f8f9fc;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .method-card h4 {
+            margin-top: 0;
+            color: #4e73df;
+        }
+        
+        /* Estilos para pestañas */
+        .tab {
+            overflow: hidden;
+            border: 1px solid #dee2e6;
+            background-color: #f8f9fa;
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 10px 16px;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+        
+        .tab button:hover {
+            background-color: #e9ecef;
+        }
+        
+        .tab button.active {
+            background-color: #4e73df;
+            color: white;
+        }
+        
+        .tabcontent {
+            display: none;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+            animation: fadeEffect 0.5s;
+        }
+        
+        @keyframes fadeEffect {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+        
+        /* Estilos para modo oscuro */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #1a1a1a;
+                color: #e0e0e0;
+            }
+            
+            .visualization-box, .method-card {
+                background-color: #2d2d2d;
+                border-color: #444;
+            }
+            
+            .comparison-table th, .comparison-table td {
+                border-color: #444;
+            }
+            
+            .comparison-table th {
+                background-color: #333;
+            }
+            
+            .tab {
+                background-color: #2d2d2d;
+                border-color: #444;
+            }
+            
+            .tab button {
+                color: #e0e0e0;
+            }
+            
+            .tab button:hover {
+                background-color: #444;
+            }
+            
+            .tabcontent {
+                background-color: #2d2d2d;
+                border-color: #444;
+            }
+        }
+        
+        /* Estilos responsivos */
+        @media (max-width: 768px) {
+            .visualization-container {
+                flex-direction: column;
+            }
+            
+            .visualization-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>3.10: Reducción de Dimensionalidad</h1>
+            <p>Curso de Inteligencia Artificial - Módulo 3: Machine Learning</p>
+            <div class="header-actions">
+                <a href="SESION3-9.html" class="btn btn-outline">← Anterior</a>
+                <a href="index.html" class="btn btn-outline">Inicio</a>
+                <a href="SESION3-11.html" class="btn btn-outline">Siguiente →</a>
+            </div>
+        </div>
+    </header>
+
+    <nav class="toc">
+        <div class="container">
+            <h3>Contenido</h3>
+            <ul>
+                <li><a href="#introduccion">Introducción</a></li>
+                <li><a href="#metodos">Métodos de Reducción de Dimensionalidad</a></li>
+                <li><a href="#pca">Análisis de Componentes Principales (PCA)</a></li>
+                <li><a href="#tsne">t-SNE</a></li>
+                <li><a href="#umap">UMAP</a></li>
+                <li><a href="#aplicaciones">Aplicaciones Prácticas</a></li>
+                <li><a href="#ejercicios">Ejercicios Prácticos</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section id="introduccion">
+            <h2>Introducción a la Reducción de Dimensionalidad</h2>
+            <p>La reducción de dimensionalidad es una técnica fundamental en el aprendizaje automático que permite simplificar conjuntos de datos complejos al reducir el número de variables o características, manteniendo la mayor cantidad de información posible. Esta técnica es especialmente útil cuando se trabaja con datos de alta dimensionalidad, donde el número de características es significativamente mayor que el número de observaciones.</p>
+            
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <h4>Problema de la Maldición de la Dimensionalidad</h4>
+                    <p>A medida que aumenta el número de dimensiones en un conjunto de datos, el volumen del espacio de características crece exponencialmente, lo que puede llevar a:</p>
+                    <ul>
+                        <li>Sobredimensionamiento del modelo</li>
+                        <li>Mayor costo computacional</li>
+                        <li>Mayor riesgo de sobreajuste</li>
+                        <li>Dificultad para visualizar los datos</li>
+                    </ul>
+                </div>
+                
+                <div class="visualization-box">
+                    <h4>Beneficios de la Reducción de Dimensionalidad</h4>
+                    <ul>
+                        <li>Reducción del tiempo de entrenamiento</li>
+                        <li>Mejora en la visualización de datos</li>
+                        <li>Reducción del ruido en los datos</li>
+                        <li>Mejora en el rendimiento del modelo</li>
+                        <li>Prevención del sobreajuste</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <i class="fas fa-lightbulb"></i>
+                <p>La reducción de dimensionalidad no solo es útil para la visualización, sino que también puede mejorar significativamente el rendimiento de los algoritmos de aprendizaje automático al eliminar características redundantes o irrelevantes.</p>
+            </div>
+        </section>
+
+        <section id="metodos">
+            <h2>Métodos de Reducción de Dimensionalidad</h2>
+            <p>Existen dos enfoques principales para la reducción de dimensionalidad:</p>
+            
+            <div class="method-card">
+                <h4>1. Extracción de Características</h4>
+                <p>Transforma los datos en un espacio de menor dimensión mediante la combinación o transformación de las características existentes.</p>
+                <ul>
+                    <li><strong>PCA (Análisis de Componentes Principales)</strong>: Encuentra las direcciones de máxima varianza en los datos.</li>
+                    <li><strong>LDA (Análisis Discriminante Lineal)</strong>: Maximiza la separabilidad entre clases.</li>
+                    <li><strong>t-SNE (t-Distributed Stochastic Neighbor Embedding)</strong>: Ideal para visualización de datos de alta dimensión.</li>
+                    <li><strong>UMAP (Uniform Manifold Approximation and Projection)</strong>: Alternativa más rápida a t-SNE que preserva mejor la estructura global.</li>
+                </ul>
+            </div>
+            
+            <div class="method-card">
+                <h4>2. Selección de Características</h4>
+                <p>Selecciona un subconjunto de las características más relevantes del conjunto original.</p>
+                <ul>
+                    <li><strong>Métodos de filtrado</strong>: Seleccionan características basadas en puntuaciones estadísticas.</li>
+                    <li><strong>Métodos de envoltura</strong>: Utilizan un modelo de aprendizaje automático para evaluar subconjuntos de características.</li>
+                    <li><strong>Métodos integrados</strong>: Realizan la selección de características durante el proceso de entrenamiento del modelo.</li>
+                </ul>
+            </div>
+            
+            <div class="info-box">
+                <i class="fas fa-chart-line"></i>
+                <p>La elección del método de reducción de dimensionalidad depende del tipo de datos, el problema específico y los requisitos de interpretabilidad.</p>
+            </div>
+        </section>
+
+        <section id="pca">
+            <h2>Análisis de Componentes Principales (PCA)</h2>
+            <p>El PCA es uno de los métodos de reducción de dimensionalidad más utilizados. Funciona identificando los ejes (componentes principales) a lo largo de los cuales los datos tienen la mayor varianza.</p>
+            
+            <h3>Conceptos Clave del PCA</h3>
+            <ul>
+                <li><strong>Componentes principales</strong>: Nuevas variables no correlacionadas que capturan la mayor variabilidad en los datos.</li>
+                <li><strong>Varianza explicada</strong>: Porcentaje de la varianza total que explica cada componente principal.</li>
+                <li><strong>Autovalores y autovectores</strong>: Los autovectores representan las direcciones de los componentes principales, y los autovalores representan su magnitud.</li>
+            </ul>
+            
+            <h3>Implementación de PCA en Python</h3>
+            
+            <div class="tab">
+                <button class="tablinks active" onclick="openTab(event, 'pca-code')">Código</button>
+                <button class="tablinks" onclick="openTab(event, 'pca-explanation')">Explicación</button>
+            </div>
+            
+            <div id="pca-code" class="tabcontent" >
+                <pre><code class="language-python">import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+
+# Cargar el conjunto de datos de ejemplo (Iris)
+data = load_iris()
+X = data.data
+y = data.target
+feature_names = data.feature_names
+
+# Estandarizar los datos
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Aplicar PCA
+pca = PCA(n_components=2)  # Reducir a 2 dimensiones
+X_pca = pca.fit_transform(X_scaled)
+
+# Crear un DataFrame con los componentes principales
+pca_df = pd.DataFrame(data=X_pca, columns=['Componente Principal 1', 'Componente Principal 2'])
+pca_df['Clase'] = y
+
+# Visualizar los datos en el espacio de componentes principales
+plt.figure(figsize=(10, 6))
+for target, color in zip([0, 1, 2], ['r', 'g', 'b']):
+    indices = pca_df['Clase'] == target
+    plt.scatter(pca_df.loc[indices, 'Componente Principal 1'],
+                pca_df.loc[indices, 'Componente Principal 2'],
+                c=color, label=data.target_names[target])
+
+plt.xlabel('Componente Principal 1 (Varianza: {:.2f}%)'.format(pca.explained_variance_ratio_[0] * 100))
+plt.ylabel('Componente Principal 2 (Varianza: {:.2f}%)'.format(pca.explained_variance_ratio_[1] * 100))
+plt.title('PCA del Conjunto de Datos Iris')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# Varianza explicada por cada componente
+print("Varianza explicada por cada componente:", pca.explained_variance_ratio_)
+print("Varianza acumulada:", np.cumsum(pca.explained_variance_ratio_))
+
+# Visualizar la varianza explicada
+plt.figure(figsize=(10, 4))
+plt.bar(range(1, len(pca.explained_variance_ratio_) + 1), pca.explained_variance_ratio_, 
+        alpha=0.5, align='center', label='Varianza individual explicada')
+plt.step(range(1, len(pca.explained_variance_ratio_) + 1), np.cumsum(pca.explained_variance_ratio_),
+         where='mid', label='Varianza acumulada explicada')
+plt.ylabel('Proporción de varianza explicada')
+plt.xlabel('Componentes principales')
+plt.title('Varianza explicada por los componentes principales')
+plt.legend(loc='best')
+plt.tight_layout()
+plt.show()</code></pre>
+                <button onclick="copyToClipboard('pca-code')" class="copy-button" title="Copiar al portapapeles">
+                    <i class="far fa-copy"></i>
+                </button>
+            </div>
+            
+            <div id="pca-explanation" class="tabcontent">
+                <h4>Explicación del Código</h4>
+                <ol>
+                    <li><strong>Carga de datos</strong>: Cargamos el conjunto de datos de Iris, que contiene medidas de flores de diferentes especies.</li>
+                    <li><strong>Estandarización</strong>: Estandarizamos los datos para que tengan media 0 y desviación estándar 1, lo que es importante para PCA.</li>
+                    <li><strong>Aplicación de PCA</strong>: Creamos una instancia de PCA especificando que queremos reducir a 2 dimensiones y ajustamos el modelo a nuestros datos.</li>
+                    <li><strong>Visualización</strong>: Visualizamos los datos transformados en el espacio de los dos primeros componentes principales.</li>
+                    <li><strong>Análisis de varianza</strong>: Calculamos y visualizamos la varianza explicada por cada componente principal.</li>
+                </ol>
+                
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <p>La varianza explicada nos ayuda a entender cuánta información retienen los componentes principales. En este caso, los dos primeros componentes principales capturan la mayor parte de la varianza en los datos.</p>
+                </div>
+            </div>
+            
+            <h3>Interpretación de los Componentes</h3>
+            <p>Los componentes principales son combinaciones lineales de las características originales. Podemos examinar los pesos (loadings) de cada característica en los componentes principales:</p>
+            
+            <pre><code class="language-python"># Obtener los componentes principales (autovectores)
+components = pca.components_
+
+# Crear un DataFrame para visualizar los pesos
+loadings = pd.DataFrame(components.T, 
+                        columns=['PC1', 'PC2'],
+                        index=feature_names)
+
+print("Pesos de las características en los componentes principales:")
+print(loadings)
+
+# Visualizar la importancia de las características en los componentes principales
+plt.figure(figsize=(10, 6))
+plt.scatter(loadings['PC1'], loadings['PC2'])
+
+# Añadir etiquetas a los puntos
+for i, feature in enumerate(feature_names):
+    plt.annotate(feature, (loadings['PC1'][i], loadings['PC2'][i]))
+
+plt.axhline(y=0, color='k', linestyle='--', alpha=0.3)
+plt.axvline(x=0, color='k', linestyle='--', alpha=0.3)
+plt.xlabel('Componente Principal 1')
+plt.ylabel('Componente Principal 2')
+plt.title('Círculo de Correlación')
+plt.grid(True)
+
+# Añadir un círculo unitario
+theta = np.linspace(0, 2*np.pi, 100)
+plt.plot(np.cos(theta), np.sin(theta), 'k--', alpha=0.3)
+plt.axis('equal')
+plt.show()</code></pre>
+            <button onclick="copyToClipboard('pca-loadings')" class="copy-button" title="Copiar al portapapeles">
+                <i class="far fa-copy"></i>
+            </button>
+            
+            <div class="info-box">
+                <i class="fas fa-lightbulb"></i>
+                <p>El círculo de correlación nos ayuda a interpretar las relaciones entre las características originales y los componentes principales. Las características que están cerca del borde del círculo y en direcciones similares están altamente correlacionadas entre sí.</p>
+            </div>
+        </section>
+
+        <section id="tsne">
+            <h2>t-SNE (t-Distributed Stochastic Neighbor Embedding)</h2>
+            <p>t-SNE es un algoritmo de reducción de dimensionalidad no lineal que es particularmente adecuado para la visualización de datos de alta dimensión. A diferencia de PCA, que busca preservar la varianza global, t-SNE se centra en preservar las similitudes locales entre los puntos de datos.</p>
+            
+            <h3>Características Principales de t-SNE</h3>
+            <ul>
+                <li><strong>No linealidad</strong>: Puede capturar estructuras no lineales en los datos.</li>
+                <li><strong>Preservación de vecindarios locales</strong>: Los puntos que están cerca en el espacio original tenderán a estar cerca en el espacio reducido.</li>
+                <li><strong>Hiperparámetros sensibles</strong>: La elección de la perplejidad y la tasa de aprendizaje puede afectar significativamente los resultados.</li>
+            </ul>
+            
+            <h3>Implementación de t-SNE en Python</h3>
+            
+            <div class="tab">
+                <button class="tablinks active" onclick="openTab(event, 'tsne-code')">Código</button>
+                <button class="tablinks" onclick="openTab(event, 'tsne-explanation')">Explicación</button>
+            </div>
+            
+            <div id="tsne-code" class="tabcontent" >
+                <pre><code class="language-python">import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_digits
+from sklearn.manifold import TSNE
+from sklearn.preprocessing import StandardScaler
+
+# Cargar el conjunto de datos de dígitos escritos a mano
+digits = load_digits()
+X = digits.data
+y = digits.target
+
+# Estandarizar los datos
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Aplicar t-SNE
+tsne = TSNE(n_components=2, random_state=42, perplexity=30, n_iter=1000)
+X_tsne = tsne.fit_transform(X_scaled)
+
+# Crear un DataFrame con los resultados
+tsne_df = pd.DataFrame(data=X_tsne, columns=['Dimensión 1', 'Dimensión 2'])
+tsne_df['Clase'] = y
+
+# Visualizar los resultados
+plt.figure(figsize=(10, 8))
+for i in range(10):
+    indices = tsne_df['Clase'] == i
+    plt.scatter(tsne_df.loc[indices, 'Dimensión 1'],
+                tsne_df.loc[indices, 'Dimensión 2'],
+                label=str(i), s=50, alpha=0.7)
+
+plt.title('Visualización t-SNE del Conjunto de Datos de Dígitos')
+plt.xlabel('Dimensión 1')
+plt.ylabel('Dimensión 2')
+plt.legend(title='Dígito')
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# Comparar diferentes valores de perplejidad
+perplexities = [5, 30, 50, 100]
+
+plt.figure(figsize=(15, 10))
+for i, perplexity in enumerate(perplexities, 1):
+    # Aplicar t-SNE con diferente perplejidad
+    tsne = TSNE(n_components=2, random_state=42, perplexity=perplexity, n_iter=1000)
+    X_tsne = tsne.fit_transform(X_scaled)
+    
+    # Visualizar
+    plt.subplot(2, 2, i)
+    scatter = plt.scatter(X_tsne[:, 0], X_tsne[:, 1], c=y, cmap='tab10', alpha=0.7)
+    plt.title(f't-SNE con perplejidad = {perplexity}')
+    plt.xlabel('Dimensión 1')
+    plt.ylabel('Dimensión 2')
+    
+plt.tight_layout()
+plt.show()</code></pre>
+                <button onclick="copyToClipboard('tsne-code')" class="copy-button" title="Copiar al portapapeles">
+                    <i class="far fa-copy"></i>
+                </button>
+            </div>
+            
+            <div id="tsne-explanation" class="tabcontent">
+                <h4>Explicación del Código</h4>
+                <ol>
+                    <li><strong>Carga de datos</strong>: Cargamos el conjunto de datos de dígitos escritos a mano, que contiene imágenes de 8x8 píxeles de dígitos del 0 al 9.</li>
+                    <li><strong>Estandarización</strong>: Estandarizamos los datos para que tengan media 0 y desviación estándar 1.</li>
+                    <li><strong>Aplicación de t-SNE</strong>: Creamos una instancia de t-SNE con 2 componentes y un valor de perplejidad de 30, luego ajustamos el modelo a nuestros datos.</li>
+                    <li><strong>Visualización</strong>: Visualizamos los datos transformados, coloreando los puntos según la clase a la que pertenecen.</li>
+                    <li><strong>Comparación de perplejidades</strong>: Mostramos cómo diferentes valores de perplejidad afectan a la visualización t-SNE.</li>
+                </ol>
+                
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <p>La perplejidad es un parámetro que controla el equilibrio entre la atención que el algoritmo presta a la estructura local y global de los datos. Valores más bajos hacen que el algoritmo se centre más en la estructura local, mientras que valores más altos consideran más la estructura global.</p>
+                </div>
+            </div>
+            
+            <h3>Ventajas y Limitaciones de t-SNE</h3>
+            
+            <div class="visualization-container">
+                <div class="visualization-box">
+                    <h4>Ventajas</h4>
+                    <ul>
+                        <li>Excelente para visualizar estructuras no lineales</li>
+                        <li>Preserva las relaciones locales entre puntos de datos</li>
+                        <li>Efectivo para conjuntos de datos con muchas características</li>
+                        <li>Útil para identificar agrupaciones (clústeres) en los datos</li>
+                    </ul>
+                </div>
+                
+                <div class="visualization-box">
+                    <h4>Limitaciones</h4>
+                    <ul>
+                        <li>Los resultados pueden variar con diferentes ejecuciones (debido a la inicialización aleatoria)</li>
+                        <li>La elección de la perplejidad puede afectar significativamente los resultados</li>
+                        <li>Computacionalmente costoso para conjuntos de datos grandes</li>
+                        <li>Las distancias entre grupos en la visualización no son interpretables</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="umap">
+            <h2>UMAP (Uniform Manifold Approximation and Projection)</h2>
+            <p>UMAP es un algoritmo de reducción de dimensionalidad que puede usarse para visualización similar a t-SNE, pero con un mejor rendimiento computacional y una mejor preservación de la estructura global de los datos.</p>
+            
+            <h3>Características Principales de UMAP</h3>
+            <ul>
+                <li><strong>Eficiencia computacional</strong>: Generalmente más rápido que t-SNE, especialmente para conjuntos de datos grandes.</li>
+                <li><strong>Preservación de la estructura global</strong>: Mejor que t-SNE para preservar tanto la estructura local como la global.</li>
+                <li><strong>Hiperparámetros intuitivos</strong>: Los parámetros como `n_neighbors` y `min_dist` son más fáciles de interpretar que la perplejidad en t-SNE.</li>
+            </ul>
+            
+            <h3>Implementación de UMAP en Python</h3>
+            
+            <div class="tab">
+                <button class="tablinks active" onclick="openTab(event, 'umap-code')">Código</button>
+                <button class="tablinks" onclick="openTab(event, 'umap-explanation')">Explicación</button>
+            </div>
+            
+            <div id="umap-code" class="tabcontent" >
+                <pre><code class="language-python">!pip install umap-learn  # Instalar UMAP si no está instalado
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.datasets import fetch_openml
+from sklearn.preprocessing import StandardScaler
+import umap
+
+# Cargar el conjunto de datos MNIST
+print("Cargando el conjunto de datos MNIST...")
+mnist = fetch_openml('mnist_784', as_frame=False)
+X = mnist.data
+y = mnist.target.astype(int)
+
+# Tomar una muestra más pequeña para reducir el tiempo de cómputo
+np.random.seed(42)
+sample_size = 5000
+indices = np.random.permutation(len(X))[:sample_size]
+X_sample = X[indices]
+y_sample = y[indices]
+
+# Estandarizar los datos
+print("Estandarizando los datos...")
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X_sample)
+
+# Aplicar UMAP
+print("Aplicando UMAP...")
+reducer = umap.UMAP(n_components=2, random_state=42, n_neighbors=15, min_dist=0.1)
+X_umap = reducer.fit_transform(X_scaled)
+
+# Crear un DataFrame con los resultados
+umap_df = pd.DataFrame(data=X_umap, columns=['Dimensión 1', 'Dimensión 2'])
+umap_df['Clase'] = y_sample
+
+# Visualizar los resultados
+plt.figure(figsize=(12, 10))
+scatter = plt.scatter(X_umap[:, 0], X_umap[:, 1], c=y_sample, cmap='Spectral', s=5, alpha=0.7)
+plt.colorbar(scatter, label='Dígito')
+plt.title('Visualización UMAP del Conjunto de Datos MNIST (muestra de 5,000 dígitos)', fontsize=12)
+plt.xlabel('Dimensión 1')
+plt.ylabel('Dimensión 2')
+plt.grid(True, alpha=0.2)
+plt.show()
+
+# Comparar diferentes valores de n_neighbors y min_dist
+params_combinations = [
+    {'n_neighbors': 5, 'min_dist': 0.1},
+    {'n_neighbors': 50, 'min_dist': 0.1},
+    {'n_neighbors': 15, 'min_dist': 0.01},
+    {'n_neighbors': 15, 'min_dist': 0.5}
+]
+
+plt.figure(figsize=(15, 12))
+for i, params in enumerate(params_combinations, 1):
+    # Aplicar UMAP con diferentes parámetros
+    reducer = umap.UMAP(n_components=2, random_state=42, 
+                        n_neighbors=params['n_neighbors'], 
+                        min_dist=params['min_dist'])
+    X_umap = reducer.fit_transform(X_scaled)
+    
+    # Visualizar
+    plt.subplot(2, 2, i)
+    plt.scatter(X_umap[:, 0], X_umap[:, 1], c=y_sample, cmap='Spectral', s=5, alpha=0.7)
+    plt.title(f"UMAP: n_neighbors={params['n_neighbors']}, min_dist={params['min_dist']}")
+    plt.xlabel('Dimensión 1')
+    plt.ylabel('Dimensión 2')
+    
+plt.tight_layout()
+plt.show()</code></pre>
+                <button onclick="copyToClipboard('umap-code')" class="copy-button" title="Copiar al portapapeles">
+                    <i class="far fa-copy"></i>
+                </button>
+            </div>
+            
+            <div id="umap-explanation" class="tabcontent">
+                <h4>Explicación del Código</h4>
+                <ol>
+                    <li><strong>Carga de datos</strong>: Cargamos el conjunto de datos MNIST, que contiene imágenes de dígitos escritos a mano de 28x28 píxeles.</li>
+                    <li><strong>Muestreo</strong>: Tomamos una muestra más pequeña del conjunto de datos para reducir el tiempo de cómputo.</li>
+                    <li><strong>Estandarización</strong>: Estandarizamos los datos para que tengan media 0 y desviación estándar 1.</li>
+                    <li><strong>Aplicación de UMAP</strong>: Creamos una instancia de UMAP con 2 componentes y parámetros predeterminados, luego ajustamos el modelo a nuestros datos.</li>
+                    <li><strong>Visualización</strong>: Visualizamos los datos transformados, coloreando los puntos según la clase a la que pertenecen.</li>
+                    <li><strong>Comparación de parámetros</strong>: Mostramos cómo diferentes valores de `n_neighbors` y `min_dist` afectan a la visualización UMAP.</li>
+                </ol>
+                
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <p>Los parámetros clave de UMAP son:
+                    <ul>
+                        <li><strong>n_neighbors</strong>: Controla el equilibrio entre la estructura local y global. Valores más bajos se centran en la estructura local, mientras que valores más altos capturan mejor la estructura global.</li>
+                        <li><strong>min_dist</strong>: Controla la separación mínima entre puntos en el espacio de baja dimensión. Valores más bajos permiten una agrupación más densa de puntos similares.</li>
+                    </ul>
+                    </p>
+                </div>
+            </div>
+            
+            <h3>Comparación entre PCA, t-SNE y UMAP</h3>
+            
+            <table class="comparison-table">
+                <tr>
+                    <th>Característica</th>
+                    <th>PCA</th>
+                    <th>t-SNE</th>
+                    <th>UMAP</th>
+                </tr>
+                <tr>
+                    <td>Tipo</td>
+                    <td>Lineal</td>
+                    <td>No lineal</td>
+                    <td>No lineal</td>
+                </tr>
+                <tr>
+                    <td>Velocidad</td>
+                    <td>Muy rápida</td>
+                    <td>Lenta, especialmente para conjuntos grandes</td>
+                    <td>Rápida, incluso para conjuntos grandes</td>
+                </tr>
+                <tr>
+                    <td>Estructura global</td>
+                    <td>Buena</td>
+                    <td>Mala</td>
+                    <td>Buena</td>
+                </tr>
+                <tr>
+                    <td>Estructura local</td>
+                    <td>Mala para datos no lineales</td>
+                    <td>Excelente</td>
+                    <td>Muy buena</td>
+                </tr>
+                <tr>
+                    <td>Interpretabilidad</td>
+                    <td>Alta (componentes lineales)</td>
+                    <td>Baja</td>
+                    <td>Baja</td>
+                </tr>
+                <tr>
+                    <td>Uso recomendado</td>
+                    <td>Reducción inicial de dimensionalidad, visualización rápida</td>
+                    <td>Visualización de estructuras locales en conjuntos pequeños</td>
+                    <td>Visualización de conjuntos grandes, preservando estructura global y local</td>
+                </tr>
+            </table>
+            
+            <div class="info-box">
+                <i class="fas fa-lightbulb"></i>
+                <p>Para conjuntos de datos muy grandes, una estrategia común es usar primero PCA para reducir la dimensionalidad a un número manejable (por ejemplo, 50 componentes) y luego aplicar UMAP o t-SNE para la visualización final.</p>
+            </div>
+        </section>
+
+        <section id="aplicaciones">
+            <h2>Aplicaciones Prácticas de la Reducción de Dimensionalidad</h2>
+            <p>La reducción de dimensionalidad tiene numerosas aplicaciones en el mundo real. A continuación, se presentan algunos ejemplos prácticos:</p>
+            
+            <div class="method-card">
+                <h4>1. Procesamiento de Imágenes</h4>
+                <p>Las imágenes son datos de alta dimensión por naturaleza (cada píxel es una característica). La reducción de dimensionalidad permite:</p>
+                <ul>
+                    <li>Compresión de imágenes</li>
+                    <li>Detección de características relevantes</li>
+                    <li>Reconocimiento facial</li>
+                    <li>Clasificación de imágenes médicas</li>
+                </ul>
+                
+                <h5>Ejemplo: Reconocimiento Facial con PCA (Eigenfaces)</h5>
+                <pre><code class="language-python">from sklearn.datasets import fetch_lfw_people
+from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Cargar el conjunto de datos de caras etiquetadas (Labeled Faces in the Wild)
+lfw_people = fetch_lfw_people(min_faces_per_person=70, resize=0.4)
+X = lfw_people.data
+y = lfw_people.target
+
+# Aplicar PCA para extraer las "eigenfaces"
+n_components = 100  # Número de componentes principales a extraer
+pca = PCA(n_components=n_components, whiten=True, random_state=42)
+X_pca = pca.fit_transform(X)
+
+# Visualizar las primeras eigenfaces
+fig, axes = plt.subplots(2, 5, figsize=(15, 6),
+                         subplot_kw={'xticks':[], 'yticks':[]},
+                         gridspec_kw=dict(hspace=0.1, wspace=0.1))
+
+for i, ax in enumerate(axes.flat):
+    ax.imshow(pca.components_[i].reshape(50, 37), cmap='gray')
+    ax.set_title(f'Componente {i+1}')
+
+plt.suptitle('Eigenfaces - Componentes Principales', fontsize=16)
+plt.show()
+
+# Reconstruir las caras originales usando diferentes números de componentes
+n_components_to_test = [10, 50, 100, 200, 400]
+
+plt.figure(figsize=(15, 8))
+for i, n in enumerate(n_components_to_test, 1):
+    # Ajustar PCA con n componentes
+    pca = PCA(n_components=n, whiten=True, random_state=42)
+    X_pca = pca.fit_transform(X)
+    
+    # Reconstruir la imagen
+    X_reconstructed = pca.inverse_transform(X_pca)
+    
+    # Mostrar la imagen original y reconstruida
+    plt.subplot(2, len(n_components_to_test), i)
+    plt.imshow(X[0].reshape(50, 37), cmap='gray')
+    plt.title(f'Original\n({X.shape[1]} características)')
+    plt.axis('off')
+    
+    plt.subplot(2, len(n_components_to_test), i + len(n_components_to_test))
+    plt.imshow(X_reconstructed[0].reshape(50, 37), cmap='gray')
+    plt.title(f'{n} componentes\n({n/X.shape[1]*100:.1f}% de varianza)')
+    plt.axis('off')
+
+plt.tight_layout()
+plt.show()</code></pre>
+                <button onclick="copyToClipboard('eigenfaces-code')" class="copy-button" title="Copiar al portapapeles">
+                    <i class="far fa-copy"></i>
+                </button>
+            </div>
+            
+            <div class="method-card">
+                <h4>2. Procesamiento de Lenguaje Natural (NLP)</h4>
+                <p>En NLP, los textos se representan a menudo como vectores de alta dimensión (por ejemplo, TF-IDF o incrustaciones de palabras). La reducción de dimensionalidad permite:</p>
+                <ul>
+                    <li>Visualizar similitudes entre documentos</li>
+                    <li>Reducir el ruido en los datos de texto</li>
+                    <li>Mejorar el rendimiento de los modelos de clasificación</li>
+                </ul>
+                
+                <h5>Ejemplo: Visualización de Documentos con t-SNE</h5>
+                <pre><code class="language-python">from sklearn.datasets import fetch_20newsgroups
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.manifold import TSNE
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Cargar el conjunto de datos de noticias
+categories = ['sci.space', 'rec.sport.baseball', 'comp.graphics', 'talk.politics.mideast']
+newsgroups = fetch_20newsgroups(subset='train', categories=categories, remove=('headers', 'footers', 'quotes'))
+
+# Convertir los textos a vectores TF-IDF
+vectorizer = TfidfVectorizer(max_features=5000, stop_words='english')
+X = vectorizer.fit_transform(newsgroups.data)
+
+# Aplicar t-SNE para reducción a 2D
+tsne = TSNE(n_components=2, random_state=42, perplexity=30, n_iter=1000)
+X_tsne = tsne.fit_transform(X.toarray())
+
+# Visualizar los resultados
+plt.figure(figsize=(12, 8))
+for i, category in enumerate(categories):
+    indices = newsgroups.target == i
+    plt.scatter(X_tsne[indices, 0], X_tsne[indices, 1], 
+                label=category, alpha=0.7, s=50)
+
+plt.title('Visualización de Documentos con t-SNE')
+plt.xlabel('Dimensión 1')
+plt.ylabel('Dimensión 2')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()</code></pre>
+                <button onclick="copyToClipboard('nlp-tsne-code')" class="copy-button" title="Copiar al portapapeles">
+                    <i class="far fa-copy"></i>
+                </button>
+            </div>
+            
+            <div class="method-card">
+                <h4>3. Genómica y Bioinformática</h4>
+                <p>En genómica, los conjuntos de datos suelen tener miles o millones de características (genes) para un número relativamente pequeño de muestras. La reducción de dimensionalidad permite:</p>
+                <ul>
+                    <li>Identificar patrones en la expresión génica</li>
+                    <li>Clasificar tipos de cáncer</li>
+                    <li>Descubrir subtipos moleculares</li>
+                </ul>
+                
+                <h5>Ejemplo: Análisis de Expresión Génica con UMAP</h5>
+                <pre><code class="language-python">import scanpy as sc
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Cargar un conjunto de datos de expresión génica (ejemplo con datos de células inmunes)
+# Nota: Este es un ejemplo con datos simulados
+# En la práctica, podrías cargar datos de un archivo .h5ad o .csv
+
+# Datos simulados (en un caso real, cargarías tus propios datos)
+# Por ejemplo: adata = sc.read_h5ad('tus_datos.h5ad')
+
+# Para este ejemplo, usaremos un conjunto de datos de ejemplo de scanpy
+adata = sc.datasets.pbmc3k()
+
+# Preprocesamiento básico
+sc.pp.filter_cells(adata, min_genes=200)
+sc.pp.filter_genes(adata, min_cells=3)
+adata.var['mt'] = adata.var_names.str.startswith('MT-')
+sc.pp.calculate_qc_metrics(adata, qc_vars=['mt'], percent_top=None, log1p=False, inplace=True)
+
+# Normalización
+del adata.raw
+sc.pp.normalize_total(adata, target_sum=1e4)
+sc.pp.log1p(adata)
+sc.pp.highly_variable_genes(adata, min_mean=0.0125, max_mean=3, min_disp=0.5)
+adata = adata[:, adata.var.highly_variable]
+
+# Escalar los datos
+sc.pp.scale(adata, max_value=10)
+
+# Aplicar PCA
+sc.tl.pca(adata, svd_solver='arpack')
+
+# Aplicar UMAP
+sc.pp.neighbors(adata, n_neighbors=10, n_pcs=40)
+sc.tl.umap(adata)
+
+# Visualizar los resultados
+plt.figure(figsize=(10, 8))
+sc.pl.umap(adata, color='louvain', size=50, legend_loc='on data', show=False)
+plt.title('UMAP de Expresión Génica (Células Inmunes)')
+plt.show()</code></pre>
+                <button onclick="copyToClipboard('genomics-umap-code')" class="copy-button" title="Copiar al portapapeles">
+                    <i class="far fa-copy"></i>
+                </button>
+            </div>
+        </section>
+
+        <section id="ejercicios">
+            <h2>Ejercicios Prácticos</h2>
+            <p>Para consolidar los conceptos aprendidos, te proponemos los siguientes ejercicios prácticos:</p>
+            
+            <div class="exercise">
+                <h3>Ejercicio 1: Análisis de Componentes Principales (PCA)</h3>
+                <p>Carga el conjunto de datos de vino de scikit-learn y realiza las siguientes tareas:</p>
+                <ol>
+                    <li>Estandariza los datos.</li>
+                    <li>Aplica PCA para reducir la dimensionalidad a 2 componentes.</li>
+                    <li>Visualiza los datos en el espacio de los dos primeros componentes principales, coloreando los puntos según la clase de vino.</li>
+                    <li>¿Qué porcentaje de la varianza total explican los dos primeros componentes principales?</li>
+                    <li>¿Qué características originales contribuyen más a cada uno de los dos primeros componentes principales?</li>
+                </ol>
+                
+                <button onclick="toggleHint('hint-1')" class="hint-button">Mostrar Pista</button>
+                <div id="hint-1" class="hint">
+                    <p>Puedes cargar el conjunto de datos de vino con <code>from sklearn.datasets import load_wine</code>. Usa <code>pca.explained_variance_ratio_</code> para obtener la varianza explicada por cada componente.</p>
+                </div>
+                
+                <button onclick="toggleSolution('solution-1')" class="solution-button">Mostrar Solución</button>
+                <div id="solution-1" class="solution">
+                    <pre><code class="language-python">from sklearn.datasets import load_wine
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Cargar el conjunto de datos de vino
+wine = load_wine()
+X = wine.data
+y = wine.target
+feature_names = wine.feature_names
+
+# Estandarizar los datos
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Aplicar PCA
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X_scaled)
+
+# Visualizar los resultados
+plt.figure(figsize=(10, 7))
+for target, color in zip([0, 1, 2], ['r', 'g', 'b']):
+    indices = y == target
+    plt.scatter(X_pca[indices, 0], X_pca[indices, 1], 
+                c=color, label=wine.target_names[target], alpha=0.7)
+
+plt.xlabel(f'Componente Principal 1 ({pca.explained_variance_ratio_[0]:.1%})')
+plt.ylabel(f'Componente Principal 2 ({pca.explained_variance_ratio_[1]:.1%})')
+plt.title('PCA del Conjunto de Datos de Vino')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# Varianza explicada
+print("Varianza explicada por cada componente:", pca.explained_variance_ratio_)
+print("Varianza acumulada:", np.cumsum(pca.explained_variance_ratio_))
+
+# Pesos de las características en los componentes principales
+loadings = pd.DataFrame(pca.components_.T, 
+                        columns=['PC1', 'PC2'],
+                        index=feature_names)
+
+print("\nPesos de las características en los componentes principales:")
+print(loadings)
+
+# Visualizar la importancia de las características
+plt.figure(figsize=(10, 6))
+plt.scatter(loadings['PC1'], loadings['PC2'])
+for i, feature in enumerate(feature_names):
+    plt.annotate(feature, (loadings['PC1'][i], loadings['PC2'][i]))
+
+plt.axhline(y=0, color='k', linestyle='--', alpha=0.3)
+plt.axvline(x=0, color='k', linestyle='--', alpha=0.3)
+plt.xlabel('Componente Principal 1')
+plt.ylabel('Componente Principal 2')
+plt.title('Círculo de Correlación')
+plt.grid(True, alpha=0.3)
+plt.show()</code></pre>
+                    <button onclick="copyToClipboard('solution-1-code')" class="copy-button" title="Copiar al portapapeles">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h3>Ejercicio 2: Comparación entre t-SNE y UMAP</h3>
+                <p>Usando el conjunto de datos de dígitos de scikit-learn, realiza lo siguiente:</p>
+                <ol>
+                    <li>Estandariza los datos.</li>
+                    <li>Aplica t-SNE para reducir la dimensionalidad a 2D.</li>
+                    <li>Aplica UMAP para reducir la dimensionalidad a 2D.</li>
+                    <li>Compara visualmente los resultados de ambos métodos.</li>
+                    <li>¿Qué método crees que hace un mejor trabajo separando las diferentes clases? ¿Por qué?</li>
+                </ol>
+                
+                <button onclick="toggleHint('hint-2')" class="hint-button">Mostrar Pista</button>
+                <div id="hint-2" class="hint">
+                    <p>Puedes cargar el conjunto de datos de dígitos con <code>from sklearn.datasets import load_digits</code>. Para UMAP, necesitarás instalar la biblioteca con <code>pip install umap-learn</code>.</p>
+                </div>
+                
+                <button onclick="toggleSolution('solution-2')" class="solution-button">Mostrar Solución</button>
+                <div id="solution-2" class="solution">
+                    <pre><code class="language-python">from sklearn.datasets import load_digits
+from sklearn.preprocessing import StandardScaler
+from sklearn.manifold import TSNE
+import umap
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Cargar el conjunto de datos de dígitos
+digits = load_digits()
+X = digits.data
+y = digits.target
+
+# Estandarizar los datos
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Aplicar t-SNE
+tsne = TSNE(n_components=2, random_state=42, perplexity=30, n_iter=1000)
+X_tsne = tsne.fit_transform(X_scaled)
+
+# Aplicar UMAP
+reducer = umap.UMAP(random_state=42, n_neighbors=15, min_dist=0.1)
+X_umap = reducer.fit_transform(X_scaled)
+
+# Visualizar los resultados
+plt.figure(figsize=(18, 6))
+
+# Gráfico t-SNE
+plt.subplot(1, 2, 1)
+scatter = plt.scatter(X_tsne[:, 0], X_tsne[:, 1], c=y, cmap='tab10', alpha=0.7)
+plt.colorbar(scatter, label='Dígito')
+plt.title('t-SNE de Dígitos (perplexity=30)')
+plt.xlabel('Dimensión 1')
+plt.ylabel('Dimensión 2')
+plt.grid(True, alpha=0.3)
+
+# Gráfico UMAP
+plt.subplot(1, 2, 2)
+scatter = plt.scatter(X_umap[:, 0], X_umap[:, 1], c=y, cmap='tab10', alpha=0.7)
+plt.colorbar(scatter, label='Dígito')
+plt.title('UMAP de Dígitos (n_neighbors=15, min_dist=0.1)')
+plt.xlabel('Dimensión 1')
+plt.ylabel('Dimensión 2')
+plt.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Comparación cualitativa
+print("Comparación entre t-SNE y UMAP para el conjunto de datos de dígitos:")
+print("\n1. t-SNE:")
+print("- Excelente para preservar las distancias locales (puntos similares están cerca).")
+print("- Puede perder la estructura global (distancias entre grupos no son significativas).")
+print("- Los parámetros como 'perplexity' pueden afectar significativamente los resultados.")
+
+print("\n2. UMAP:")
+print("- Mejor preservación de la estructura global en comparación con t-SNE.")
+print("- Generalmente más rápido que t-SNE para conjuntos de datos grandes.")
+print("- Los parámetros 'n_neighbors' y 'min_dist' son más fáciles de interpretar que 'perplexity'.")
+
+print("\nEn este caso, UMAP parece hacer un mejor trabajo separando las diferentes clases de dígitos, ") 
+print("especialmente para dígitos que son estructuralmente similares (como 3, 5 y 8). Sin embargo, ") 
+print("la elección entre t-SNE y UMAP puede depender del conjunto de datos específico y del objetivo del análisis.")</code></pre>
+                    <button onclick="copyToClipboard('solution-2-code')" class="copy-button" title="Copiar al portapapeles">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h3>Ejercicio 3: Aplicación Práctica - Análisis de Sentimientos</h3>
+                <p>En este ejercicio, utilizarás técnicas de reducción de dimensionalidad para analizar reseñas de películas del conjunto de datos de IMDB.</p>
+                <ol>
+                    <li>Carga el conjunto de datos de reseñas de películas de IMDB.</li>
+                    <li>Convierte los textos a vectores numéricos usando TF-IDF.</li>
+                    <li>Reduce la dimensionalidad a 2D usando PCA, t-SNE y UMAP.</li>
+                    <li>Visualiza los resultados, coloreando los puntos según el sentimiento (positivo/negativo).</li>
+                    <li>¿Qué método crees que hace un mejor trabajo separando las reseñas positivas de las negativas?</li>
+                </ol>
+                
+                <button onclick="toggleHint('hint-3')" class="hint-button">Mostrar Pista</button>
+                <div id="hint-3" class="hint">
+                    <p>Puedes cargar el conjunto de datos de IMDB con <code>from sklearn.datasets import fetch_20newsgroups</code> o usar la API de la biblioteca <code>nltk</code> o <code>tensorflow_datasets</code> para obtener un conjunto de datos de reseñas de películas.</p>
+                </div>
+                
+                <button onclick="toggleSolution('solution-3')" class="solution-button">Mostrar Solución</button>
+                <div id="solution-3" class="solution">
+                    <pre><code class="language-python"># Instalar las bibliotecas necesarias si no están instaladas
+# !pip install umap-learn nltk
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
+import umap
+import nltk
+from nltk.corpus import movie_reviews
+
+# Descargar el conjunto de datos de reseñas de películas de NLTK
+nltk.download('movie_reviews')
+
+# Cargar los datos
+documents = [(list(movie_reviews.words(fileid)), category)
+             for category in movie_reviews.categories()
+             for fileid in movie_reviews.fileids(category)]
+
+# Convertir a formato de texto
+X = [' '.join(words) for words, _ in documents]
+y = [1 if category == 'pos' else 0 for _, category in documents]
+
+# Tomar una muestra más pequeña para reducir el tiempo de cómputo
+np.random.seed(42)
+sample_size = 1000  # Reducir este número si el cómputo es demasiado lento
+indices = np.random.permutation(len(X))[:sample_size]
+X_sample = [X[i] for i in indices]
+y_sample = [y[i] for i in indices]
+
+# Convertir los textos a vectores TF-IDF
+print("Convirtiendo textos a vectores TF-IDF...")
+vectorizer = TfidfVectorizer(max_features=5000, stop_words='english')
+X_tfidf = vectorizer.fit_transform(X_sample)
+
+# Aplicar PCA
+print("Aplicando PCA...")
+pca = PCA(n_components=2, random_state=42)
+X_pca = pca.fit_transform(X_tfidf.toarray())
+
+# Aplicar t-SNE (puede llevar tiempo para conjuntos de datos grandes)
+print("Aplicando t-SNE (esto puede tardar unos minutos)...")
+tsne = TSNE(n_components=2, random_state=42, perplexity=30, n_iter=1000)
+X_tsne = tsne.fit_transform(X_tfidf.toarray())
+
+# Aplicar UMAP
+print("Aplicando UMAP...")
+reducer = umap.UMAP(random_state=42, n_neighbors=15, min_dist=0.1)
+X_umap = reducer.fit_transform(X_tfidf)
+
+# Visualizar los resultados
+plt.figure(figsize=(18, 5))
+
+# Gráfico PCA
+plt.subplot(1, 3, 1)
+for label in [0, 1]:
+    indices = np.array(y_sample) == label
+    plt.scatter(X_pca[indices, 0], X_pca[indices, 1], 
+                label='Positivo' if label == 1 else 'Negativo',
+                alpha=0.6, s=30)
+plt.title(f'PCA (Varianza: {np.sum(pca.explained_variance_ratio_):.1%})')
+plt.xlabel('Componente Principal 1')
+plt.ylabel('Componente Principal 2')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Gráfico t-SNE
+plt.subplot(1, 3, 2)
+for label in [0, 1]:
+    indices = np.array(y_sample) == label
+    plt.scatter(X_tsne[indices, 0], X_tsne[indices, 1], 
+                label='Positivo' if label == 1 else 'Negativo',
+                alpha=0.6, s=30)
+plt.title('t-SNE (perplexity=30)')
+plt.xlabel('Dimensión 1')
+plt.ylabel('Dimensión 2')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Gráfico UMAP
+plt.subplot(1, 3, 3)
+for label in [0, 1]:
+    indices = np.array(y_sample) == label
+    plt.scatter(X_umap[indices, 0], X_umap[indices, 1], 
+                label='Positivo' if label == 1 else 'Negativo',
+                alpha=0.6, s=30)
+plt.title('UMAP (n_neighbors=15, min_dist=0.1)')
+plt.xlabel('Dimensión 1')
+plt.ylabel('Dimensión 2')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Análisis de los resultados
+print("\nAnálisis de los resultados:")
+print("1. PCA: Aunque es rápido, PCA (lineal) tiene dificultades para separar claramente las reseñas positivas de las negativas.")
+print("2. t-SNE: Mejora la separación, pero puede crear agrupaciones artificiales y es sensible a la perplejidad.")
+print("3. UMAP: Proporciona una buena separación entre las clases y es más rápido que t-SNE para conjuntos de datos grandes.")
+
+print("\nConclusión: Para este conjunto de datos de análisis de sentimientos, UMAP parece ofrecer la mejor separación ") 
+print("entre reseñas positivas y negativas, aunque la elección final del método puede depender de los requisitos ") 
+print("específicos del problema, como la necesidad de velocidad, interpretabilidad o la preservación de estructuras específicas.")</code></pre>
+                    <button onclick="copyToClipboard('solution-3-code')" class="copy-button" title="Copiar al portapapeles">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+            <div class="footer-links">
+                <a href="#" onclick="window.scrollTo(0, 0)">Volver al inicio</a>
+                <a href="SESION3-9.html">← Sesión anterior</a>
+                <a href="SESION3-11.html">Siguiente sesión →</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Función para cambiar entre pestañas
+        function openTab(evt, tabName) {
+            // Ocultar todos los contenidos de pestañas
+            const tabContents = document.getElementsByClassName('tabcontent');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].style.display = 'none';
+            }
+            
+            // Desactivar todas las pestañas
+            const tabButtons = document.getElementsByClassName('tablinks');
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].className = tabButtons[i].className.replace(' active', '');
+            }
+            
+            // Mostrar la pestaña actual y activar el botón
+            document.getElementById(tabName).style.display = 'block';
+            evt.currentTarget.className += ' active';
+        }
+        
+        // Función para mostrar/ocultar pistas y soluciones
+        function toggleHint(elementId) {
+            const element = document.getElementById(elementId);
+            if (element.style.display === 'none' || !element.style.display) {
+                element.style.display = 'block';
+            } else {
+                element.style.display = 'none';
+            }
+        }
+        
+        // Función para mostrar/ocultar soluciones
+        function toggleSolution(elementId) {
+            const element = document.getElementById(elementId);
+            if (element.style.display === 'none' || !element.style.display) {
+                element.style.display = 'block';
+                // Desplazarse suavemente al elemento
+                element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                element.style.display = 'none';
+            }
+        }
+        
+        // Función para copiar código al portapapeles
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const code = element.getElementsByTagName('code')[0].innerText;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                // Mostrar notificación de copiado
+                const notification = document.createElement('div');
+                notification.className = 'copy-notification';
+                notification.textContent = '¡Código copiado!';
+                document.body.appendChild(notification);
+                
+                // Eliminar la notificación después de 2 segundos
+                setTimeout(() => {
+                    notification.remove();
+                }, 2000);
+            }).catch(err => {
+                console.error('Error al copiar: ', err);
+            });
+        }
+        
+        // Inicializar la primera pestaña como activa
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mostrar el primer contenido de pestaña
+            const firstTab = document.querySelector('.tabcontent');
+            if (firstTab) {
+                firstTab.style.display = 'block';
+            }
+            
+            // Agregar botones de copiar a los bloques de código
+            const codeBlocks = document.querySelectorAll('pre');
+            codeBlocks.forEach(block => {
+                // Verificar si ya tiene un botón de copiar
+                if (!block.querySelector('.copy-button')) {
+                    const copyButton = document.createElement('button');
+                    copyButton.className = 'copy-button';
+                    copyButton.title = 'Copiar al portapapeles';
+                    copyButton.innerHTML = '<i class="far fa-copy"></i>';
+                    
+                    // Posicionar el botón en la esquina superior derecha
+                    block.style.position = 'relative';
+                    copyButton.style.position = 'absolute';
+                    copyButton.style.top = '8px';
+                    copyButton.style.right = '8px';
+                    copyButton.style.background = 'rgba(255, 255, 255, 0.2)';
+                    copyButton.style.border = 'none';
+                    copyButton.style.borderRadius = '4px';
+                    copyButton.style.padding = '4px 8px';
+                    copyButton.style.cursor = 'pointer';
+                    copyButton.style.transition = 'background 0.3s';
+                    
+                    copyButton.addEventListener('mouseover', () => {
+                        copyButton.style.background = 'rgba(255, 255, 255, 0.3)';
+                    });
+                    
+                    copyButton.addEventListener('mouseout', () => {
+                        copyButton.style.background = 'rgba(255, 255, 255, 0.2)';
+                    });
+                    
+                    copyButton.addEventListener('click', () => {
+                        const code = block.querySelector('code').textContent;
+                        navigator.clipboard.writeText(code).then(() => {
+                            copyButton.innerHTML = '<i class="fas fa-check"></i>';
+                            setTimeout(() => {
+                                copyButton.innerHTML = '<i class="far fa-copy"></i>';
+                            }, 2000);
+                        });
+                    });
+                    
+                    block.appendChild(copyButton);
+                }
+            });
+            
+            // Configurar navegación entre sesiones
+            setupNavigation();
+        });
+        
+        // Función para configurar la navegación entre sesiones
+        function setupNavigation() {
+            // Aquí podrías implementar la lógica para navegar entre sesiones
+            // Por ahora, solo actualizamos los enlaces para que no recarguen la página
+            document.querySelectorAll('a[href="#"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // Lógica de navegación entre sesiones iría aquí
+                    console.log('Navegación a:', this.textContent);
+                });
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.13: Evaluación de Modelos (II) - Curso de Inteligencia Artificial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .evaluation-section {
+            margin: 25px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .metric-card {
+            background: white;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            border-radius: 0 4px 4px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .confusion-matrix {
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        .confusion-matrix th, .confusion-matrix td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: center;
+        }
+        .confusion-matrix th {
+            background-color: #3498db;
+            color: white;
+        }
+        .visualization-container {
+            width: 100%;
+            height: 400px;
+            background: #f8f9fa;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #dee2e6;
+            border-radius: 8px;
+        }
+        .code-tabs {
+            margin: 20px 0;
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 5px;
+            margin-bottom: -1px;
+        }
+        .tab-button {
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            cursor: pointer;
+        }
+        .tab-button.active {
+            background: white;
+            border-bottom: 1px solid white;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 0 0 4px 4px;
+            background: white;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @media (prefers-color-scheme: dark) {
+            .evaluation-section, .metric-card, .tab-content {
+                background: #2d2d2d;
+                color: #f8f9fa;
+            }
+            .confusion-matrix th {
+                background-color: #2ecc71;
+            }
+            .tab-button {
+                background: #333;
+                border-color: #444;
+                color: #f8f9fa;
+            }
+            .tab-button.active {
+                background: #2d2d2d;
+                border-bottom-color: #2d2d2d;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>3.13: Evaluación de Modelos (II)</h1>
+            <p>Curso de Inteligencia Artificial - Módulo 3: Machine Learning</p>
+        </div>
+    </header>
+
+    <nav class="tabs">
+        <div class="container">
+            <ul>
+                <li><a href="#avanzado">Métricas Avanzadas</a></li>
+                <li><a href="#validacion">Técnicas de Validación</a></li>
+                <li><a href="#casos">Casos de Estudio</a></li>
+                <li><a href="#ejercicios">Ejercicios</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section id="avanzado" class="evaluation-section">
+            <h2>Métricas Avanzadas de Evaluación</h2>
+            
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <h3>Precisión, Recall y F1-Score</h3>
+                    <ul>
+                        <li><strong>Precisión</strong>: VP / (VP + FP)</li>
+                        <li><strong>Recall</strong>: VP / (VP + FN)</li>
+                        <li><strong>F1-Score</strong>: 2 * (Precisión * Recall) / (Precisión + Recall)</li>
+                    </ul>
+                </div>
+
+                <div class="metric-card">
+                    <h3>Curvas ROC y AUC</h3>
+                    <ul>
+                        <li>ROC: TPR vs FPR</li>
+                        <li>AUC: Área bajo la curva ROC</li>
+                        <li>Interpretación de valores AUC</li>
+                    </ul>
+                </div>
+
+                <div class="metric-card">
+                    <h3>Otras Métricas</h3>
+                    <ul>
+                        <li>Log Loss</li>
+                        <li>Matriz de Confusión Multiclase</li>
+                        <li>Métricas específicas por clase</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Matriz de Confusión Detallada</h3>
+            <table class="confusion-matrix">
+                <tr>
+                    <th>Métrica</th>
+                    <th>Fórmula</th>
+                    <th>Interpretación</th>
+                </tr>
+                <tr>
+                    <td>Exactitud</td>
+                    <td>(VP + VN) / Total</td>
+                    <td>Porcentaje de predicciones correctas</td>
+                </tr>
+                <tr>
+                    <td>Precisión</td>
+                    <td>VP / (VP + FP)</td>
+                    <td>De los predichos como positivos, ¿cuántos lo son realmente?</td>
+                </tr>
+                <tr>
+                    <td>Sensibilidad (Recall)</td>
+                    <td>VP / (VP + FN)</td>
+                    <td>De los reales positivos, ¿cuántos detectamos?</td>
+                </tr>
+                <tr>
+                    <td>Especificidad</td>
+                    <td>VN / (VN + FP)</td>
+                    <td>Capacidad de detectar correctamente los negativos</td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="validacion" class="evaluation-section">
+            <h2>Técnicas de Validación Avanzadas</h2>
+            
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <h3>Validación Cruzada Anidada</h3>
+                    <p>Para una evaluación más robusta de hiperparámetros:</p>
+                    <ul>
+                        <li>Bucle externo: Validación cruzada</li>
+                        <li>Bucle interno: Optimización de parámetros</li>
+                    </ul>
+                </div>
+
+                <div class="metric-card">
+                    <h3>Time Series Split</h3>
+                    <p>Para datos temporales:</p>
+                    <ul>
+                        <li>Respetar el orden temporal</li>
+                        <li>Train en datos pasados, test en futuros</li>
+                    </ul>
+                </div>
+
+                <div class="metric-card">
+                    <h3>Stratified K-Fold</h3>
+                    <p>Para conjuntos de datos desbalanceados:</p>
+                    <ul>
+                        <li>Mantiene proporciones de clase</li>
+                        <li>Mejor estimación del rendimiento</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="code-tabs">
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="openTab(event, 'nested-cv')">Validación Cruzada Anidada</button>
+                    <button class="tab-button" onclick="openTab(event, 'timeseries')">Time Series Split</button>
+                </div>
+
+                <div id="nested-cv" class="tab-content active">
+                    <pre><code class="python">from sklearn.model_selection import GridSearchCV, cross_val_score, KFold
+from sklearn.ensemble import RandomForestClassifier
+import numpy as np
+
+# Configuración de la validación cruzada anidada
+inner_cv = KFold(n_splits=5, shuffle=True, random_state=42)
+outer_cv = KFold(n_splits=5, shuffle=True, random_state=42)
+
+# Hiperparámetros a optimizar
+param_grid = {
+    'n_estimators': [50, 100, 200],
+    'max_depth': [None, 10, 20, 30],
+    'min_samples_split': [2, 5, 10]
+}
+
+# Búsqueda de hiperparámetros
+clf = GridSearchCV(
+    estimator=RandomForestClassifier(random_state=42),
+    param_grid=param_grid,
+    cv=inner_cv,
+    scoring='accuracy',
+    n_jobs=-1
+)
+
+# Validación cruzada externa
+nested_scores = cross_val_score(clf, X, y, cv=outer_cv, scoring='accuracy')
+print(f"Precisión media: {nested_scores.mean():.3f} ± {nested_scores.std():.3f}")
+</code></pre>
+                </div>
+
+                <div id="timeseries" class="tab-content">
+                    <pre><code class="python">from sklearn.model_selection import TimeSeriesSplit
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error
+import numpy as np
+
+# Configuración de Time Series Split
+tscv = TimeSeriesSplit(n_splits=5)
+model = RandomForestRegressor(n_estimators=100, random_state=42)
+
+scores = []
+for train_index, test_index in tscv.split(X):
+    X_train, X_test = X[train_index], X[test_index]
+    y_train, y_test = y[train_index], y[test_index]
+    
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    score = np.sqrt(mean_squared_error(y_test, y_pred))
+    scores.append(score)
+
+print(f"RMSE medio: {np.mean(scores):.3f} ± {np.std(scores):.3f}")
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="casos" class="evaluation-section">
+            <h2>Casos de Estudio Prácticos</h2>
+            
+            <h3>Caso 1: Desbalance de Clases</h3>
+            <div class="metric-card">
+                <p>Cuando una clase es mucho más frecuente que otras:</p>
+                <ul>
+                    <li>Muestreo (oversampling/undersampling)</li>
+                    <li>Pesos de clase</li>
+                    <li>Métricas apropiadas (F1, AUC-ROC)</li>
+                </ul>
+            </div>
+
+            <h3>Caso 2: Datos Temporales</h3>
+            <div class="metric-card">
+                <p>Consideraciones especiales para series de tiempo:</p>
+                <ul>
+                    <li>No mezclar datos de diferentes períodos</li>
+                    <li>Validación temporal (walk-forward)</li>
+                    <li>Métricas específicas (sMAPE, MASE)</li>
+                </ul>
+            </div>
+
+            <div class="visualization-container">
+                <div >
+                    <h4>Visualización de Métricas</h4>
+                    <p>Comparación de diferentes modelos y métricas</p>
+                    <div class="metric-grid">
+                        <div class="metric-card" >
+                            <div class="metric-card-content"></div>
+                            <p>Modelo A</p>
+                        </div>
+                        <div class="metric-card" >
+                            <div class="metric-card-content"></div>
+                            <p>Modelo B</p>
+                        </div>
+                        <div class="metric-card" >
+                            <div class="metric-card-content"></div>
+                            <p>Modelo C</p>
+                        </div>
+                    </div>
+                    <p class="metric-card">Comparación de rendimiento en diferentes métricas</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="ejercicios" class="evaluation-section">
+            <h2>Ejercicios Prácticos</h2>
+            
+            <div class="exercise">
+                <h3>Ejercicio 1: Análisis de Desempeño</h3>
+                <p>Utiliza el conjunto de datos de fraude en tarjetas de crédito:</p>
+                <ol>
+                    <li>Explora el desbalance de clases</li>
+                    <li>Entrena un modelo de clasificación</li>
+                    <li>Evalúa usando diferentes métricas</li>
+                    <li>Implementa técnicas para manejar el desbalance</li>
+                </ol>
+                <button onclick="toggleHint('hint1')" class="hint-button">Mostrar Pista</button>
+                <div id="hint1" class="hint">
+                    <p>Puedes usar <code>imbalanced-learn</code> para técnicas de muestreo.</p>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h3>Ejercicio 2: Validación Cruzada Anidada</h3>
+                <p>Implementa validación cruzada anidada para:</p>
+                <ol>
+                    <li>Seleccionar los mejores hiperparámetros</li>
+                    <li>Obtener una estimación realista del rendimiento</li>
+                    <li>Comparar con validación cruzada simple</li>
+                </ol>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <script>
+        // Función para cambiar entre pestañas
+        function openTab(evt, tabName) {
+            // Ocultar todos los contenidos de pestañas
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+
+            // Desactivar todos los botones de pestaña
+            const tabButtons = document.getElementsByClassName('tab-button');
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove('active');
+            }
+
+            // Mostrar la pestaña actual y marcar el botón como activo
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+
+        // Interactividad para mostrar/ocultar pistas
+        document.querySelectorAll('.hint-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const hint = this.nextElementSibling;
+                hint.style.display = hint.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+    </script>
+</body>
+</html>

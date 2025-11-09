@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.12: Evaluación de Modelos (I) - Curso de Inteligencia Artificial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .evaluation-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .metric-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .confusion-matrix {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        .confusion-matrix th, .confusion-matrix td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: center;
+        }
+        .confusion-matrix th {
+            background-color: #3498db;
+            color: white;
+        }
+        .roc-curve {
+            width: 100%;
+            height: 300px;
+            background: #f8f9fa;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #dee2e6;
+            border-radius: 4px;
+        }
+        .code-comparison {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .code-block {
+            flex: 1;
+            position: relative;
+        }
+        @media (max-width: 768px) {
+            .code-comparison, .evaluation-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (prefers-color-scheme: dark) {
+            .metric-card {
+                background: #2d2d2d;
+            }
+            .confusion-matrix th {
+                background-color: #2ecc71;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>3.12: Evaluación de Modelos (I)</h1>
+            <p>Curso de Inteligencia Artificial - Módulo 3: Machine Learning</p>
+        </div>
+    </header>
+
+    <nav class="tabs">
+        <div class="container">
+            <ul>
+                <li><a href="#introduccion">Introducción</a></li>
+                <li><a href="#metricas">Métricas</a></li>
+                <li><a href="#validacion">Validación</a></li>
+                <li><a href="#ejercicios">Ejercicios</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section id="introduccion">
+            <h2>Introducción a la Evaluación de Modelos</h2>
+            <p>La evaluación de modelos es fundamental para entender el rendimiento y la capacidad de generalización de nuestros modelos de aprendizaje automático.</p>
+            
+            <div class="metric-card">
+                <h3>¿Por qué evaluar modelos?</h3>
+                <ul>
+                    <li>Medir el rendimiento predictivo</li>
+                    <li>Comparar diferentes modelos</li>
+                    <li>Detectar sobreajuste (overfitting)</li>
+                    <li>Tomar decisiones informadas</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="metricas">
+            <h2>Métricas de Evaluación</h2>
+            
+            <div class="evaluation-metrics">
+                <div class="metric-card">
+                    <h3>Clasificación</h3>
+                    <ul>
+                        <li>Exactitud (Accuracy)</li>
+                        <li>Precisión y Recall</li>
+                        <li>F1-Score</li>
+                        <li>Matriz de confusión</li>
+                        <li>Curva ROC y AUC</li>
+                    </ul>
+                </div>
+
+                <div class="metric-card">
+                    <h3>Regresión</h3>
+                    <ul>
+                        <li>Error Cuadrático Medio (MSE)</li>
+                        <li>Error Absoluto Medio (MAE)</li>
+                        <li>R² (R cuadrado)</li>
+                        <li>Error Porcentual Absoluto Medio (MAPE)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Matriz de Confusión</h3>
+            <table class="confusion-matrix">
+                <tr>
+                    <th></th>
+                    <th>Predicción Positiva</th>
+                    <th>Predicción Negativa</th>
+                </tr>
+                <tr>
+                    <th>Real Positivo</th>
+                    <td>Verdaderos Positivos (VP)</td>
+                    <td>Falsos Negativos (FN)</td>
+                </tr>
+                <tr>
+                    <th>Real Negativo</th>
+                    <td>Falsos Positivos (FP)</td>
+                    <td>Verdaderos Negativos (VN)</td>
+                </tr>
+            </table>
+
+            <h3>Curva ROC</h3>
+            <div class="roc-curve">
+                <p>Visualización interactiva de la curva ROC</p>
+            </div>
+        </section>
+
+        <section id="validacion">
+            <h2>Técnicas de Validación</h2>
+            
+            <div class="evaluation-metrics">
+                <div class="metric-card">
+                    <h3>Train-Test Split</h3>
+                    <p>División simple de los datos en conjuntos de entrenamiento y prueba.</p>
+                    <pre><code class="language-python">from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)</code></pre>
+                </div>
+
+                <div class="metric-card">n                    <h3>Validación Cruzada</h3>
+                    <p>K-Fold Cross-Validation para una evaluación más robusta.</p>
+                    <pre><code class="language-python">from sklearn.model_selection import cross_val_score
+
+scores = cross_val_score(
+    model, X, y, cv=5, scoring='accuracy'
+)
+print(f"Precisión media: {scores.mean():.2f} ± {scores.std():.2f}")</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="ejercicios">
+            <h2>Ejercicios Prácticos</h2>
+            
+            <div class="exercise">
+                <h3>Ejercicio 1: Evaluación de Clasificador</h3>
+                <p>Utiliza el conjunto de datos de cáncer de mama de scikit-learn:</p>
+                <ol>
+                    <li>Entrena un clasificador (ej. Random Forest)</li>
+                    <li>Calcula las métricas de evaluación</li>
+                    <li>Dibuja la matriz de confusión</li>
+                    <li>Grafica la curva ROC</li>
+                </ol>
+                <button onclick="toggleHint('hint1')" class="hint-button">Mostrar Pista</button>
+                <div id="hint1" class="hint">
+                    <p>Puedes usar <code>load_breast_cancer()</code> de sklearn.datasets para cargar los datos.</p>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h3>Ejercicio 2: Comparación de Modelos</h3>
+                <p>Compara diferentes algoritmos de clasificación:</p>
+                <ol>
+                    <li>Regresión Logística</li>
+                    <li>Árbol de Decisión</li>
+                    <li>Random Forest</li>
+                    <li>SVM</li>
+                </ol>
+                <p>Utiliza validación cruzada para comparar su rendimiento.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <script>
+        // Interactividad para mostrar/ocultar pistas
+        document.querySelectorAll('.hint-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const hint = this.nextElementSibling;
+                hint.style.display = hint.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+
+        // Simulación de curva ROC
+        document.addEventListener('DOMContentLoaded', function() {
+            const rocCurve = document.querySelector('.roc-curve');
+            if (rocCurve) {
+                // Aquí iría el código para generar la curva ROC
+                // Por ejemplo, usando Chart.js o similar
+                rocCurve.innerHTML = `
+                    <div style="text-align: center; width: 100%;">
+                        <h4>Curva ROC (Ejemplo)</h4>
+                        <div style="position: relative; width: 100%; max-width: 400px; margin: 0 auto;">
+                            <div style="border-left: 1px solid #333; border-bottom: 1px solid #333; height: 200px; width: 200px; position: relative; margin: 0 auto;">
+                                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-right: 1px solid #333; border-top: 1px solid #333; transform: rotate(180deg);"></div>
+                                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(46, 204, 113, 0.2) 0%, rgba(46, 204, 113, 0.5) 50%, rgba(46, 204, 113, 0.8) 100%);"></div>
+                                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; border: 2px solid #2ecc71; transform: rotate(180deg); clip-path: polygon(0% 100%, 10% 90%, 30% 75%, 50% 60%, 70% 40%, 100% 0%);"></div>
+                            </div>
+                            <p style="margin-top: 10px;">Área bajo la curva (AUC): 0.92</p>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

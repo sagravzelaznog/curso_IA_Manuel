@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.8: Máquinas de Vectores de Soporte (SVM)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .svm-visualization { text-align: center; margin: 20px 0; }
+        #svm-plot { width: 100%; height: 400px; margin: 20px 0; }
+        .kernel-card { background: #fff; border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; margin: 10px 0; }
+        .slider-container { margin: 15px 0; }
+        .parameter-slider { width: 100%; }
+        .math-formula { background: #f8f9fa; padding: 10px; border-radius: 4px; margin: 10px 0; }
+        @media (prefers-color-scheme: dark) {
+            body { background: #1a1a1a; color: #e0e0e0; }
+            .container { background: #2d2d2d; }
+            .kernel-card { background: #3d3d3d; border-color: #4d4d4d; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>3.8: Máquinas de Vectores de Soporte (SVM)</h1>
+            <p>Curso de Inteligencia Artificial - Módulo 3: Machine Learning</p>
+        </div>
+    </header>
+
+    <nav class="tabs">
+        <div class="container">
+            <ul>
+                <li><a href="#introduccion">Introducción</a></li>
+                <li><a href="#implementacion">Implementación</a></li>
+                <li><a href="#ejercicios">Ejercicios</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section id="introduccion">
+            <h2>Introducción a SVM</h2>
+            <p>Las Máquinas de Vectores de Soporte (SVM) son algoritmos supervisados utilizados para clasificación y regresión. Buscan el mejor hiperplano de separación entre clases.</p>
+            
+            <div class="svm-visualization">
+                <div id="svm-plot">
+                    <p>Cargando visualización de SVM...</p>
+                </div>
+                <div class="slider-container">
+                    <label>Parámetro C: <span id="c-value">1.0</span></label>
+                    <input type="range" id="c-param" class="parameter-slider" min="0.1" max="10" step="0.1" value="1.0">
+                </div>
+                <select id="kernel-select">
+                    <option value="linear">Lineal</option>
+                    <option value="rbf" selected>RBF</option>
+                    <option value="poly">Polinómico</option>
+                </select>
+            </div>
+
+            <h3>Tipos de Kernels</h3>
+            <div class="kernel-card">
+                <h4>Kernel Lineal</h4>
+                <p>K(x, y) = x·y</p>
+                <p>Ideal para datos linealmente separables.</p>
+            </div>
+            <div class="kernel-card">
+                <h4>Kernel RBF (Gaussiano)</h4>
+                <p>K(x, y) = exp(-γ||x - y||²)</p>
+                <p>Para datos no lineales. Ajuste con γ.</p>
+            </div>
+        </section>
+
+        <section id="implementacion">
+            <h2>Implementación en Python</h2>
+            <pre><code class="language-python">from sklearn import svm
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+
+# Generar datos de ejemplo
+X, y = make_classification(n_samples=100, n_features=2, n_redundant=0, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Crear y entrenar el modelo
+clf = svm.SVC(kernel='rbf', C=1.0)
+clf.fit(X_train, y_train)
+
+# Evaluar el modelo
+accuracy = clf.score(X_test, y_test)
+print(f"Precisión: {accuracy:.2f}")
+
+# Vectores de soporte
+print(f"Número de vectores de soporte: {len(clf.support_)}")</code></pre>
+        </section>
+
+        <section id="ejercicios">
+            <h2>Ejercicios Prácticos</h2>
+            <div class="exercise">
+                <h4>Ejercicio 1: Clasificación con SVM</h4>
+                <p>Utiliza el conjunto de datos Iris para entrenar un clasificador SVM.</p>
+                <ol>
+                    <li>Carga el conjunto de datos Iris</li>
+                    <li>Divide los datos en entrenamiento y prueba</li>
+                    <li>Entrena un modelo SVM con kernel RBF</li>
+                    <li>Evalúa el rendimiento del modelo</li>
+                </ol>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <script>
+        // Interactividad básica
+        document.addEventListener('DOMContentLoaded', function() {
+            const cSlider = document.getElementById('c-param');
+            const cValue = document.getElementById('c-value');
+            
+            cSlider.addEventListener('input', function() {
+                cValue.textContent = this.value;
+                // Aquí iría la actualización de la visualización
+            });
+        });
+    </script>
+</body>
+</html>

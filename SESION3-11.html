@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.11: Selección de Características - Curso de Inteligencia Artificial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .feature-selection {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .method-card {
+            background: white;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .feature-importance-plot {
+            width: 100%;
+            height: 300px;
+            background: #f8f9fa;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #dee2e6;
+            border-radius: 4px;
+        }
+        .code-comparison {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .code-block {
+            flex: 1;
+            position: relative;
+        }
+        @media (max-width: 768px) {
+            .code-comparison {
+                flex-direction: column;
+            }
+        }
+        @media (prefers-color-scheme: dark) {
+            .method-card {
+                background: #2d2d2d;
+                border-left-color: #2ecc71;
+            }
+            .feature-selection {
+                background: #1e1e1e;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>3.11: Selección de Características</h1>
+            <p>Curso de Inteligencia Artificial - Módulo 3: Machine Learning</p>
+        </div>
+    </header>
+
+    <nav class="tabs">
+        <div class="container">
+            <ul>
+                <li><a href="#introduccion">Introducción</a></li>
+                <li><a href="#metodos">Métodos</a></li>
+                <li><a href="#implementacion">Implementación</a></li>
+                <li><a href="#ejercicios">Ejercicios</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section id="introduccion">
+            <h2>Introducción a la Selección de Características</h2>
+            <p>La selección de características es un proceso fundamental en el aprendizaje automático que consiste en elegir un subconjunto de características relevantes para la construcción de modelos predictivos.</p>
+            
+            <div class="feature-selection">
+                <h3>¿Por qué es importante?</h3>
+                <ul>
+                    <li>Mejora el rendimiento del modelo</li>
+                    <li>Reduce el sobreajuste (overfitting)</li>
+                    <li>Disminuye el tiempo de entrenamiento</li>
+                    <li>Facilita la interpretación del modelo</li>
+                </ul>
+            </div>
+
+            <div class="feature-importance-plot">
+                <p>Importancia de las características (visualización interactiva)</p>
+            </div>
+        </section>
+
+        <section id="metodos">
+            <h2>Métodos de Selección de Características</h2>
+            
+            <div class="method-card">
+                <h3>1. Métodos de Filtrado</h3>
+                <p>Selección basada en estadísticas sin considerar el modelo.</p>
+                <ul>
+                    <li>Correlación de Pearson</li>
+                    <li>Prueba de Chi-cuadrado</li>
+                    <li>Análisis de varianza (ANOVA)</li>
+                    <li>Información mutua</li>
+                </ul>
+            </div>
+
+            <div class="method-card">
+                <h3>2. Métodos de Envoltura (Wrapper)</h3>
+                <p>Utilizan el modelo de aprendizaje automático para evaluar subconjuntos de características.</p>
+                <ul>
+                    <li>Selección hacia adelante (Forward Selection)</li>
+                    <li>Eliminación hacia atrás (Backward Elimination)</li>
+                    <li>Búsqueda exhaustiva</li>
+                </ul>
+            </div>
+
+            <div class="method-card">
+                <h3>3. Métodos Integrados (Embedded)</h3>
+                <p>La selección de características se realiza durante el proceso de entrenamiento.</p>
+                <ul>
+                    <li>Regularización L1 (Lasso)</li>
+                    <li>Árboles de decisión y Random Forest</li>
+                    <li>XGBoost, LightGBM</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="implementacion">
+            <h2>Implementación en Python</h2>
+            
+            <h3>1. Usando SelectKBest (Método de Filtrado)</h3>
+            <pre><code class="language-python">from sklearn.feature_selection import SelectKBest, f_classif
+from sklearn.datasets import load_iris
+
+# Cargar datos
+X, y = load_iris(return_X_y=True)
+
+# Seleccionar las 2 mejores características
+selector = SelectKBest(score_func=f_classif, k=2)
+X_new = selector.fit_transform(X, y)
+
+# Ver características seleccionadas
+print("Características seleccionadas:", selector.get_support(indices=True))</code></pre>
+
+            <h3>2. Usando SelectFromModel (Método Integrado)</h3>
+            <pre><code class="language-python">from sklearn.ensemble import RandomForestClassifier
+from sklearn.feature_selection import SelectFromModel
+
+# Entrenar modelo
+clf = RandomForestClassifier(n_estimators=100, random_state=42)
+clf = clf.fit(X, y)
+
+# Seleccionar características importantes
+model = SelectFromModel(clf, prefit=True)
+X_new = model.transform(X)
+
+# Ver importancia de características
+print("Importancia de características:", clf.feature_importances_)</code></pre>
+        </section>
+
+        <section id="ejercicios">
+            <h2>Ejercicios Prácticos</h2>
+            
+            <div class="exercise">
+                <h3>Ejercicio 1: Análisis de Datos de Viviendas</h3>
+                <p>Utiliza el conjunto de datos de precios de viviendas de California:</p>
+                <ol>
+                    <li>Carga el conjunto de datos de scikit-learn</li>
+                    <li>Explora las características y su relación con el precio</li>
+                    <li>Aplica diferentes métodos de selección de características</li>
+                    <li>Compara el rendimiento del modelo con y sin selección de características</li>
+                </ol>
+                <button onclick="toggleHint('hint1')" class="hint-button">Mostrar Pista</button>
+                <div id="hint1" class="hint">
+                    <p>Puedes usar <code>fetch_california_housing()</code> de sklearn.datasets para cargar los datos.</p>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h3>Ejercicio 2: Selección de Características para Clasificación</h3>
+                <p>En el conjunto de datos de dígitos de MNIST:</p>
+                <ol>
+                    <li>Utiliza PCA para reducción de dimensionalidad</li>
+                    <li>Compara con la selección de características basada en árboles</li>
+                    <li>Evalúa el impacto en el rendimiento de clasificación</li>
+                </ol>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <script>
+        // Interactividad para mostrar/ocultar pistas
+        document.querySelectorAll('.hint-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const hint = this.nextElementSibling;
+                hint.style.display = hint.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+
+        // Simulación de gráfico de importancia de características
+        document.addEventListener('DOMContentLoaded', function() {
+            const plot = document.querySelector('.feature-importance-plot');
+            if (plot) {
+                // Aquí iría el código para generar un gráfico de importancia
+                // Por ejemplo, usando Chart.js o similar
+                plot.innerHTML = `
+                    <div style="text-align: center; width: 100%;">
+                        <p>Visualización interactiva de importancia de características</p>
+                        <div style="display: flex; justify-content: center; margin-top: 20px;">
+                            <div style="margin: 0 10px; text-align: center;">
+                                <div style="width: 20px; height: 100px; background: #3498db; margin: 0 auto;"></div>
+                                <p>Característica 1</p>
+                            </div>
+                            <div style="margin: 0 10px; text-align: center;">
+                                <div style="width: 20px; height: 150px; background: #2ecc71; margin: 0 auto;"></div>
+                                <p>Característica 2</p>
+                            </div>
+                            <div style="margin: 0 10px; text-align: center;">
+                                <div style="width: 20px; height: 80px; background: #e74c3c; margin: 0 auto;"></div>
+                                <p>Característica 3</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesión 3.9: K-means Clustering - Curso de Inteligencia Artificial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos específicos para esta sesión */
+        .interactive-demo {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        #clusters-visualization {
+            width: 100%;
+            height: 400px;
+            border: 1px solid #ddd;
+            margin: 20px 0;
+            position: relative;
+            background-color: white;
+        }
+        
+        .data-point {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 8px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        input[type="number"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 60px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Módulo 3: Machine Learning</h1>
+            <h2>Sesión 3.9: K-means Clustering</h2>
+            <nav class="session-nav">
+                <a href="SESION3-8.html" class="nav-button"><i class="fas fa-arrow-left"></i> Anterior</a>
+                <a href="index.html" class="nav-button"><i class="fas fa-home"></i> Inicio</a>
+                <a href="SESION3-10.html" class="nav-button">Siguiente <i class="fas fa-arrow-right"></i></a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="learning-objectives">
+            <h3><i class="fas fa-bullseye"></i> Objetivos de Aprendizaje</h3>
+            <ul>
+                <li>Comprender los fundamentos del algoritmo K-means</li>
+                <li>Aprender a implementar K-means desde cero</li>
+                <li>Entender cómo seleccionar el número óptimo de clusters</li>
+                <li>Aplicar K-means a conjuntos de datos reales</li>
+                <li>Identificar limitaciones y variantes del algoritmo</li>
+            </ul>
+        </section>
+
+        <section class="content">
+            <h3><i class="fas fa-book"></i> Contenido Teórico</h3>
+            
+            <h4>1. Introducción a K-means</h4>
+            <p>K-means es un algoritmo de aprendizaje no supervisado utilizado para agrupar datos en K clusters. Es uno de los algoritmos de clustering más populares debido a su simplicidad y eficiencia.</p>
+            
+            <h4>2. Matemáticas detrás de K-means</h4>
+            <p>El objetivo de K-means es minimizar la inercia, también conocida como suma de cuadrados dentro del cluster (WCSS):</p>
+            <div class="formula">
+                <p>minimizar ∑ᵢ=1ᵏ ∑ₓ∈Cᵢ ||x - μᵢ||²</p>
+                <p>donde:</p>
+                <ul>
+                    <li>k: número de clusters</li>
+                    <li>Cᵢ: conjunto de puntos en el cluster i-ésimo</li>
+                    <li>μᵢ: centroide del cluster i-ésimo</li>
+                    <li>||x - μᵢ||: distancia euclidiana entre el punto x y el centroide μᵢ</li>
+                </ul>
+            </div>
+            
+            <h4>3. Algoritmo K-means paso a paso</h4>
+            <ol>
+                <li>Seleccionar K puntos aleatorios como centroides iniciales</li>
+                <li>Asignar cada punto al centroide más cercano</li>
+                <li>Recalcular los centroides como la media de todos los puntos en cada cluster</li>
+                <li>Repetir pasos 2-3 hasta la convergencia o hasta alcanzar el número máximo de iteraciones</li>
+            </ol>
+            
+            <h4>4. Implementación en Python</h4>
+            <div class="code-tabs">
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="openTab(event, 'numpy')">NumPy</button>
+                    <button class="tab-button" onclick="openTab(event, 'sklearn')">Scikit-learn</button>
+                </div>
+                
+                <div id="numpy" class="tab-content active">
+                    <pre><code class="python">import numpy as np
+import matplotlib.pyplot as plt
+
+def k_means(X, k, max_iters=100):
+    # Inicializar centroides aleatorios
+    centroids = X[np.random.choice(X.shape[0], k, replace=False)]
+    
+    for _ in range(max_iters):
+        # Asignar cada punto al centroide más cercano
+        distances = np.sqrt(((X - centroids[:, np.newaxis])**2).sum(axis=2))
+        labels = np.argmin(distances, axis=0)
+        
+        # Actualizar centroides
+        new_centroids = np.array([X[labels == i].mean(axis=0) for i in range(k)])
+        
+        # Verificar convergencia
+        if np.all(centroids == new_centroids):
+            break
+            
+        centroids = new_centroids
+    
+    return centroids, labels
+
+# Ejemplo de uso
+np.random.seed(42)
+X = np.vstack((
+    np.random.normal((2, 2), 0.5, (100, 2)),
+    np.random.normal((6, 6), 0.5, (100, 2)),
+    np.random.normal((2, 6), 0.5, (100, 2))
+))
+
+centroids, labels = k_means(X, k=3)
+
+# Visualización
+plt.scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis', alpha=0.7)
+plt.scatter(centroids[:, 0], centroids[:, 1], c='red', marker='X', s=200)
+plt.title('K-means Clustering')
+plt.show()</code></pre>
+                    <button button-name="copy-button" class="copy-button" onclick="copyToClipboard(this)"><i class="far fa-copy">copy</i></button>
+                </div>
+                
+                <div id="sklearn" class="tab-content">
+                    <pre><code class="python">from sklearn.cluster import KMeans
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Generar datos de ejemplo
+np.random.seed(42)
+X = np.vstack((
+    np.random.normal((2, 2), 0.5, (100, 2)),
+    np.random.normal((6, 6), 0.5, (100, 2)),
+    np.random.normal((2, 6), 0.5, (100, 2))
+))
+
+# Crear y entrenar el modelo K-means
+kmeans = KMeans(n_clusters=3, random_state=42)
+kmeans.fit(X)
+
+# Obtener etiquetas y centroides
+labels = kmeans.labels_
+centroids = kmeans.cluster_centers_
+
+# Visualización
+plt.figure(figsize=(10, 6))
+plt.scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis', alpha=0.7)
+plt.scatter(centroids[:, 0], centroids[:, 1], c='red', marker='X', s=200)
+plt.title('K-means Clustering con Scikit-learn')
+plt.xlabel('Característica 1')
+plt.ylabel('Característica 2')
+plt.colorbar(label='Cluster')
+plt.grid(True, linestyle='--', alpha=0.7)
+plt.show()</code></pre>
+                    <button class="copy-button" onclick="copyToClipboard(this)"><i class="far fa-copy">copy</i></button>
+                </div>
+            </div>
+            
+            <h4>5. Selección del número óptimo de clusters</h4>
+            <p>El método del codo (Elbow Method) es una técnica común para seleccionar el número óptimo de clusters:</p>
+            <pre><code class="python">from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+
+# Calcular la inercia para diferentes valores de k
+inertias = []
+K = range(1, 11)
+
+for k in K:
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    kmeans.fit(X)
+    inertias.append(kmeans.inertia_)
+
+# Graficar el método del codo
+plt.figure(figsize=(10, 6))
+plt.plot(K, inertias, 'bo-')
+plt.xlabel('Número de clusters (k)')
+plt.ylabel('Inercia')
+plt.title('Método del Codo para Selección de k')
+plt.xticks(K)
+plt.grid(True, linestyle='--', alpha=0.7)
+plt.show()</code></pre>
+            <button name="copy-button" type="button" class="copy-button" onclick="copyToClipboard(this)"><i class="far fa-copy">copy</i></button>
+            
+            <h4>6. Ventajas y limitaciones</h4>
+            <div class="pros-cons">
+                <div class="pros">
+                    <h5>Ventajas:</h5>
+                    <ul>
+                        <li>Fácil de implementar y entender</li>
+                        <li>Eficiente computacionalmente</li>
+                        <li>Escala bien con grandes conjuntos de datos</li>
+                        <li>Garantiza convergencia</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h5>Limitaciones:</h5>
+                    <ul>
+                        <li>Requiere especificar el número de clusters (k) de antemano</li>
+                        <li>Sensible a la inicialización de los centroides</li>
+                        <li>Asume clusters esféricos y de tamaño similar</li>
+                        <li>Sensible a valores atípicos</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h4>7. Aplicaciones prácticas</h4>
+            <ul>
+                <li>Segmentación de clientes</li>
+                <li>Compresión de imágenes (reducción de colores)</li>
+                <li>Detección de anomalías</li>
+                <li>Análisis de documentos</li>
+                <li>Reconocimiento de patrones en imágenes</li>
+            </ul>
+        </section>
+
+        <section class="interactive-demo">
+            <h3><i class="fas fa-laptop-code"></i> Demostración Interactiva</h3>
+            <p>Experimenta con K-means creando tus propios clusters:</p>
+            
+            <div class="controls">
+                <div>
+                    <label for="num-clusters">Número de clusters (k):</label>
+                    <input type="number" id="num-clusters" min="1" max="10" value="3">
+                </div>
+                <div>
+                    <label for="num-points">Puntos por cluster:</label>
+                    <input type="number" id="num-points" min="1" max="100" value="50">
+                </div>
+                <button id="generate-data">Generar Datos</button>
+                <button id="run-kmeans">Ejecutar K-means</button>
+                <button id="reset">Reiniciar</button>
+            </div>
+            
+            <div id="clusters-visualization">
+                <!-- Los puntos se generarán dinámicamente con JavaScript -->
+            </div>
+            
+            <div id="metrics">
+                <p>Inercia: <span id="inertia">-</span></p>
+                <p>Iteraciones: <span id="iterations">-</span></p>
+            </div>
+        </section>
+
+        <section class="exercises">
+            <h3><i class="fas fa-tasks"></i> Ejercicios Prácticos</h3>
+            
+            <div class="exercise">
+                <h4>Ejercicio 1: Implementación desde cero</h4>
+                <p>Completa la siguiente implementación de K-means:</p>
+                <pre><code class="python">def k_means(X, k, max_iters=100):
+    # 1. Inicializar centroides aleatorios
+    # 2. Implementar el bucle principal
+    # 3. Asignar puntos a clusters
+    # 4. Actualizar centroides
+    # 5. Verificar convergencia
+    return centroids, labels</code></pre>
+                <button class="hint-button" onclick="toggleHint('hint-1')">Mostrar pista</button>
+                <div id="hint-1" class="hint">
+                    <p>Recuerda que necesitarás calcular las distancias entre cada punto y los centroides, y asignar cada punto al centroide más cercano.</p>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4>Ejercicio 2: Aplicación a un conjunto de datos real</h4>
+                <p>Descarga el conjunto de datos de dígitos de scikit-learn y aplica K-means para agrupar los dígitos. ¿Cómo se comparan los clusters con las etiquetas reales?</p>
+                <button class="hint-button" onclick="toggleHint('hint-2')">Mostrar pista</button>
+                <div id="hint-2" class="hint">
+                    <p>Puedes usar <code>from sklearn.datasets import load_digits</code> para cargar el conjunto de datos.</p>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4>Ejercicio 3: Método del codo</h4>
+                <p>Implementa el método del codo para determinar el número óptimo de clusters para el conjunto de datos de dígitos. ¿Cuál es el valor óptimo de k?</p>
+                <button class="hint-button" onclick="toggleHint('hint-3')">Mostrar pista</button>
+                <div id="hint-3" class="hint">
+                    <p>Calcula la inercia para diferentes valores de k y busca el "codo" en la gráfica.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="resources">
+            <h3><i class="fas fa-book-open"></i> Recursos Adicionales</h3>
+            <ul>
+                <li><a href="https://scikit-learn.org/stable/modules/clustering.html#k-means" target="_blank" rel="noopener">Documentación oficial de scikit-learn sobre K-means</a></li>
+                <li><a href="https://towardsdatascience.com/k-means-clustering-algorithm-applications-evaluation-methods-and-drawbacks-aa03e644b48a" target="_blank" rel="noopener">Artículo detallado sobre K-means</a></li>
+                <li><a href="https://www.youtube.com/watch?v=4b5d3muPQmA" target="_blank" rel="noopener">Video tutorial: K-means explicado visualmente</a></li>
+                <li><a href="https://www.kaggle.com/code/andyxie/k-means-clustering-tutorial/notebook" target="_blank" rel="noopener">Tutorial práctico en Kaggle</a></li>
+            </ul>
+        </section>
+        
+        <section class="summary">
+            <h3><i class="fas fa-clipboard-check"></i> Resumen de la Sesión</h3>
+            <ul>
+                <li>K-means es un algoritmo de clustering que agrupa datos en K clusters basándose en la distancia euclidiana.</li>
+                <li>El algoritmo itera entre asignar puntos a clusters y actualizar los centroides hasta la convergencia.</li>
+                <li>La selección del número óptimo de clusters es crucial y puede determinarse usando el método del codo.</li>
+                <li>K-means es sensible a la inicialización de los centroides y asume clusters esféricos de tamaño similar.</li>
+                <li>Las aplicaciones incluyen segmentación de clientes, compresión de imágenes y reconocimiento de patrones.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Código para la demostración interactiva de K-means
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('clusters-visualization');
+            const ctx = canvas.getContext('2d');
+            const numClustersInput = document.getElementById('num-clusters');
+            const numPointsInput = document.getElementById('num-points');
+            const generateBtn = document.getElementById('generate-data');
+            const runKmeansBtn = document.getElementById('run-kmeans');
+            const resetBtn = document.getElementById('reset');
+            const inertiaSpan = document.getElementById('inertia');
+            const iterationsSpan = document.getElementById('iterations');
+            
+            let points = [];
+            let centroids = [];
+            let labels = [];
+            let colors = [];
+            
+            // Inicializar el canvas
+            function initCanvas() {
+                const rect = canvas.getBoundingClientRect();
+                canvas.width = rect.width;
+                canvas.height = rect.height;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            
+            window.addEventListener('resize', initCanvas);
+            initCanvas();
+            
+            // Generar datos aleatorios
+            function generateData() {
+                const k = parseInt(numClustersInput.value);
+                const n = parseInt(numPointsInput.value);
+                
+                points = [];
+                centroids = [];
+                labels = [];
+                colors = [];
+                
+                // Generar centroides aleatorios
+                for (let i = 0; i < k; i++) {
+                    const x = 50 + Math.random() * (canvas.width - 100);
+                    const y = 50 + Math.random() * (canvas.height - 100);
+                    centroids.push({x, y});
+                    
+                    // Generar puntos alrededor de los centroides
+                    for (let j = 0; j < n; j++) {
+                        const angle = Math.random() * Math.PI * 2;
+                        const radius = Math.random() * 50;
+                        const px = x + Math.cos(angle) * radius;
+                        const py = y + Math.sin(angle) * radius;
+                        points.push({x: px, y: py, cluster: i});
+                    }
+                    
+                    // Generar color para el cluster
+                    colors.push({
+                        r: Math.floor(Math.random() * 200 + 55),
+                        g: Math.floor(Math.random() * 200 + 55),
+                        b: Math.floor(Math.random() * 200 + 55)
+                    });
+                }
+                
+                drawPoints();
+            }
+            
+            // Dibujar puntos en el canvas
+            function drawPoints() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Dibujar puntos
+                points.forEach((point, i) => {
+                    ctx.beginPath();
+                    ctx.arc(point.x, point.y, 4, 0, Math.PI * 2);
+                    const color = colors[point.cluster] || {r: 200, g: 200, b: 200};
+                    ctx.fillStyle = `rgba(${color.r}, ${color.g}, ${color.b}, 0.7)`;
+                    ctx.fill();
+                });
+                
+                // Dibujar centroides
+                centroids.forEach((centroid, i) => {
+                    ctx.beginPath();
+                    ctx.arc(centroid.x, centroid.y, 8, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgb(${colors[i].r}, ${colors[i].g}, ${colors[i].b})`;
+                    ctx.fill();
+                    ctx.strokeStyle = 'white';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                    
+                    // Etiqueta del cluster
+                    ctx.fillStyle = 'black';
+                    ctx.font = 'bold 14px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`C${i+1}`, centroid.x, centroid.y + 4);
+                });
+            }
+            
+            // Algoritmo K-means simplificado
+            function runKmeans() {
+                const maxIterations = 10;
+                let iterations = 0;
+                let converged = false;
+                
+                function step() {
+                    if (iterations >= maxIterations || converged) {
+                        iterationsSpan.textContent = iterations;
+                        calculateInertia();
+                        return;
+                    }
+                    
+                    // Asignar puntos al centroide más cercano
+                    let changed = false;
+                    
+                    points.forEach(point => {
+                        let minDist = Infinity;
+                        let newCluster = -1;
+                        
+                        centroids.forEach((centroid, i) => {
+                            const dx = point.x - centroid.x;
+                            const dy = point.y - centroid.y;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+                            
+                            if (dist < minDist) {
+                                minDist = dist;
+                                newCluster = i;
+                            }
+                        });
+                        
+                        if (point.cluster !== newCluster) {
+                            point.cluster = newCluster;
+                            changed = true;
+                        }
+                    });
+                    
+                    // Actualizar centroides
+                    const clusterSums = Array(centroids.length).fill().map(() => ({x: 0, y: 0, count: 0}));
+                    
+                    points.forEach(point => {
+                        const cluster = clusterSums[point.cluster];
+                        cluster.x += point.x;
+                        cluster.y += point.y;
+                        cluster.count++;
+                    });
+                    
+                    centroids.forEach((centroid, i) => {
+                        if (clusterSums[i].count > 0) {
+                            const newX = clusterSums[i].x / clusterSums[i].count;
+                            const newY = clusterSums[i].y / clusterSums[i].count;
+                            
+                            if (Math.abs(centroid.x - newX) > 0.1 || Math.abs(centroid.y - newY) > 0.1) {
+                                centroid.x = newX;
+                                centroid.y = newY;
+                                changed = true;
+                            }
+                        }
+                    });
+                    
+                    iterations++;
+                    iterationsSpan.textContent = iterations;
+                    
+                    if (!changed) {
+                        converged = true;
+                    }
+                    
+                    drawPoints();
+                    calculateInertia();
+                    
+                    if (iterations < maxIterations && changed) {
+                        setTimeout(step, 1000);
+                    }
+                }
+                
+                step();
+            }
+            
+            // Calcular inercia (suma de distancias al cuadrado)
+            function calculateInertia() {
+                let inertia = 0;
+                
+                points.forEach(point => {
+                    const centroid = centroids[point.cluster];
+                    const dx = point.x - centroid.x;
+                    const dy = point.y - centroid.y;
+                    inertia += dx * dx + dy * dy;
+                });
+                
+                inertiaSpan.textContent = inertia.toFixed(2);
+                return inertia;
+            }
+            
+            // Manejadores de eventos
+            generateBtn.addEventListener('click', generateData);
+            runKmeansBtn.addEventListener('click', runKmeans);
+            resetBtn.addEventListener('click', () => {
+                points = [];
+                centroids = [];
+                labels = [];
+                inertiaSpan.textContent = '-';
+                iterationsSpan.textContent = '-';
+                initCanvas();
+            });
+            
+            // Generar datos iniciales
+            generateData();
+        });
+    </script>
+</body>
+</html>
