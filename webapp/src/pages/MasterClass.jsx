@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import sessionsData from '../data/sessionsData.json';
 import Quiz from '../components/Quiz';
 import { useAuth } from '../context/AuthContext';
+import DonationSection from '../components/DonationSection';
 
 // React component to dangerously set inner HTML since content is extracted from HTML
 const HtmlContent = ({ html }) => {
@@ -87,6 +88,8 @@ const MasterClass = () => {
       <section style={{ marginBottom: '64px' }}>
         <Quiz quizData={session.quiz} onComplete={(score) => updateProgress(session.id, score)} />
       </section>
+
+      <DonationSection />
 
       {/* Bottom Navigation */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '64px', paddingTop: '32px', borderTop: '1px solid var(--border)' }}>
