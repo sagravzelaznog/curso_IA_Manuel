@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.15: Proyecto - Análisis Predictivo | Curso de Inteligencia Artificial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .project-section {
+            margin: 25px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .project-card {
+            background: white;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .step {
+            margin: 20px 0;
+            padding: 15px;
+            background: #e9f7fe;
+            border-left: 4px solid #3498db;
+            border-radius: 0 4px 4px 0;
+        }
+        .dataset-card {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+        }
+        .evaluation-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .metric-card {
+            background: white;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .visualization-container {
+            width: 100%;
+            height: 400px;
+            background: #f8f9fa;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #dee2e6;
+            border-radius: 8px;
+        }
+        @media (prefers-color-scheme: dark) {
+            .project-section, .project-card, .metric-card {
+                background: #2d2d2d;
+                color: #f8f9fa;
+            }
+            .step {
+                background: #1a3a4a;
+                border-left-color: #2ecc71;
+            }
+            .dataset-card {
+                background: #333;
+                border-color: #444;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>3.15: Proyecto - Análisis Predictivo</h1>
+            <p>Curso de Inteligencia Artificial - Módulo 3: Machine Learning</p>
+        </div>
+    </header>
+
+    <nav class="tabs">
+        <div class="container">
+            <ul>
+                <li><a href="#introduccion">Introducción</a></li>
+                <li><a href="#etapas">Etapas del Proyecto</a></li>
+                <li><a href="#ejemplo">Ejemplo Práctico</a></li>
+                <li><a href="#evaluacion">Evaluación</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section id="introduccion" class="project-section">
+            <h2>Introducción al Proyecto de Análisis Predictivo</h2>
+            
+            <div class="project-card">
+                <h3>Objetivos del Proyecto</h3>
+                <p>En este proyecto, aplicarás los conocimientos adquiridos en el módulo de Machine Learning para desarrollar un modelo predictivo completo. Aprenderás a:</p>
+                <ul>
+                    <li>Definir un problema de negocio</li>
+                    <li>Recopilar y preparar datos</li>
+                    <li>Seleccionar y entrenar modelos</li>
+                    <li>Evaluar el rendimiento</li>
+                    <li>Desplegar y comunicar resultados</li>
+                </ul>
+            </div>
+
+            <div class="project-card">
+                <h3>Opciones de Conjuntos de Datos</h3>
+                <p>Puedes elegir uno de los siguientes conjuntos de datos o proponer uno propio:</p>
+                
+                <div class="dataset-card">
+                    <h4>1. Predicción de Precios de Viviendas</h4>
+                    <p><strong>Objetivo:</strong> Predecir el precio de venta de viviendas basado en características como tamaño, ubicación, número de habitaciones, etc.</p>
+                    <p><strong>Dificultad:</strong> Intermedia</p>
+                    <p><strong>Enlace:</strong> <a href="https://www.kaggle.com/c/house-prices-advanced-regression-techniques" target="_blank">House Prices Dataset</a></p>
+                </div>
+
+                <div class="dataset-card">
+                    <h4>2. Clasificación de Clientes</h4>
+                    <p><strong>Objetivo:</strong> Clasificar clientes en grupos según su comportamiento de compra para estrategias de marketing dirigido.</p>
+                    <p><strong>Dificultad:</strong> Intermedia</p>
+                    <p><strong>Enlace:</strong> <a href="https://www.kaggle.com/akram24/mall-customers" target="_blank">Mall Customers Dataset</a></p>
+                </div>
+
+                <div class="dataset-card">
+                    <h4>3. Predicción de Abandono de Clientes</h4>
+                    <p><strong>Objetivo:</strong> Predecir qué clientes tienen mayor probabilidad de cancelar su suscripción o servicio.</p>
+                    <p><strong>Dificultad:</strong> Avanzada</p>
+                    <p><strong>Enlace:</strong> <a href="https://www.kaggle.com/blastchar/telco-customer-churn" target="_blank">Telco Customer Churn</a></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="etapas" class="project-section">
+            <h2>Etapas del Proyecto</h2>
+            
+            <div class="step">
+                <h3>1. Comprensión del Negocio</h3>
+                <ul>
+                    <li>Definir el problema de negocio</li>
+                    <li>Identificar las métricas de éxito</li>
+                    <li>Establecer los requisitos del proyecto</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <h3>2. Recopilación y Exploración de Datos</h3>
+                <ul>
+                    <li>Recopilar datos relevantes</li>
+                    <li>Realizar análisis exploratorio (EDA)</li>
+                    <li>Identificar valores atípicos y faltantes</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <h3>3. Preparación de Datos</h3>
+                <ul>
+                    <li>Limpieza de datos</li>
+                    <li>Transformación de características</li>
+                    <li>División en conjuntos de entrenamiento y prueba</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <h3>4. Modelado</h3>
+                <ul>
+                    <li>Seleccionar algoritmos apropiados</li>
+                    <li>Entrenar los modelos</li>
+                    <li>Ajustar hiperparámetros</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <h3>5. Evaluación</h3>
+                <ul>
+                    <li>Medir el rendimiento del modelo</li>
+                    <li>Comparar con el modelo de referencia</li>
+                    <li>Analizar errores</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <h3>6. Despliegue y Comunicación</h3>
+                <ul>
+                    <li>Preparar el modelo para producción</li>
+                    <li>Crear visualizaciones efectivas</li>
+                    <li>Comunicar resultados a partes interesadas</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="ejemplo" class="project-section">
+            <h2>Ejemplo Práctico: Predicción de Precios de Viviendas</h2>
+            
+            <div class="project-card">
+                <h3>1. Carga y Exploración de Datos</h3>
+                <pre><code class="python">import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Cargar datos
+data = pd.read_csv('house_prices.csv')
+
+# Mostrar primeras filas
+print(data.head())
+
+# Estadísticas descriptivas
+print(data.describe())
+
+# Visualizar distribución de precios
+plt.figure(figsize=(10, 6))
+sns.histplot(data['SalePrice'], kde=True)
+plt.title('Distribución de Precios de Venta')
+plt.xlabel('Precio de Venta')
+plt.ylabel('Frecuencia')
+plt.show()</code></pre>
+            </div>
+
+            <div class="project-card">
+                <h3>2. Preprocesamiento de Datos</h3>
+                <pre><code class="python">from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+
+# Definir características y objetivo
+X = data.drop('SalePrice', axis=1)
+y = data['SalePrice']
+
+# Dividir en conjuntos de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Identificar columnas numéricas y categóricas
+numeric_features = X.select_dtypes(include=['int64', 'float64']).columns
+categorical_features = X.select_dtypes(include=['object']).columns
+
+# Crear transformadores
+numeric_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='median')),
+    ('scaler', StandardScaler())
+])
+
+categorical_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+    ('onehot', OneHotEncoder(handle_unknown='ignore'))
+])
+
+# Combinar transformadores
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', numeric_transformer, numeric_features),
+        ('cat', categorical_transformer, categorical_features)
+    ])
+
+# Aplicar transformaciones
+X_train_processed = preprocessor.fit_transform(X_train)
+X_test_processed = preprocessor.transform(X_test)</code></pre>
+            </div>
+
+            <div class="project-card">
+                <h3>3. Entrenamiento y Evaluación de Modelos</h3>
+                <pre><code class="python">from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error, r2_score
+import numpy as np
+
+# Crear y entrenar el modelo
+model = RandomForestRegressor(n_estimators=100, random_state=42)
+model.fit(X_train_processed, y_train)
+
+# Hacer predicciones
+y_pred = model.predict(X_test_processed)
+
+# Evaluar el modelo
+mse = mean_squared_error(y_test, y_pred)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_test, y_pred)
+
+print(f'RMSE: {rmse:.2f}')
+print(f'R²: {r2:.4f}')
+
+# Visualizar predicciones vs valores reales
+plt.figure(figsize=(10, 6))
+plt.scatter(y_test, y_pred, alpha=0.5)
+plt.plot([y.min(), y.max()], [y.min(), y.max()], 'r--')
+plt.xlabel('Precio Real')
+plt.ylabel('Precio Predicho')
+plt.title('Precios Reales vs Predichos')
+plt.show()</code></pre>
+            </div>
+
+            <div class="visualization-container">
+                <div style="text-align: center;">
+                    <h4>Importancia de Características</h4>
+                    <div style="display: flex; justify-content: center; margin-top: 20px;">
+                        <div style="width: 300px; height: 300px; position: relative;">
+                            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                                display: flex; flex-direction: column; justify-content: flex-end;">
+                                <div style="background: #3498db; height: 80%; margin: 5px 0; display: flex; align-items: center; justify-content: center;">
+                                    <span style="color: white; font-weight: bold;">Tamaño (m²)</span>
+                                </div>
+                                <div style="background: #2ecc71; height: 60%; margin: 5px 0; display: flex; align-items: center; justify-content: center;">
+                                    <span style="color: white; font-weight: bold;">Año Construcción</span>
+                                </div>
+                                <div style="background: #e74c3c; height: 45%; margin: 5px 0; display: flex; align-items: center; justify-content: center;">
+                                    <span style="color: white; font-weight: bold;">N° Habitaciones</span>
+                                </div>
+                                <div style="background: #f39c12; height: 30%; margin: 5px 0; display: flex; align-items: center; justify-content: center;">
+                                    <span style="color: white; font-weight: bold;">Baños</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="evaluacion" class="project-section">
+            <h2>Evaluación del Proyecto</h2>
+            
+            <div class="project-card">
+                <h3>Criterios de Evaluación</h3>
+                
+                <div class="evaluation-metrics">
+                    <div class="metric-card">
+                        <h4>Calidad del Código</h4>
+                        <p>20%</p>
+                        <ul style="text-align: left;">
+                            <li>Organización</li>
+                            <li>Comentarios</li>
+                            <li>Buenas prácticas</li>
+                        </ul>
+                    </div>
+
+                    <div class="metric-card">
+                        <h4>Análisis Exploratorio</h4>
+                        <p>20%</p>
+                        <ul style="text-align: left;">
+                            <li>Visualizaciones</li>
+                            <li>Hipótesis</li>
+                            <li>Hallazgos</li>
+                        </ul>
+                    </div>
+
+                    <div class="metric-card">
+                        <h4>Modelado</h4>
+                        <p>30%</p>
+                        <ul style="text-align: left;">
+                            <li>Selección de modelo</li>
+                            <li>Ajuste de hiperparámetros</li>
+                            <li>Validación cruzada</li>
+                        </ul>
+                    </div>
+
+                    <div class="metric-card">
+                        <h4>Resultados</h4>
+                        <p>30%</p>
+                        <ul style="text-align: left;">
+                            <li>Métricas de evaluación</li>
+                            <li>Interpretación</li>
+                            <li>Conclusiones</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <h3>Entrega del Proyecto</h3>
+                <p>El proyecto debe incluir:</p>
+                <ol>
+                    <li>Un cuaderno Jupyter o script Python bien documentado</li>
+                    <li>Un archivo README.md que explique el proyecto</li>
+                    <li>Los datos utilizados (o instrucciones para obtenerlos)</li>
+                    <li>Un informe con los hallazgos principales (máx. 5 páginas)</li>
+                </ol>
+                <p><strong>Fecha límite de entrega:</strong> [Fecha límite]</p>
+            </div>
+
+            <div class="project-card">
+                <h3>Recursos Adicionales</h3>
+                <ul>
+                    <li><a href="https://scikit-learn.org/stable/tutorial/machine_learning_map/index.html" target="_blank">Mapa de Algoritmos de scikit-learn</a></li>
+                    <li><a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/10min.html" target="_blank">Guía Rápida de Pandas</a></li>
+                    <li><a href="https://matplotlib.org/stable/contents.html" target="_blank">Documentación de Matplotlib</a></li>
+                    <li><a href="https://seaborn.pydata.org/tutorial.html" target="_blank">Tutorial de Seaborn</a></li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; JMGV-PTEL-2025 Curso de Inteligencia Artificial - Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <script>
+        // Función para copiar código al portapapeles
+        function copyToClipboard(element) {
+            const code = element.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                // Mostrar notificación de copiado
+                const notification = document.createElement('div');
+                notification.className = 'copy-notification';
+                notification.textContent = '¡Código copiado!';
+                document.body.appendChild(notification);
+                
+                // Eliminar la notificación después de 2 segundos
+                setTimeout(() => {
+                    notification.remove();
+                }, 2000);
+            }).catch(err => {
+                console.error('Error al copiar: ', err);
+            });
+        }
+
+        // Inicializar botones de copia
+        document.addEventListener('DOMContentLoaded', function() {
+            // Agregar botón de copiar a los bloques de código
+            const codeBlocks = document.querySelectorAll('pre');
+            codeBlocks.forEach(block => {
+                // Crear botón de copiar
+                const copyButton = document.createElement('button');
+                copyButton.className = 'copy-button';
+                copyButton.title = 'Copiar código al portapapeles';
+                copyButton.setAttribute('aria-label', 'Copiar código al portapapeles');
+                copyButton.innerHTML = '<i class="far fa-copy"></i>';
+                
+                // Posicionar el botón en la esquina superior derecha
+                block.style.position = 'relative';
+                copyButton.style.position = 'absolute';
+                copyButton.style.top = '8px';
+                copyButton.style.right = '8px';
+                copyButton.style.background = 'rgba(255, 255, 255, 0.2)';
+                copyButton.style.border = 'none';
+                copyButton.style.borderRadius = '4px';
+                copyButton.style.padding = '4px 8px';
+                copyButton.style.cursor = 'pointer';
+                copyButton.style.transition = 'background 0.3s';
+                
+                copyButton.addEventListener('mouseover', () => {
+                    copyButton.style.background = 'rgba(255, 255, 255, 0.3)';
+                });
+                
+                copyButton.addEventListener('mouseout', () => {
+                    copyButton.style.background = 'rgba(255, 255, 255, 0.2)';
+                });
+                
+                copyButton.addEventListener('click', () => {
+                    const code = block.querySelector('code').textContent;
+                    navigator.clipboard.writeText(code).then(() => {
+                        copyButton.innerHTML = '<i class="fas fa-check"></i>';
+                        copyButton.title = '¡Copiado!';
+                        copyButton.setAttribute('aria-label', 'Código copiado');
+                        setTimeout(() => {
+                            copyButton.innerHTML = '<i class="far fa-copy"></i>';
+                        copyButton.title = 'Copiar código al portapapeles';
+                        copyButton.setAttribute('aria-label', 'Copiar código al portapapeles');
+                        }, 2000);
+                    });
+                });
+                
+                block.appendChild(copyButton);
+            });
+        });
+    </script>
+</body>
+</html>
